@@ -5,34 +5,34 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/index.html</loc>
-<lastmod>2014-09-26T17:41:07-00:00</lastmod>
+<lastmod>2014-09-26T17:53:10-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/archives.html</loc>
-<lastmod>2014-09-26T17:41:07-00:00</lastmod>
+<lastmod>2014-09-26T17:53:10-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/tags.html</loc>
-<lastmod>2014-09-26T17:41:07-00:00</lastmod>
+<lastmod>2014-09-26T17:53:10-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/categories.html</loc>
-<lastmod>2014-09-26T17:41:07-00:00</lastmod>
+<lastmod>2014-09-26T17:53:10-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://www.acalustra.com/las-mejores-funciones-de-ansible.html</loc>
+<loc>http://www.acalustra.com/trick-and-tips-en-ansible.html</loc>
 <lastmod>2014-06-03T12:20:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
@@ -53,7 +53,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.acalustra.com/instalar-hubot-e-integrarlo-con-nuestro-servicio-xmpp.html</loc>
+<loc>http://www.acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html</loc>
 <lastmod>2013-05-10T00:30:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
@@ -67,7 +67,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.acalustra.com/kamailio-redis-integracion-de-colas.html</loc>
+<loc>http://www.acalustra.com/sistemas-de-colas-basado-en-redis-en-kamailio.html</loc>
 <lastmod>2013-04-10T00:30:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
@@ -160,6 +160,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://www.acalustra.com/tag/playbook.html</loc>
 <lastmod>2014-06-03T12:20:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/tag/sippy_cup.html</loc>
+<lastmod>2013-08-30T10:10:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -335,13 +342,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://www.acalustra.com/tag/github.html</loc>
 <lastmod>2013-05-10T00:30:00-00:15</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>http://www.acalustra.com/tag/sippy_cup.html</loc>
-<lastmod>2013-08-30T10:10:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
