@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="es">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> How to de reglas de seguridad en kamailio</title>
+    <link rel="canonical" href="http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" kamailio, python, redis, seguridad, voip, pike"/>
+    <meta name="description" content=" Una serie de funciones para poder aplicar nuestra seguridad en kamailio sin tener que asumir riesgos usando kamailio pike, redis y python. "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+
+
+
+    <meta name="tags" content="kamailio, redis, python, seguridad, ataques, voip, sip" />
+    <meta name="date" content=" 2014-04-05 12:20:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">Excepciones de seguridad en kamailio</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2014-04-05T12:20:00" itemprop="datePublished">Saturday April 05th 2014</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>El otro día a través de este <a class="reference external" href="https://twitter.com/hellc2/status/448756126382034944">tuit de Elio Rojano</a> me anime a  documentar una serie de procesos que estamos siguiendo para mantener nuestra infraestructura segura y al mismo tiempo poder mantener las excepciones para no cortar el servicio en falsos positivos.</p>
+<p>Para securizar kamailio lo más normal es usar el <a class="reference external" href="http://kamailio.org/docs/modules/stable/modules/pike.html">módulo pike</a>, teniendo un código muy parecido a este tipo:</p>
+<pre class="literal-block">
+route[PIKE_CHECK]{
+    if (src_ip == myself)
+        return(1);
+
+    if($sht(ipban=&gt;$si)!=$null){
+        xdbg(&quot;Request $rm from blocked IP - from $fu (IP:$si:$sp)\n&quot;);
+        exit;
+    }
+
+    if (!pike_check_req()){
+        xlog(&quot;L_ALERT&quot;,&quot;Callid $ci -- pike blocking $rm from $fu (IP:$si:$sp)&quot;);
+        $sht(ipban=&gt;$si) = 1;
+        exit;
+    }
+}
+</pre>
+<p>Pero esto según los parámetros del modelo  podemos poner más rígido o más flexible. Si le pones flexible puedes poner en riesgo tu infraestructura. Nosotros creemos que la mejor opción es ser restrictivos y añadir opciones para desbloquear.</p>
+<p>En nuestro caso a la ruta normal de Pike hemos añadido una serie de valores que nos son útiles para añadir datos a la blacklist:</p>
+<ul class="simple">
+<li>Validar si la extensión se parece a una existente.El caso de que se registre a la extensión 140 cuando lo normal es tener extensiones 7XXX, por otro lado para extensiones con nombre vamos a usar el <a class="reference external" href="https://github.com/seatgeek/fuzzywuzzy">método fuzzy</a>.</li>
+<li>Validar una lista blanca de IPs que siempre están validadas.</li>
+<li>En caso de error tenemos una cola que obtiene el valor del <a class="reference external" href="http://stackoverflow.com/questions/2575760/python-lookup-hostname-from-ip-with-1-second-timeout">reverse dns</a> de la ip origen, si no pertenece a un dominio válido no bloqueamos.</li>
+</ul>
+<p>Por otra parte muchos de nuestros clientes se conectan desde ips de hoteles/starbucks/etc. Es bastante difícil de explicar que se te bloquea desde un determinado lugar por tener problemas con el registro de su sip. Básicamente hemos añadido una opción dentro del userportal, que valida la ip como usuario y añade durante una hora la ip en la whitelist. Para hacerlo tenemos la siguiente route:</p>
+<pre class="literal-block">
+modparam(&quot;ndb_redis&quot;, &quot;server&quot;, &quot;name=srvN;addr=127.0.0.1;port=6379;db=0&quot;)
+route[IS_IN_WHITE_LIST]{
+    if ( redis_cmd(&quot;srvN&quot;,&quot;GET white_list:$si&quot;,&quot;r&quot;) ){
+        return(1);
+    }else{
+        return(0);
+    }
+}
+</pre>
+<p>Desde nuestra web básicamente hacemos los siguientes comandos dentro de redis:</p>
+<pre class="literal-block">
+redis 127.0.0.1:6379&gt; SET white_list:{SOURCE_IP} 1
+OK
+redis 127.0.0.1:6379&gt; EXPIRE white_list:{SOURCE_IP} 3600
+(integer) 1
+</pre>
+<p>Con esto de momento y teniendo muy en cuenta la información del graphite vamos intentando solucionar todos nuestros problemas. Nuestra white list es accesible desde diferentes puntos, desde la integración con la web nuestros clientes están más contentos y al mismo tiempo en cualquier momento podemos bloquear a una IP.</p>
+<p>Por otra parte tenemos nuestro sistema de bloqueo por rates, en el momento que un cliente se dispara de rates en un momento, lo que hacemos es borrarlo de la white_list y volvemos a bloquearlo. Por otra parte estamos buscando una manera de añadir un counter con expire, para ver que una ip no hace 100 request en 5 minutos, pero esto, de momento, es una idea.</p>
+<p>Esto, evidentemente, no es el mejor sistema de seguridad, un robot puede llegar a acceder a la url del sistema, pero bueno, al mismo tiempo intentamos que nuestros problemas no sean problemas de nuestros clientes ;-)</p>
+<p>PS: Desde la pasada Kamailio World conference el siguiente punto será este usar los datos de <a class="reference external" href="mirror.simwood.com/honeypot/">Ips de Simwood</a></p>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> ataques, kamailio, python, redis, seguridad, sip, voip,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+            <ul>
+                <li><a href="http://www.acalustra.com/kamailio-redis-integracion-de-colas.html">Kamailio redis integracion de colas</a></li>
+                <li><a href="http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html">Haciendo test con sipp sin morir en el intento</a></li>
+                <li><a href="http://www.acalustra.com/spring-hackaton-london.html">Spring Hackaton London</a></li>
+            </ul>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/ataques.html" rel="tag">ataques</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/kamailio.html" rel="tag">kamailio</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/python.html" rel="tag">python</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/redis.html" rel="tag">redis</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/seguridad.html" rel="tag">seguridad</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/sip.html" rel="tag">sip</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/voip.html" rel="tag">voip</a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=Politicas de seguridad en Kamailio via @eloycoto&url=http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html&title=Politicas de seguridad en Kamailio"><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>

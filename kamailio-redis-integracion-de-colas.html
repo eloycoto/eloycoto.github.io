@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="es">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> Kamailio redis, sistemas de colas - Eloy Coto</title>
+    <link rel="canonical" href="http://www.acalustra.com/kamailio-redis-integracion-de-colas.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" kamailio, redis, python, notifications, voip, telefonia"/>
+    <meta name="description" content=" kamailio redis. Un uso diferente de usar Redis desde kamailio para poder integrarlo con otras plataformas. "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+
+
+
+    <meta name="tags" content="kamailio, redis, python, notifications, voip, telefonia" />
+    <meta name="date" content=" 2013-04-10 00:30:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">Sistemas de colas basado en kamailio con redis.</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2013-04-10T00:30:00" itemprop="datePublished">Wednesday April 10th 2013</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>Desde la versión
+<a class="reference external" href="http://www.kamailio.org/wiki/features/new-in-3.2.x">3.2</a>
+de<a class="reference external" href="http://www.kamailio.org/">Kamailio</a> tiene soporte para
+<a class="reference external" href="http://redis.io/">Redis</a>. Junto con el módulo
+<a class="reference external" href="http://kamailio.org/docs/modules/3.3.x/modules_k/memcached.html">memcache</a>,
+se aproxima al mundo web, algo que favorece a la telefonía en los
+tiempos que vivimos. :)</p>
+<p>Antiguamente para llamar un programa externo y tener información
+detallada(en tiempo real) en otro sistema te hacía falta usar el modulo
+de python, xhttp,lua..Todos son muy válidos, pero la velocidad/sencillez
+que aporta redis no lo aportan los otros sistemas.</p>
+<p>Redis es una 'Database' que esta escrita en C que empezó en el 2009, y
+que esta siendo usada en muchos entornos web. Por otra parte la
+estructura de datos es orientada en key=&gt;value. Por lo que los que
+venimos del mundo voip la podemos asociar a la database de Asterisk.</p>
+<div class="figure">
+<img alt="class" src="img/redis.jpg" />
+</div>
+<p>Para un sistema de colas es simple. Existe un proceso(o varios) que
+inserta los datos (Comando <a class="reference external" href="http://redis.io/commands/rpush">RPUSH</a>) y
+un proceso (worker) que esta a la espera de que el master inserte datos
+(<a class="reference external" href="http://redis.io/commands/blpop">BLPOP</a>) para poder ejecutar la
+acción, ahora os dejo un ejemplo:</p>
+<p>Inserción de datos (Kamailio):</p>
+<p>Para la instalación del módulo de redis, <a class="reference external" href="http://www.kamailio.org/wiki/install/3.3.x/git">simplemente tenemos que seguir
+esta guía de la wiki de
+kamailio</a> cambiando
+el <em>make FLAVOUR</em> por este:</p>
+<pre class="literal-block">
+make FLAVOUR=kamailio include_modules=&quot;db_mysql ndb_redis&quot; cfg
+</pre>
+<p>Una vez instalado deberemos hacer los siguientes cambios en el
+kamailio.cfg:</p>
+<pre class="literal-block">
+   loadmodule &quot;ndb_redis.so&quot;
+modparam(&quot;ndb_redis&quot;, &quot;server&quot;, &quot;name=srvN;addr=127.0.0.1;port=6379;db=0&quot;)
+route{
+  ...
+  ...
+  ...
+  ...
+  if(redis_cmd(&quot;srvN&quot;, &quot;RPUSH calls $ci&quot;, &quot;r&quot;)) {
+    # success
+    xlog(&quot;===== $redis(r=&amp;gt;type) * $redis(r=&amp;gt;value)\n&quot;);
+  }
+}
+</pre>
+<p>Obtención de datos (python):</p>
+<pre class="literal-block">
+pip install hiredis
+pip install redis
+
+    import redis
+    def queue():
+        r= redis.StrictRedis(host='127.0.0.1', port=6379, db=1)
+        while True:
+            (queue, msg) = r.blpop('invites')
+            print 'Entrada en la cola %s y con datos %s'%(queue,msg)
+
+    if __name__ == '__main__':
+        queue()
+</pre>
+<p>Con este módulo se me ocurren varias aplicaciones que realizar:</p>
+<ul class="simple">
+<li>Tener el numero de llamadas que se están cursando.</li>
+<li>Un sistema de colas para generar los cdrs.</li>
+<li>Notificación para sistemas de prepago, descontar saldo etc..</li>
+<li>Notificación de estados de llamadas en un dashboard.</li>
+</ul>
+<p>Como veis la aplicación es bastante sencilla, y en sistemas que no sean
+puramente de voz, viene muy bien para interaccionar con otros programas.</p>
+<p>Dentro de poco mostraré la integración de Opensips con Mongodb. Esta
+database no es que me apasione, pero lo de poder escribir objetos json,
+es muy rápido para ciertos casos.</p>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> kamailio, notifications, python, redis, telefonia, voip,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+            <ul>
+                <li><a href="http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html">Politicas de seguridad en Kamailio</a></li>
+                <li><a href="http://www.acalustra.com/spring-hackaton-london.html">Spring Hackaton London</a></li>
+            </ul>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/kamailio.html" rel="tag">kamailio</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/notifications.html" rel="tag">notifications</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/python.html" rel="tag">python</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/redis.html" rel="tag">redis</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/telefonia.html" rel="tag">telefonia</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/voip.html" rel="tag">voip</a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=Kamailio redis integracion de colas via @eloycoto&url=http://www.acalustra.com/kamailio-redis-integracion-de-colas.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/kamailio-redis-integracion-de-colas.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/kamailio-redis-integracion-de-colas.html&title=Kamailio redis integracion de colas"><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>

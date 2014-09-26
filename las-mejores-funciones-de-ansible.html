@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="es">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> Trucos en la configuración de Ansible</title>
+    <link rel="canonical" href="http://www.acalustra.com/las-mejores-funciones-de-ansible.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" ansible, playbooks, conditionals, tricks, trucos, python, asterisk"/>
+    <meta name="description" content=" Ansible es una herramienta impresionante,aqui explicamos 6 funciones muy utiles. "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+
+
+
+    <meta name="tags" content="ansible, deploy, tricks, condicionales" />
+    <meta name="date" content=" 2014-06-03 12:20:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">6 funciones de Ansible que no conocías</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2014-06-03T12:20:00" itemprop="datePublished">Tuesday June 03th 2014</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>Hace aproximadamente dos años que empecé a trabajar con Ansible. Desde ese día después de usar algo de chef/puppet y darme cabezazos contra la pared (dada su complejidad), este stack se ha convertido en mi preferido, por lo sencillo que es. No es tan completo como los anteriormente comentados, pero para mis necesidades cumple perfectamente.</p>
+<p>Durante este tiempo han sido muchas las cosas que he aprendido, de las cuales me parece bueno salientar:</p>
+<p><strong>Registro de variables</strong></p>
+<p>Cada tarea tiene un resultado, muchas veces creemos que no nos dan un resultado que no sea True/False. Pero muchos módulos devuelven mucha información en un objeto json. En el código fuente de los <a class="reference external" href="https://github.com/ansible/ansible/blob/devel/library/commands/command#L150-L160">módulos se pueden buscar que info es la que exporta</a>. Para poder utilizarla solo debemos hacer lo siguiente en nuestro playbook:</p>
+<pre class="literal-block">
+- command: cat /etc/hostname
+  register: my_var
+
+- debug: msg=&quot;Hostname == {{my_var.stdout}} Command start at {{my_var.start}}&quot;
+</pre>
+<p><strong>Condicionales</strong></p>
+<p>Las condiciones es una de las partes más sencillas de Ansible. Pero lo mejor que este sistema tiene es la capacidad de hacer condicionales con expresiones de python, lo que nos permite validar en una sola línea:</p>
+<ul>
+<li><p class="first">Usando variables internas de ansible:</p>
+<pre class="literal-block">
+- include: debian.yml
+  when: ansible_os_family == &quot;Debian&quot;
+
+- include: network.yml
+  when: ansible_eth0.active
+</pre>
+</li>
+<li><p class="first">Usando expresiones <a class="reference external" href="https://docs.python.org/2/library/string.html">string de python</a>:</p>
+<pre class="literal-block">
+- include: debian.yml
+  when: &quot;'Debian' in my_var.stdout&quot;
+
+- include: debian.yml
+  when: my_var.stdout.find(&quot;Debian&quot;) =&gt;= 1
+
+- include: debian.yml
+  when: my_var.stdout.lower() == 'debian'
+</pre>
+</li>
+</ul>
+<p><strong>Debug</strong></p>
+<p>Suele ser útil mostrar debug en un formato legible. La función debug es una gran desconocida pero hace justo lo que deseamos:</p>
+<pre class="literal-block">
+- debug: msg=&quot;System {{ inventory_hostname }} with IP: {{ansible_eth0.ipv4}} is ready&quot;
+</pre>
+<p><strong>pre_task y post_task</strong></p>
+<p>Nosotros por ejemplo tenemos muchos roles en repositorios separados y usamos <a class="reference external" href="http://git-scm.com/docs/git-submodule">git-submodules</a>. De esta manera compartimos muchos de los roles (Asterisk, Kamailio, Postgresql) por lo que muchas veces antes de ejecutar el rol, tenemos que ejecutar una serie de tareas propias del proyecto, para ello nuestros playbooks lucen así:</p>
+<pre class="literal-block">
+- name: apply asterisk config
+  hosts: prod
+  gather_facts: yes
+  user: root
+  vars_files:
+    - vars/prod.yml
+    - vars/ha.yml
+  roles:
+    - asterisk
+  post_task:
+    - name: Add configs
+      template: src=src/{{item}}.j2 dest=/etc/asterisk/{{item}}.conf mode=0444
+      with_items:
+        - extensions
+        - sip
+        - features
+</pre>
+<p><strong>Callbacks</strong></p>
+<p>Personalmente esta es una de las funciones más interesantes que hay en <a class="reference external" href="http://jpmens.net/2012/09/11/watching-ansible-at-work-callbacks/">Ansible</a>. Cada vez que el playbook o tarea acaba podemos definir una serie de <a class="reference external" href="https://github.com/ansible/ansible/blob/devel/plugins/callbacks/osx_say.py#L31">callbacks</a> y obtener información de la misma.Yo las suelo usar para enviar un resumen a nuestro xmpp de cuantas tareas se ejecutaron con cambios, la hora de los cambios y el resultado:</p>
+<pre class="literal-block">
+class CallbackModule(object):
+    def playbook_on_stats(self, stats):
+        do_stuff()
+</pre>
+<p><strong>Test</strong></p>
+<p>Una de las cosas que me falta en Ansible es una solución 100% opensource como <a class="reference external" href="http://www.ansible.com/tower">Tower</a>. Tower no es caro, pero en nuestro caso, no es necesario este sistema. Una de las mejoras que hemos implementado es cada vez que se hace un push al server, Jenkins ejecuta un dry-run y ver el resultado de la siguiente manera:</p>
+<pre class="literal-block">
+ansible-playbook -i host playbook.yml -C
+</pre>
+<p>Con lo que tenemos una lista de resultados que se van a ejecutar en la máquina. En el caso de que existan cambios tengo una mini APP que nos notifica que estan pendiente cambios sin aplicar.</p>
+<p>Finalmente estas son las funciones que nunca ves en los ejemplos pero que son muy útiles a la hora de desarrollar y hacer despliegues en entornos de producción, pruebas y desarrollo. Yo tengo el 90% de mis servidores basados en Ansible y cada día que pasa estoy más alegre de utilizarlo.  ;-)</p>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> ansible, asterisk, devops, howto, playbook,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+            <ul>
+                <li><a href="http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html">Haciendo test con sipp sin morir en el intento</a></li>
+                <li><a href="http://www.acalustra.com/instalar-hubot-e-integrarlo-con-nuestro-servicio-xmpp.html">Instalar Hubot e integrarlo con nuestro servicio XMPP</a></li>
+            </ul>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/ansible.html" rel="tag">ansible</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/asterisk.html" rel="tag">asterisk</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/devops.html" rel="tag">devops</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/howto.html" rel="tag">howto</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/playbook.html" rel="tag">playbook</a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=Las mejores funciones de Ansible via @eloycoto&url=http://www.acalustra.com/las-mejores-funciones-de-ansible.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/las-mejores-funciones-de-ansible.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/las-mejores-funciones-de-ansible.html&title=Las mejores funciones de Ansible"><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>

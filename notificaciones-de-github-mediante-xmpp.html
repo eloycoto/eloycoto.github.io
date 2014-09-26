@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="es">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> Notificaciones Xmpp desde nuestro servicio de Git</title>
+    <link rel="canonical" href="http://www.acalustra.com/notificaciones-de-github-mediante-xmpp.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" git, github, xmpp, triggers, push"/>
+    <meta name="description" content=" How to use github para enviar mensajes a nuestro servidor de jabber "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+
+
+
+    <meta name="tags" content="git, github, xmpp, triggers, push" />
+    <meta name="date" content=" 2013-03-15 12:25:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">Notificaciones push desde github a nuestro IM</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2013-03-15T12:25:00" itemprop="datePublished">Friday March 15th 2013</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>El concepto de desarrollador ha cambiado desde hace un par de años.
+Antiguamente todo el mundo escribia sus programas, o se adaptaba algo de
+software libre. Ahora se busca la integración de todos los servicios
+mediante APIS.</p>
+<p>Por una razón o por otra me ha tocado estar en los dos lados de una API.
+En la de diseño del API de webphone, y en el consumo de las mismas.
+Siempre que he tenido la oportunidad de usarlas he echado de menos la
+información push. Siempre se puede arreglar con el uso de base de datos
+y celery, pero bueno, no es lo mismo.</p>
+<p>XMPP es un protocolo que se puede usar para todo, tanto como un sistema
+de mesajeria corporativo, como servicio de presencia o <a class="reference external" href="http://bosqueviejo.net/2012/11/17/soa-con-xmpp/">para desplegar
+servicios soa.</a></p>
+<div class="figure">
+<img alt="xmpp" src="static/xmpp.png" />
+</div>
+<p>Github tiene una lista de servicios push bastante interesante con cada
+repositorio <a class="reference external" href="https://github.com/github/github-services">(ademas los tiene liberados bajo software
+libre)</a>, uno de ellos es
+la integración con
+<a class="reference external" href="https://github.com/github/github-services/blob/master/lib/services/jabber.rb">Jabber</a>.
+En un sistema de varios desarrolladores suele ser útil para notificar al
+resto de usuarios de una nueva versión de código en el repositorio.En mi
+actual empresa además parcheamos la entrada e insertamos los datos en
+nuestra plataforma de tareas.</p>
+<div class="figure">
+<img alt="github" src="static/github.png" />
+</div>
+<p>Para configurar las notificaciones en un repositorio de Github solamente
+tenemos que hacer lo siguiente,
+<a class="reference external" href="https://help.github.com/articles/post-receive-hooks">opciones/servicios/jabber</a>
+y setear el usuario/conferencia que deseemos.</p>
+<p>Leer los datos con python no es una tarea muy complicada, y aqui os dejo
+un pequeño trozo de código que espera la entrada de un commit de github</p>
+<p>La verdad que echo de menos una lista de triggers en muchos servicios en
+los que cuando ocurra una accción que se notifique mediante XMPP. Hay
+librerías para todos los lenguajes y se puede reducir mucho las
+peticiones REST que simplemente se hacen si existe algún cambio.</p>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> git, github, push, triggers, xmpp,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+            <ul>
+                <li><a href="http://www.acalustra.com/instalar-hubot-e-integrarlo-con-nuestro-servicio-xmpp.html">Instalar Hubot e integrarlo con nuestro servicio XMPP</a></li>
+            </ul>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/git.html" rel="tag">git</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/github.html" rel="tag">github</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/push.html" rel="tag">push</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/triggers.html" rel="tag">triggers</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/xmpp.html" rel="tag">xmpp</a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=Notificaciones de Github mediante XMPP. via @eloycoto&url=http://www.acalustra.com/notificaciones-de-github-mediante-xmpp.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/notificaciones-de-github-mediante-xmpp.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/notificaciones-de-github-mediante-xmpp.html&title=Notificaciones de Github mediante XMPP."><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>

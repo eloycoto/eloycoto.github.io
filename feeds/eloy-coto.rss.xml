@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>A calustra</title><link>http://www.acalustra.com/</link><description></description><atom:link href="http://www.acalustra.com/feeds/eloy-coto.rss.xml" rel="self"></atom:link><lastBuildDate>Tue, 03 Jun 2014 12:20:00 +0200</lastBuildDate><item><title>Las mejores funciones de Ansible</title><link>http://www.acalustra.com/las-mejores-funciones-de-ansible.html</link><description>&lt;p&gt;Hace aproximadamente dos años que empecé a trabajar con Ansible. Desde ese día después de usar algo de chef/puppet y darme cabezazos contra la pared (dada su complejidad), este stack se ha convertido en mi preferido, por lo sencillo que es. No es tan completo como los anteriormente comentados, pero para mis necesidades cumple perfectamente.&lt;/p&gt;
+&lt;p&gt;Durante este tiempo han sido muchas las cosas que he aprendido, de las cuales me parece bueno salientar:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Registro de variables&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Cada tarea tiene un resultado, muchas veces creemos que no nos dan un resultado que no sea True/False. Pero muchos módulos devuelven mucha información en un objeto json. En el código fuente de los &lt;a class="reference external" href="https://github.com/ansible/ansible/blob/devel/library/commands/command#L150-L160"&gt;módulos se pueden buscar que info es la que exporta&lt;/a&gt;. Para poder utilizarla solo debemos hacer lo siguiente en nuestro playbook:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+- command: cat /etc/hostname
+  register: my_var
+
+- debug: msg=&amp;quot;Hostname == {{my_var.stdout}} Command start at {{my_var.start}}&amp;quot;
+&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Condicionales&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Las condiciones es una de las partes más sencillas de Ansible. Pero lo mejor que este sistema tiene es la capacidad de hacer condicionales con expresiones de python, lo que nos permite validar en una sola línea:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p class="first"&gt;Usando variables internas de ansible:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+- include: debian.yml
+  when: ansible_os_family == &amp;quot;Debian&amp;quot;
+
+- include: network.yml
+  when: ansible_eth0.active
+&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Usando expresiones &lt;a class="reference external" href="https://docs.python.org/2/library/string.html"&gt;string de python&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+- include: debian.yml
+  when: &amp;quot;'Debian' in my_var.stdout&amp;quot;
+
+- include: debian.yml
+  when: my_var.stdout.find(&amp;quot;Debian&amp;quot;) =&amp;gt;= 1
+
+- include: debian.yml
+  when: my_var.stdout.lower() == 'debian'
+&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Debug&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Suele ser útil mostrar debug en un formato legible. La función debug es una gran desconocida pero hace justo lo que deseamos:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+- debug: msg=&amp;quot;System {{ inventory_hostname }} with IP: {{ansible_eth0.ipv4}} is ready&amp;quot;
+&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;pre_task y post_task&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Nosotros por ejemplo tenemos muchos roles en repositorios separados y usamos &lt;a class="reference external" href="http://git-scm.com/docs/git-submodule"&gt;git-submodules&lt;/a&gt;. De esta manera compartimos muchos de los roles (Asterisk, Kamailio, Postgresql) por lo que muchas veces antes de ejecutar el rol, tenemos que ejecutar una serie de tareas propias del proyecto, para ello nuestros playbooks lucen así:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+- name: apply asterisk config
+  hosts: prod
+  gather_facts: yes
+  user: root
+  vars_files:
+    - vars/prod.yml
+    - vars/ha.yml
+  roles:
+    - asterisk
+  post_task:
+    - name: Add configs
+      template: src=src/{{item}}.j2 dest=/etc/asterisk/{{item}}.conf mode=0444
+      with_items:
+        - extensions
+        - sip
+        - features
+&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Callbacks&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Personalmente esta es una de las funciones más interesantes que hay en &lt;a class="reference external" href="http://jpmens.net/2012/09/11/watching-ansible-at-work-callbacks/"&gt;Ansible&lt;/a&gt;. Cada vez que el playbook o tarea acaba podemos definir una serie de &lt;a class="reference external" href="https://github.com/ansible/ansible/blob/devel/plugins/callbacks/osx_say.py#L31"&gt;callbacks&lt;/a&gt; y obtener información de la misma.Yo las suelo usar para enviar un resumen a nuestro xmpp de cuantas tareas se ejecutaron con cambios, la hora de los cambios y el resultado:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+class CallbackModule(object):
+    def playbook_on_stats(self, stats):
+        do_stuff()
+&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Test&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Una de las cosas que me falta en Ansible es una solución 100% opensource como &lt;a class="reference external" href="http://www.ansible.com/tower"&gt;Tower&lt;/a&gt;. Tower no es caro, pero en nuestro caso, no es necesario este sistema. Una de las mejoras que hemos implementado es cada vez que se hace un push al server, Jenkins ejecuta un dry-run y ver el resultado de la siguiente manera:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+ansible-playbook -i host playbook.yml -C
+&lt;/pre&gt;
+&lt;p&gt;Con lo que tenemos una lista de resultados que se van a ejecutar en la máquina. En el caso de que existan cambios tengo una mini APP que nos notifica que estan pendiente cambios sin aplicar.&lt;/p&gt;
+&lt;p&gt;Finalmente estas son las funciones que nunca ves en los ejemplos pero que son muy útiles a la hora de desarrollar y hacer despliegues en entornos de producción, pruebas y desarrollo. Yo tengo el 90% de mis servidores basados en Ansible y cada día que pasa estoy más alegre de utilizarlo.  ;-)&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Tue, 03 Jun 2014 12:20:00 +0200</pubDate><guid>tag:www.acalustra.com,2014-06-03:las-mejores-funciones-de-ansible.html</guid><category>ansible</category><category>devops</category><category>howto</category><category>asterisk</category><category>playbook</category></item><item><title>Politicas de seguridad en Kamailio</title><link>http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html</link><description>&lt;p&gt;El otro día a través de este &lt;a class="reference external" href="https://twitter.com/hellc2/status/448756126382034944"&gt;tuit de Elio Rojano&lt;/a&gt; me anime a  documentar una serie de procesos que estamos siguiendo para mantener nuestra infraestructura segura y al mismo tiempo poder mantener las excepciones para no cortar el servicio en falsos positivos.&lt;/p&gt;
+&lt;p&gt;Para securizar kamailio lo más normal es usar el &lt;a class="reference external" href="http://kamailio.org/docs/modules/stable/modules/pike.html"&gt;módulo pike&lt;/a&gt;, teniendo un código muy parecido a este tipo:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+route[PIKE_CHECK]{
+    if (src_ip == myself)
+        return(1);
+
+    if($sht(ipban=&amp;gt;$si)!=$null){
+        xdbg(&amp;quot;Request $rm from blocked IP - from $fu (IP:$si:$sp)\n&amp;quot;);
+        exit;
+    }
+
+    if (!pike_check_req()){
+        xlog(&amp;quot;L_ALERT&amp;quot;,&amp;quot;Callid $ci -- pike blocking $rm from $fu (IP:$si:$sp)&amp;quot;);
+        $sht(ipban=&amp;gt;$si) = 1;
+        exit;
+    }
+}
+&lt;/pre&gt;
+&lt;p&gt;Pero esto según los parámetros del modelo  podemos poner más rígido o más flexible. Si le pones flexible puedes poner en riesgo tu infraestructura. Nosotros creemos que la mejor opción es ser restrictivos y añadir opciones para desbloquear.&lt;/p&gt;
+&lt;p&gt;En nuestro caso a la ruta normal de Pike hemos añadido una serie de valores que nos son útiles para añadir datos a la blacklist:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Validar si la extensión se parece a una existente.El caso de que se registre a la extensión 140 cuando lo normal es tener extensiones 7XXX, por otro lado para extensiones con nombre vamos a usar el &lt;a class="reference external" href="https://github.com/seatgeek/fuzzywuzzy"&gt;método fuzzy&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Validar una lista blanca de IPs que siempre están validadas.&lt;/li&gt;
+&lt;li&gt;En caso de error tenemos una cola que obtiene el valor del &lt;a class="reference external" href="http://stackoverflow.com/questions/2575760/python-lookup-hostname-from-ip-with-1-second-timeout"&gt;reverse dns&lt;/a&gt; de la ip origen, si no pertenece a un dominio válido no bloqueamos.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Por otra parte muchos de nuestros clientes se conectan desde ips de hoteles/starbucks/etc. Es bastante difícil de explicar que se te bloquea desde un determinado lugar por tener problemas con el registro de su sip. Básicamente hemos añadido una opción dentro del userportal, que valida la ip como usuario y añade durante una hora la ip en la whitelist. Para hacerlo tenemos la siguiente route:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+modparam(&amp;quot;ndb_redis&amp;quot;, &amp;quot;server&amp;quot;, &amp;quot;name=srvN;addr=127.0.0.1;port=6379;db=0&amp;quot;)
+route[IS_IN_WHITE_LIST]{
+    if ( redis_cmd(&amp;quot;srvN&amp;quot;,&amp;quot;GET white_list:$si&amp;quot;,&amp;quot;r&amp;quot;) ){
+        return(1);
+    }else{
+        return(0);
+    }
+}
+&lt;/pre&gt;
+&lt;p&gt;Desde nuestra web básicamente hacemos los siguientes comandos dentro de redis:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+redis 127.0.0.1:6379&amp;gt; SET white_list:{SOURCE_IP} 1
+OK
+redis 127.0.0.1:6379&amp;gt; EXPIRE white_list:{SOURCE_IP} 3600
+(integer) 1
+&lt;/pre&gt;
+&lt;p&gt;Con esto de momento y teniendo muy en cuenta la información del graphite vamos intentando solucionar todos nuestros problemas. Nuestra white list es accesible desde diferentes puntos, desde la integración con la web nuestros clientes están más contentos y al mismo tiempo en cualquier momento podemos bloquear a una IP.&lt;/p&gt;
+&lt;p&gt;Por otra parte tenemos nuestro sistema de bloqueo por rates, en el momento que un cliente se dispara de rates en un momento, lo que hacemos es borrarlo de la white_list y volvemos a bloquearlo. Por otra parte estamos buscando una manera de añadir un counter con expire, para ver que una ip no hace 100 request en 5 minutos, pero esto, de momento, es una idea.&lt;/p&gt;
+&lt;p&gt;Esto, evidentemente, no es el mejor sistema de seguridad, un robot puede llegar a acceder a la url del sistema, pero bueno, al mismo tiempo intentamos que nuestros problemas no sean problemas de nuestros clientes ;-)&lt;/p&gt;
+&lt;p&gt;PS: Desde la pasada Kamailio World conference el siguiente punto será este usar los datos de &lt;a class="reference external" href="mirror.simwood.com/honeypot/"&gt;Ips de Simwood&lt;/a&gt;&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Sat, 05 Apr 2014 12:20:00 +0200</pubDate><guid>tag:www.acalustra.com,2014-04-05:politicas-de-seguridad-en-kamailio.html</guid><category>kamailio</category><category>redis</category><category>python</category><category>seguridad</category><category>ataques</category><category>voip</category><category>sip</category></item><item><title>Haciendo test con sipp sin morir en el intento</title><link>http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html</link><description>&lt;p&gt;En el pasado Febrero cerramos un proyecto muy importante. Dicho proyecto necesita una cantidad de test, no porque el cliente lo pidiera, si no porque el SLA que teníamos con ellos nos hacia que con cualquier cambio solo teníamos ventanas muy pequeñas de tiempo. Lo que nos hizo tener que programar todos los escenarios posibles para una validación más eficiente.&lt;/p&gt;
+&lt;p&gt;Desde ese proyecto y usando &lt;a class="reference external" href="http://sipsimpleclient.org/"&gt;python-sipsimple&lt;/a&gt; hice un pequeño framework, para hacer test sin ser la locura de los ficheros xml de &lt;a class="reference external" href="http://sipp.sourceforge.net/"&gt;sipp&lt;/a&gt;. En los últimos meses estaba pensando en como poder hacer un framework libre, que pudiera ser útil para demás proyectos. Cuando tenía algo de código han salido a la luz dos proyectos muy interesantes.&lt;/p&gt;
+&lt;p&gt;El primero ha sido el que ha realizado &lt;a class="reference external" href="http://www.metaswitch.com/"&gt;metaswitch&lt;/a&gt;, que &lt;a class="reference external" href="https://github.com/Metaswitch"&gt;han liberado muchas partes de sus herramientas/productos&lt;/a&gt; y tiene un &lt;a class="reference external" href="https://github.com/Metaswitch/clearwater-live-test"&gt;framework de test muy orientado a su plataforma.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;El framework esta bien, pero era costoso de hacer sin ser referido a Metaswitch.&lt;/p&gt;
+&lt;p&gt;Esta semana &lt;a class="reference external" href="https://twitter.com/bklang"&gt;Ben Klang&lt;/a&gt; ha liberado &lt;a class="reference external" href="http://bklang.github.io/sippy_cup/"&gt;sippy_cup&lt;/a&gt;, un framework que la verdad me ha dejado muy contento. Es justo lo que estaba haciendo, por lo que a partir de ahora, usare este sistema y me &lt;a class="reference external" href="https://github.com/bklang/sippy_cup/pull/8"&gt;centraré en enviar pull-request&lt;/a&gt; si algo veo que se puede mejorar.&lt;/p&gt;
+&lt;p&gt;Para instalar este framework hay que seguir los siguientes pasos:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Dependencias ruby&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;sudo apt-get install build-essential git --yes
+curl -L https://get.rvm.io | bash -s stable
+&lt;span class="nb"&gt;source&lt;/span&gt; ~/.rvm/scripts/rvm
+rvm autolibs &lt;span class="nb"&gt;enable&lt;/span&gt;
+rvm install 1.9.3
+rvm use 1.9.3
+gem install sippy_cup
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;Instalando sipp&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;apt-get install libpcap-dev
+&lt;span class="nb"&gt;cd&lt;/span&gt; /tmp/
+git clone https://github.com/polysics/sipp_dynamic_pcapp_play.git
+tar -xvzf sipp-xxx.tar.gz
+&lt;span class="nb"&gt;cd &lt;/span&gt;sipp-*
+patch -p1 -i /tmp/sipp_dynamic_pcapp_play/
+autoreconf -ivf
+./configure --with-pcap
+make
+cp sipp /usr/local/bin/
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;Usando sippy_cup&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Para empezar con sippy_cup se necesita crear un fichero .yml con la siguiente estructura&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;---
+&lt;span class="nb"&gt;source&lt;/span&gt;: 192.168.1.114
+destination: 192.168.1.120
+max_concurrent: 10
+calls_per_second: 5
+number_of_calls: 20
+sip_user: 100
+steps:
+  - invite
+  - wait_for_answer
+  - ack_answer
+  - sleep 3
+  - send_digits &lt;span class="s1"&gt;&amp;#39;3125551234&amp;#39;&lt;/span&gt;
+  - sleep 5
+  - send_digits &lt;span class="s1"&gt;&amp;#39;#&amp;#39;&lt;/span&gt;
+  - wait_for_hangup
+&lt;/pre&gt;&lt;/div&gt;
+&lt;dl class="docutils"&gt;
+&lt;dt&gt;Una vez creado el fichero, tenemos dos opciones para correr el &lt;strong&gt;sippy_cup&lt;/strong&gt;:&lt;/dt&gt;
+&lt;dd&gt;&lt;ul class="first last simple"&gt;
+&lt;li&gt;&lt;strong&gt;-c&lt;/strong&gt;: Esto genera solamente el .xml y el pcap que se necesita&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;-r&lt;/strong&gt;: Esto hace que el programa empieze a correr y genera el flujo de llamadas.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;sippy_cup -cr my_test_scenario.yml
+Compiling media to /Users/eloycotopereiro/dev/sipp/sippcup/my_test_scenario.xml...done.
+Compiling scenario to /Users/eloycotopereiro/dev/sipp/sippcup/my_test_scenario.pcap...done.
+&lt;span class="s2"&gt;&amp;quot;Preparing to run SIPp command: sudo sipp -i 192.168.1.114 -p 8836 -sf /Users/eloycotopereiro/dev/sipp/sippcup/my_test_scenario.xml -l 10 -m 20 -r 5 -s 100 192.168.1.120 &amp;gt; /dev/null 2&amp;gt;&amp;amp;1&amp;quot;&lt;/span&gt;
+Password:
+&lt;span class="s2"&gt;&amp;quot;Test completed successfully!&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Ahora ya tenemos nuestro servicio de testing mas sencillo de leer, y mas fácil para hacer pruebas en nuestros servicios de voip.&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Fri, 30 Aug 2013 10:10:00 +0200</pubDate><guid>tag:www.acalustra.com,2013-08-30:haciendo-test-con-sipp-sin-morir-en-el-intento.html</guid><category>sip</category><category>sipp</category><category>ruby</category><category>sippy_cup</category><category>test</category><category>asterisk</category><category>asteriskTestSuite</category></item><item><title>Instalar Hubot e integrarlo con nuestro servicio XMPP</title><link>http://www.acalustra.com/instalar-hubot-e-integrarlo-con-nuestro-servicio-xmpp.html</link><description>&lt;p&gt;&lt;a class="reference external" href="http://hubot.github.com/"&gt;Hubot&lt;/a&gt; es uno de los productos más de moda en el panorama de empresas desarrolladoras de software Americanas. Iniciado y comandado por &lt;a class="reference external" href="http://github.com/"&gt;Github&lt;/a&gt;, Hubot permite automatizar muchas tareas a través de tu chat de grupo.&lt;/p&gt;
+&lt;p&gt;La propia descripción de Hubot en la página web es la siguiente:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nx"&gt;GitHub&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;Inc&lt;/span&gt;&lt;span class="p"&gt;.,&lt;/span&gt; &lt;span class="nx"&gt;wrote&lt;/span&gt; &lt;span class="nx"&gt;the&lt;/span&gt; &lt;span class="nx"&gt;first&lt;/span&gt; &lt;span class="nx"&gt;version&lt;/span&gt; &lt;span class="nx"&gt;of&lt;/span&gt; &lt;span class="nx"&gt;Hubot&lt;/span&gt; &lt;span class="nx"&gt;to&lt;/span&gt; &lt;span class="nx"&gt;automate&lt;/span&gt; &lt;span class="nx"&gt;our&lt;/span&gt; &lt;span class="nx"&gt;company&lt;/span&gt; &lt;span class="nx"&gt;chat&lt;/span&gt; &lt;span class="nx"&gt;room&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="nx"&gt;Hubot&lt;/span&gt; &lt;span class="nx"&gt;knew&lt;/span&gt; &lt;span class="nx"&gt;how&lt;/span&gt; &lt;span class="nx"&gt;to&lt;/span&gt; &lt;span class="nx"&gt;deploy&lt;/span&gt; &lt;span class="nx"&gt;the&lt;/span&gt; &lt;span class="nx"&gt;site&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;automate&lt;/span&gt; &lt;span class="nx"&gt;a&lt;/span&gt; &lt;span class="nx"&gt;lot&lt;/span&gt; &lt;span class="nx"&gt;of&lt;/span&gt; &lt;span class="nx"&gt;tasks&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;and&lt;/span&gt; &lt;span class="nx"&gt;be&lt;/span&gt; &lt;span class="nx"&gt;a&lt;/span&gt; &lt;span class="nx"&gt;source&lt;/span&gt; &lt;span class="nx"&gt;of&lt;/span&gt; &lt;span class="nx"&gt;fun&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="nx"&gt;the&lt;/span&gt; &lt;span class="nx"&gt;company&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="nx"&gt;Eventually&lt;/span&gt; &lt;span class="nx"&gt;he&lt;/span&gt; &lt;span class="nx"&gt;grew&lt;/span&gt; &lt;span class="nx"&gt;to&lt;/span&gt; &lt;span class="nx"&gt;become&lt;/span&gt; &lt;span class="nx"&gt;a&lt;/span&gt; &lt;span class="nx"&gt;formidable&lt;/span&gt; &lt;span class="nx"&gt;force&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="nx"&gt;GitHub&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="nx"&gt;But&lt;/span&gt; &lt;span class="nx"&gt;he&lt;/span&gt; &lt;span class="nx"&gt;led&lt;/span&gt; &lt;span class="nx"&gt;a&lt;/span&gt; &lt;span class="kr"&gt;private&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;messy&lt;/span&gt; &lt;span class="nx"&gt;life&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="nx"&gt;So&lt;/span&gt; &lt;span class="nx"&gt;we&lt;/span&gt; &lt;span class="nx"&gt;rewrote&lt;/span&gt; &lt;span class="nx"&gt;him&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;img alt="hubot-fast-integration" class="align-center" src="img/hubot.jpg" /&gt;
+&lt;p&gt;En este caso Hubot es muy potente. Además es muy fácil extender los módulos existentes. La situación más normal es tenerlo integrado con Hipchat, o campfire. Pero pocas veces se ve integrado con XMPP. En mi empresa usamos bastante el XMPP, por lo que poder integrar esta herramienta es increíble para nosotros, no solo por los script existentes, si no también por lo que podemos generar.&lt;/p&gt;
+&lt;p&gt;Para instalar hubot lo primero que hay que hacer es tener la versión de &lt;a class="reference external" href="http://nodejs.org/"&gt;node&lt;/a&gt; / &lt;a class="reference external" href="http://coffeescript.org/"&gt;coffee-script&lt;/a&gt; correcta:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# apt-get install build-essential libssl-dev git-core redis-server libexpat1-dev&lt;/span&gt;
+&lt;span class="c"&gt;# cd /usr/src/&lt;/span&gt;
+&lt;span class="c"&gt;# wget http://nodejs.org/dist/v0.8.17/node-v0.8.17.tar.gz&lt;/span&gt;
+&lt;span class="c"&gt;# tar xf node-v0.8.17.tar.gz -C /usr/local/src &amp;amp;amp;&amp;amp;amp; cd /usr/local/src/node-v0.8.17&lt;/span&gt;
+&lt;span class="c"&gt;# ./configure &amp;amp;amp;&amp;amp;amp; make &amp;amp;amp;&amp;amp;amp; make install&lt;/span&gt;
+&lt;span class="c"&gt;# npm install -g coffee-script&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Una vez instaladas todas las dependencias solamente hay que hacer el deploy del código base.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# cd /opt&lt;/span&gt;
+&lt;span class="c"&gt;# git clone git://github.com/github/hubot.git &amp;amp;amp;&amp;amp;amp; cd hubot&lt;/span&gt;
+&lt;span class="c"&gt;# npm install&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Una vez instalado tenemos que comprobar que funciona correctamente, para ello ejecutamos los siguientes comandos:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;root@deb-pruebas:/opt/hubot&lt;span class="nv"&gt;$ &lt;/span&gt;./bin/hubot
+Hubot&amp;amp;gt; hubot ping
+Hubot&amp;amp;gt; PONG
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Ahora tenemos que crear el bot que sera la configuración que se conecte a nuestro servidor:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;/opt/hubot/bin/hubot -c ./xmpp
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Eso nos crea una carpeta llamada xmpp, ahora tenemos que entrar y editar las dependencias en el package.json para añadir nuestras necesidades:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="s2"&gt;&amp;quot;dependencies&amp;quot;&lt;/span&gt;: &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="s2"&gt;&amp;quot;hubot&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;&amp;amp;gt;=2.3.2&amp;quot;&lt;/span&gt;,
+    &lt;span class="s2"&gt;&amp;quot;hubot-scripts&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;&amp;amp;gt;= 2.1.0&amp;quot;&lt;/span&gt;,
+    &lt;span class="s2"&gt;&amp;quot;optparse&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;&amp;amp;gt;=1.0.3&amp;quot;&lt;/span&gt;,
+    &lt;span class="s2"&gt;&amp;quot;node-xmpp&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;&amp;amp;gt;=0.3.2&amp;quot;&lt;/span&gt;,
+    &lt;span class="s2"&gt;&amp;quot;hubot-xmpp&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;&amp;amp;gt;=0.1.0&amp;quot;&lt;/span&gt;,
+    &lt;span class="s2"&gt;&amp;quot;htmlparser&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;&amp;amp;gt;=1.7.6&amp;quot;&lt;/span&gt;,
+    &lt;span class="s2"&gt;&amp;quot;soupselect&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;&amp;amp;gt;=0.2.0&amp;quot;&lt;/span&gt;,
+    &lt;span class="s2"&gt;&amp;quot;underscore&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;&amp;amp;gt;=1.3.3&amp;quot;&lt;/span&gt;,
+    &lt;span class="s2"&gt;&amp;quot;underscore.string&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;&amp;amp;gt;=2.2.0rc&amp;quot;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Ahora solo tenemos que instalar las dependencias con &lt;strong&gt;npm install&lt;/strong&gt;. Una vez instaladas tenemos que configurar las env variables.  Donde le decimos a donde/como se tiene que conectar:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;HUBOT_XMPP_USERNAME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;hubot@deb-pruebas
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;HUBOT_XMPP_PASSWORD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;hubot
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;HUBOT_XMPP_ROOMS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;dev@dev-pruebas
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Una vez configurado solo tenemos que ejecutarlo y empezar a jugar en nuestro chat de grupo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;root@deb-pruebas:/&lt;span class="nv"&gt;$ &lt;/span&gt;/opt/hubot/xmpp/bin/hubot --adapter xmpp
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;En ese momento veremos que se conecta el usuario hubot a la conferencia y ya podemos empezar a usar los comandos en la sala.  Para listar todos los comandos y ver que se puede hacer solamente hay que ejecutar &lt;strong&gt;hubot help&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Si necesitais mas scripts, &lt;a class="reference external" href="https://github.com/github/hubot-scripts/"&gt;en este repositorio de github&lt;/a&gt;, existen un ciento de ellos totalmente diferentes. &lt;a class="reference external" href="http://net.tutsplus.com/tutorials/javascript-ajax/writing-hubot-plugins-with-coffeescript/"&gt;Por otra parte aquí os dejo un tutorial para poder escribir vuestros propios plugins&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Este es una pequeña demo de lo que se puede hacer.&lt;/p&gt;
+&lt;iframe src="http://player.vimeo.com/video/57637316" width="500" height="314" frameborder="0"&gt;&lt;/iframe&gt;&lt;p&gt;Yo lo he instalado recientemente, durante esta semana creo que voy a escribir varios módulos. Te imaginas obtener cuantas llamadas existen en vuestra plataforma, o quizás añadir/expulsar a un usuario a la cola solamente con un comando xmpp :-)&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Fri, 10 May 2013 00:30:00 +0200</pubDate><guid>tag:www.acalustra.com,2013-05-10:instalar-hubot-e-integrarlo-con-nuestro-servicio-xmpp.html</guid><category>xmpp</category><category>github</category><category>productividad</category><category>hubot</category><category>asterisk</category><category>jabber</category></item><item><title>Spring Hackaton London</title><link>http://www.acalustra.com/spring-hackaton-london.html</link><description>&lt;p&gt;26-28 de Abril en Londres, 3 hackathones en apenas 300 metros de distancia y muchas ganas de programar. En el pasado mes de octubre había estado en la #angelhack me quedo con un poco mal sabor de boca debido a que no cumplió mis expectativas a nivel de proyectos.&lt;/p&gt;
+&lt;p&gt;Este fin de semana, con la compañía de &lt;a class="reference external" href="https://twitter.com/agonzalezroro/"&gt;&amp;#64;agonzalezroro&lt;/a&gt;, nos fuimos a la &lt;a class="reference external" href="http://hackathoncentral.com/"&gt;hackatoncentral&lt;/a&gt;, que tenía una bases muy interesantes:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Varios proveedores de &lt;a class="reference external" href="http://hackathoncentral.com/#schedule"&gt;APIS que patrocinaban el evento&lt;/a&gt;. Siendo los más accesibles &lt;a class="reference external" href="http://www.openstreetmap.org/"&gt;OpenStreetMaps&lt;/a&gt;, &lt;a class="reference external" href="http://www.twilio.com/"&gt;twilio&lt;/a&gt; o el &lt;a class="reference external" href="http://data.police.uk/api/docs/"&gt;api de la policía de Reino unido&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Enfocado a aplicaciones locales, ya sean web o móvill.&lt;/li&gt;
+&lt;li&gt;Tenía que ser freshcode&lt;/li&gt;
+&lt;li&gt;Había &lt;a class="reference external" href="http://hackathoncentral.com/#prizes"&gt;6 diferentes categorías&lt;/a&gt; para optar a interesantes premios.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;La idea era hacer un chat Webrtc/sip con &lt;a class="reference external" href="http://acalustra.com/post/42677671338/kamailio-integracion-redis-colas"&gt;Kamailio&lt;/a&gt; con localización en un mapa, pero finalmente, al presentar las API de los patrocinadores, la habían propuesto, por lo que la desechamos y empezamos a pensar en otra solución/idea.&lt;/p&gt;
+&lt;p&gt;La idea fue un sistema de localización de comisarías de policía en un mapa, y que al clickar en ella se pudiera llamar gratuitamente a la comisaría.&lt;/p&gt;
+&lt;a class="reference external image-reference" href="hackathon"&gt;&lt;img alt="" class="align-center" src="img/springhackathon.png" style="width: 50%;" /&gt;&lt;/a&gt;
+&lt;p&gt;Empezamos a programar y teníamos claro que usaríamos herramientas que no usábamos a menudo para así aprender algo nuevo,aqui os presento la lista:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Backend: Finalmente usamos &lt;a class="reference external" href="http://flask.pocoo.org/docs/"&gt;Flask&lt;/a&gt;, que es muy ligero y rápido de programar.&lt;/li&gt;
+&lt;li&gt;Frontend: Finalmente nos decantamos por &lt;a class="reference external" href="http://emberjs.com/"&gt;emberjs&lt;/a&gt;. Álex prefería backbone, pero yo había estudiado las últimas semanas este framework. Por otra parte también usamos &lt;a class="reference external" href="http://openlayers.org/"&gt;Openlayers&lt;/a&gt; con los &lt;a class="reference external" href="http://dev.openlayers.org/docs/files/OpenLayers/Layer/Bing-js.html"&gt;layers de bing&lt;/a&gt; para mostrar el mapa.&lt;/li&gt;
+&lt;li&gt;Se hicieron una pequeños scrappers para detectar la situaciones de las comisarías de policía, algo liosa la API para usar, por lo que se hizo un pequeño script que lo pasaba a un fichero json.&lt;/li&gt;
+&lt;li&gt;Para el deploy usamos &lt;a class="reference external" href="http://www.heroku.com"&gt;Heroku&lt;/a&gt; que nunca lo había usado, pese a leer sobre el a menudo. Muy grata satisfacción con la sencillez de hacer los deploys :-).&lt;/li&gt;
+&lt;li&gt;Para realizar las llamadas usamos &lt;a class="reference external" href="http://www.twilio.com"&gt;Twilio&lt;/a&gt;, que simplemente realizaba un click to call de vieja usanza.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;a class="reference external image-reference" href="emberjs.jpg"&gt;&lt;img alt="" class="align-center" src="img/emberjs.jpg" style="width: 50%;" /&gt;&lt;/a&gt;
+&lt;p&gt;Al final el resultado: para ser un par de días, y no haber pasado mucho tiempo por la noche creo que ha sido bastante aceptable, como no el codigo esta en &lt;a class="reference external" href="http://kcy.me/joh2"&gt;github&lt;/a&gt; y &lt;a class="reference external" href="http://kcy.me/joog"&gt;se puede ver la aplicación online&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Me alegra haber asistido a esta hackaton. Alex me ha enseñado muchos tips que me van a servir mucho durante mis jornadas laborales. Además por fin he probado esas tecnologías que siempre lees, pero que siempre tienes la duda de usarlas o no.&lt;/p&gt;
+&lt;p&gt;Nos vemos en la próxima hackathon, que espero que sea pronto. :-)&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Sun, 28 Apr 2013 12:25:00 +0200</pubDate><guid>tag:www.acalustra.com,2013-04-28:spring-hackaton-london.html</guid><category>openlayers</category><category>twilio</category><category>cloud-communications</category><category>programacion</category><category>emberjs</category><category>python</category></item><item><title>Kamailio redis integracion de colas</title><link>http://www.acalustra.com/kamailio-redis-integracion-de-colas.html</link><description>&lt;p&gt;Desde la versión
+&lt;a class="reference external" href="http://www.kamailio.org/wiki/features/new-in-3.2.x"&gt;3.2&lt;/a&gt;
+de&lt;a class="reference external" href="http://www.kamailio.org/"&gt;Kamailio&lt;/a&gt; tiene soporte para
+&lt;a class="reference external" href="http://redis.io/"&gt;Redis&lt;/a&gt;. Junto con el módulo
+&lt;a class="reference external" href="http://kamailio.org/docs/modules/3.3.x/modules_k/memcached.html"&gt;memcache&lt;/a&gt;,
+se aproxima al mundo web, algo que favorece a la telefonía en los
+tiempos que vivimos. :)&lt;/p&gt;
+&lt;p&gt;Antiguamente para llamar un programa externo y tener información
+detallada(en tiempo real) en otro sistema te hacía falta usar el modulo
+de python, xhttp,lua..Todos son muy válidos, pero la velocidad/sencillez
+que aporta redis no lo aportan los otros sistemas.&lt;/p&gt;
+&lt;p&gt;Redis es una 'Database' que esta escrita en C que empezó en el 2009, y
+que esta siendo usada en muchos entornos web. Por otra parte la
+estructura de datos es orientada en key=&amp;gt;value. Por lo que los que
+venimos del mundo voip la podemos asociar a la database de Asterisk.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="class" src="img/redis.jpg" /&gt;
+&lt;/div&gt;
+&lt;p&gt;Para un sistema de colas es simple. Existe un proceso(o varios) que
+inserta los datos (Comando &lt;a class="reference external" href="http://redis.io/commands/rpush"&gt;RPUSH&lt;/a&gt;) y
+un proceso (worker) que esta a la espera de que el master inserte datos
+(&lt;a class="reference external" href="http://redis.io/commands/blpop"&gt;BLPOP&lt;/a&gt;) para poder ejecutar la
+acción, ahora os dejo un ejemplo:&lt;/p&gt;
+&lt;p&gt;Inserción de datos (Kamailio):&lt;/p&gt;
+&lt;p&gt;Para la instalación del módulo de redis, &lt;a class="reference external" href="http://www.kamailio.org/wiki/install/3.3.x/git"&gt;simplemente tenemos que seguir
+esta guía de la wiki de
+kamailio&lt;/a&gt; cambiando
+el &lt;em&gt;make FLAVOUR&lt;/em&gt; por este:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+make FLAVOUR=kamailio include_modules=&amp;quot;db_mysql ndb_redis&amp;quot; cfg
+&lt;/pre&gt;
+&lt;p&gt;Una vez instalado deberemos hacer los siguientes cambios en el
+kamailio.cfg:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+   loadmodule &amp;quot;ndb_redis.so&amp;quot;
+modparam(&amp;quot;ndb_redis&amp;quot;, &amp;quot;server&amp;quot;, &amp;quot;name=srvN;addr=127.0.0.1;port=6379;db=0&amp;quot;)
+route{
+  ...
+  ...
+  ...
+  ...
+  if(redis_cmd(&amp;quot;srvN&amp;quot;, &amp;quot;RPUSH calls $ci&amp;quot;, &amp;quot;r&amp;quot;)) {
+    # success
+    xlog(&amp;quot;===== $redis(r=&amp;amp;gt;type) * $redis(r=&amp;amp;gt;value)\n&amp;quot;);
+  }
+}
+&lt;/pre&gt;
+&lt;p&gt;Obtención de datos (python):&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+pip install hiredis
+pip install redis
+
+    import redis
+    def queue():
+        r= redis.StrictRedis(host='127.0.0.1', port=6379, db=1)
+        while True:
+            (queue, msg) = r.blpop('invites')
+            print 'Entrada en la cola %s y con datos %s'%(queue,msg)
+
+    if __name__ == '__main__':
+        queue()
+&lt;/pre&gt;
+&lt;p&gt;Con este módulo se me ocurren varias aplicaciones que realizar:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Tener el numero de llamadas que se están cursando.&lt;/li&gt;
+&lt;li&gt;Un sistema de colas para generar los cdrs.&lt;/li&gt;
+&lt;li&gt;Notificación para sistemas de prepago, descontar saldo etc..&lt;/li&gt;
+&lt;li&gt;Notificación de estados de llamadas en un dashboard.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Como veis la aplicación es bastante sencilla, y en sistemas que no sean
+puramente de voz, viene muy bien para interaccionar con otros programas.&lt;/p&gt;
+&lt;p&gt;Dentro de poco mostraré la integración de Opensips con Mongodb. Esta
+database no es que me apasione, pero lo de poder escribir objetos json,
+es muy rápido para ciertos casos.&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Wed, 10 Apr 2013 00:30:00 +0200</pubDate><guid>tag:www.acalustra.com,2013-04-10:kamailio-redis-integracion-de-colas.html</guid><category>kamailio</category><category>redis</category><category>python</category><category>notifications</category><category>voip</category><category>telefonia</category></item><item><title>Notificaciones de Github mediante XMPP.</title><link>http://www.acalustra.com/notificaciones-de-github-mediante-xmpp.html</link><description>&lt;p&gt;El concepto de desarrollador ha cambiado desde hace un par de años.
+Antiguamente todo el mundo escribia sus programas, o se adaptaba algo de
+software libre. Ahora se busca la integración de todos los servicios
+mediante APIS.&lt;/p&gt;
+&lt;p&gt;Por una razón o por otra me ha tocado estar en los dos lados de una API.
+En la de diseño del API de webphone, y en el consumo de las mismas.
+Siempre que he tenido la oportunidad de usarlas he echado de menos la
+información push. Siempre se puede arreglar con el uso de base de datos
+y celery, pero bueno, no es lo mismo.&lt;/p&gt;
+&lt;p&gt;XMPP es un protocolo que se puede usar para todo, tanto como un sistema
+de mesajeria corporativo, como servicio de presencia o &lt;a class="reference external" href="http://bosqueviejo.net/2012/11/17/soa-con-xmpp/"&gt;para desplegar
+servicios soa.&lt;/a&gt;&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="xmpp" src="static/xmpp.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;Github tiene una lista de servicios push bastante interesante con cada
+repositorio &lt;a class="reference external" href="https://github.com/github/github-services"&gt;(ademas los tiene liberados bajo software
+libre)&lt;/a&gt;, uno de ellos es
+la integración con
+&lt;a class="reference external" href="https://github.com/github/github-services/blob/master/lib/services/jabber.rb"&gt;Jabber&lt;/a&gt;.
+En un sistema de varios desarrolladores suele ser útil para notificar al
+resto de usuarios de una nueva versión de código en el repositorio.En mi
+actual empresa además parcheamos la entrada e insertamos los datos en
+nuestra plataforma de tareas.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="github" src="static/github.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;Para configurar las notificaciones en un repositorio de Github solamente
+tenemos que hacer lo siguiente,
+&lt;a class="reference external" href="https://help.github.com/articles/post-receive-hooks"&gt;opciones/servicios/jabber&lt;/a&gt;
+y setear el usuario/conferencia que deseemos.&lt;/p&gt;
+&lt;p&gt;Leer los datos con python no es una tarea muy complicada, y aqui os dejo
+un pequeño trozo de código que espera la entrada de un commit de github&lt;/p&gt;
+&lt;p&gt;La verdad que echo de menos una lista de triggers en muchos servicios en
+los que cuando ocurra una accción que se notifique mediante XMPP. Hay
+librerías para todos los lenguajes y se puede reducir mucho las
+peticiones REST que simplemente se hacen si existe algún cambio.&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Fri, 15 Mar 2013 12:25:00 +0100</pubDate><guid>tag:www.acalustra.com,2013-03-15:notificaciones-de-github-mediante-xmpp.html</guid><category>git</category><category>github</category><category>xmpp</category><category>triggers</category><category>push</category></item><item><title>Para hacerlo mal, mejor no hacerlo</title><link>http://www.acalustra.com/para-hacerlo-mal-mejor-no-hacerlo.html</link><description>&lt;p&gt;Durante el tiempo que he trabajado siempre ha existido un problema, todo
+el mundo quiere pagar por un taladro de primera calidad, pero nadie es
+capaz de pagar por un software de primera calidad.&lt;/p&gt;
+&lt;p&gt;Esto post va a ser referido a las herramientas que se usan en todo tipo
+de empresas tecnológicas. Es muy difícil que una empresa pague una
+cuantía mensual por un sistema de tickets para soporte, o que
+simplemente pague por un sistema de gestión de tareas, o por el IDE del
+empleado.&lt;/p&gt;
+&lt;p&gt;Además empresas tecnológicas el sistema de gestión de tareas, el control
+de versiones, o el sistema operativo a usar. Lo elige un director de
+sistemas o el responsable de grupo lo que acarrea una tarea costosa para
+el verdadero empleado (el que reporta)&lt;/p&gt;
+&lt;p&gt;Según se asume la necesidad, la primera opción siempre es el software
+libre, pero muchas veces el problema es que no existen más opciones.&lt;/p&gt;
+&lt;p&gt;Siempre he intentado trabajar en lo que me gusta, y donde evidentemente
+generó valor. Por eso para mi tener que pelearme con un sistema de
+tareas inválido, o tener que usar un sistema operativo que no conozco
+los atajos de teclado, para mi, es tirar dinero.&lt;/p&gt;
+&lt;p&gt;Ahora dejo algunos ejemplos con mis experiencias en el entorno
+empresarial:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cliente de correo:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Muchas de las pequeñas empresas tienen el correo gestionado con su
+proveedor de hosting, o las más alocadas montan su propio servidor.&lt;/p&gt;
+&lt;p&gt;En mi anterior etapa de &lt;a class="reference external" href="http://www.quobis.com"&gt;Quobis&lt;/a&gt;, teníamos una
+suite colaborativa basada en &lt;a class="reference external" href="http://www.novell.com/products/groupwise/"&gt;Novell
+Groupwise&lt;/a&gt;. La herramienta
+era potente(mucho) pero no para una empresa de 10 empleados. Además
+había la obligación de usar un cliente de correo corporativo, que en
+linux era bastante lento (el 80% de la plantilla lo utilizaba), tenía
+una buena web, pero no era tan buena como Gmail.&lt;/p&gt;
+&lt;p&gt;El mantenimiento de licencias salía en torno a 600€ al mes (60€
+empleado) y había un coste de consumo eléctrico y mantenimiento que
+había que asumir. Además de prevenir las constantes caídas que teníamos.&lt;/p&gt;
+&lt;p&gt;La decisión fue el cambio a &lt;a class="reference external" href="http://www.google.co.uk/intl/en_uk/enterprise/apps/business/"&gt;Google
+Apps&lt;/a&gt;,
+que además de solucionar los problemas del correo, se mataba el servidor
+de xmpp, y todos podíamos usar Google Docs. Por su parte los clientes
+nativos de Iphone/Android resultan más rápidos y eficaces.&lt;/p&gt;
+&lt;p&gt;Además Gmail provee un api, que cualquier software por ahí deje que te
+loguees contra el, por lo que además sirve como un &lt;strong&gt;fork&lt;/strong&gt; de ldap.&lt;/p&gt;
+&lt;p&gt;En cuanto a todos los plugins de navegador que se pueden usar a nivel
+empresarial, hace que la herramienta de google apps, no tenga rival en
+entornos pequeños, y me atrevería a decir en empresas grandes, pero
+cuando se elevan los usuarios herramientas como Zimbra quizás no es tan
+eficaz, pero válida por costes.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Gestión de tareas:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Esta es de las que más me cabrea, usar un sistema de tareas decente
+(Jira, Youtrack, Assembla) es algo primordial. Es muy común que mucha
+gente use Redmine, yo no tengo nada contra el, pero cualquiera de los
+anteriormente mencionados es muy superior a la hora del uso y de la
+rapidez de gestionarlo.&lt;/p&gt;
+&lt;p&gt;Además los anteriormente comentados tienen las siguientes
+características:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Plugins para el navegador, importante para mejorar la productividad.&lt;/li&gt;
+&lt;li&gt;Se actualizan solos en la versión ondemand&lt;/li&gt;
+&lt;li&gt;Están pensados para los programadores y para managers. Para unos
+tienen APIS y para otros gráficas. :)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;De esta manera es la única (Bueno, eso fuera de España) de que el
+responsable de turno no venga el lunes a preguntarte como esta el
+proyecto, o que tengas que enviarle los viernes los avances del mismo.&lt;/p&gt;
+&lt;p&gt;La creación de tareas con Jira es rápida si esta bien configurado, los
+reportes que da son eficaces y de esta manera se mejora la productividad
+de todo el mundo.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Servidor de control de versiones:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Aquí va al gusto, pero esta muy ligado a la gestión de tareas, el
+sistema de control de versiones para la empresa es Bitbucket,por las
+siguientes razones:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Se integra con Jira de una manera perfecta&lt;/li&gt;
+&lt;li&gt;La gestión de tickets es rápida y visual + La nueva interfaz ha
+mejorado muchisimo en rapidez.&lt;/li&gt;
+&lt;li&gt;A nivel de precios es competitivo, por 10$/mensuales tienes 10 dev
+trabajando.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;En cuanto a la opción de Github, me gusta y la interfaz es mucho más
+práctica que bitbucket, pero la diferencia es que licenciar por
+repositorio es más complicado para la pequeña empresa que suele tener
+varios repositorios privados.&lt;/p&gt;
+&lt;p&gt;En cuanto si instalar tu propio servidor para mi no es viable, la
+instalación de gitlabHQ puede llevarle a una persona 8 horas, y las
+actualizaciones. Contando las horas del técnico se escapan los 10$
+mensuales que vale la licencia para 10 usuarios de Bitbucket. :)&lt;/p&gt;
+&lt;p&gt;Finalmente valorar el software libre debe ser nuestra primera opción,
+pero las herramientas de trabajo tienen que ser las mejores, para mi hay
+una diferencia enorme entre un zimbra-gmail, jira-redmine. A veces
+perder mas de 10 minutos en preparar un informe porque la aplicación no
+es flexible, o no se adapta, sale bastante mas caro que pagar unos 200$
+por trabajador al año.&lt;/p&gt;
+&lt;p&gt;Consecuentemente en la empresa tiene que brindar el sentido común, no es
+normal que un trabajador tenga un portátil que se le apaga cuando se le
+calienta, o que tenga que trabajar con Eclipse y los 2 gigabytes de
+memoria RAM no sean suficientes para poder compilar. Por ahorrar 200$ se
+esta tirando varios días de trabajo de un empleado.&lt;/p&gt;
+&lt;p&gt;Mas me sorprende cuando en el entorno empresarial se ven muchos
+teléfonos móviles de última generación/tablets, y algunos trabajadores
+están trabajando en pantallas de 15”, con ordenadores Pentium 4, y con
+ratones de bola. Cuando las herramientas son buenas el trabajo será
+mejor, pero las buenas herramientas no suelen estar en manos de los
+&lt;em&gt;curritos&lt;/em&gt;.&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Wed, 28 Nov 2012 12:25:00 +0100</pubDate><guid>tag:www.acalustra.com,2012-11-28:para-hacerlo-mal-mejor-no-hacerlo.html</guid><category>productividad</category><category>software libre</category><category>jira</category><category>bitbucket</category><category>googleapps</category></item><item><title>La aventura de marcharche al Google Campus</title><link>http://www.acalustra.com/la-aventura-de-marcharche-al-google-campus.html</link><description>&lt;p&gt;Como muchos sabéis desde Septiembre estoy trabajando desde Londres. Una
+ilusión que tenía desde pequeño. Vivir en una ciudad grande, que me
+pudiera dar en cualquier momento una sorpresa.&lt;/p&gt;
+&lt;p&gt;Todo este proyecto empezó en el 2010, cuando por una razón o por otra me
+quería adentrar en otra cultura, otras empresas, etc.. Hubo un intento,
+pero no cuajo. Por lo que desistí y decidí dejar un sueño de lado. Al
+fin al cabo tenía una vida fácil, me podía permitir todo lo que quería y
+era feliz. Además tenía la suerte de que en cualquier momento podía
+plantarme e intentarlo.&lt;/p&gt;
+&lt;p&gt;Hasta que un día me llamó David Bello, mi actual CEO,&amp;nbsp;diciéndome&amp;nbsp;para
+trabajar en la Coruña, algo que a mi no me motivaba, dado que estaba en
+una empresa de primera división, pequeña, solvente y con la capacidad de
+hacer cosas innovadoras. Pero después de unas cuantas llamadas viene
+David y me lanza, ¡Entiendo que no quieras venir para Coruña! ¿Y si
+trabajas desde el país que te apetezca? ¡Manda carallo! se daba una
+ecuación perfecta para intentarlo:&lt;/p&gt;
+&lt;p&gt;Empresa gallega en proceso de internacionalización, lo que conlleva
+abrir un nuevo país, ayudar a la misma y generar valor en España, que
+buena falta hace.&lt;/p&gt;
+&lt;p&gt;Una empresa pequeña, que conoces a todos tus compañeros y no tienes
+problemas jerarquicos.&lt;/p&gt;
+&lt;p&gt;La entrada de dinero de un grupo inversor, es la mejor noticia para una
+startup. Con ese dinero se puede garantizar de que se puede hacer
+producto, y tener a varios desarrolladores durante &amp;quot;unos meses&amp;quot; sin
+sacar rentabilidad a la empresa, pero que en un futuro generará una
+fuente de ingresos recursivos.&lt;/p&gt;
+&lt;p&gt;La idea siempre fue Londres, una ciudad que me fascina desde que tengo
+uso de razón. Poder estar dentro de la Tech city es un
+lugar&amp;nbsp;increíble&amp;nbsp;para cualquier persona técnica.&lt;/p&gt;
+&lt;p&gt;Poder estar en las oficinas del Google campus es una oportunidad que
+debería poder tener cualquier persona, el ambiente es&amp;nbsp;increíble&amp;nbsp; las
+conversaciones de una calidad envidiable y las oportunidades de
+mentoring de personal de otras empresas son semanales.&lt;/p&gt;
+&lt;p&gt;Trabajar en una oficina de coworking tiene mas ventajas. Las ganas de
+ayudar a tu compañero de al lado cuando dice &amp;quot;Mother Fuck!&amp;quot; es algo que
+no se espera, ¡se supone!. Además cuando en una empresa pequeña una
+persona es muy buena, la calidad del resto mejora substancialmente.
+Imaginaros que esa calidad no la&amp;nbsp;tengáis&amp;nbsp;que contratar, si no que los
+puedas tener de compañero, que lo ves todos los días y los dos puedan
+evolucionar mutuamente. Eso para una startup, que tiene a sus primeros
+trabajadores es algo que a plantear para el&amp;nbsp;crecimiento&amp;nbsp;de la misma.&lt;/p&gt;
+&lt;p&gt;Actualmente hablando de Webphone estamos en pleno proceso de
+internacionalización, se ha trabajado duro durante los últimos meses
+para sacar una nueva versión, que pasa de un MVP a un producto completo,
+en el cual ahora mismo podemos hacer releases semanales, hemos mejorado
+la arquitectura, mejorado algunas funcionalidades y añadidas otras
+muchas. El resultado se verá en un plazo corto de tiempo :)&lt;/p&gt;
+&lt;p&gt;Desde&amp;nbsp;aquí&amp;nbsp;saludaros y daros la bienvenida a mi nuevo rinconcete.&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Mon, 01 Oct 2012 00:30:00 +0200</pubDate><guid>tag:www.acalustra.com,2012-10-01:la-aventura-de-marcharche-al-google-campus.html</guid><category>londres</category><category>webphone</category><category>techhub</category><category>googleCampus</category></item></channel></rss>

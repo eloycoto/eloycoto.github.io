@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="es">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> Validacion sencilla de sipp con sippy_cup</title>
+    <link rel="canonical" href="http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" sipp, sip, voip, ims, testing, asterisk, kamailio, mojolingo, bklang"/>
+    <meta name="description" content=" Sippy_cup es una herramienta de test que utiliza sipp en backend. Hace fácil probar herramientas en la web "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+
+
+
+    <meta name="tags" content="sip, sipp, sippy_cup, asterisk, voip" />
+    <meta name="date" content=" 2013-08-30 10:10:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">Validar instalaciones de SIPP con sippy_cup</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2013-08-30T10:10:00" itemprop="datePublished">Friday August 30th 2013</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>En el pasado Febrero cerramos un proyecto muy importante. Dicho proyecto necesita una cantidad de test, no porque el cliente lo pidiera, si no porque el SLA que teníamos con ellos nos hacia que con cualquier cambio solo teníamos ventanas muy pequeñas de tiempo. Lo que nos hizo tener que programar todos los escenarios posibles para una validación más eficiente.</p>
+<p>Desde ese proyecto y usando <a class="reference external" href="http://sipsimpleclient.org/">python-sipsimple</a> hice un pequeño framework, para hacer test sin ser la locura de los ficheros xml de <a class="reference external" href="http://sipp.sourceforge.net/">sipp</a>. En los últimos meses estaba pensando en como poder hacer un framework libre, que pudiera ser útil para demás proyectos. Cuando tenía algo de código han salido a la luz dos proyectos muy interesantes.</p>
+<p>El primero ha sido el que ha realizado <a class="reference external" href="http://www.metaswitch.com/">metaswitch</a>, que <a class="reference external" href="https://github.com/Metaswitch">han liberado muchas partes de sus herramientas/productos</a> y tiene un <a class="reference external" href="https://github.com/Metaswitch/clearwater-live-test">framework de test muy orientado a su plataforma.</a></p>
+<p>El framework esta bien, pero era costoso de hacer sin ser referido a Metaswitch.</p>
+<p>Esta semana <a class="reference external" href="https://twitter.com/bklang">Ben Klang</a> ha liberado <a class="reference external" href="http://bklang.github.io/sippy_cup/">sippy_cup</a>, un framework que la verdad me ha dejado muy contento. Es justo lo que estaba haciendo, por lo que a partir de ahora, usare este sistema y me <a class="reference external" href="https://github.com/bklang/sippy_cup/pull/8">centraré en enviar pull-request</a> si algo veo que se puede mejorar.</p>
+<p>Para instalar este framework hay que seguir los siguientes pasos:</p>
+<p><strong>Dependencias ruby</strong></p>
+<div class="highlight"><pre>sudo apt-get install build-essential git --yes
+curl -L https://get.rvm.io | bash -s stable
+<span class="nb">source</span> ~/.rvm/scripts/rvm
+rvm autolibs <span class="nb">enable</span>
+rvm install 1.9.3
+rvm use 1.9.3
+gem install sippy_cup
+</pre></div>
+<p><strong>Instalando sipp</strong></p>
+<div class="highlight"><pre>apt-get install libpcap-dev
+<span class="nb">cd</span> /tmp/
+git clone https://github.com/polysics/sipp_dynamic_pcapp_play.git
+tar -xvzf sipp-xxx.tar.gz
+<span class="nb">cd </span>sipp-*
+patch -p1 -i /tmp/sipp_dynamic_pcapp_play/
+autoreconf -ivf
+./configure --with-pcap
+make
+cp sipp /usr/local/bin/
+</pre></div>
+<p><strong>Usando sippy_cup</strong></p>
+<p>Para empezar con sippy_cup se necesita crear un fichero .yml con la siguiente estructura</p>
+<div class="highlight"><pre>---
+<span class="nb">source</span>: 192.168.1.114
+destination: 192.168.1.120
+max_concurrent: 10
+calls_per_second: 5
+number_of_calls: 20
+sip_user: 100
+steps:
+  - invite
+  - wait_for_answer
+  - ack_answer
+  - sleep 3
+  - send_digits <span class="s1">&#39;3125551234&#39;</span>
+  - sleep 5
+  - send_digits <span class="s1">&#39;#&#39;</span>
+  - wait_for_hangup
+</pre></div>
+<dl class="docutils">
+<dt>Una vez creado el fichero, tenemos dos opciones para correr el <strong>sippy_cup</strong>:</dt>
+<dd><ul class="first last simple">
+<li><strong>-c</strong>: Esto genera solamente el .xml y el pcap que se necesita</li>
+<li><strong>-r</strong>: Esto hace que el programa empieze a correr y genera el flujo de llamadas.</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight"><pre>sippy_cup -cr my_test_scenario.yml
+Compiling media to /Users/eloycotopereiro/dev/sipp/sippcup/my_test_scenario.xml...done.
+Compiling scenario to /Users/eloycotopereiro/dev/sipp/sippcup/my_test_scenario.pcap...done.
+<span class="s2">&quot;Preparing to run SIPp command: sudo sipp -i 192.168.1.114 -p 8836 -sf /Users/eloycotopereiro/dev/sipp/sippcup/my_test_scenario.xml -l 10 -m 20 -r 5 -s 100 192.168.1.120 &gt; /dev/null 2&gt;&amp;1&quot;</span>
+Password:
+<span class="s2">&quot;Test completed successfully!&quot;</span>
+</pre></div>
+<p>Ahora ya tenemos nuestro servicio de testing mas sencillo de leer, y mas fácil para hacer pruebas en nuestros servicios de voip.</p>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> asterisk, asteriskTestSuite, ruby, sip, sipp, sippy_cup, test,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+            <ul>
+                <li><a href="http://www.acalustra.com/las-mejores-funciones-de-ansible.html">Las mejores funciones de Ansible</a></li>
+                <li><a href="http://www.acalustra.com/instalar-hubot-e-integrarlo-con-nuestro-servicio-xmpp.html">Instalar Hubot e integrarlo con nuestro servicio XMPP</a></li>
+                <li><a href="http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html">Politicas de seguridad en Kamailio</a></li>
+            </ul>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/asterisk.html" rel="tag">asterisk</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/asterisktestsuite.html" rel="tag">asteriskTestSuite</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/ruby.html" rel="tag">ruby</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/sip.html" rel="tag">sip</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/sipp.html" rel="tag">sipp</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/sippy_cup.html" rel="tag">sippy_cup</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/test.html" rel="tag">test</a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=Haciendo test con sipp sin morir en el intento via @eloycoto&url=http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html&title=Haciendo test con sipp sin morir en el intento"><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>

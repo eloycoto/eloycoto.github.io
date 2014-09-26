@@ -1,0 +1,881 @@
+@font-face {
+  font-family: amble;
+  src: url(/theme/fonts/Amble-Regular.ttf);
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: fanwood;
+  src: url(/theme/fonts/Fanwood.otf);
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: lato;
+  src: url(/theme/fonts/lato-regular.woff);
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: helvetica;
+  src: url(/theme/fonts/HelveticaNeue-Thin.otf);
+  font-weight: normal;
+  font-style: normal;
+}
+body {
+  background-color: #e8e8e8;
+  margin: 0;
+  height: 100%;
+  color: #3b3b3b;
+  font-family: helvetica;
+  line-height: 1.3;
+}
+h1 {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+h2 {
+  font-size: 34px;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: lato;
+  color: #649130;
+}
+h1 a,
+h2 a,
+h3 a,
+h4 a {
+  color: #649130;
+}
+p {
+  color: #3b3b3b;
+  font-family: helvetica;
+  line-height: 1.3;
+  box-sizing: border-box;
+}
+a {
+  color: #3b3b3b;
+}
+img.profile {
+  width: 75%;
+  margin-left: 12.5%;
+  border: 4px solid #8bc34a;
+  border-radius: 3px;
+  margin-bottom: 12.5%;
+  margin-top: 10px;
+}
+.btn {
+  background-color: #8bc34a;
+  color: #edf6e3;
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0px;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  text-decoration: none;
+}
+.title {
+  background-color: #abd47c;
+  margin-left: 0px!important;
+  margin-right: 0px!important;
+  padding-left: 100px;
+  padding-right: 70px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
+.title h1,
+.title h2,
+.title h3,
+.title h4,
+.title p {
+  color: #edf6e3;
+}
+.resume .resumetitle {
+  font-size: 34px;
+}
+.resume h2 {
+  font-size: 24px;
+}
+.resume img {
+  margin-top: 20px;
+  width: 50%;
+}
+.nav {
+  background-color: #edf6e3;
+  float: right;
+}
+.nav ul {
+  float: right;
+  font-family: lato;
+  color: #649130;
+  list-style: none;
+  margin-right: 70px;
+  text-transform: uppercase;
+}
+.nav li {
+  display: inline;
+  list-style-type: none;
+  padding-right: 5px;
+}
+.nav a:link,
+.nav a:visited,
+.nav a:hover,
+.nav a:active {
+  color: #649130;
+  text-decoration: none;
+}
+.content {
+  padding-bottom: 75px;
+  padding-top: 10px;
+}
+.wrapper {
+  min-height: 100%;
+  position: relative;
+}
+.footer {
+  background-color: #edf6e3;
+  position: absolute;
+  bottom: 0;
+  height: 70px;
+}
+.footer .container {
+  padding-top: 15px;
+}
+.footer h1,
+.footer h2,
+.footer h3,
+.footer h4,
+.footer p {
+  color: #649130;
+}
+.share {
+  color: #8bc34a;
+}
+.share a {
+  font-size: 30;
+  color: #8bc34a;
+}
+.share .fa {
+  margin-top: 10px;
+}
+.col-1 {
+  width: 8.33333333%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-1 {
+  margin-left: 8.33333333%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-2 {
+  width: 16.66666667%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-2 {
+  margin-left: 16.66666667%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-3 {
+  width: 25%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-3 {
+  margin-left: 25%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-4 {
+  width: 33.33333333%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-4 {
+  margin-left: 33.33333333%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-5 {
+  width: 41.66666667%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-5 {
+  margin-left: 41.66666667%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-6 {
+  width: 50%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-6 {
+  margin-left: 50%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-7 {
+  width: 58.33333333%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-7 {
+  margin-left: 58.33333333%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-8 {
+  width: 66.66666667%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-8 {
+  margin-left: 66.66666667%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-9 {
+  width: 75%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-9 {
+  margin-left: 75%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-10 {
+  width: 83.33333333%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-10 {
+  margin-left: 83.33333333%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-11 {
+  width: 91.66666667%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-11 {
+  margin-left: 91.66666667%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-12 {
+  width: 100%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-12 {
+  margin-left: 100%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.row {
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.container {
+  margin-left: 100px;
+  margin-right: 70px;
+}
+@media (max-width: 768px) {
+  .col-1 {
+    width: 16.66666667%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-1 {
+    margin-left: 16.66666667%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-2 {
+    width: 33.33333333%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-2 {
+    margin-left: 33.33333333%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-3 {
+    width: 50%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-3 {
+    margin-left: 50%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-4 {
+    width: 66.66666667%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-4 {
+    margin-left: 66.66666667%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-5 {
+    width: 83.33333333%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-5 {
+    margin-left: 83.33333333%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-6 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-6 {
+    margin-left: 100%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-7 {
+    width: 100%;
+    margin: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-7 {
+    margin-left: 0px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-8 {
+    width: 100%;
+    margin: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-8 {
+    margin-left: 0px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-9 {
+    width: 100%;
+    margin: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-9 {
+    margin-left: 0px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-10 {
+    width: 100%;
+    margin: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-10 {
+    margin-left: 0px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-11 {
+    width: 100%;
+    margin: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-11 {
+    margin-left: 0px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-12 {
+    width: 100%;
+    margin: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-12 {
+    margin-left: 0px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .container {
+    margin-left: 50px;
+    margin-right: 35px;
+  }
+  .title {
+    padding-left: 50px;
+    padding-right: 35px;
+  }
+}
+@media (max-width: 450px) {
+  .col-1 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-1 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-2 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-2 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-3 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-3 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-4 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-4 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-5 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-5 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-6 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-6 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-7 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-7 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-8 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-8 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-9 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-9 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-10 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-10 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-11 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-11 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-12 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-12 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .container {
+    margin-left: 25px;
+    margin-right: 17.5px;
+  }
+  .title {
+    padding-left: 25px;
+    padding-right: 17.5px;
+  }
+}
+.box h2 {
+  font-size: 34px;
+}
+.progress {
+  background-color: #bdbdbd;
+  margin-bottom: 10px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  box-sizing: border-box;
+}
+.progress .progress-bar {
+  background-color: #8bc34a;
+  color: #edf6e3;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.blog {
+  padding-top: 20px;
+}
+.blog img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+.blog .byline {
+  color: #757575;
+}
+.blog pre {
+  background-color: #d6d6d6;
+  border-radius: 4px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-top: 10px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.blog .tag {
+  border-radius: 4px;
+  background-color: #abd47c;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  overflow: hidden;
+  line-height: 15px;
+  position: relative;
+  vertical-align: middle;
+  -webkit-transition: 0.25s linear;
+  transition: 0.25s linear;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.blog .tag a {
+  color: #edf6e3;
+  text-decoration: none;
+}
+.taglist {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.taglist a {
+  text-decoration: none;
+  padding-left: 0px;
+}

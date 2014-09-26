@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="es">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> Hackaton localizacion y twilio en el Google Campus</title>
+    <link rel="canonical" href="http://www.acalustra.com/spring-hackaton-london.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" geo, twilio, google campus, hackatoncentral, eloycoto, agonzalezro"/>
+    <meta name="description" content=" Resumen de lo sucedido en la primera hackaton de primavera usando herramientas de geocalizacion "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+
+
+
+    <meta name="tags" content="openlayers,twilio, cloud-communications, programacion, emberjs, python" />
+    <meta name="date" content=" 2013-04-28 12:25:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">Spring Hackaton Londres Abril 2013</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2013-04-28T12:25:00" itemprop="datePublished">Sunday April 28th 2013</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>26-28 de Abril en Londres, 3 hackathones en apenas 300 metros de distancia y muchas ganas de programar. En el pasado mes de octubre había estado en la #angelhack me quedo con un poco mal sabor de boca debido a que no cumplió mis expectativas a nivel de proyectos.</p>
+<p>Este fin de semana, con la compañía de <a class="reference external" href="https://twitter.com/agonzalezroro/">&#64;agonzalezroro</a>, nos fuimos a la <a class="reference external" href="http://hackathoncentral.com/">hackatoncentral</a>, que tenía una bases muy interesantes:</p>
+<ul class="simple">
+<li>Varios proveedores de <a class="reference external" href="http://hackathoncentral.com/#schedule">APIS que patrocinaban el evento</a>. Siendo los más accesibles <a class="reference external" href="http://www.openstreetmap.org/">OpenStreetMaps</a>, <a class="reference external" href="http://www.twilio.com/">twilio</a> o el <a class="reference external" href="http://data.police.uk/api/docs/">api de la policía de Reino unido</a></li>
+<li>Enfocado a aplicaciones locales, ya sean web o móvill.</li>
+<li>Tenía que ser freshcode</li>
+<li>Había <a class="reference external" href="http://hackathoncentral.com/#prizes">6 diferentes categorías</a> para optar a interesantes premios.</li>
+</ul>
+<p>La idea era hacer un chat Webrtc/sip con <a class="reference external" href="http://acalustra.com/post/42677671338/kamailio-integracion-redis-colas">Kamailio</a> con localización en un mapa, pero finalmente, al presentar las API de los patrocinadores, la habían propuesto, por lo que la desechamos y empezamos a pensar en otra solución/idea.</p>
+<p>La idea fue un sistema de localización de comisarías de policía en un mapa, y que al clickar en ella se pudiera llamar gratuitamente a la comisaría.</p>
+<a class="reference external image-reference" href="hackathon"><img alt="" class="align-center" src="img/springhackathon.png" style="width: 50%;" /></a>
+<p>Empezamos a programar y teníamos claro que usaríamos herramientas que no usábamos a menudo para así aprender algo nuevo,aqui os presento la lista:</p>
+<ul class="simple">
+<li>Backend: Finalmente usamos <a class="reference external" href="http://flask.pocoo.org/docs/">Flask</a>, que es muy ligero y rápido de programar.</li>
+<li>Frontend: Finalmente nos decantamos por <a class="reference external" href="http://emberjs.com/">emberjs</a>. Álex prefería backbone, pero yo había estudiado las últimas semanas este framework. Por otra parte también usamos <a class="reference external" href="http://openlayers.org/">Openlayers</a> con los <a class="reference external" href="http://dev.openlayers.org/docs/files/OpenLayers/Layer/Bing-js.html">layers de bing</a> para mostrar el mapa.</li>
+<li>Se hicieron una pequeños scrappers para detectar la situaciones de las comisarías de policía, algo liosa la API para usar, por lo que se hizo un pequeño script que lo pasaba a un fichero json.</li>
+<li>Para el deploy usamos <a class="reference external" href="http://www.heroku.com">Heroku</a> que nunca lo había usado, pese a leer sobre el a menudo. Muy grata satisfacción con la sencillez de hacer los deploys :-).</li>
+<li>Para realizar las llamadas usamos <a class="reference external" href="http://www.twilio.com">Twilio</a>, que simplemente realizaba un click to call de vieja usanza.</li>
+</ul>
+<a class="reference external image-reference" href="emberjs.jpg"><img alt="" class="align-center" src="img/emberjs.jpg" style="width: 50%;" /></a>
+<p>Al final el resultado: para ser un par de días, y no haber pasado mucho tiempo por la noche creo que ha sido bastante aceptable, como no el codigo esta en <a class="reference external" href="http://kcy.me/joh2">github</a> y <a class="reference external" href="http://kcy.me/joog">se puede ver la aplicación online</a></p>
+<p>Me alegra haber asistido a esta hackaton. Alex me ha enseñado muchos tips que me van a servir mucho durante mis jornadas laborales. Además por fin he probado esas tecnologías que siempre lees, pero que siempre tienes la duda de usarlas o no.</p>
+<p>Nos vemos en la próxima hackathon, que espero que sea pronto. :-)</p>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> cloud-communications, emberjs, openlayers, programacion, python, twilio,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+            <ul>
+                <li><a href="http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html">Politicas de seguridad en Kamailio</a></li>
+                <li><a href="http://www.acalustra.com/kamailio-redis-integracion-de-colas.html">Kamailio redis integracion de colas</a></li>
+            </ul>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/cloud-communications.html" rel="tag">cloud-communications</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/emberjs.html" rel="tag">emberjs</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/openlayers.html" rel="tag">openlayers</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/programacion.html" rel="tag">programacion</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/python.html" rel="tag">python</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/twilio.html" rel="tag">twilio</a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=Spring Hackaton London via @eloycoto&url=http://www.acalustra.com/spring-hackaton-london.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/spring-hackaton-london.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/spring-hackaton-london.html&title=Spring Hackaton London"><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>
