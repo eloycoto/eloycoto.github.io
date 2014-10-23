@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="es">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> How to integrate kamailio with Graphite using kamailio statsd</title>
+    <link rel="canonical" href="https://acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" kamailio statsd, kamailio modules, graphite, grafana, statsd, gauges, counters"/>
+    <meta name="description" content=" Kamailio statsd is a module to integrate your Voip platform with Realtime graphing Graphite. You can get better statistics with this module. "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://acalustra.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A calustra Full Atom Feed" />
+
+
+
+
+    <link href="https://acalustra.com/feeds/blog.atom.xml" type="application/atom+xml" rel="alternate" title="A calustra Categories Atom Feed" />
+
+
+
+    <meta name="tags" content="kamailio, graphite, statsd, grafana" />
+    <meta name="date" content=" 2014-10-22 16:00:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">Kamailio integration with Statsd and Graphite.</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2014-10-22T16:00:00" itemprop="datePublished">Wednesday October 22th 2014</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>I remember when I read about <a class="reference external" href="http://graphite.wikidot.com/">Graphite</a>. I was reading that Vimeo used it for making realtime monitoring in their projects and reporting for all the team. I got a chance to test with my local apps and after a few days I started to love graphite.</p>
+<p>I start to use graphite in my web apps. Affer few weeks I needed to monitor a new feature deployed in one of our kamailio. The first time I used mod_python+statsd, but I realise that using python module was not the best way so I write <a class="reference external" href="https://github.com/eloycoto/statsd">statsd module</a> that work native with kamailio.</p>
+<p><a class="reference external" href="https://github.com/eloycoto/statsd">I made this module, after 7 years working with Kamailio</a>, I read/modified a lot of modules, but I never had a chance to write a new one.</p>
+<p>Kamailio mod statsd provides just four functions. All of those functions are damn easy to understand but if you are not familiarized with this world, I would recommend you to check this posts:</p>
+<blockquote>
+<ul class="simple">
+<li><a class="reference external" href="https://www.digitalocean.com/community/tutorials/an-introduction-to-tracking-statistics-with-graphite-statsd-and-collectd">Introduction to graphite and collectd</a></li>
+<li><a class="reference external" href="http://blog.pkhamre.com/2012/07/24/understanding-statsd-and-graphite/">Undertanding graphite and statsd</a></li>
+<li><a class="reference external" href="https://github.com/etsy/statsd/blob/master/docs/metric_types.md">Statsd metric types</a></li>
+</ul>
+</blockquote>
+<img alt="grafana kamailio integration" class="align-center" src="img/grafana1.png" />
+<p>If you want to test the module without a lot of trouble, the recommended way in my opinion is to use this <a class="reference external" href="https://github.com/grafana/grafana-docker-dev-env">Docker deploy</a> (Grafana is the best dashboard for graphite).</p>
+<p>And after have it installed, go throught the <a class="reference external" href="https://github.com/eloycoto/statsd/blob/master/Readme.md">READAME.md</a> file:</p>
+<div class="section" id="kamailio-statsd-parameters">
+<h2><a class="reference external" href="http://github.com/eloycoto/kamailio-statsd">Kamailio statsd parameters</a>:</h2>
+<dl class="docutils">
+<dt><strong>IP</strong>: Statsd listen IP.</dt>
+<dd><div class="first last"><div class="highlight"><pre><span class="n">modparam</span><span class="p">(</span><span class="s">&quot;statsd&quot;</span><span class="p">,</span> <span class="s">&quot;ip&quot;</span><span class="p">,</span> <span class="s">&quot;127.0.0.1&quot;</span><span class="p">)</span>
+</pre></div>
+</div></dd>
+<dt><strong>PORT</strong>: Statsd listen port.</dt>
+<dd><div class="first last"><div class="highlight"><pre><span class="n">modparam</span><span class="p">(</span><span class="s">&quot;statsd&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">,</span> <span class="s">&quot;8125&quot;</span><span class="p">)</span>
+</pre></div>
+</div></dd>
+</dl>
+</div>
+<div class="section" id="kamailio-statsd-functions">
+<h2><a class="reference external" href="http://github.com/eloycoto/kamailio-statsd">Kamailio statsd functions</a>:</h2>
+<dl class="docutils">
+<dt><strong>Set</strong>:  counting unique occurrences of events between flushes, using a Set to store all occurring events.</dt>
+<dd><div class="first last"><div class="highlight"><pre><span class="n">route</span> <span class="p">[</span><span class="n">customer_credit</span><span class="p">]{</span>
+    <span class="n">statsd_set</span><span class="p">(</span><span class="err">“</span><span class="n">customer</span><span class="p">.</span><span class="s">&quot;+$avp(customer)+”credit”, $var(credit))</span>
+<span class="p">}</span>
+</pre></div>
+</div></dd>
+</dl>
+<p><strong>Gauge</strong>:  A gauge simply indicates an arbitrary value at a point in time. You can use like this:</p>
+<blockquote>
+<div class="highlight"><pre><span class="n">route</span> <span class="p">[</span><span class="n">gauge_method</span><span class="p">]{</span>
+        <span class="n">statsd_gauge</span><span class="p">(</span><span class="s">&quot;method.count&quot;</span><span class="o">+</span><span class="err">$</span><span class="n">rm</span><span class="p">,</span> <span class="err">“</span><span class="mi">1</span><span class="err">”</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="err">$</span><span class="n">avp</span><span class="p">(</span><span class="n">s</span><span class="o">:</span><span class="n">prepaid</span><span class="p">))</span> <span class="n">statsd_gauge</span><span class="p">(</span><span class="s">&quot;customer.prepaid&quot;</span><span class="p">,</span> <span class="err">“</span><span class="o">+</span><span class="mi">1</span><span class="err">”</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</blockquote>
+<p><strong>Timing</strong>: You can use timing options in any function, or specific route, with code like this:</p>
+<blockquote>
+<div class="highlight"><pre><span class="n">route</span> <span class="p">[</span><span class="n">long_mysql_query</span><span class="p">]{</span>
+        <span class="n">statsd_start</span><span class="p">(</span><span class="s">&quot;long_mysql_query&quot;</span><span class="p">);</span>
+        <span class="n">sql_query</span><span class="p">(</span><span class="s">&quot;ca&quot;</span><span class="p">,</span> <span class="s">&quot;select sleep(rand()/4)&quot;</span><span class="p">,</span> <span class="s">&quot;ra&quot;</span><span class="p">);</span>
+        <span class="n">statsd_stop</span><span class="p">(</span><span class="s">&quot;long_mysql_query&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</blockquote>
+<p>Timers (statsd_start, statsd_stop) are an incredibly powerful tool for tracking application performance.</p>
+<p><strong>Counters</strong>:  You can use statsd_incr or statsd_decr for increment/decrement a counter. For example I used a lot the counter with GeoIP module or log any specific feature in the platform (Prepaid user, new features launch).</p>
+<blockquote>
+<div class="highlight"><pre><span class="n">route</span><span class="p">[</span><span class="n">country</span><span class="p">]{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">geoip_match</span><span class="p">(</span><span class="s">&quot;$si&quot;</span><span class="p">,</span> <span class="s">&quot;src&quot;</span><span class="p">)){</span>
+           <span class="n">statsd_incr</span><span class="p">(</span><span class="s">&quot;country.&quot;</span><span class="o">+</span><span class="err">$</span><span class="p">(</span><span class="n">gip</span><span class="p">(</span><span class="n">src</span><span class="o">=&gt;</span><span class="n">cc</span><span class="p">)));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</blockquote>
+<p>You can also check how many failure are coming from your providers, gateways, etc.</p>
+<p>After that, you can use grafrana (Port 8081 if you are using the dockerfile) and <a class="reference external" href="http://grafana.org/docs/features/graphite/">add a new graph with your information</a>. The first days, you will feel lost, after a few weeks I'm sure that you will love it ;-)</p>
+<img alt="Grafana kamailio integration dashboard" class="align-center" src="img/grafana3.png" />
+<p>If you have any trouble, you can ping me in my email, or in twitter <a class="reference external" href="http://twitter.com/eloycoto/">&#64;eloycoto</a></p>
+<p>You can get the source of the statsd module in github:
+<a class="reference external" href="https://github.com/eloycoto/statsd">https://github.com/eloycoto/statsd</a></p>
+</div>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> grafana, graphite, kamailio, monitoring, statistics, statsd,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+            <ul>
+                <li><a href="https://acalustra.com/sistemas-de-colas-basado-en-redis-en-kamailio.html">sistemas de colas basado en redis en kamailio</a></li>
+                <li><a href="https://acalustra.com/politicas-de-seguridad-en-kamailio.html">Politicas de seguridad en Kamailio</a></li>
+            </ul>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="https://acalustra.com/tag/grafana.html" rel="tag">grafana</a>
+          </span>
+          <span class="tag">
+            <a href="https://acalustra.com/tag/graphite.html" rel="tag">graphite</a>
+          </span>
+          <span class="tag">
+            <a href="https://acalustra.com/tag/kamailio.html" rel="tag">kamailio</a>
+          </span>
+          <span class="tag">
+            <a href="https://acalustra.com/tag/monitoring.html" rel="tag">monitoring</a>
+          </span>
+          <span class="tag">
+            <a href="https://acalustra.com/tag/statistics.html" rel="tag">statistics</a>
+          </span>
+          <span class="tag">
+            <a href="https://acalustra.com/tag/statsd.html" rel="tag">statsd</a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=Kamailio statsd, better statistics in your voip platform. via @eloycoto&url=https://acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=https://acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=https://acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html&title=Kamailio statsd, better statistics in your voip platform."><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>
