@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="es">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> Asterisk 11, new feature hangup handlers</title>
+    <link rel="canonical" href="http://www.acalustra.com/asterisk-11-hangups-handlers.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" asterisk, subroutines, gosub, hangup"/>
+    <meta name="description" content=" Asterisk 11 introduces hangups handlers, useful application to improve asterisk subroutines (Gosub) "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://www.acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A calustra Full Atom Feed" />
+
+
+
+
+
+
+
+    <meta name="tags" content="asterisk, dialplan, gosub, hangup" />
+    <meta name="date" content=" 2014-10-22 16:00:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">How to improve your hangups handlers in asterisk.</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2014-10-22T16:00:00" itemprop="datePublished">Wednesday October 22th 2014</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>I don't know what I was doing when I read <strong>Asterisk 11 new features</strong>. Last week I read in the asterisk <a class="reference external" href="http://lists.digium.com/pipermail/asterisk-users/2014-October/284839.html">mailing list about hangup handlers.</a></p>
+<p>One of the pains in large apps based on asterisk are hangups. If one customer hangups in the middle of one subroutine, you need to add h exten in all subroutines. This make the code difficult to maintain. This is a normal subroutine in asterisk application:</p>
+<div class="highlight"><pre><span class="p">[</span><span class="n">from</span><span class="o">-</span><span class="n">outside</span><span class="p">]</span>
+<span class="n">exten</span> <span class="o">=&gt;</span> <span class="n">_X</span><span class="p">.,</span><span class="mi">1</span><span class="p">,</span><span class="n">Noop</span><span class="p">(</span><span class="n">Call</span> <span class="n">from</span> <span class="n">outside</span> <span class="n">with</span> <span class="n">callerid</span><span class="o">=</span><span class="err">$</span><span class="p">{</span><span class="n">CALLERID</span><span class="p">(</span><span class="n">num</span><span class="p">)})</span>
+<span class="n">same</span> <span class="o">=&gt;</span> <span class="n">n</span><span class="p">,</span><span class="n">Gosub</span><span class="p">(</span><span class="n">monkeys</span><span class="p">,</span><span class="err">$</span><span class="p">{</span><span class="n">EXTEN</span><span class="p">},</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">exten</span> <span class="o">=&gt;</span> <span class="n">h</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">Noop</span><span class="p">(</span><span class="s">&quot;Hangup in from-outside context&quot;</span><span class="p">)</span>
+
+<span class="p">[</span><span class="n">monkeys</span><span class="p">]</span>
+<span class="n">exten</span> <span class="o">=&gt;</span> <span class="n">_X</span><span class="p">.,</span><span class="mi">1</span><span class="p">,</span><span class="n">Noop</span><span class="p">(</span><span class="n">Subroutine</span> <span class="n">Monkeys</span><span class="p">)</span>
+<span class="n">same</span> <span class="o">=&gt;</span> <span class="n">n</span><span class="p">,</span><span class="n">While</span><span class="p">(</span><span class="mi">1</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">same</span> <span class="o">=&gt;</span> <span class="n">n</span><span class="p">,</span><span class="n">Playback</span><span class="p">(</span><span class="n">tt</span><span class="o">-</span><span class="n">monkeys</span><span class="p">)</span>
+<span class="n">same</span> <span class="o">=&gt;</span> <span class="n">n</span><span class="p">,</span><span class="n">EndWhile</span><span class="p">()</span>
+
+<span class="n">exten</span> <span class="o">=&gt;</span> <span class="n">h</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">Noop</span><span class="p">(</span><span class="s">&quot;Hangup into subrutine monkeys&quot;</span><span class="p">)</span>
+</pre></div>
+<div class="highlight"><pre><span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="mi">100</span><span class="err">@</span><span class="n">from</span><span class="o">-</span><span class="n">outside</span><span class="o">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">NoOp</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000001&quot;</span><span class="p">,</span> <span class="s">&quot;Call from outside from eloy&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+<span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="mi">100</span><span class="err">@</span><span class="n">from</span><span class="o">-</span><span class="n">outside</span><span class="o">:</span><span class="mi">2</span><span class="p">]</span> <span class="n">Gosub</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000001&quot;</span><span class="p">,</span> <span class="s">&quot;monkeys,100,1&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+<span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="mi">100</span><span class="err">@</span><span class="n">monkeys</span><span class="o">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">NoOp</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000001&quot;</span><span class="p">,</span> <span class="s">&quot;Subroutine Monkeys&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+<span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="mi">100</span><span class="err">@</span><span class="n">monkeys</span><span class="o">:</span><span class="mi">2</span><span class="p">]</span> <span class="n">While</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000001&quot;</span><span class="p">,</span> <span class="s">&quot;1&gt;0&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+<span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="mi">100</span><span class="err">@</span><span class="n">monkeys</span><span class="o">:</span><span class="mi">3</span><span class="p">]</span> <span class="n">Playback</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000001&quot;</span><span class="p">,</span> <span class="s">&quot;tt-monkeys&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+<span class="o">--</span> <span class="o">&lt;</span><span class="n">SIP</span><span class="o">/</span><span class="n">eloy</span><span class="o">-</span><span class="mo">00000001</span><span class="o">&gt;</span> <span class="n">Playing</span> <span class="err">&#39;</span><span class="n">tt</span><span class="o">-</span><span class="n">monkeys</span><span class="p">.</span><span class="n">gsm</span><span class="err">&#39;</span> <span class="p">(</span><span class="n">language</span> <span class="err">&#39;</span><span class="n">en</span><span class="err">&#39;</span><span class="p">)</span>
+<span class="o">==</span> <span class="n">Spawn</span> <span class="n">extension</span> <span class="p">(</span><span class="n">monkeys</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="n">exited</span> <span class="n">non</span><span class="o">-</span><span class="n">zero</span> <span class="n">on</span> <span class="err">&#39;</span><span class="n">SIP</span><span class="o">/</span><span class="n">eloy</span><span class="o">-</span><span class="mo">00000001</span><span class="err">&#39;</span>
+<span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="n">h</span><span class="err">@</span><span class="n">monkeys</span><span class="o">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">NoOp</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000001&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="n">Hangup</span> <span class="n">into</span> <span class="n">subrutine</span><span class="s">&quot;&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+</pre></div>
+<p>In this case, you should take care how to use asterisk hangup handlers into subroutines. You can't share subroutines between different logics if the hangup are different. In Asterisk 11 was added hangup handler options, and this, personally, is one of the best features added in asterisk.</p>
+<p>You can add a simple new hangup handler adding a simple set in the context:</p>
+<div class="highlight"><pre><span class="n">same</span> <span class="o">=&gt;</span> <span class="n">n</span><span class="p">,</span><span class="n">Set</span><span class="p">(</span><span class="n">CHANNEL</span><span class="p">(</span><span class="n">hangup_handler_push</span><span class="p">)</span><span class="o">=</span><span class="n">hangup</span><span class="o">-</span><span class="n">handler</span><span class="p">,</span><span class="err">$</span><span class="p">{</span><span class="n">EXTEN</span><span class="p">},</span><span class="mi">1</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+</pre></div>
+<p>In this case, when user hangup, asterisk will use <strong>hangup-handler</strong> context, and no problems in the gosub.</p>
+<div class="highlight"><pre><span class="p">[</span><span class="n">from</span><span class="o">-</span><span class="n">outside</span><span class="o">-</span><span class="n">hangup</span><span class="p">]</span>
+
+<span class="n">exten</span> <span class="o">=&gt;</span> <span class="n">_X</span><span class="p">.,</span><span class="mi">1</span><span class="p">,</span><span class="n">Noop</span><span class="p">(</span><span class="n">Call</span> <span class="n">from</span> <span class="n">outside</span> <span class="n">from</span> <span class="err">$</span><span class="p">{</span><span class="n">CALLERID</span><span class="p">(</span><span class="n">num</span><span class="p">)})</span>
+<span class="n">same</span> <span class="o">=&gt;</span> <span class="n">n</span><span class="p">,</span><span class="n">Set</span><span class="p">(</span><span class="n">CHANNEL</span><span class="p">(</span><span class="n">hangup_handler_push</span><span class="p">)</span><span class="o">=</span><span class="n">hangup</span><span class="o">-</span><span class="n">handler</span><span class="p">,</span><span class="err">$</span><span class="p">{</span><span class="n">EXTEN</span><span class="p">},</span><span class="mi">1</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+<span class="n">same</span> <span class="o">=&gt;</span> <span class="n">n</span><span class="p">,</span><span class="n">Gosub</span><span class="p">(</span><span class="n">monkeys</span><span class="p">,</span><span class="err">$</span><span class="p">{</span><span class="n">EXTEN</span><span class="p">},</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="p">[</span><span class="n">monkeys</span><span class="p">]</span>
+<span class="n">exten</span> <span class="o">=&gt;</span> <span class="n">_X</span><span class="p">.,</span><span class="mi">1</span><span class="p">,</span><span class="n">Noop</span><span class="p">(</span><span class="n">Subroutine</span> <span class="n">Monkeys</span><span class="p">)</span>
+<span class="n">same</span> <span class="o">=&gt;</span> <span class="n">n</span><span class="p">,</span><span class="n">While</span><span class="p">(</span><span class="mi">1</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">same</span> <span class="o">=&gt;</span> <span class="n">n</span><span class="p">,</span><span class="n">Playback</span><span class="p">(</span><span class="n">tt</span><span class="o">-</span><span class="n">monkeys</span><span class="p">)</span>
+<span class="n">same</span> <span class="o">=&gt;</span> <span class="n">n</span><span class="p">,</span><span class="n">EndWhile</span><span class="p">()</span>
+
+<span class="p">[</span><span class="n">hangup</span><span class="o">-</span><span class="n">handler</span><span class="p">]</span>
+<span class="n">exten</span> <span class="o">=&gt;</span> <span class="n">_X</span><span class="p">.,</span><span class="mi">1</span><span class="p">,</span><span class="n">Noop</span><span class="p">(</span><span class="s">&quot;Hangup into the handler&quot;</span><span class="p">)</span>
+</pre></div>
+<div class="highlight"><pre><span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="mi">100</span><span class="err">@</span><span class="n">from</span><span class="o">-</span><span class="n">outside</span><span class="o">-</span><span class="n">hangup</span><span class="o">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">NoOp</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000006&quot;</span><span class="p">,</span> <span class="s">&quot;Call from outside from eloy&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+<span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="mi">100</span><span class="err">@</span><span class="n">from</span><span class="o">-</span><span class="n">outside</span><span class="o">-</span><span class="n">hangup</span><span class="o">:</span><span class="mi">2</span><span class="p">]</span> <span class="n">Set</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000006&quot;</span><span class="p">,</span> <span class="s">&quot;CHANNEL(hangup_handler_push)=hangup-handler,100,1&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+<span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="mi">100</span><span class="err">@</span><span class="n">from</span><span class="o">-</span><span class="n">outside</span><span class="o">-</span><span class="n">hangup</span><span class="o">:</span><span class="mi">3</span><span class="p">]</span> <span class="n">Gosub</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000006&quot;</span><span class="p">,</span> <span class="s">&quot;monkeys,100,1&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+<span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="mi">100</span><span class="err">@</span><span class="n">monkeys</span><span class="o">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">NoOp</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000006&quot;</span><span class="p">,</span> <span class="s">&quot;Subroutine Monkeys&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+<span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="mi">100</span><span class="err">@</span><span class="n">monkeys</span><span class="o">:</span><span class="mi">2</span><span class="p">]</span> <span class="n">While</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000006&quot;</span><span class="p">,</span> <span class="s">&quot;1&gt;0&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+<span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="mi">100</span><span class="err">@</span><span class="n">monkeys</span><span class="o">:</span><span class="mi">3</span><span class="p">]</span> <span class="n">Playback</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000006&quot;</span><span class="p">,</span> <span class="s">&quot;tt-monkeys&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+<span class="o">--</span> <span class="o">&lt;</span><span class="n">SIP</span><span class="o">/</span><span class="n">eloy</span><span class="o">-</span><span class="mo">00000006</span><span class="o">&gt;</span> <span class="n">Playing</span> <span class="err">&#39;</span><span class="n">tt</span><span class="o">-</span><span class="n">monkeys</span><span class="p">.</span><span class="n">gsm</span><span class="err">&#39;</span> <span class="p">(</span><span class="n">language</span> <span class="err">&#39;</span><span class="n">en</span><span class="err">&#39;</span><span class="p">)</span>
+<span class="o">==</span> <span class="n">Spawn</span> <span class="n">extension</span> <span class="p">(</span><span class="n">monkeys</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="n">exited</span> <span class="n">non</span><span class="o">-</span><span class="n">zero</span> <span class="n">on</span> <span class="err">&#39;</span><span class="n">SIP</span><span class="o">/</span><span class="n">eloy</span><span class="o">-</span><span class="mo">00000006</span><span class="err">&#39;</span>
+<span class="o">--</span> <span class="n">SIP</span><span class="o">/</span><span class="n">eloy</span><span class="o">-</span><span class="mo">00000006</span> <span class="n">Internal</span> <span class="n">Gosub</span><span class="p">(</span><span class="n">hangup</span><span class="o">-</span><span class="n">handler</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="n">start</span>
+<span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="mi">100</span><span class="err">@</span><span class="n">hangup</span><span class="o">-</span><span class="n">handler</span><span class="o">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">NoOp</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000006&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="n">Hangup</span> <span class="n">into</span> <span class="n">the</span> <span class="n">handler</span><span class="s">&quot;&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+<span class="o">--</span> <span class="n">Executing</span> <span class="p">[</span><span class="mi">100</span><span class="err">@</span><span class="n">hangup</span><span class="o">-</span><span class="n">handler</span><span class="o">:</span><span class="mi">2</span><span class="p">]</span> <span class="n">Return</span><span class="p">(</span><span class="s">&quot;SIP/eloy-00000006&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span> <span class="n">in</span> <span class="n">new</span> <span class="n">stack</span>
+<span class="o">==</span> <span class="n">Spawn</span> <span class="n">extension</span> <span class="p">(</span><span class="n">monkeys</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">exited</span> <span class="n">non</span><span class="o">-</span><span class="n">zero</span> <span class="n">on</span> <span class="err">&#39;</span><span class="n">SIP</span><span class="o">/</span><span class="n">eloy</span><span class="o">-</span><span class="mo">00000006</span><span class="err">&#39;</span>
+<span class="o">--</span> <span class="n">SIP</span><span class="o">/</span><span class="n">eloy</span><span class="o">-</span><span class="mo">00000006</span> <span class="n">Internal</span> <span class="n">Gosub</span><span class="p">(</span><span class="n">hangup</span><span class="o">-</span><span class="n">handler</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="n">complete</span> <span class="n">GOSUB_RETVAL</span><span class="o">=</span>
+</pre></div>
+<p>You can check the docs into the <a class="reference external" href="https://wiki.asterisk.org/wiki/display/AST/Hangup+Handlers">Aserisk wiki</a>, more functions are available (push, pop, wipe). In the CLI you can check the hangup handlers with this command <strong>core show hanguphandlers &lt;chan&gt;</strong></p>
+<p>Happy coding!</p>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> ari, asterisk, dialplan, hangup,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+            <ul>
+                <li><a href="http://www.acalustra.com/trick-and-tips-en-ansible.html">trick and tips en ansible</a></li>
+                <li><a href="http://www.acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html">Integrando hubot con nuestro servicio xmpp</a></li>
+                <li><a href="http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html">Haciendo test con sipp sin morir en el intento</a></li>
+            </ul>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/ari.html" rel="tag">ari</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/asterisk.html" rel="tag">asterisk</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/dialplan.html" rel="tag">dialplan</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/hangup.html" rel="tag">hangup</a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=Asterisk 11 hangups handlers via @eloycoto&url=http://www.acalustra.com/asterisk-11-hangups-handlers.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/asterisk-11-hangups-handlers.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/asterisk-11-hangups-handlers.html&title=Asterisk 11 hangups handlers"><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>
