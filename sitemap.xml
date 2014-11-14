@@ -5,29 +5,36 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/index.html</loc>
-<lastmod>2014-11-03T07:52:01-00:00</lastmod>
+<lastmod>2014-11-14T07:37:24-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/archives.html</loc>
-<lastmod>2014-11-03T07:52:01-00:00</lastmod>
+<lastmod>2014-11-14T07:37:24-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/tags.html</loc>
-<lastmod>2014-11-03T07:52:01-00:00</lastmod>
+<lastmod>2014-11-14T07:37:24-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/categories.html</loc>
-<lastmod>2014-11-03T07:52:01-00:00</lastmod>
+<lastmod>2014-11-14T07:37:24-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/hablando-de-docker-en-betabeers-galicia.html</loc>
+<lastmod>2014-11-24T16:00:00-00:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -110,7 +117,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/category/blog.html</loc>
-<lastmod>2014-10-22T16:00:00-00:15</lastmod>
+<lastmod>2014-11-24T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -137,8 +144,8 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.acalustra.com/tag/googleapps.html</loc>
-<lastmod>2012-11-28T12:25:00-00:15</lastmod>
+<loc>http://www.acalustra.com/tag/googlecampus.html</loc>
+<lastmod>2012-10-01T00:30:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -195,6 +202,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://www.acalustra.com/tag/kamailio.html</loc>
 <lastmod>2014-10-22T16:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/tag/betabeers.html</loc>
+<lastmod>2014-11-24T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -305,6 +319,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>http://www.acalustra.com/tag/googleapps.html</loc>
+<lastmod>2012-11-28T12:25:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://www.acalustra.com/tag/seguridad.html</loc>
 <lastmod>2014-04-05T12:20:00-00:15</lastmod>
 <changefreq>daily</changefreq>
@@ -375,7 +396,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.acalustra.com/tag/googlecampus.html</loc>
+<loc>http://www.acalustra.com/tag/webphone.html</loc>
 <lastmod>2012-10-01T00:30:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
@@ -438,8 +459,8 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.acalustra.com/tag/webphone.html</loc>
-<lastmod>2012-10-01T00:30:00-00:15</lastmod>
+<loc>http://www.acalustra.com/tag/docker.html</loc>
+<lastmod>2014-11-24T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -453,7 +474,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/author/eloy-coto.html</loc>
-<lastmod>2014-10-22T16:00:00-00:15</lastmod>
+<lastmod>2014-11-24T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
