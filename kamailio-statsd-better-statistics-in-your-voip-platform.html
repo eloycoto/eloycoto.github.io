@@ -23,7 +23,7 @@
 
 
     <meta name="tags" content="kamailio, graphite, statsd, grafana" />
-    <meta name="date" content=" 2014-10-22 16:00:00" />
+    <meta name="date" content=" 2014-10-22 16:00:00+02:00" />
     <meta name="category" content="blog" />
     <meta name="author" content="Eloy coto" />
     <meta name="robots" content="index,follow" />
@@ -96,7 +96,7 @@
 <blockquote>
 <div class="highlight"><pre><span class="n">route</span> <span class="p">[</span><span class="n">gauge_method</span><span class="p">]{</span>
         <span class="n">statsd_gauge</span><span class="p">(</span><span class="s">&quot;method.count&quot;</span><span class="o">+</span><span class="err">$</span><span class="n">rm</span><span class="p">,</span> <span class="err">“</span><span class="mi">1</span><span class="err">”</span><span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span><span class="err">$</span><span class="n">avp</span><span class="p">(</span><span class="n">s</span><span class="o">:</span><span class="n">prepaid</span><span class="p">))</span> <span class="n">statsd_gauge</span><span class="p">(</span><span class="s">&quot;customer.prepaid&quot;</span><span class="p">,</span> <span class="err">“</span><span class="o">+</span><span class="mi">1</span><span class="err">”</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="err">$</span><span class="n">avp</span><span class="p">(</span><span class="nl">s</span><span class="p">:</span><span class="n">prepaid</span><span class="p">))</span> <span class="n">statsd_gauge</span><span class="p">(</span><span class="s">&quot;customer.prepaid&quot;</span><span class="p">,</span> <span class="err">“</span><span class="o">+</span><span class="mi">1</span><span class="err">”</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </blockquote>

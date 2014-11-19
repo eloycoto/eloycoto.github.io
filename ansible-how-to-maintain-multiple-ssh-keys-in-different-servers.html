@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="es">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> Ansible deploy multiple ssh-keys to different servers</title>
+    <link rel="canonical" href="http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" ansible, deploy, ssh-keys, ansible role"/>
+    <meta name="description" content=" Configure ssh_keys in the servers is a pain in the ass, with this code you can deployed/maintain easyly. "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://www.acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A calustra Full Atom Feed" />
+
+
+
+
+
+
+
+    <meta name="tags" content="ansible, ssh, deploy, ansible roles" />
+    <meta name="date" content=" 2014-11-19 21:00:00+01:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">How to deploy multiple ssh-keys to different servers</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2014-11-19T21:00:00" itemprop="datePublished">Wednesday November 19th 2014</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>In <a class="reference external" href="http://www.ansible.com">Ansible</a> is quite easy add users, pubkeys and other stuff to any server. If
+you work in a organization where you have multiple servers, ssh-keys are a
+swiss-knife, but they are kinda difficult to handle if you create/destroy
+multiple servers every week.</p>
+<p>Without using Ansible (or any other config management), to add or revoke access you will need to login in all
+servers by hand (or by a script) and this is boring &amp; error prone.</p>
+<p>With Ansible, you can setup a playbook to keep this up to date, and be sure
+that the users &amp; keys are going to be present or absent depending on your needs
+(and the server that we are working with). For this purpose, Ansible provides 2
+different functions: <a class="reference external" href="http://docs.ansible.com/user_module.html">User</a> and <a class="reference external" href="http://docs.ansible.com/authorized_key_module.html">authorized_key</a>. Let's see how to use them
+in this small example <cite>playbook.yml</cite>:</p>
+<div class="highlight"><pre>- hosts: all
+  user: root
+  vars:
+    admin_group: &#39;admin&#39;
+    users:
+      192.168.50.105:
+        - {name: eloy, state: present}
+  tasks:
+    - name: Add admin group
+      group: name={{admin_group}} state=present
+
+    - name: Check users state
+      user: name=&quot;{{item.name}}&quot; state=&quot;{{item.state}}&quot; group=&quot;{{admin_group}}&quot;
+      with_items: users[ansible_eth1.ipv4.address]
+
+    - name: Add Pub key
+      authorized_key: user=&quot;{{item.name}}&quot;
+                      key=&quot;{{ lookup(&#39;file&#39;, &#39;public_keys/&#39;+item.name+&#39;.pub&#39;) }}&quot;
+                      state=&quot;{{item.state}}&quot;
+      with_items: users[ansible_eth1.ipv4.address]
+      when: item.state == &quot;present&quot;
+
+    - name: Add admin group to sudo
+      lineinfile: &quot;dest=/etc/sudoers regexp=&#39;^%{{admin_group}}} ALL&#39; line=&#39;%{{admin_group}} ALL=(ALL) NOPASSWD: ALL&#39; state=present&quot;
+</pre></div>
+<p>This snipped will perform 4 tasks that are easy to follow:</p>
+<ol class="arabic simple">
+<li>We need to create group admin in the machine for sudo purposes.</li>
+<li>Per each host, we need to define the user and its state.</li>
+<li>If the user is present, we need to copy the ssh pub key into the correct folder.</li>
+<li>At the end, we need to allow the users on the admin group to sudo without password.</li>
+</ol>
+<p>If you want to use this piece of code you will only need to add your users to
+the <cite>vars</cite> section and their public keys to the <cite>public_keys</cite> folder inside the
+Ansible repo.</p>
+<p>Happy coding!</p>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> ansible, deploy, ssh, users,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+            <ul>
+                <li><a href="http://www.acalustra.com/trick-and-tips-en-ansible.html">trick and tips en ansible</a></li>
+            </ul>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/ansible.html" rel="tag">ansible</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/deploy.html" rel="tag">deploy</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/ssh.html" rel="tag">ssh</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/users.html" rel="tag">users</a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=Ansible: how to maintain multiple ssh-keys in different servers via @eloycoto&url=http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html&title=Ansible: how to maintain multiple ssh-keys in different servers"><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>
