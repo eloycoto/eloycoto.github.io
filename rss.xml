@@ -434,9 +434,9 @@ Hubot&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&lt;/s
 &lt;li&gt;Tenía que ser freshcode&lt;/li&gt;
 &lt;li&gt;Había &lt;a class="reference external" href="http://hackathoncentral.com/#prizes"&gt;6 diferentes categorías&lt;/a&gt; para optar a interesantes premios.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;La idea era hacer un chat Webrtc/sip con &lt;a class="reference external" href="http://acalustra.com/post/42677671338/kamailio-integracion-redis-colas"&gt;Kamailio&lt;/a&gt; con localización en un mapa, pero finalmente, al presentar las API de los patrocinadores, la habían propuesto, por lo que la desechamos y empezamos a pensar en otra solución/idea.&lt;/p&gt;
+&lt;p&gt;La idea era hacer un chat Webrtc/sip con &lt;a class="reference external" href="http://www.acalustra.com/sistemas-de-colas-basado-en-redis-en-kamailio.html"&gt;Kamailio&lt;/a&gt; con localización en un mapa, pero finalmente, al presentar las API de los patrocinadores, la habían propuesto, por lo que la desechamos y empezamos a pensar en otra solución/idea.&lt;/p&gt;
 &lt;p&gt;La idea fue un sistema de localización de comisarías de policía en un mapa, y que al clickar en ella se pudiera llamar gratuitamente a la comisaría.&lt;/p&gt;
-&lt;a class="reference external image-reference" href="hackathon"&gt;&lt;img alt="" class="align-center" src="img/springhackathon.png" style="width: 50%;" /&gt;&lt;/a&gt;
+&lt;img alt="" class="align-center" src="img/springhackathon.png" style="width: 50%;" /&gt;
 &lt;p&gt;Empezamos a programar y teníamos claro que usaríamos herramientas que no usábamos a menudo para así aprender algo nuevo,aqui os presento la lista:&lt;/p&gt;
 &lt;ul class="simple"&gt;
 &lt;li&gt;Backend: Finalmente usamos &lt;a class="reference external" href="http://flask.pocoo.org/docs/"&gt;Flask&lt;/a&gt;, que es muy ligero y rápido de programar.&lt;/li&gt;
@@ -445,7 +445,7 @@ Hubot&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&lt;/s
 &lt;li&gt;Para el deploy usamos &lt;a class="reference external" href="http://www.heroku.com"&gt;Heroku&lt;/a&gt; que nunca lo había usado, pese a leer sobre el a menudo. Muy grata satisfacción con la sencillez de hacer los deploys :-).&lt;/li&gt;
 &lt;li&gt;Para realizar las llamadas usamos &lt;a class="reference external" href="http://www.twilio.com"&gt;Twilio&lt;/a&gt;, que simplemente realizaba un click to call de vieja usanza.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;a class="reference external image-reference" href="emberjs.jpg"&gt;&lt;img alt="" class="align-center" src="img/emberjs.jpg" style="width: 50%;" /&gt;&lt;/a&gt;
+&lt;img alt="" class="align-center" src="img/emberjs.jpg" style="width: 50%;" /&gt;
 &lt;p&gt;Al final el resultado: para ser un par de días, y no haber pasado mucho tiempo por la noche creo que ha sido bastante aceptable, como no el codigo esta en &lt;a class="reference external" href="http://kcy.me/joh2"&gt;github&lt;/a&gt; y &lt;a class="reference external" href="http://kcy.me/joog"&gt;se puede ver la aplicación online&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Me alegra haber asistido a esta hackaton. Alex me ha enseñado muchos tips que me van a servir mucho durante mis jornadas laborales. Además por fin he probado esas tecnologías que siempre lees, pero que siempre tienes la duda de usarlas o no.&lt;/p&gt;
 &lt;p&gt;Nos vemos en la próxima hackathon, que espero que sea pronto. :-)&lt;/p&gt;
