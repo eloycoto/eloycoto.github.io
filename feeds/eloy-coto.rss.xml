@@ -1,5 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>A calustra</title><link>http://www.acalustra.com/</link><description></description><atom:link href="http://www.acalustra.com/feeds/eloy-coto.rss.xml" rel="self"></atom:link><lastBuildDate>Wed, 19 Nov 2014 21:00:00 +0100</lastBuildDate><item><title>Ansible: how to maintain multiple ssh-keys in different servers</title><link>http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html</link><description>&lt;p&gt;In &lt;a class="reference external" href="http://www.ansible.com"&gt;Ansible&lt;/a&gt; is quite easy add users, pubkeys and other stuff to any server. If
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>A calustra</title><link>http://www.acalustra.com/</link><description></description><atom:link href="http://www.acalustra.com/feeds/eloy-coto.rss.xml" rel="self"></atom:link><lastBuildDate>Wed, 10 Dec 2014 00:00:00 +0100</lastBuildDate><item><title>Dockercon Europe 14</title><link>http://www.acalustra.com/dockercon-europe-14.html</link><description>&lt;p&gt;I was in the &lt;a class="reference external" href="http://europe.dockercon.com/"&gt;dockercon Europe&lt;/a&gt; only for one
+reason: I think that docker and the VoIP world will be good friends. However,
+some problems will need to be sorted before that can happen. At the moment the
+state of the VoIP Docker support is far better than optimal, but I am pretty
+sure that it will be there in just few months, or even weeks because &lt;a class="reference external" href="https://github.com/docker/docker/graphs/commit-activity"&gt;Docker is
+growing so fast.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I need to admit that my expectations before the conference were big, but the
+result was even better than what I was expected. It was &lt;strong&gt;awesome&lt;/strong&gt;! The
+organization was &lt;strong&gt;perfect&lt;/strong&gt;, venue, sound, displays, lights, WiFi, food,
+&lt;strong&gt;everything&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;About the conference, it lasts for 2 days, split in 2 different kind of talks:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Keynotes from amazing people as the Docker CTO, CEO, ING IT manager, Netflix
+architect... focussed in use cases and solutions.&lt;/li&gt;
+&lt;li&gt;And some deeper talks about solutions, how to's, and a lot of tips.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img alt="Dockercon Europe start" class="align-center" src="img/dockercon.jpg" /&gt;
+&lt;div class="section" id="docker-community"&gt;
+&lt;h2&gt;Docker Community&lt;/h2&gt;
+&lt;p&gt;One of the best things that Docker is doing is take care of their community.
+It's growing a lot, loads of pull request &amp;amp; lots of new ideas. Manage this is
+not easy and keeping track of all of those while you continue maintaining a
+happy community is a hard work.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.slideshare.net/shykes/open-design-at-large-scale"&gt;The solution&lt;/a&gt;
+for them is to split the project in small projects, and keep a different set of
+maintainers for &lt;a class="reference external" href="https://clusterhq.com/blog/docker-extensions/"&gt;each plugin&lt;/a&gt;
+of the real engine. This idea is amazing, and makes it easier for new parties
+doing integrations-solutions. I love it &amp;lt;3&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="docker-machine"&gt;
+&lt;h2&gt;Docker Machine&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://github.com/docker/machine"&gt;Docker Machine&lt;/a&gt; was the first new
+announcement. The tool is quite powerful for admins or devs. Sadly, after deep
+a little bit in the code is not as powerful as &lt;em&gt;I thought when they announced
+it in the conference&lt;/em&gt;. It's definitely a tool to keep watching, but, at the
+moment &lt;a class="reference external" href="http://agonzalezro.github.io/how-i-prepared-my-mac-to-make-some-docker-development.html"&gt;I'll keep my host machines with docker and shared volumes with my host.&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="docker-swarm"&gt;
+&lt;h2&gt;Docker Swarm&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://github.com/docker/swarm/"&gt;This announcement made me happy&lt;/a&gt;.
+Orchestration iss difficult, very difficult, &lt;a class="reference external" href="https://speakerdeck.com/vieux/docker-swarm"&gt;Swarm is the first step of
+something that I hope will be great&lt;/a&gt;. Use docker as normal with
+Swarm iss quite useful, and easy to make it grow. Things like volumes or
+networking linking will continue to be difficult, but I'm sure that will be
+fixed in less than 4 months ;-).&lt;/p&gt;
+&lt;p&gt;On the other hand: &lt;a class="reference external" href="https://twitter.com/capotribu/status/540851114242211840/photo/1"&gt;Mesos looks like that will integrate with Docker Swarm&lt;/a&gt;, this
+relation makes Swam even more powerful.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="docker-compose"&gt;
+&lt;h2&gt;Docker Compose&lt;/h2&gt;
+&lt;p&gt;When docker announced the acquisition of &lt;a class="reference external" href="http://www.fig.sh/"&gt;fig&lt;/a&gt;, I was
+thinking that the service would be merged into docker, but it looks that I was
+wrong. Docker Compose use the same fig structure and I love it. Compose will
+help a lot to devs, and I'm sure that in relation with Swarm they will do a
+very good mix.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="another-talks"&gt;
+&lt;h2&gt;Another talks&lt;/h2&gt;
+&lt;p&gt;About the other talks: some of them were amazing: &lt;a class="reference external" href="https://github.com/mitchellh"&gt;Mitchell Hashimoto&lt;/a&gt; presented &lt;a class="reference external" href="http://terrafon.io"&gt;terrafon.io&lt;/a&gt; and &lt;a class="reference external" href="http://consul.io"&gt;consul.io&lt;/a&gt;. Both projects are
+awesome. Consul.io will help to move from vertical scaling to horizontal
+scaling in a lot of VoIP projects. Hopefully in few weeks I will write about
+kamailio and consul ;-)&lt;/p&gt;
+&lt;img alt="Dockercon Europe start" class="align-center" src="img/dockercon-hard.jpg" /&gt;
+&lt;p&gt;Another talks were about tips, tips to build more faster, tips about how to
+migrate old platforms, about how to move Docker to production, how to use it in
+CI environments, those talks wer kinda useful.&lt;/p&gt;
+&lt;p&gt;In the other hand, there were some other talks that I didn't like: BBC CI, Rafe
+Colton talk... but it's quite difficult to keep the high level during all the
+talks of the conference.&lt;/p&gt;
+&lt;p&gt;Another think that it has impacted me is that the USA devs are far better
+storytellers than Europe devs (We need to learn :-))&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="sponsors"&gt;
+&lt;h2&gt;Sponsors&lt;/h2&gt;
+&lt;p&gt;Usually I don't like the sponsors trying to sell me something, but thanks to
+the sponsorships at Dockerconf I got to met &lt;a class="reference external" href="https://www.tutum.co/"&gt;Tutum&lt;/a&gt;
+(Amazing project to deploy multiple containers), a bit about &lt;a class="reference external" href="https://clusterhq.com/"&gt;ClusterHQ&lt;/a&gt; and I also saw that some vendors (as IBM, HP,
+Vmware, Azure) getting involved in this technology which makes me happy. Thanks
+to them for support the conference.&lt;/p&gt;
+&lt;p&gt;On Thursday night I had a chat with Solomon Hykes about networking. &lt;a class="reference external" href="https://github.com/docker/docker/issues/8951"&gt;He shared
+with me this open issues&lt;/a&gt;, I
+realised that openvswitch is really powerful, and some other small tips about
+networking. I'll test them and I'll tell you the results of my tests. It's
+amazing how this disruptive web technology can be part of the VoIP Solutions,
+I'm also sure that 2015 will be, for me, the year that I'll build a lot of VoIP
+servers into containers ;-)&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="conclusion"&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Finally my conclusion about docker after the conference is:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;All the people use docker in testing environments.&lt;/li&gt;
+&lt;li&gt;Docker is the future, but it's still hard in production.&lt;/li&gt;
+&lt;li&gt;Docker is not just the technology, the good thing is the community.&lt;/li&gt;
+&lt;li&gt;Split the project in small pieces, will keep the pieces small, and will be
+easy to maintain, grown and focus. &lt;em&gt;Congrats to all, I love this idea &amp;lt;3&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Nothing more to add to the Dockercon summary. Thanks to all the Docker
+community for this amazing conference, all the people made it amazing. Thanks
+to the organizers. All conference was incredible, the venue, the party, ALL. I
+know that organize events like this it's a lot of effort. Big thanks.&lt;/p&gt;
+&lt;p&gt;Hopefully see you in the next Dockercon Europe!&lt;/p&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Wed, 10 Dec 2014 00:00:00 +0100</pubDate><guid>tag:www.acalustra.com,2014-12-10:dockercon-europe-14.html</guid><category>docker</category><category>kamailio</category></item><item><title>Ansible: how to maintain multiple ssh-keys in different servers</title><link>http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html</link><description>&lt;p&gt;In &lt;a class="reference external" href="http://www.ansible.com"&gt;Ansible&lt;/a&gt; is quite easy add users, pubkeys and other stuff to any server. If
 you work in a organization where you have multiple servers, ssh-keys are a
 swiss-knife, but they are kinda difficult to handle if you create/destroy
 multiple servers every week.&lt;/p&gt;

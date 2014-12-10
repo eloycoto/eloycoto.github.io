@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="es">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> Dockercon Europe 14 review about all the talks&annoucements.</title>
+    <link rel="canonical" href="http://www.acalustra.com/dockercon-europe-14.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" docker, kamailio, dockercon, amsterdam"/>
+    <meta name="description" content=" Dockercon was a good fun. I learnt a lot about it, also their new projects and new interfaces were amazing. "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://www.acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A calustra Full Atom Feed" />
+
+
+
+
+
+
+
+    <meta name="tags" content="docker, kamailio, dockercon, amsterdam" />
+    <meta name="date" content=" 2014-12-10 00:00:00+01:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">My review of Dockercon Europe 14</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2014-12-10T00:00:00" itemprop="datePublished">Wednesday December 10th 2014</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>I was in the <a class="reference external" href="http://europe.dockercon.com/">dockercon Europe</a> only for one
+reason: I think that docker and the VoIP world will be good friends. However,
+some problems will need to be sorted before that can happen. At the moment the
+state of the VoIP Docker support is far better than optimal, but I am pretty
+sure that it will be there in just few months, or even weeks because <a class="reference external" href="https://github.com/docker/docker/graphs/commit-activity">Docker is
+growing so fast.</a></p>
+<p>I need to admit that my expectations before the conference were big, but the
+result was even better than what I was expected. It was <strong>awesome</strong>! The
+organization was <strong>perfect</strong>, venue, sound, displays, lights, WiFi, food,
+<strong>everything</strong>.</p>
+<p>About the conference, it lasts for 2 days, split in 2 different kind of talks:</p>
+<ul class="simple">
+<li>Keynotes from amazing people as the Docker CTO, CEO, ING IT manager, Netflix
+architect... focussed in use cases and solutions.</li>
+<li>And some deeper talks about solutions, how to's, and a lot of tips.</li>
+</ul>
+<img alt="Dockercon Europe start" class="align-center" src="img/dockercon.jpg" />
+<div class="section" id="docker-community">
+<h2>Docker Community</h2>
+<p>One of the best things that Docker is doing is take care of their community.
+It's growing a lot, loads of pull request &amp; lots of new ideas. Manage this is
+not easy and keeping track of all of those while you continue maintaining a
+happy community is a hard work.</p>
+<p><a class="reference external" href="http://www.slideshare.net/shykes/open-design-at-large-scale">The solution</a>
+for them is to split the project in small projects, and keep a different set of
+maintainers for <a class="reference external" href="https://clusterhq.com/blog/docker-extensions/">each plugin</a>
+of the real engine. This idea is amazing, and makes it easier for new parties
+doing integrations-solutions. I love it &lt;3</p>
+</div>
+<div class="section" id="docker-machine">
+<h2>Docker Machine</h2>
+<p><a class="reference external" href="https://github.com/docker/machine">Docker Machine</a> was the first new
+announcement. The tool is quite powerful for admins or devs. Sadly, after deep
+a little bit in the code is not as powerful as <em>I thought when they announced
+it in the conference</em>. It's definitely a tool to keep watching, but, at the
+moment <a class="reference external" href="http://agonzalezro.github.io/how-i-prepared-my-mac-to-make-some-docker-development.html">I'll keep my host machines with docker and shared volumes with my host.</a></p>
+</div>
+<div class="section" id="docker-swarm">
+<h2>Docker Swarm</h2>
+<p><a class="reference external" href="https://github.com/docker/swarm/">This announcement made me happy</a>.
+Orchestration iss difficult, very difficult, <a class="reference external" href="https://speakerdeck.com/vieux/docker-swarm">Swarm is the first step of
+something that I hope will be great</a>. Use docker as normal with
+Swarm iss quite useful, and easy to make it grow. Things like volumes or
+networking linking will continue to be difficult, but I'm sure that will be
+fixed in less than 4 months ;-).</p>
+<p>On the other hand: <a class="reference external" href="https://twitter.com/capotribu/status/540851114242211840/photo/1">Mesos looks like that will integrate with Docker Swarm</a>, this
+relation makes Swam even more powerful.</p>
+</div>
+<div class="section" id="docker-compose">
+<h2>Docker Compose</h2>
+<p>When docker announced the acquisition of <a class="reference external" href="http://www.fig.sh/">fig</a>, I was
+thinking that the service would be merged into docker, but it looks that I was
+wrong. Docker Compose use the same fig structure and I love it. Compose will
+help a lot to devs, and I'm sure that in relation with Swarm they will do a
+very good mix.</p>
+</div>
+<div class="section" id="another-talks">
+<h2>Another talks</h2>
+<p>About the other talks: some of them were amazing: <a class="reference external" href="https://github.com/mitchellh">Mitchell Hashimoto</a> presented <a class="reference external" href="http://terrafon.io">terrafon.io</a> and <a class="reference external" href="http://consul.io">consul.io</a>. Both projects are
+awesome. Consul.io will help to move from vertical scaling to horizontal
+scaling in a lot of VoIP projects. Hopefully in few weeks I will write about
+kamailio and consul ;-)</p>
+<img alt="Dockercon Europe start" class="align-center" src="img/dockercon-hard.jpg" />
+<p>Another talks were about tips, tips to build more faster, tips about how to
+migrate old platforms, about how to move Docker to production, how to use it in
+CI environments, those talks wer kinda useful.</p>
+<p>In the other hand, there were some other talks that I didn't like: BBC CI, Rafe
+Colton talk... but it's quite difficult to keep the high level during all the
+talks of the conference.</p>
+<p>Another think that it has impacted me is that the USA devs are far better
+storytellers than Europe devs (We need to learn :-))</p>
+</div>
+<div class="section" id="sponsors">
+<h2>Sponsors</h2>
+<p>Usually I don't like the sponsors trying to sell me something, but thanks to
+the sponsorships at Dockerconf I got to met <a class="reference external" href="https://www.tutum.co/">Tutum</a>
+(Amazing project to deploy multiple containers), a bit about <a class="reference external" href="https://clusterhq.com/">ClusterHQ</a> and I also saw that some vendors (as IBM, HP,
+Vmware, Azure) getting involved in this technology which makes me happy. Thanks
+to them for support the conference.</p>
+<p>On Thursday night I had a chat with Solomon Hykes about networking. <a class="reference external" href="https://github.com/docker/docker/issues/8951">He shared
+with me this open issues</a>, I
+realised that openvswitch is really powerful, and some other small tips about
+networking. I'll test them and I'll tell you the results of my tests. It's
+amazing how this disruptive web technology can be part of the VoIP Solutions,
+I'm also sure that 2015 will be, for me, the year that I'll build a lot of VoIP
+servers into containers ;-)</p>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion</h2>
+<p>Finally my conclusion about docker after the conference is:</p>
+<ul class="simple">
+<li>All the people use docker in testing environments.</li>
+<li>Docker is the future, but it's still hard in production.</li>
+<li>Docker is not just the technology, the good thing is the community.</li>
+<li>Split the project in small pieces, will keep the pieces small, and will be
+easy to maintain, grown and focus. <em>Congrats to all, I love this idea &lt;3</em></li>
+</ul>
+<p>Nothing more to add to the Dockercon summary. Thanks to all the Docker
+community for this amazing conference, all the people made it amazing. Thanks
+to the organizers. All conference was incredible, the venue, the party, ALL. I
+know that organize events like this it's a lot of effort. Big thanks.</p>
+<p>Hopefully see you in the next Dockercon Europe!</p>
+</div>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> docker, kamailio,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+            <ul>
+                <li><a href="http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html">Politicas de seguridad en Kamailio</a></li>
+                <li><a href="http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html">Kamailio statsd, better statistics in your voip platform.</a></li>
+                <li><a href="http://www.acalustra.com/hablando-de-docker-en-betabeers-galicia.html">Hablando de Docker en betabeers Galicia</a></li>
+                <li><a href="http://www.acalustra.com/sistemas-de-colas-basado-en-redis-en-kamailio.html">sistemas de colas basado en redis en kamailio</a></li>
+            </ul>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/docker.html" rel="tag">docker</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/kamailio.html" rel="tag">kamailio</a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=Dockercon Europe 14 via @eloycoto&url=http://www.acalustra.com/dockercon-europe-14.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/dockercon-europe-14.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/dockercon-europe-14.html&title=Dockercon Europe 14"><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>
