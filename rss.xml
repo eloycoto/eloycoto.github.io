@@ -39,9 +39,9 @@ moment &lt;a class="reference external" href="http://agonzalezro.github.io/how-i
 &lt;div class="section" id="docker-swarm"&gt;
 &lt;h2&gt;Docker Swarm&lt;/h2&gt;
 &lt;p&gt;&lt;a class="reference external" href="https://github.com/docker/swarm/"&gt;This announcement made me happy&lt;/a&gt;.
-Orchestration iss difficult, very difficult, &lt;a class="reference external" href="https://speakerdeck.com/vieux/docker-swarm"&gt;Swarm is the first step of
+Orchestration is difficult, very difficult, &lt;a class="reference external" href="https://speakerdeck.com/vieux/docker-swarm"&gt;Swarm is the first step of
 something that I hope will be great&lt;/a&gt;. Use docker as normal with
-Swarm iss quite useful, and easy to make it grow. Things like volumes or
+Swarm is quite useful, and easy to make it grow. Things like volumes or
 networking linking will continue to be difficult, but I'm sure that will be
 fixed in less than 4 months ;-).&lt;/p&gt;
 &lt;p&gt;On the other hand: &lt;a class="reference external" href="https://twitter.com/capotribu/status/540851114242211840/photo/1"&gt;Mesos looks like that will integrate with Docker Swarm&lt;/a&gt;, this
