@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="es">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> </title>
+    <link rel="canonical" href="http://www.acalustra.com/kamailio-new-module-statsd.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" "/>
+    <meta name="description" content="  "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://www.acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A calustra Full Atom Feed" />
+
+
+
+
+
+
+
+    <meta name="tags" content="" />
+    <meta name="date" content=" 2014-12-31 16:00:00+01:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">Kamailio module statsd explain</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2014-12-31T16:00:00" itemprop="datePublished">Wednesday December 31th 2014</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>I remember when I heard about graphite/statsd. It was late of 2012 in Python London Group. Few weeks before I read Lean Startup book and I learnt to measure all the things to improve our companies.</p>
+<p>In early 2013 I started to use graphite. I track all the logins, events and all the calls made in Foehn Platform. After a few weeks I felt in love with Statsd/Graphite.</p>
+<div class="section" id="about-statsd-graphite">
+<h2>About Statsd/Graphite</h2>
+<dl class="docutils">
+<dt>Graphite is a scalable realtime graphing. Graphite has 3 main components:</dt>
+<dd><ul class="first last simple">
+<li>Carbon: Is a daemon that listens for time-series data. UDP server with simple one direction protocol.</li>
+<li>Whisper: A simple database library for storing time-series data (Similar in design to RRD)</li>
+<li>Graphite Webapp: Django app that renders graphs on-demand and provides REST API.</li>
+</ul>
+</dd>
+</dl>
+<p>In these years a lot of developers started to use <a class="reference external" href="https://github.com/etsy/statsd/">Statsd</a>. Statsd is a nodejs daemon that works with different <a class="reference external" href="https://github.com/etsy/statsd/blob/master/docs/metric_types.md">metric types</a>, and completed graphite weakness.</p>
+<p>After a few years working with both. My advice is using Statsd only for one reason. Graphite appears to be not active in the last months. In the other hand InfluxDB is the new standar &quot;events database&quot; for a lot of USA startups, and it's growing fast. By the way, InfluxDB is statsd compatible.</p>
+</div>
+<div class="section" id="why-statsd-graphite">
+<h2>Why Statsd/Graphite</h2>
+<p>Graphite help developers to measure all the things. It's not a sql/no-sql databases, it's a database designed to save realtime/events info, and tools to aggregate the info after days, weeks, or years.</p>
+<dl class="docutils">
+<dt>The main features of graphite are:</dt>
+<dd><ul class="first last simple">
+<li>You can save the info about events easily. Only a simple key with value example: ('kamProd.gateways.gateway5') and you can find easyly in the graphite web app.</li>
+<li>You can compare information between days/hours</li>
+<li>You can make graphs related with Phones, Web, gateways, custom apps, or whataver you want.</li>
+<li>See trends in your platform in a simple panel.</li>
+<li>Compare numbers, a lot of different numbers.</li>
+</ul>
+</dd>
+</dl>
+<p>You can see more info in this talk: <a class="reference external" href="http://vimeo.com/41146918">Video</a> and <a class="reference external" href="https://docs.google.com/presentation/d/1QlLV00OyV-J8DkwfdUiXYRao-hLRkKFuu5DP90u1jKQ/edit?pli=1#slide=id.p">Slides</a> or <a class="reference external" href="https://codeascraft.com/2011/02/15/measure-anything-measure-everything/">in this blog post</a>.</p>
+</div>
+<div class="section" id="bussines-uses">
+<h2>Bussines Uses</h2>
+<dl class="docutils">
+<dt>Added this feature to Kamailio you can measure the following things:</dt>
+<dd><ul class="first last simple">
+<li>The number of request processed in Kamailio and the time that expend.</li>
+<li>The load of the gateways.</li>
+<li>How many invites are without proper number format.</li>
+<li>How many reinvites do you have in the application.</li>
+<li>Media Codec logging to make sure that always HD codec. :-)</li>
+<li>Test how long take a database query.</li>
+<li>Count how many invalid register do you have in the application.</li>
+<li>Count how many connections are using tls or clear sip.</li>
+</ul>
+</dd>
+</dl>
+<p>This is only a few examples. All that you want to measure, you can do without trouble.</p>
+</div>
+<div class="section" id="technical-info">
+<h2>Technical info</h2>
+<p>To enable statsd in kamilio you need to add the module in the compile flags:</p>
+<blockquote>
+<div class="highlight"><pre><span class="n">make</span> <span class="n">include_modules</span><span class="o">=</span><span class="s">&quot;statsd&quot;</span> <span class="n">cfg</span>
+<span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</blockquote>
+<p>Kamailio statsd only has 2 module parameters. <a class="reference external" href="http://kamailio.org/docs/modules/devel/modules/statsd.html#statsd.p.serverIP">IP</a> and <a class="reference external" href="http://kamailio.org/docs/modules/devel/modules/statsd.html#statsd.p.serverPort">Port</a>.</p>
+<p>About the config functions match with statsd metric types:</p>
+<ul>
+<li><p class="first"><strong>SET</strong>: Simple info based on metric-value. <a class="reference external" href="http://kamailio.org/docs/modules/devel/modules/statsd.html#statsd.f.statsd_set">Kamailio module example</a></p>
+</li>
+<li><p class="first"><strong>Gauge</strong>: Simple info too, but in this case if flush interval is not defined, statsd will send to graphite the last value. You can send +1 or -1 in the value field. <a class="reference external" href="http://kamailio.org/docs/modules/devel/modules/statsd.html#statsd.f.statsd_gauge">Kamailio module example</a></p>
+</li>
+<li><p class="first"><strong>Timming Options</strong>: Timing is useful, you can use <a class="reference external" href="http://kamailio.org/docs/modules/devel/modules/statsd.html#statsd.f.statsd_start">statsd_start</a> and <a class="reference external" href="http://kamailio.org/docs/modules/devel/modules/statsd.html#statsd.f.statsd_stop">statsd_stop</a> to measure in production your code. I mean, for example if you are using a testing one subroutine and you want to track. You can use as the example.</p>
+</li>
+<li><p class="first"><strong>Counting Options</strong>: If you want to track decrement or increments <a class="reference external" href="http://kamailio.org/docs/modules/devel/modules/statsd.html#statsd.f.statsd_incr">statsd_incr</a> and <a class="reference external" href="http://kamailio.org/docs/modules/devel/modules/statsd.html#statsd.f.statsd_decr">statsd_decr</a> and this match exactly with statsd counting definition.</p>
+<blockquote>
+<div class="highlight"><pre><span class="n">This</span> <span class="n">is</span> <span class="n">a</span> <span class="n">simple</span> <span class="n">counter</span><span class="p">.</span> <span class="n">Add</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">the</span> <span class="s">&quot;gorets&quot;</span> <span class="n">bucket</span><span class="p">.</span> <span class="n">At</span> <span class="n">each</span> <span class="n">flush</span> <span class="n">the</span> <span class="n">current</span> <span class="n">count</span> <span class="n">is</span> <span class="n">sent</span> <span class="n">and</span> <span class="n">reset</span> <span class="n">to</span> <span class="mf">0.</span> <span class="n">If</span> <span class="n">the</span> <span class="n">count</span> <span class="n">at</span> <span class="n">flush</span> <span class="n">is</span> <span class="mi">0</span> <span class="n">then</span> <span class="n">you</span> <span class="n">can</span> <span class="n">opt</span> <span class="n">to</span> <span class="n">send</span> <span class="n">no</span> <span class="n">metric</span> <span class="n">at</span> <span class="n">all</span> <span class="k">for</span> <span class="n">this</span> <span class="n">counter</span><span class="p">,</span> <span class="n">by</span> <span class="n">setting</span> <span class="n">config</span><span class="p">.</span><span class="n">deleteCounters</span> <span class="p">(</span><span class="n">applies</span> <span class="n">only</span> <span class="n">to</span> <span class="n">graphite</span> <span class="n">backend</span><span class="p">).</span> <span class="n">Statsd</span> <span class="n">will</span> <span class="n">send</span> <span class="n">both</span> <span class="n">the</span> <span class="n">rate</span> <span class="n">as</span> <span class="n">well</span> <span class="n">as</span> <span class="n">the</span> <span class="n">count</span> <span class="n">at</span> <span class="n">each</span> <span class="n">flush</span><span class="p">.</span>
+</pre></div>
+</blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="installing-graphite">
+<h2>Installing Graphite</h2>
+<p>Install graphite is hard if you are not familiarized with python tools. My simple advice is to follow this <a class="reference external" href="https://github.com/grafana/grafana-docker-dev-env">dockerfile</a> and test using docker. At the moment I'm running a system with more than 1700 metrics keys and all works perfect.</p>
+</div>
+<div class="section" id="graphite-statsd-environment">
+<h2>Graphite/Statsd Environment</h2>
+<dl class="docutils">
+<dt>Environment is always important. Around Graphite some projects are growing and it's important to add. I'm using all this tools to keep things easy working:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="http://grafana.org">Grafana</a>: This is the swiss-knife to Graphite. A easy dashboard that you can keep all your info in simple views.</li>
+<li><a class="reference external" href="http://cabotapp.com">CabotApp</a>: Monitor and alert system for your metrics. Did you get more than 100 5XX error from one gateway? Automatic disable please ;-)</li>
+<li><a class="reference external" href="https://github.com/BrightcoveOS/Diamond/wiki">Diamond</a>: Python daemon that collects system metrics. <a class="reference external" href="https://github.com/BrightcoveOS/Diamond/wiki/Collectors">With a lot of useful collectors</a>.</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="my-advices">
+<h2>My advices</h2>
+<ul class="simple">
+<li>Use the docker image to start to test and production too!</li>
+<li>Grafana is a good friend, all your company will love it. <cite>You must see this video &lt;http://grafana.org/blog/2014/05/25/monitorama-video-and-update.html&gt;</cite></li>
+<li>Graphite query language is quite powerful, <a class="reference external" href="http://graphite.readthedocs.org/en/1.0/functions.html">have a look in all the funcions</a></li>
+<li><a class="reference external" href="http://graphite.readthedocs.org/en/1.0/functions.html#graphite.render.functions.timeShift">TimeShift function</a> is one of the best things in graphite.</li>
+<li>The learning curve of graphite is not easy. You can try with one metric and try every week to add a new graph in grafana.</li>
+</ul>
+</div>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> ,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/.html" rel="tag"></a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=Kamailio new module statsd via @eloycoto&url=http://www.acalustra.com/kamailio-new-module-statsd.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/kamailio-new-module-statsd.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/kamailio-new-module-statsd.html&title=Kamailio new module statsd"><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>

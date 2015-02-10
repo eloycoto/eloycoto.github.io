@@ -1,5 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>A calustra</title><link href="http://www.acalustra.com/" rel="alternate"></link><link href="http://www.acalustra.com/feeds/eloy-coto.atom.xml" rel="self"></link><id>http://www.acalustra.com/</id><updated>2014-12-10T00:00:00+01:00</updated><entry><title>Dockercon Europe 14</title><link href="http://www.acalustra.com/dockercon-europe-14.html" rel="alternate"></link><updated>2014-12-10T00:00:00+01:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2014-12-10:dockercon-europe-14.html</id><summary type="html">&lt;p&gt;I was in the &lt;a class="reference external" href="http://europe.dockercon.com/"&gt;dockercon Europe&lt;/a&gt; only for one
+<feed xmlns="http://www.w3.org/2005/Atom"><title>A calustra</title><link href="http://www.acalustra.com/" rel="alternate"></link><link href="http://www.acalustra.com/feeds/eloy-coto.atom.xml" rel="self"></link><id>http://www.acalustra.com/</id><updated>2015-02-01T00:00:00+01:00</updated><entry><title>My first issue with Airbnb</title><link href="http://www.acalustra.com/my-first-issue-with-airbnb.html" rel="alternate"></link><updated>2015-02-01T00:00:00+01:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-02-01:my-first-issue-with-airbnb.html</id><summary type="html">&lt;p&gt;In early 2012 I met Airbnb. At the first time (I was living in Spain yet) I
+thought that was not a very good idea. I was mainly scared about the fact that
+I would be sharing a house with complete strangers.&lt;/p&gt;
+&lt;p&gt;When I arrived in London a lot of people of Google Campus were using it. So in
+early 2013 I gave it a try.&lt;/p&gt;
+&lt;p&gt;From early 2013, I made dozens of travels using Airbnb. Both professionally and
+leisure. Nowadays I think that I couldn't live without this service.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="class" src="img/airbnb_logo.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;From mid 2013 I've travelled to London around one time per month. If I need to
+book a hotel I would spend a lot of days with crappy internet connection and
+nobody to speak with after work. Using Airbnb gave me a chance to speak with a
+lot of English people, learning UK culture, etc... Actually, some of my
+previous hosts are now my friends.&lt;/p&gt;
+&lt;div class="section" id="the-first-airbnb-trouble"&gt;
+&lt;h2&gt;The first Airbnb trouble&lt;/h2&gt;
+&lt;p&gt;So, in January 2015, I had a reservation in a London house. I arrived on Sunday
+afternoon and all was ok, so no problem. Monday got home after work and it was
+freezing. I waited for the host. At 21:00 I sent her an sms and an email, at
+22:00 I called her but she hanged up my call.&lt;/p&gt;
+&lt;p&gt;So at 22:30 I opened an issue in Airbnb, telling that the home was freezing and
+the host didn't reply to my intents of communication. Few hours later, I was in
+bed with 2 duvets and 2 blankets, and Annie from Airbnb called me. She was very
+very kind with me and she also offered me the chance to move to any hotel, or
+try different options. By that time the host already arrived and she powered on
+the central heating, so it was not needed to moved at that time in the night.
+Problem fixed! - I thought.&lt;/p&gt;
+&lt;p&gt;At 3:30 my room was freezing again. I tried to sleep but at 6:00 AM I woke up
+and I went to work. At 8:00 I wrote a email to the host if she could provide a
+solution for the heating.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="class" src="img/airbnb.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;During the morning I &lt;strong&gt;tried&lt;/strong&gt; to speak with Airbnb, but nobody replied my
+emails.  So I didn't know where I'll sleep Tuesday night. Meanwhile the host
+didn't reply me.&lt;/p&gt;
+&lt;p&gt;At 17:00 UK time, I wrote a public tweet, and in 20 minutes someone from Airbnb
+support rang me. They want to catch up with my issue! USA customer services
+started to work again. :-)&lt;/p&gt;
+&lt;p&gt;At 18:00 Annie called me again. She was the best support agent that I ever had.
+She gave me some options (another house, hotels). I selected another house that
+I used before. After few hours and dozens of Annie calls, I was in a warm house!
+I'm quite happy with Annie's support, she gave me a lot of options. Meanwhile
+two different Europe agents closed my tickets without any comment. I'm pissed
+off with that.&lt;/p&gt;
+&lt;p&gt;I was quite worried during Tuesday morning, I didn't want to move around London
+in the evening. Europe support didn't provide me any solution.&lt;/p&gt;
+&lt;p&gt;So, I totally recommend Airbnb! I never had problems before. USA agents and
+Annie helped me a lot, but it definitely looks that they need some work in the
+Europe customer service if they want to keep the good work.&lt;/p&gt;
+&lt;p&gt;On the other hand, and more related with my field, Airbnb needs to improve the
+calls quality. I had some issues with it and even some of the calls got dropped.&lt;/p&gt;
+&lt;/div&gt;
+</summary><category term="airbnb"></category><category term="travels"></category><category term="personal"></category></entry><entry><title>Dockercon Europe 14</title><link href="http://www.acalustra.com/dockercon-europe-14.html" rel="alternate"></link><updated>2014-12-10T00:00:00+01:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2014-12-10:dockercon-europe-14.html</id><summary type="html">&lt;p&gt;I was in the &lt;a class="reference external" href="http://europe.dockercon.com/"&gt;dockercon Europe&lt;/a&gt; only for one
 reason: I think that docker and the VoIP world will be good friends. However,
 some problems will need to be sorted before that can happen. At the moment the
 state of the VoIP Docker support is far better than optimal, but I am pretty
