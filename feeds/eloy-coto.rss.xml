@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>A calustra</title><link>http://www.acalustra.com/</link><description></description><atom:link href="http://www.acalustra.com/feeds/eloy-coto.rss.xml" rel="self"></atom:link><lastBuildDate>Sun, 01 Feb 2015 00:00:00 +0100</lastBuildDate><item><title>My first issue with Airbnb</title><link>http://www.acalustra.com/my-first-issue-with-airbnb.html</link><description>&lt;p&gt;In early 2012 I met Airbnb. At the first time (I was living in Spain yet) I
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>A calustra</title><link>http://www.acalustra.com/</link><description></description><atom:link href="http://www.acalustra.com/feeds/eloy-coto.rss.xml" rel="self"></atom:link><lastBuildDate>Tue, 10 Feb 2015 00:00:00 +0100</lastBuildDate><item><title>My first issue with Airbnb</title><link>http://www.acalustra.com/my-first-issue-with-airbnb.html</link><description>&lt;p&gt;In early 2012 I met Airbnb. At the first time (I was living in Spain yet) I
 thought that was not a very good idea. I was mainly scared about the fact that
 I would be sharing a house with complete strangers.&lt;/p&gt;
 &lt;p&gt;When I arrived in London a lot of people of Google Campus were using it. So in
@@ -53,7 +53,7 @@ Europe customer service if they want to keep the good work.&lt;/p&gt;
 &lt;p&gt;On the other hand, and more related with my field, Airbnb needs to improve the
 calls quality. I had some issues with it and even some of the calls got dropped.&lt;/p&gt;
 &lt;/div&gt;
-</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Sun, 01 Feb 2015 00:00:00 +0100</pubDate><guid>tag:www.acalustra.com,2015-02-01:my-first-issue-with-airbnb.html</guid><category>airbnb</category><category>travels</category><category>personal</category></item><item><title>Dockercon Europe 14</title><link>http://www.acalustra.com/dockercon-europe-14.html</link><description>&lt;p&gt;I was in the &lt;a class="reference external" href="http://europe.dockercon.com/"&gt;dockercon Europe&lt;/a&gt; only for one
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Tue, 10 Feb 2015 00:00:00 +0100</pubDate><guid>tag:www.acalustra.com,2015-02-10:my-first-issue-with-airbnb.html</guid><category>airbnb</category><category>travels</category><category>personal</category></item><item><title>Dockercon Europe 14</title><link>http://www.acalustra.com/dockercon-europe-14.html</link><description>&lt;p&gt;I was in the &lt;a class="reference external" href="http://europe.dockercon.com/"&gt;dockercon Europe&lt;/a&gt; only for one
 reason: I think that docker and the VoIP world will be good friends. However,
 some problems will need to be sorted before that can happen. At the moment the
 state of the VoIP Docker support is far better than optimal, but I am pretty
