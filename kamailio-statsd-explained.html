@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <title> Kamailio Statsd module explained</title>
-    <link rel="canonical" href="http://www.acalustra.com/kamailio-new-module-statsd.html" />
+    <link rel="canonical" href="http://www.acalustra.com/kamailio-statsd-explained.html" />
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <meta name="keywords" content=" Kamailio statsd, kamailio modules, graphite, grafana, statsd, gauges, counters"/>
     <meta name="description" content=" Kamailio statsd is a module to integrate your Voip platform with Realtime graphing Graphite. You can get better statistics with this module. "/>
@@ -43,7 +43,7 @@
 
   <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
     <div class="col-9 col-offset-1">
-      <h1 itemprop="name headline">Kamailio module statsd explained</h1>
+      <h1 itemprop="name headline">Kamailio statsd best practices</h1>
       <div class="byline">
         Escrito por:
         <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -103,6 +103,7 @@
 <li>Count how many connections are using tls.</li>
 </ul>
 <p>Those are only few examples. Whatever you want to measure, can be measured without any trouble.</p>
+<img alt="Kamailio statsd native integration" class="align-center" src="img/nice_dashboard.png" />
 </div>
 <div class="section" id="technical-info">
 <h2>Technical info</h2>
@@ -135,9 +136,11 @@
 </div>
 <div class="section" id="graphite-statsd-environment">
 <h2>Graphite/Statsd Environment</h2>
-<p>Environment is always important. Graphite environment is growing and it's important to add in this list:
-- <a class="reference external" href="http://cabotapp.com">CabotApp</a>: Monitor and alert system for your metrics. Gateway can be disabled if you are getting more than 100 5XX replies from it.
-- <a class="reference external" href="https://github.com/BrightcoveOS/Diamond/wiki">Diamond</a>: Python daemon that collects system metrics. <a class="reference external" href="https://github.com/BrightcoveOS/Diamond/wiki/Collectors">With a lot of useful collectors</a>.</p>
+<p>Environment is always important. Graphite environment is growing and it's important to add in this list:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://cabotapp.com">CabotApp</a>: Monitor and alert system for your metrics. Gateway can be disabled if you are getting more than 100 5XX replies from it.</li>
+<li><a class="reference external" href="https://github.com/BrightcoveOS/Diamond/wiki">Diamond</a>: Python daemon that collects system metrics. <a class="reference external" href="https://github.com/BrightcoveOS/Diamond/wiki/Collectors">With a lot of useful collectors</a>.</li>
+</ul>
 </div>
 <div class="section" id="my-advices">
 <h2>My advices</h2>
@@ -165,10 +168,9 @@
         <h4>Artículos relacionados:</h4>
             <ul>
                 <li><a href="http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html">Kamailio statsd, better statistics in your voip platform.</a></li>
+                <li><a href="http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html">Politicas de seguridad en Kamailio</a></li>
                 <li><a href="http://www.acalustra.com/dockercon-europe-14.html">Dockercon Europe 14</a></li>
                 <li><a href="http://www.acalustra.com/sistemas-de-colas-basado-en-redis-en-kamailio.html">sistemas de colas basado en redis en kamailio</a></li>
-                <li><a href="http://www.acalustra.com/kamailio-from-tables-to-htables.html">Kamailio from tables to htables</a></li>
-                <li><a href="http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html">Politicas de seguridad en Kamailio</a></li>
             </ul>
       </div>
 
@@ -197,11 +199,11 @@
           </span>
       </div><!--tags-->
       <div class="share">
-        <a href="http://twitter.com/share?text=Kamailio new module statsd via @eloycoto&url=http://www.acalustra.com/kamailio-new-module-statsd.html"><i class="fa fa-twitter"></i></a>
+        <a href="http://twitter.com/share?text=Kamailio statsd explained via @eloycoto&url=http://www.acalustra.com/kamailio-statsd-explained.html"><i class="fa fa-twitter"></i></a>
         <br>
-        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/kamailio-new-module-statsd.html"><i class="fa fa-facebook"></i></a>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/kamailio-statsd-explained.html"><i class="fa fa-facebook"></i></a>
         <br>
-        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/kamailio-new-module-statsd.html&title=Kamailio new module statsd"><i class="fa fa-linkedin"></i></a>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/kamailio-statsd-explained.html&title=Kamailio statsd explained"><i class="fa fa-linkedin"></i></a>
       </div>
     </div>
   </div>
