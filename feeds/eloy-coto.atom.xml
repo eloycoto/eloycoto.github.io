@@ -9,7 +9,7 @@ fixtures and all that was not easy anymore.&lt;/p&gt;
 &lt;p&gt;PostgreSQL provides powerful solutions for this problems. One of my favourites
 is HStore. With HStore we can move from Django models to Kamailio htables in
 few lines of code.&lt;/p&gt;
-&lt;img alt="PostgreSQL logo" class="align-center" src="img/PostgreSQL.png" /&gt;
+&lt;img alt="PostgreSQL logo" class="align-center" src="img/postgreSQL.png" /&gt;
 &lt;p&gt;If, for example, we have the following data:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;CREATE&lt;/span&gt; &lt;span class="k"&gt;TABLE&lt;/span&gt; &lt;span class="ss"&gt;&amp;quot;domain&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
     &lt;span class="n"&gt;id&lt;/span&gt; &lt;span class="n"&gt;bigserial&lt;/span&gt; &lt;span class="k"&gt;PRIMARY&lt;/span&gt; &lt;span class="k"&gt;KEY&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
