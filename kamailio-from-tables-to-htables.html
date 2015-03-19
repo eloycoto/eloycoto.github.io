@@ -6,11 +6,11 @@
     <meta http-equiv="content-language" content="es">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title> </title>
+    <title> Snippet to work with PostgreSQL and Kamailio htables</title>
     <link rel="canonical" href="http://www.acalustra.com/kamailio-from-tables-to-htables.html" />
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <meta name="keywords" content=" Kamailio htables, htable, postgresql, hstore"/>
-    <meta name="description" content="  "/>
+    <meta name="keywords" content=" kamailio htables, htable, postgresql, hstore"/>
+    <meta name="description" content=" Postgresql snippet that helps in the creation of news Kamailio htables with a few lines of SQL code. "/>
 
     <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
     <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css">
@@ -23,8 +23,8 @@
 
 
 
-    <meta name="tags" content="kamailio, hashtables, hstore" />
-    <meta name="date" content=" 2015-03-10 16:00:00+01:00" />
+    <meta name="tags" content="Kamailio, hashtables, hstore" />
+    <meta name="date" content=" 2015-03-19 11:00:00+01:00" />
     <meta name="category" content="blog" />
     <meta name="author" content="Eloy coto" />
     <meta name="robots" content="index,follow" />
@@ -43,7 +43,7 @@
 
   <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
     <div class="col-9 col-offset-1">
-      <h1 itemprop="name headline">From sql tables to Kamailio hash tables.</h1>
+      <h1 itemprop="name headline">From SQL tables to Kamailio hash tables.</h1>
       <div class="byline">
         Escrito por:
         <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -52,21 +52,22 @@
           </span>
         </span>
         on
-        <time datetime="2015-03-10T16:00:00" itemprop="datePublished">Tuesday March 10th 2015</time>
+        <time datetime="2015-03-19T11:00:00" itemprop="datePublished">Thursday March 19th 2015</time>
       </div>
 
       <div class="content" itemprop="articleBody">
         <p>Hash tables are one of the best features in Kamailio, but they can be a double
-edged sword. Build web application that work with the htables architecture can
+edged sword. Build web applications that work with the htables architecture can
 be difficult.</p>
-<p>I am using Django since few years ago. This framework had helped me a lot with
+<p>I am using Django since a few years ago. This framework had helped me a lot with
 forms, database models, fixtures, test, migrations, etc.. But when I needed to
-use django in conjunction with htable I found it painful: building forms,
+use Django in conjunction with htables I found it painful: building forms,
 fixtures and all that was not easy anymore.</p>
-<p>Postgresql provides powerful solutions for this problems. One of my favourites
-is hstore. With hstore we can move from Django models to kamailio htables in
+<p>PostgreSQL provides powerful solutions for this problems. One of my favourites
+is HStore. With HStore we can move from Django models to Kamailio htables in
 few lines of code.</p>
-<p>If we have the following data for example:</p>
+<img alt="PostgreSQL logo" class="align-center" src="img/PostgreSQL.png" />
+<p>If, for example, we have the following data:</p>
 <div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="ss">&quot;domain&quot;</span> <span class="p">(</span>
     <span class="n">id</span> <span class="n">bigserial</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
     <span class="n">name</span> <span class="nb">character</span> <span class="nb">varying</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
@@ -83,10 +84,10 @@ few lines of code.</p>
     <span class="p">(</span><span class="s1">&#39;acalustra.com&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3600</span><span class="p">,</span> <span class="s1">&#39;acalustra&#39;</span><span class="p">,</span> <span class="s1">&#39;nomedia=yes&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;0034&#39;</span><span class="p">),</span>
     <span class="p">(</span><span class="s1">&#39;acalustra.es&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3600</span><span class="p">,</span> <span class="s1">&#39;acalustraes&#39;</span><span class="p">,</span> <span class="s1">&#39;nomedia=yes&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;0034&#39;</span><span class="p">);</span>
 </pre></div>
-<p>In this case we have one table with a lot of domain preferences. From our
-kamailio we get read-only access. So the easy way it's to create a new view
-that generates kamailio htable format.</p>
-<p>We can use the following SQL query:</p>
+<p>In this case we have one table with a lot of domain preferences. In our
+Kamailio we will only need read access, so the easy way it's to create a new
+view that generates Kamailio htable format.</p>
+<p>For that purpose we can use the following SQL query:</p>
 <div class="highlight"><pre><span class="k">CREATE</span> <span class="n">extension</span> <span class="n">hstore</span><span class="p">;</span>
 <span class="k">drop</span> <span class="k">view</span> <span class="n">htable_domain</span><span class="p">;</span>
 <span class="k">create</span> <span class="k">view</span> <span class="n">htable_domain</span> <span class="k">as</span>
@@ -103,16 +104,37 @@ that generates kamailio htable format.</p>
         <span class="p">)</span> <span class="k">as</span> <span class="n">domainPref</span><span class="p">)</span>
     <span class="k">as</span> <span class="n">htable</span><span class="p">;</span>
 </pre></div>
-<p>This query uses a few postgresql functions:</p>
+<p>This query uses a few PostgreSQL functions:</p>
 <ul class="simple">
-<li><a class="reference external" href="http://www.postgresql.org/docs/9.4/static/tutorial-window.html">rank()</a>: Create a new id per row over the result.</li>
-<li><a class="reference external" href="http://www.postgresql.org/docs/9.4/static/hstore.html">hstore()</a>: with the subquery(domainPref) creates a new dict like colum name -&gt; value.</li>
+<li><a class="reference external" href="http://www.PostgreSQL.org/docs/9.4/static/tutorial-window.html">rank()</a>: Create a new id per row over the result.</li>
+<li><a class="reference external" href="http://www.PostgreSQL.org/docs/9.4/static/HStore.html">hstore()</a>: with the subquery(domainPref) creates a new dict like colum name -&gt; value.</li>
 </ul>
-<p>In Kamailio we only need to set the following information:</p>
+<p>Now we have a new SQL view with the following information:</p>
+<div class="highlight"><pre>=&gt; select * from htable_domain;
+ id │           key_name            │ key_type │ value_type │   key_value   │ expires
+────┼───────────────────────────────┼──────────┼────────────┼───────────────┼─────────
+  1 │ acalustra.com::id             │        0 │          0 │ 1             │       0
+  2 │ acalustra.es::id              │        0 │          0 │ 2             │       0
+  3 │ acalustra.com::limit_calls    │        0 │          0 │ 10            │       0
+  4 │ acalustra.es::limit_calls     │        0 │          0 │ 10            │       0
+  5 │ acalustra.com::limit_duration │        0 │          0 │ 3600          │       0
+  6 │ acalustra.es::limit_duration  │        0 │          0 │ 3600          │       0
+  7 │ acalustra.com::name           │        0 │          0 │ acalustra.com │       0
+  8 │ acalustra.es::name            │        0 │          0 │ acalustra.es  │       0
+  9 │ acalustra.com::params         │        0 │          0 │ nomedia=yes   │       0
+ 10 │ acalustra.es::params          │        0 │          0 │ nomedia=yes   │       0
+ 11 │ acalustra.com::prefix         │        0 │          0 │ 0034          │       0
+ 12 │ acalustra.es::prefix          │        0 │          0 │ 0034          │       0
+ 13 │ acalustra.com::statsd_prefix  │        0 │          0 │ acalustra     │       0
+ 14 │ acalustra.es::statsd_prefix   │        0 │          0 │ acalustraes   │       0
+ 15 │ acalustra.com::strip          │        0 │          0 │ 0             │       0
+ 16 │ acalustra.es::strip           │        0 │          0 │ 0             │       0
+</pre></div>
+<p>Now, in Kamailio we only need to set the htable parameters:</p>
 <div class="highlight"><pre><span class="n">modparam</span><span class="p">(</span><span class="s">&quot;htable&quot;</span><span class="p">,</span> <span class="s">&quot;htable&quot;</span><span class="p">,</span> <span class="s">&quot;domainPref=&gt;dbtable=htable_domain;&quot;</span><span class="p">)</span>
 </pre></div>
-<p>With this piece of code, we can use this htable without trouble with web
-developers, and we can improve our company dev speed ;-)</p>
+<p>With this piece of code, we can use this <a class="reference external" href="http://kamailio.org/docs/modules/stable/modules/htable.html">htable</a> having our web
+developers happy which will definitely increase our dev speed.</p>
 
       </div>
 
@@ -128,11 +150,11 @@ developers, and we can improve our company dev speed ;-)</p>
       <div class="row">
         <h4>Artículos relacionados:</h4>
             <ul>
-                <li><a href="http://www.acalustra.com/kamailio-new-module-statsd.html">Kamailio new module statsd</a></li>
-                <li><a href="http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html">Kamailio statsd, better statistics in your voip platform.</a></li>
+                <li><a href="http://www.acalustra.com/dockercon-europe-14.html">Dockercon Europe 14</a></li>
                 <li><a href="http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html">Politicas de seguridad en Kamailio</a></li>
                 <li><a href="http://www.acalustra.com/sistemas-de-colas-basado-en-redis-en-kamailio.html">sistemas de colas basado en redis en kamailio</a></li>
-                <li><a href="http://www.acalustra.com/dockercon-europe-14.html">Dockercon Europe 14</a></li>
+                <li><a href="http://www.acalustra.com/kamailio-statsd-explained.html">Kamailio statsd explained</a></li>
+                <li><a href="http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html">Kamailio statsd, better statistics in your voip platform.</a></li>
             </ul>
       </div>
 

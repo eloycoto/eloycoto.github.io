@@ -1,5 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>A calustra</title><link>http://www.acalustra.com/</link><description></description><atom:link href="http://www.acalustra.com/feeds/eloy-coto.rss.xml" rel="self"></atom:link><lastBuildDate>Thu, 16 Apr 2015 16:00:00 +0200</lastBuildDate><item><title>Kamailio statsd explained</title><link>http://www.acalustra.com/kamailio-statsd-explained.html</link><description>&lt;p&gt;I remember when I heard about graphite/statsd. It was late of 2012 in the Python London Group. Few weeks before I read &lt;em&gt;Lean Startup&lt;/em&gt; and I learnt to measure all the things to improve our business.&lt;/p&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>A calustra</title><link>http://www.acalustra.com/</link><description></description><atom:link href="http://www.acalustra.com/feeds/eloy-coto.rss.xml" rel="self"></atom:link><lastBuildDate>Thu, 19 Mar 2015 11:00:00 +0100</lastBuildDate><item><title>Kamailio from tables to htables</title><link>http://www.acalustra.com/kamailio-from-tables-to-htables.html</link><description>&lt;p&gt;Hash tables are one of the best features in Kamailio, but they can be a double
+edged sword. Build web applications that work with the htables architecture can
+be difficult.&lt;/p&gt;
+&lt;p&gt;I am using Django since a few years ago. This framework had helped me a lot with
+forms, database models, fixtures, test, migrations, etc.. But when I needed to
+use Django in conjunction with htables I found it painful: building forms,
+fixtures and all that was not easy anymore.&lt;/p&gt;
+&lt;p&gt;PostgreSQL provides powerful solutions for this problems. One of my favourites
+is HStore. With HStore we can move from Django models to Kamailio htables in
+few lines of code.&lt;/p&gt;
+&lt;img alt="PostgreSQL logo" class="align-center" src="img/PostgreSQL.png" /&gt;
+&lt;p&gt;If, for example, we have the following data:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;CREATE&lt;/span&gt; &lt;span class="k"&gt;TABLE&lt;/span&gt; &lt;span class="ss"&gt;&amp;quot;domain&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;id&lt;/span&gt; &lt;span class="n"&gt;bigserial&lt;/span&gt; &lt;span class="k"&gt;PRIMARY&lt;/span&gt; &lt;span class="k"&gt;KEY&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="nb"&gt;character&lt;/span&gt; &lt;span class="nb"&gt;varying&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;NOT&lt;/span&gt; &lt;span class="k"&gt;NULL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;limit_calls&lt;/span&gt; &lt;span class="nb"&gt;integer&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;limit_duration&lt;/span&gt; &lt;span class="nb"&gt;integer&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;statsd_prefix&lt;/span&gt; &lt;span class="nb"&gt;character&lt;/span&gt; &lt;span class="nb"&gt;varying&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;40&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;NOT&lt;/span&gt; &lt;span class="k"&gt;NULL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;params&lt;/span&gt; &lt;span class="nb"&gt;character&lt;/span&gt; &lt;span class="nb"&gt;varying&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;64&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;NOT&lt;/span&gt; &lt;span class="k"&gt;NULL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;strip&lt;/span&gt; &lt;span class="nb"&gt;integer&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="k"&gt;prefix&lt;/span&gt; &lt;span class="nb"&gt;character&lt;/span&gt; &lt;span class="nb"&gt;varying&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;NOT&lt;/span&gt; &lt;span class="k"&gt;NULL&lt;/span&gt;
+&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="k"&gt;INSERT&lt;/span&gt; &lt;span class="k"&gt;INTO&lt;/span&gt; &lt;span class="k"&gt;domain&lt;/span&gt;
+    &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;&amp;quot;limit_calls&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;&amp;quot;limit_duration&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;&amp;quot;statsd_prefix&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;&amp;quot;params&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;&amp;quot;strip&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;&amp;quot;prefix&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;VALUES&lt;/span&gt;
+    &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;acalustra.com&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;3600&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;acalustra&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;nomedia=yes&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;0034&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;acalustra.es&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;3600&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;acalustraes&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;nomedia=yes&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;0034&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;In this case we have one table with a lot of domain preferences. In our
+Kamailio we will only need read access, so the easy way it's to create a new
+view that generates Kamailio htable format.&lt;/p&gt;
+&lt;p&gt;For that purpose we can use the following SQL query:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;CREATE&lt;/span&gt; &lt;span class="n"&gt;extension&lt;/span&gt; &lt;span class="n"&gt;hstore&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;drop&lt;/span&gt; &lt;span class="k"&gt;view&lt;/span&gt; &lt;span class="n"&gt;htable_domain&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;create&lt;/span&gt; &lt;span class="k"&gt;view&lt;/span&gt; &lt;span class="n"&gt;htable_domain&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt;
+    &lt;span class="k"&gt;select&lt;/span&gt;
+      &lt;span class="n"&gt;rank&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;over&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;order&lt;/span&gt; &lt;span class="k"&gt;by&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="k"&gt;key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;id&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;::&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="k"&gt;key&lt;/span&gt;&lt;span class="p"&gt;)::&lt;/span&gt;&lt;span class="nb"&gt;varchar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;64&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;key_name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="k"&gt;key_type&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;value_type&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="k"&gt;CASE&lt;/span&gt; &lt;span class="k"&gt;WHEN&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="k"&gt;is&lt;/span&gt; &lt;span class="k"&gt;not&lt;/span&gt; &lt;span class="k"&gt;NULL&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;THEN&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="nb"&gt;varchar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;128&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;ELSE&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="nb"&gt;varchar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;128&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;END&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;key_value&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;expires&lt;/span&gt;
+    &lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+        &lt;span class="k"&gt;select&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;each&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;hstore&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;domainPref&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="k"&gt;from&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+            &lt;span class="k"&gt;select&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="k"&gt;from&lt;/span&gt; &lt;span class="k"&gt;domain&lt;/span&gt;
+        &lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;domainPref&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;htable&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This query uses a few PostgreSQL functions:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://www.PostgreSQL.org/docs/9.4/static/tutorial-window.html"&gt;rank()&lt;/a&gt;: Create a new id per row over the result.&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://www.PostgreSQL.org/docs/9.4/static/HStore.html"&gt;hstore()&lt;/a&gt;: with the subquery(domainPref) creates a new dict like colum name -&amp;gt; value.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Now we have a new SQL view with the following information:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;=&amp;gt; select * from htable_domain;
+ id │           key_name            │ key_type │ value_type │   key_value   │ expires
+────┼───────────────────────────────┼──────────┼────────────┼───────────────┼─────────
+  1 │ acalustra.com::id             │        0 │          0 │ 1             │       0
+  2 │ acalustra.es::id              │        0 │          0 │ 2             │       0
+  3 │ acalustra.com::limit_calls    │        0 │          0 │ 10            │       0
+  4 │ acalustra.es::limit_calls     │        0 │          0 │ 10            │       0
+  5 │ acalustra.com::limit_duration │        0 │          0 │ 3600          │       0
+  6 │ acalustra.es::limit_duration  │        0 │          0 │ 3600          │       0
+  7 │ acalustra.com::name           │        0 │          0 │ acalustra.com │       0
+  8 │ acalustra.es::name            │        0 │          0 │ acalustra.es  │       0
+  9 │ acalustra.com::params         │        0 │          0 │ nomedia=yes   │       0
+ 10 │ acalustra.es::params          │        0 │          0 │ nomedia=yes   │       0
+ 11 │ acalustra.com::prefix         │        0 │          0 │ 0034          │       0
+ 12 │ acalustra.es::prefix          │        0 │          0 │ 0034          │       0
+ 13 │ acalustra.com::statsd_prefix  │        0 │          0 │ acalustra     │       0
+ 14 │ acalustra.es::statsd_prefix   │        0 │          0 │ acalustraes   │       0
+ 15 │ acalustra.com::strip          │        0 │          0 │ 0             │       0
+ 16 │ acalustra.es::strip           │        0 │          0 │ 0             │       0
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now, in Kamailio we only need to set the htable parameters:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;modparam&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;htable&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;htable&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;domainPref=&amp;gt;dbtable=htable_domain;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;With this piece of code, we can use this &lt;a class="reference external" href="http://kamailio.org/docs/modules/stable/modules/htable.html"&gt;htable&lt;/a&gt; having our web
+developers happy which will definitely increase our dev speed.&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Thu, 19 Mar 2015 11:00:00 +0100</pubDate><guid>tag:www.acalustra.com,2015-03-19:kamailio-from-tables-to-htables.html</guid><category>kamailio</category><category>postgresql</category><category>htables</category></item><item><title>Kamailio statsd explained</title><link>http://www.acalustra.com/kamailio-statsd-explained.html</link><description>&lt;p&gt;I remember when I heard about graphite/statsd. It was late of 2012 in the Python London Group. Few weeks before I read &lt;em&gt;Lean Startup&lt;/em&gt; and I learnt to measure all the things to improve our business.&lt;/p&gt;
 &lt;p&gt;In early 2013 I started to use graphite. I tracked all logins, custom events, machine performance and all the running calls in the Foehn platform. After a few weeks I felt in love with Statsd/Graphite.&lt;/p&gt;
 &lt;div class="section" id="about-statsd-graphite"&gt;
 &lt;h2&gt;About Statsd/Graphite&lt;/h2&gt;
@@ -95,7 +174,7 @@
 &lt;li&gt;The learning curve of graphite is not easy. You can try with one metric and try every week to add a new graph in grafana.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
-</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Thu, 16 Apr 2015 16:00:00 +0200</pubDate><guid>tag:www.acalustra.com,2015-04-16:kamailio-statsd-explained.html</guid><category>kamailio</category><category>graphite</category><category>statsd</category><category>grafana</category><category>statistics</category><category>monitoring</category></item><item><title>My first issue with Airbnb</title><link>http://www.acalustra.com/my-first-issue-with-airbnb.html</link><description>&lt;p&gt;In early 2012 I met Airbnb. At the first time (I was living in Spain yet) I
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Mon, 16 Mar 2015 16:00:00 +0100</pubDate><guid>tag:www.acalustra.com,2015-03-16:kamailio-statsd-explained.html</guid><category>kamailio</category><category>graphite</category><category>statsd</category><category>grafana</category><category>statistics</category><category>monitoring</category></item><item><title>My first issue with Airbnb</title><link>http://www.acalustra.com/my-first-issue-with-airbnb.html</link><description>&lt;p&gt;In early 2012 I met Airbnb. At the first time (I was living in Spain yet) I
 thought that was not a very good idea. I was mainly scared about the fact that
 I would be sharing a house with complete strangers.&lt;/p&gt;
 &lt;p&gt;When I arrived in London a lot of people of Google Campus were using it. So in
