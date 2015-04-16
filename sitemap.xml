@@ -5,29 +5,36 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/index.html</loc>
-<lastmod>2015-04-15T20:10:57-00:00</lastmod>
+<lastmod>2015-04-16T16:19:23-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/archives.html</loc>
-<lastmod>2015-04-15T20:10:57-00:00</lastmod>
+<lastmod>2015-04-16T16:19:23-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/tags.html</loc>
-<lastmod>2015-04-15T20:10:57-00:00</lastmod>
+<lastmod>2015-04-16T16:19:23-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/categories.html</loc>
-<lastmod>2015-04-15T20:10:57-00:00</lastmod>
+<lastmod>2015-04-16T16:19:23-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html</loc>
+<lastmod>2015-04-16T16:00:00+02:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -152,7 +159,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/category/blog.html</loc>
-<lastmod>2015-03-19T11:00:00-00:15</lastmod>
+<lastmod>2015-04-16T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -271,7 +278,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/tag/monitoring.html</loc>
-<lastmod>2015-03-16T16:00:00-00:15</lastmod>
+<lastmod>2015-04-16T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -313,7 +320,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/tag/grafana.html</loc>
-<lastmod>2015-03-16T16:00:00-00:15</lastmod>
+<lastmod>2015-04-16T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -376,7 +383,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/tag/statsd.html</loc>
-<lastmod>2015-03-16T16:00:00-00:15</lastmod>
+<lastmod>2015-04-16T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -424,6 +431,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>http://www.acalustra.com/tag/influxdb.html</loc>
+<lastmod>2015-04-16T16:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://www.acalustra.com/tag/hubot.html</loc>
 <lastmod>2013-05-10T00:30:00-00:15</lastmod>
 <changefreq>daily</changefreq>
@@ -439,7 +453,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/tag/statistics.html</loc>
-<lastmod>2015-03-16T16:00:00-00:15</lastmod>
+<lastmod>2015-04-16T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -565,7 +579,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/author/eloy-coto.html</loc>
-<lastmod>2015-03-19T11:00:00-00:15</lastmod>
+<lastmod>2015-04-16T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>

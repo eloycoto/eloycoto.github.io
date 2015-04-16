@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="es">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> Statsd talk at Python Vigo Meetup</title>
+    <link rel="canonical" href="http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" statsd, influxdb, analytics, measure, python Vigo, talk, docker"/>
+    <meta name="description" content=" This are the slides for the Python Vigo talk I gave. The topic was statsd, influxdb and grafana "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://www.acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A calustra Full Atom Feed" />
+
+
+
+
+
+
+
+    <meta name="tags" content="influxdb, statsd, grafana" />
+    <meta name="date" content=" 2015-04-16 16:00:00+02:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">Measure all the things talk</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2015-04-16T16:00:00" itemprop="datePublished">Thursday April 16th 2015</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>I had the luck to give a talk to the Python Vigo community. The topic was about
+how to measure our python applications with few lines of code.</p>
+<p>As you know I love statsd, so I spoke about statsd data types, InfluxDB database
+and Grafana as dashboard.</p>
+<div style="width: 70%;" class="align-center">
+<script async class="speakerdeck-embed" data-id="83ac3b9b27974f39941924fc592f6fb2" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+</div><p>I wrote a few examples that are available in my Github Profile, so you only need
+to do the following things to run those services in your server (Disclaimer: You
+will need docker).</p>
+<div class="highlight"><pre>git clone https://github.com/eloycoto/statsd-influxdb-examples
+<span class="nb">cd </span>statsd-influxdb-examples
+./start.sh
+</pre></div>
+<p>After that, the following services will be listen in these ports:</p>
+<ul class="simple">
+<li>Influxdb: 8083 and 8086 (root/root)</li>
+<li>Grafana: 3000 (admin/admin)</li>
+<li>Statsd: 8125</li>
+</ul>
+<p>Now you can test with the different python apps that you have in the repo.</p>
+<p>Happy code!</p>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> grafana, influxdb, monitoring, statistics, statsd,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+            <ul>
+                <li><a href="http://www.acalustra.com/kamailio-statsd-explained.html">Kamailio statsd explained</a></li>
+                <li><a href="http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html">Kamailio statsd, better statistics in your voip platform.</a></li>
+            </ul>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/grafana.html" rel="tag">grafana</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/influxdb.html" rel="tag">influxdb</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/monitoring.html" rel="tag">monitoring</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/statistics.html" rel="tag">statistics</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/statsd.html" rel="tag">statsd</a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=Statsd talk at Python Vigo Meetup via @eloycoto&url=http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html&title=Statsd talk at Python Vigo Meetup"><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>
