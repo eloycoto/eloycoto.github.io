@@ -1,5 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>A calustra</title><link href="http://www.acalustra.com/" rel="alternate"></link><link href="http://www.acalustra.com/feeds/eloy-coto.atom.xml" rel="self"></link><id>http://www.acalustra.com/</id><updated>2015-04-16T16:00:00+02:00</updated><entry><title>Statsd talk at Python Vigo Meetup</title><link href="http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html" rel="alternate"></link><updated>2015-04-16T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-04-16:statsd-talk-at-python-vigo-meetup.html</id><summary type="html">&lt;p&gt;I had the luck to give a talk to the Python Vigo community. The topic was about
+<feed xmlns="http://www.w3.org/2005/Atom"><title>A calustra</title><link href="http://www.acalustra.com/" rel="alternate"></link><link href="http://www.acalustra.com/feeds/eloy-coto.atom.xml" rel="self"></link><id>http://www.acalustra.com/</id><updated>2015-05-08T16:00:00+02:00</updated><entry><title>Acelerate your Ansible playbooks with async tasks</title><link href="http://www.acalustra.com/acelerate-your-ansible-playbooks-with-async-tasks.html" rel="alternate"></link><updated>2015-05-08T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-05-08:acelerate-your-ansible-playbooks-with-async-tasks.html</id><summary type="html">&lt;p&gt;I'm always impressed with my friends of
+&lt;a class="reference external" href="https://www.streetlife.com/about/team/"&gt;Streetlife&lt;/a&gt;. They built a new
+infrastructure based on immutable deploys. I'm surprised about how fast they are
+able to build this
+&lt;a class="reference external" href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html"&gt;AMIs&lt;/a&gt;, they can
+start a new full configured server in only 6 min.&lt;/p&gt;
+&lt;p&gt;Three years ago I've started using &lt;a class="reference external" href="http://docs.ansible.com/"&gt;Ansible&lt;/a&gt;. My
+deploys &lt;strong&gt;were&lt;/strong&gt; always up to twenty minutes, so one day I decided to achieve an
+eight-min deploy. Eight min will be the time that I have to build a new server.&lt;/p&gt;
+&lt;p&gt;To get this eight minute build, I focused on the following tasks:&lt;/p&gt;
+&lt;div class="section" id="apt-cache-time"&gt;
+&lt;h2&gt;APT cache time:&lt;/h2&gt;
+&lt;p&gt;When you have different roles in Ansible, usually you always set &lt;em&gt;update_cache&lt;/em&gt;
+in the apt task. This is pretty useful, but painful with different roles.&lt;/p&gt;
+&lt;p&gt;Ansible provides the
+&lt;a class="reference external" href="http://docs.ansible.com/apt_module.html"&gt;cache_valid_time&lt;/a&gt; option. If you
+enable it, Ansible will check the cache age. If cache age is less than your
+value, apt-get update will be ignored.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;name&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;Installing useful packages&lt;/span&gt;
+  &lt;span class="l-Scalar-Plain"&gt;apt&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt;
+    &lt;span class="l-Scalar-Plain"&gt;name&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;{{&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;item&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;}}&amp;quot;&lt;/span&gt;
+    &lt;span class="l-Scalar-Plain"&gt;update_cache&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;yes&lt;/span&gt;
+    &lt;span class="l-Scalar-Plain"&gt;cache_valid_time&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;3600&lt;/span&gt;
+  &lt;span class="l-Scalar-Plain"&gt;with_items&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt;
+    &lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;htop&lt;/span&gt;
+    &lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;ngrep&lt;/span&gt;
+    &lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;vim&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="async-tasks"&gt;
+&lt;h2&gt;Async Tasks:&lt;/h2&gt;
+&lt;p&gt;Async tasks are in Ansible from version 1.7. It works like this: while one long
+task is running, another short task can be executed.&lt;/p&gt;
+&lt;p&gt;For example, if you want to install pip dependencies and bower dependencies:
+both are needed, both can run at the same time and both take few minutes.&lt;/p&gt;
+&lt;p&gt;With async tasks, tasks can be executed and forget, but this background task
+can be checked later. So Ansible provides the option to get the task status in
+any time.&lt;/p&gt;
+&lt;p&gt;The following example show how pip and bower dependencies will run in two new
+coroutines. While the dependencies are being installed in the system, another
+task will create the users (or any other task). Before the playbook is
+finished, it's going to be checked if the coroutines has finished properly.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;- name: bower install requirements (Coroutine #2)
+  bower:
+    path: /my_app/frontend/
+    state: latest
+  async: 1000
+  poll: 0
+  register: bower_install
+
+- name: Add the users in the platform
+  user:
+    name: &amp;quot;{{item.name}}&amp;quot;
+    shell: /bin/bash
+    groups: &amp;quot;{{item.groups}}&amp;quot;
+    state: &amp;quot;{{item.status}}&amp;quot;
+  with_items:
+    - {name: eloy, state: present, groups: admin}
+    - {name: www, state: present, groups: admin}
+    - {name: ftp, state: present, groups: admin}
+
+- name: PIP result check (Check coroutine #1)
+  async_status:
+    jid: &amp;quot;{{ pip_install.ansible_job_id }}&amp;quot;
+  register: job_result
+  until: job_result.finished
+  retries: 30
+
+- name: Bower result check (Check coroutine #2)
+  async_status:
+    jid: &amp;quot;{{ bower_install.ansible_job_id }}&amp;quot;
+  register: job_result
+  until: job_result.finished
+  retries: 30
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="ansible-async-task-and-loops"&gt;
+&lt;h2&gt;Ansible async task and loops:&lt;/h2&gt;
+&lt;p&gt;When you start with Ansible, you use a lot of &lt;em&gt;with_items&lt;/em&gt;. Loops are not
+supported in Async tasks, but the following workaround can be used:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;# vars.yml&lt;/span&gt;
+&lt;span class="l-Scalar-Plain"&gt;dependencies&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt;
+  &lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;bison&lt;/span&gt;
+  &lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;gcc&lt;/span&gt;
+  &lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;git&lt;/span&gt;
+  &lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;make&lt;/span&gt;
+  &lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;mercurial&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;name&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;Installing dependencies&lt;/span&gt;
+  &lt;span class="l-Scalar-Plain"&gt;apt&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt;
+    &lt;span class="l-Scalar-Plain"&gt;name&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;{{&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;.join(dependencies)&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;}}&amp;quot;&lt;/span&gt;
+    &lt;span class="l-Scalar-Plain"&gt;update_cache&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;yes&lt;/span&gt;
+    &lt;span class="l-Scalar-Plain"&gt;cache_valid_time&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;3600&lt;/span&gt;
+  &lt;span class="l-Scalar-Plain"&gt;async&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;1000&lt;/span&gt;
+  &lt;span class="l-Scalar-Plain"&gt;poll&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;0&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This playbook will not work in Ansible Trunk version. &lt;a class="reference external" href="https://github.com/ansible/ansible-modules-core/pull/1255"&gt;I sent a new PR to enable&lt;/a&gt; multiple packages
+inline.&lt;/p&gt;
+&lt;p&gt;Happy deploy!&lt;/p&gt;
+&lt;/div&gt;
+</summary><category term="ansible"></category><category term="async"></category><category term="debian"></category><category term="devops"></category><category term="deploy"></category></entry><entry><title>Statsd talk at Python Vigo Meetup</title><link href="http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html" rel="alternate"></link><updated>2015-04-16T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-04-16:statsd-talk-at-python-vigo-meetup.html</id><summary type="html">&lt;p&gt;I had the luck to give a talk to the Python Vigo community. The topic was about
 how to measure our python applications with few lines of code.&lt;/p&gt;
 &lt;p&gt;As you know I love statsd, so I spoke about statsd data types, InfluxDB database
 and Grafana as dashboard.&lt;/p&gt;

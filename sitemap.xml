@@ -5,29 +5,36 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/index.html</loc>
-<lastmod>2015-04-16T16:19:23-00:00</lastmod>
+<lastmod>2015-05-08T08:36:28-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/archives.html</loc>
-<lastmod>2015-04-16T16:19:23-00:00</lastmod>
+<lastmod>2015-05-08T08:36:28-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/tags.html</loc>
-<lastmod>2015-04-16T16:19:23-00:00</lastmod>
+<lastmod>2015-05-08T08:36:28-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/categories.html</loc>
-<lastmod>2015-04-16T16:19:23-00:00</lastmod>
+<lastmod>2015-05-08T08:36:28-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/acelerate-your-ansible-playbooks-with-async-tasks.html</loc>
+<lastmod>2015-05-08T16:00:00+02:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -159,7 +166,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/category/blog.html</loc>
-<lastmod>2015-04-16T16:00:00-00:15</lastmod>
+<lastmod>2015-05-08T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -215,7 +222,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/tag/ansible.html</loc>
-<lastmod>2014-11-19T21:00:00-00:15</lastmod>
+<lastmod>2015-05-08T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -270,6 +277,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>http://www.acalustra.com/tag/openlayers.html</loc>
+<lastmod>2013-04-28T12:25:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://www.acalustra.com/tag/sip.html</loc>
 <lastmod>2014-04-05T12:20:00-00:15</lastmod>
 <changefreq>daily</changefreq>
@@ -313,7 +327,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/tag/devops.html</loc>
-<lastmod>2014-06-03T12:20:00-00:15</lastmod>
+<lastmod>2015-05-08T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -368,8 +382,8 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.acalustra.com/tag/ataques.html</loc>
-<lastmod>2014-04-05T12:20:00-00:15</lastmod>
+<loc>http://www.acalustra.com/tag/webphone.html</loc>
+<lastmod>2012-10-01T00:30:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -404,7 +418,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/tag/deploy.html</loc>
-<lastmod>2014-11-19T21:00:00-00:15</lastmod>
+<lastmod>2015-05-08T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -438,8 +452,8 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.acalustra.com/tag/hubot.html</loc>
-<lastmod>2013-05-10T00:30:00-00:15</lastmod>
+<loc>http://www.acalustra.com/tag/sippy_cup.html</loc>
+<lastmod>2013-08-30T10:10:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -487,8 +501,8 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.acalustra.com/tag/webphone.html</loc>
-<lastmod>2012-10-01T00:30:00-00:15</lastmod>
+<loc>http://www.acalustra.com/tag/debian.html</loc>
+<lastmod>2015-05-08T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -522,8 +536,8 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.acalustra.com/tag/sippy_cup.html</loc>
-<lastmod>2013-08-30T10:10:00-00:15</lastmod>
+<loc>http://www.acalustra.com/tag/hubot.html</loc>
+<lastmod>2013-05-10T00:30:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -531,6 +545,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://www.acalustra.com/tag/triggers.html</loc>
 <lastmod>2013-03-15T12:25:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/tag/ataques.html</loc>
+<lastmod>2014-04-05T12:20:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -557,8 +578,8 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.acalustra.com/tag/openlayers.html</loc>
-<lastmod>2013-04-28T12:25:00-00:15</lastmod>
+<loc>http://www.acalustra.com/tag/async.html</loc>
+<lastmod>2015-05-08T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -579,7 +600,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/author/eloy-coto.html</loc>
-<lastmod>2015-04-16T16:00:00-00:15</lastmod>
+<lastmod>2015-05-08T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
