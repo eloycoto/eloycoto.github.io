@@ -27,7 +27,7 @@ body {
   margin: 0;
   height: 100%;
   color: #3b3b3b;
-  font-family: helvetica;
+  font-family: "Arimo", "Helvetica Neue", Arial, sans-serif;
   line-height: 1.3;
 }
 h1 {
@@ -52,7 +52,7 @@ h4 a {
 }
 p {
   color: #3b3b3b;
-  font-family: helvetica;
+  font-family: "Arimo", "Helvetica Neue", Arial, sans-serif;
   line-height: 1.3;
   box-sizing: border-box;
 }
@@ -165,6 +165,9 @@ img.profile {
 }
 .share .fa {
   margin-top: 10px;
+}
+.strike {
+  text-decoration: line-through;
 }
 .col-1 {
   width: 8.33333333%;
@@ -878,4 +881,21 @@ img.profile {
 .taglist a {
   text-decoration: none;
   padding-left: 0px;
+}
+blockquote {
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C" "\201D" "\2018" "\2019";
+}
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote p {
+  display: inline;
 }

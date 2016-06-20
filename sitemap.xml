@@ -4,169 +4,211 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitem
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-<loc>http://www.acalustra.com/index.html</loc>
-<lastmod>2015-05-08T08:36:28-00:00</lastmod>
+<loc>http://www.acalustra.com/</loc>
+<lastmod>2016-06-20T13:57:26-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/archives.html</loc>
-<lastmod>2015-05-08T08:36:28-00:00</lastmod>
+<lastmod>2016-06-20T13:57:26-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/tags.html</loc>
-<lastmod>2015-05-08T08:36:28-00:00</lastmod>
+<lastmod>2016-06-20T13:57:26-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/categories.html</loc>
-<lastmod>2015-05-08T08:36:28-00:00</lastmod>
+<lastmod>2016-06-20T13:57:26-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
+<loc>http://www.acalustra.com/my-review-of-hashiconf-europe-16.html</loc>
+<lastmod>2016-06-20T16:00:00-00:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/resume-persoal-da-hackathon-sanjurjo-badia.html</loc>
+<lastmod>2016-03-25T16:00:00-00:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/voip-talk-at-librecon-2015.html</loc>
+<lastmod>2015-10-29T16:00:00-00:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/how-can-i-monitor-my-voip-application.html</loc>
+<lastmod>2015-07-24T16:00:00-00:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/kamialio-world-2015.html</loc>
+<lastmod>2015-06-17T00:00:00-00:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/my-thoughts-about-cgrates.html</loc>
+<lastmod>2015-05-27T21:00:00-00:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://www.acalustra.com/acelerate-your-ansible-playbooks-with-async-tasks.html</loc>
-<lastmod>2015-05-08T16:00:00+02:00</lastmod>
+<lastmod>2015-05-08T16:00:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html</loc>
-<lastmod>2015-04-16T16:00:00+02:00</lastmod>
+<lastmod>2015-04-16T16:00:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/kamailio-from-tables-to-htables.html</loc>
-<lastmod>2015-03-19T11:00:00+01:00</lastmod>
+<lastmod>2015-03-19T11:00:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/kamailio-statsd-explained.html</loc>
-<lastmod>2015-03-16T16:00:00+01:00</lastmod>
+<lastmod>2015-03-16T16:00:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/my-first-issue-with-airbnb.html</loc>
-<lastmod>2015-02-10T00:00:00+01:00</lastmod>
+<lastmod>2015-02-10T00:00:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/dockercon-europe-14.html</loc>
-<lastmod>2014-12-10T00:00:00+01:00</lastmod>
+<lastmod>2014-12-10T00:00:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html</loc>
-<lastmod>2014-11-19T21:00:00+01:00</lastmod>
+<lastmod>2014-11-19T21:00:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/hablando-de-docker-en-betabeers-galicia.html</loc>
-<lastmod>2014-11-14T16:00:00+01:00</lastmod>
+<lastmod>2014-11-14T16:00:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/asterisk-11-hangups-handlers.html</loc>
-<lastmod>2014-10-22T16:00:00+02:00</lastmod>
+<lastmod>2014-10-22T16:00:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html</loc>
-<lastmod>2014-10-22T16:00:00+02:00</lastmod>
+<lastmod>2014-10-22T16:00:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/trick-and-tips-en-ansible.html</loc>
-<lastmod>2014-06-03T12:20:00+02:00</lastmod>
+<lastmod>2014-06-03T12:20:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html</loc>
-<lastmod>2014-04-05T12:20:00+02:00</lastmod>
+<lastmod>2014-04-05T12:20:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html</loc>
-<lastmod>2013-08-30T10:10:00+02:00</lastmod>
+<lastmod>2013-08-30T10:10:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html</loc>
-<lastmod>2013-05-10T00:30:00+02:00</lastmod>
+<lastmod>2013-05-10T00:30:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/spring-hackaton-london.html</loc>
-<lastmod>2013-04-28T12:25:00+02:00</lastmod>
+<lastmod>2013-04-28T12:25:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/sistemas-de-colas-basado-en-redis-en-kamailio.html</loc>
-<lastmod>2013-04-10T00:30:00+02:00</lastmod>
+<lastmod>2013-04-10T00:30:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/notificaciones-de-github-mediante-xmpp.html</loc>
-<lastmod>2013-03-15T12:25:00+01:00</lastmod>
+<lastmod>2013-03-15T12:25:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/para-hacerlo-mal-mejor-no-hacerlo.html</loc>
-<lastmod>2012-11-28T12:25:00+01:00</lastmod>
+<lastmod>2012-11-28T12:25:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/la-aventura-de-marcharche-al-google-campus.html</loc>
-<lastmod>2012-10-01T00:30:00+02:00</lastmod>
+<lastmod>2012-10-01T00:30:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/category/blog.html</loc>
-<lastmod>2015-05-08T16:00:00-00:15</lastmod>
+<lastmod>2016-06-20T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -179,6 +221,20 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>http://www.acalustra.com/tag/redis.html</loc>
+<lastmod>2014-04-05T12:20:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/tag/twilio.html</loc>
+<lastmod>2013-04-28T12:25:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://www.acalustra.com/tag/emberjs.html</loc>
 <lastmod>2013-04-28T12:25:00-00:15</lastmod>
 <changefreq>daily</changefreq>
@@ -186,8 +242,22 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>http://www.acalustra.com/tag/packer.html</loc>
+<lastmod>2015-10-29T16:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://www.acalustra.com/tag/xmpp.html</loc>
 <lastmod>2013-05-10T00:30:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/tag/consul.html</loc>
+<lastmod>2016-06-20T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -216,6 +286,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://www.acalustra.com/tag/cloud-communications.html</loc>
 <lastmod>2013-04-28T12:25:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/tag/terraform.html</loc>
+<lastmod>2016-06-20T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -264,7 +341,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/tag/kamailio.html</loc>
-<lastmod>2015-03-19T11:00:00-00:15</lastmod>
+<lastmod>2016-06-20T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -285,7 +362,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/tag/sip.html</loc>
-<lastmod>2014-04-05T12:20:00-00:15</lastmod>
+<lastmod>2015-07-24T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -293,6 +370,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://www.acalustra.com/tag/monitoring.html</loc>
 <lastmod>2015-04-16T16:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/tag/billing.html</loc>
+<lastmod>2015-05-27T21:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -319,8 +403,8 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.acalustra.com/tag/redis.html</loc>
-<lastmod>2014-04-05T12:20:00-00:15</lastmod>
+<loc>http://www.acalustra.com/tag/hashicorp.html</loc>
+<lastmod>2016-06-20T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -333,8 +417,15 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>http://www.acalustra.com/tag/mar.html</loc>
+<lastmod>2016-03-25T16:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://www.acalustra.com/tag/grafana.html</loc>
-<lastmod>2015-04-16T16:00:00-00:15</lastmod>
+<lastmod>2015-10-29T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -396,8 +487,15 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>http://www.acalustra.com/tag/kamailio-world.html</loc>
+<lastmod>2015-06-17T00:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://www.acalustra.com/tag/statsd.html</loc>
-<lastmod>2015-04-16T16:00:00-00:15</lastmod>
+<lastmod>2015-10-29T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -431,22 +529,22 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.acalustra.com/tag/howto.html</loc>
-<lastmod>2014-06-03T12:20:00-00:15</lastmod>
+<loc>http://www.acalustra.com/tag/asterisk.html</loc>
+<lastmod>2015-10-29T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://www.acalustra.com/tag/asterisk.html</loc>
-<lastmod>2014-10-22T16:00:00-00:15</lastmod>
+<loc>http://www.acalustra.com/tag/sipcapture.html</loc>
+<lastmod>2015-07-24T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/tag/influxdb.html</loc>
-<lastmod>2015-04-16T16:00:00-00:15</lastmod>
+<lastmod>2015-10-29T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -473,6 +571,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>http://www.acalustra.com/tag/nomad.html</loc>
+<lastmod>2016-06-20T16:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://www.acalustra.com/tag/ssh.html</loc>
 <lastmod>2014-11-19T21:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
@@ -480,8 +585,15 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.acalustra.com/tag/twilio.html</loc>
-<lastmod>2013-04-28T12:25:00-00:15</lastmod>
+<loc>http://www.acalustra.com/tag/hackathon.html</loc>
+<lastmod>2016-03-25T16:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/tag/vigo.html</loc>
+<lastmod>2016-03-25T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -510,6 +622,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://www.acalustra.com/tag/googleapps.html</loc>
 <lastmod>2012-11-28T12:25:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/tag/howto.html</loc>
+<lastmod>2014-06-03T12:20:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -550,6 +669,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>http://www.acalustra.com/tag/cgrates.html</loc>
+<lastmod>2015-05-27T21:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://www.acalustra.com/tag/ataques.html</loc>
 <lastmod>2014-04-05T12:20:00-00:15</lastmod>
 <changefreq>daily</changefreq>
@@ -571,6 +697,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>http://www.acalustra.com/tag/telefonia.html</loc>
+<lastmod>2013-04-10T00:30:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://www.acalustra.com/tag/push.html</loc>
 <lastmod>2013-03-15T12:25:00-00:15</lastmod>
 <changefreq>daily</changefreq>
@@ -586,21 +719,21 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/tag/docker.html</loc>
-<lastmod>2014-12-10T00:00:00-00:15</lastmod>
+<lastmod>2016-06-20T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://www.acalustra.com/tag/telefonia.html</loc>
-<lastmod>2013-04-10T00:30:00-00:15</lastmod>
+<loc>http://www.acalustra.com/tag/packetbeat.html</loc>
+<lastmod>2015-07-24T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/author/eloy-coto.html</loc>
-<lastmod>2015-05-08T16:00:00-00:15</lastmod>
+<lastmod>2016-06-20T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>

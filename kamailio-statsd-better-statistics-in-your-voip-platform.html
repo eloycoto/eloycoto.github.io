@@ -3,7 +3,6 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="UTF-8">
-    <meta http-equiv="content-language" content="es">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <title> How to integrate kamailio with Graphite using kamailio statsd</title>
@@ -24,7 +23,7 @@
 
 
     <meta name="tags" content="kamailio, graphite, statsd, grafana" />
-    <meta name="date" content=" 2014-10-22 16:00:00+02:00" />
+    <meta name="date" content=" 2014-10-22 16:00:00" />
     <meta name="category" content="blog" />
     <meta name="author" content="Eloy coto" />
     <meta name="robots" content="index,follow" />
@@ -97,7 +96,7 @@
 <blockquote>
 <div class="highlight"><pre><span class="n">route</span> <span class="p">[</span><span class="n">gauge_method</span><span class="p">]{</span>
         <span class="n">statsd_gauge</span><span class="p">(</span><span class="s">&quot;method.count&quot;</span><span class="o">+</span><span class="err">$</span><span class="n">rm</span><span class="p">,</span> <span class="err">“</span><span class="mi">1</span><span class="err">”</span><span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span><span class="err">$</span><span class="n">avp</span><span class="p">(</span><span class="nl">s</span><span class="p">:</span><span class="n">prepaid</span><span class="p">))</span> <span class="n">statsd_gauge</span><span class="p">(</span><span class="s">&quot;customer.prepaid&quot;</span><span class="p">,</span> <span class="err">“</span><span class="o">+</span><span class="mi">1</span><span class="err">”</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="err">$</span><span class="n">avp</span><span class="p">(</span><span class="n">s</span><span class="o">:</span><span class="n">prepaid</span><span class="p">))</span> <span class="n">statsd_gauge</span><span class="p">(</span><span class="s">&quot;customer.prepaid&quot;</span><span class="p">,</span> <span class="err">“</span><span class="o">+</span><span class="mi">1</span><span class="err">”</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </blockquote>
@@ -144,9 +143,9 @@
             <ul>
                 <li><a href="http://www.acalustra.com/kamailio-statsd-explained.html">Kamailio statsd explained</a></li>
                 <li><a href="http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html">Statsd talk at Python Vigo Meetup</a></li>
-                <li><a href="http://www.acalustra.com/kamailio-from-tables-to-htables.html">Kamailio from tables to htables</a></li>
-                <li><a href="http://www.acalustra.com/sistemas-de-colas-basado-en-redis-en-kamailio.html">sistemas de colas basado en redis en kamailio</a></li>
-                <li><a href="http://www.acalustra.com/dockercon-europe-14.html">Dockercon Europe 14</a></li>
+                <li><a href="http://www.acalustra.com/voip-talk-at-librecon-2015.html">Voip talk at Librecon 2015</a></li>
+                <li><a href="http://www.acalustra.com/how-can-i-monitor-my-voip-application.html">How can I monitor my Voip Application?</a></li>
+                <li><a href="http://www.acalustra.com/my-review-of-hashiconf-europe-16.html">My review of Hashiconf Europe 16</a></li>
             </ul>
       </div>
 

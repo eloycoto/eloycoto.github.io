@@ -1,5 +1,533 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>A calustra</title><link href="http://www.acalustra.com/" rel="alternate"></link><link href="http://www.acalustra.com/rss.xml" rel="self"></link><id>http://www.acalustra.com/</id><updated>2015-05-08T16:00:00+02:00</updated><entry><title>Acelerate your Ansible playbooks with async tasks</title><link href="http://www.acalustra.com/acelerate-your-ansible-playbooks-with-async-tasks.html" rel="alternate"></link><updated>2015-05-08T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-05-08:acelerate-your-ansible-playbooks-with-async-tasks.html</id><summary type="html">&lt;p&gt;I'm always impressed with my friends of
+<feed xmlns="http://www.w3.org/2005/Atom"><title>A calustra</title><link href="http://www.acalustra.com/" rel="alternate"></link><link href="http://www.acalustra.com/rss.xml" rel="self"></link><id>http://www.acalustra.com/</id><updated>2016-06-20T16:00:00+02:00</updated><entry><title>My review of Hashiconf Europe 16</title><link href="http://www.acalustra.com/my-review-of-hashiconf-europe-16.html" rel="alternate"></link><updated>2016-06-20T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2016-06-20:my-review-of-hashiconf-europe-16.html</id><summary type="html">&lt;p&gt;Few days ago I was in Amsterdam, in the lovely &lt;a class="reference external" href="https://www.hashiconf.eu/"&gt;Hashiconf EU&lt;/a&gt;. This conference fulfilled all my expectations
+about hashi tools and the devops world. The conference was organized by &lt;a class="reference external" href="https://xebia.com/"&gt;Xebia&lt;/a&gt; with the help of &lt;a class="reference external" href="https://www.hashicorp.com/"&gt;Hashicorp&lt;/a&gt; and it was awesome, everything was great: venue,
+sound, food, talks and the party!&lt;/p&gt;
+&lt;img alt="Hashiconf Europe 2016" class="align-center" src="img/hashiconf_eu1.jpg" /&gt;
+&lt;p&gt;Let me explain why I went to this conference; the main reason is that nowadays
+I'm doing a lot of devops, the vision of Hashicorp is very similar to my
+ideas/problems so I'm learning a lot from them. In the other hand a lot of talks
+were case studies from companies, so I learnt from other people's problems.&lt;/p&gt;
+&lt;p&gt;The conference started with &lt;a class="reference external" href="https://twitter.com/mitchellh"&gt;Mitchell Hashimoto's&lt;/a&gt; keynote, and  I want to emphasize the
+following points:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;The initial support to import in Terraform.&lt;/li&gt;
+&lt;li&gt;Maps and list in Terraform.&lt;/li&gt;
+&lt;li&gt;Terraform state cli.&lt;/li&gt;
+&lt;li&gt;Vault code audit and the new features added in 0.6.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Related with Nomad, they did a good improvement release, &lt;cite&gt;nomad plan&lt;/cite&gt; is a boost
+to the project and being able to run 1M containers in less than 300 seconds is a
+good selling point. Also, he announced that &lt;a class="reference external" href="https://www.hashicorp.com/blog/vektra-joins-hashicorp.html"&gt;Vektra joins Hashicorp&lt;/a&gt; and they are
+going to release  a new log management tool called &lt;a class="reference external" href="https://twitter.com/kelseyhightower/status/742624496763428864"&gt;Current&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The second keynote was from &lt;a class="reference external" href="https://twitter.com/techiewatt"&gt;Nicki Watt&lt;/a&gt; from
+the London based &lt;a class="reference external" href="https://opencredo.com/"&gt;OpenCredo&lt;/a&gt;. I loved this &lt;a class="reference external" href="https://speakerdeck.com/nickithewatt/hashiconf-eu-2016-building-secure-environments-in-clouds-using-hashicorp-tools"&gt;talk&lt;/a&gt;!
+Real problem was described from start and solutions were explained with the
+proper balance between code and theory. The integration and workflow between
+Terraform, Vault, Cloudinit gave me good insights for our infrastructure. In the
+other hand I got the following quote, that is great:&lt;/p&gt;
+&lt;blockquote class="epigraph"&gt;
+The only thing constant in life is change
+--  François de la Rochefoucauld&lt;/blockquote&gt;
+&lt;p&gt;One of the topics that I was more interested was &lt;a class="reference external" href="https://www.nomadproject.io/"&gt;Nomad&lt;/a&gt;. A good review was given by &lt;a class="reference external" href="https://twitter.com/diptanu"&gt;Diptanu&lt;/a&gt;, he has a lot of experience in schedulers. In
+my opinion all schedulers will be a good trend to follow, and all related with
+the microservices. Some keypoints about it:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;It's simpler than other solutions.&lt;/li&gt;
+&lt;li&gt;It's not as complete as kubernetes, but fill the gap for a lot of companies.&lt;/li&gt;
+&lt;li&gt;I can't fully get how nomad can export public interfaces or network constraints.&lt;/li&gt;
+&lt;li&gt;Traffic shaping it's good but not sure how nomad will work with media traffic.&lt;/li&gt;
+&lt;li&gt;Restart on jitter is great.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Nomad fs&lt;/strong&gt; is good, but need to change the paradigm in support teams.&lt;/li&gt;
+&lt;li&gt;All this orchestrators lose the way about dependency requirements between microservices.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img alt="Hashiconf Europe 2016" class="align-center" src="img/hashiconf_eu2.jpg" /&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://www.vaultproject.io/"&gt;Vault&lt;/a&gt; was another hot topic in the
+conference. This secret manager is great and the following uses are marvelous
+for all the companies:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;SSH credentials&lt;/li&gt;
+&lt;li&gt;ACL policies&lt;/li&gt;
+&lt;li&gt;DB credentials&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A lot of people use Vault on production environments, so I'll give a try soon.
+If you want to see an example, this is a good repository to start.&lt;/p&gt;
+&lt;p&gt;Day two started with &lt;a class="reference external" href="https://twitter.com/anne_e_currie"&gt;Anne Currie&lt;/a&gt;
+keynote, it was awesome talk. The way how I think about resource efficiency was
+changed after I heard this keynote.  She went into details around
+container/server metadata, &lt;a class="reference external" href="http://lavel-schema.org"&gt;lavel-schema.org&lt;/a&gt; and
+&lt;a class="reference external" href="http://microbadger.com/"&gt;microbadger.com&lt;/a&gt; was introduced by her to all of
+us.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://www.packer.io/"&gt;Packer&lt;/a&gt; was mentioned in almost all the talks. OS
+Hardening using packer was presented by Xebia, they introduced a lot of security
+related tools, as for example &lt;a class="reference external" href="https://github.com/ansible/ansible-lockdown"&gt;ansible-lockdown&lt;/a&gt;. Faster and reliable deploys
+was explained by &lt;a class="reference external" href="https://twitter.com/otaku_coder"&gt;Vik Bhatti&lt;/a&gt; from Beamly,
+for me, it was one of the best talks in the conference, I must insight the
+following:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://sky-shiny.github.io/smolder/"&gt;Smolder test framework&lt;/a&gt;: Looks great and maybe I'll do something similar for sip.&lt;/li&gt;
+&lt;li&gt;They introduced consul distributed locks, I've never realized of this problem before.&lt;/li&gt;
+&lt;li&gt;Consul KV locks and they daemon MarcoPolo =&amp;gt; Great way to save config in runtime.&lt;/li&gt;
+&lt;li&gt;He introduced &lt;a class="reference external" href="https://github.com/beamly/se4"&gt;SE4&lt;/a&gt;:  Simple Spec for Service Status and Health&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Day two finished with Nomad Demo by &lt;a class="reference external" href="https://twitter.com/kelseyhightower"&gt;Kelsey Hightower&lt;/a&gt;, live coding terraform provider and the
+final keynote about security from &lt;cite&gt;nuna.com &amp;lt;https://www.nuna.com/&amp;gt;__&lt;/cite&gt;.&lt;/p&gt;
+&lt;p&gt;I need to say big thanks to all the people that I spoke with and thanks to &lt;a class="reference external" href="https://twitter.com/janaboruta"&gt;Jana&lt;/a&gt;, Hashicorp and Xevia for organized this
+awesome conference.&lt;/p&gt;
+&lt;p&gt;Finally, there are few things that I think should be improved so I will write
+them down here just in case it could be helpful:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;In my opinion, the talks finished too early in both days. I missed 1 or 2 more talks to finish around 17:30 or 18:00.&lt;/li&gt;
+&lt;li&gt;I missed &lt;em&gt;Best-practices&lt;/em&gt; talks around products, I mean, I would love to hear tips around Consul or Packer by the head of the projects. For example Diptanu talk was great around Nomad.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This was my summary about Hashiconf EU2016. Thanks for reading!&lt;/p&gt;
+&lt;img alt="Hashiconf Europe 2016" class="align-center" src="img/hashiconf_eu3.jpg" /&gt;
+&lt;p&gt;PS: All photos are from &lt;a class="reference external" href="https://www.flickr.com/photos/137604751&amp;#64;N05/sets/72157667183542004/"&gt;Hashicorp flickr
+page&lt;/a&gt;&lt;/p&gt;
+</summary><category term="docker"></category><category term="kamailio"></category><category term="hashicorp"></category><category term="terraform"></category><category term="nomad"></category><category term="consul"></category></entry><entry><title>Resume persoal da hackathon Sanjurjo Badía</title><link href="http://www.acalustra.com/resume-persoal-da-hackathon-sanjurjo-badia.html" rel="alternate"></link><updated>2016-03-25T16:00:00+01:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2016-03-25:resume-persoal-da-hackathon-sanjurjo-badia.html</id><summary type="html">&lt;p&gt;Como algún ben sabedes estaba involucrado xunto con Jesús na Hackathon Sanjurjo
+Badía.  Gustaríame facer unha reflexión persoal e &amp;quot;en voz alta&amp;quot;, dado que creo
+que é importante compartir este tipo de información.&lt;/p&gt;
+&lt;p&gt;Sobre a hackathon, non vou comentar nada mais do que xa esta escrito nas
+seguintes crónicas:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://www.initios.com/dos-dias-desarrollo-creativo-hackathon-sanjurjo-badia/"&gt;Crónica de Initios Desarrollos&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://ainasa.gal/2016/03/05/hackathon-sanjurjo-badia-de-idea-a-proyecto-viable/"&gt;Crónica de Ainasa (Gañadores)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://jsanroman.net/2016/03/participamos-en-el-hackathon-sanjurjo-badia/"&gt;Crónica de Javi Sanroman&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;O primeiro que me gustaría dicir, e pedir perdón. Perdón a patrocinadores e
+asistentes polos problemas de conexión a internet do sábado. Para evitar
+problemas cun router pequeno, puxemos un firewall profesional diante, que
+xestionaba todo o tráfico da wifi. Pero unha das cousas que se me esqueceu facer
+foi configurar unha DMZ a ese router, polo que o router de internet, cando
+chegaba a 15000 portos NAT abertos, broqueaba a conexión. O meu erro polo que
+pido desculpas a todo o mundo.&lt;/p&gt;
+&lt;p&gt;O segundo: gustaríame darlle as grazas o meu compañeiro &lt;a class="reference external" href="https://twitter.com/jsayar"&gt;Jesús Sayar&lt;/a&gt;, &lt;strong&gt;un auténtico fenómeno&lt;/strong&gt;, que fai que organizar un
+evento de este tipo sexa moito mais sinxelo. Tamén acordarme de toda a sua
+familia que se encargou do catering do evento.&lt;/p&gt;
+&lt;img alt="Eloy Coto e Jesús Sayar" class="align-center" src="img/hacksb_0.jpg" /&gt;
+&lt;p&gt;O terceiro, agradecer a esas persoas que eu chamei, que botaron unha man,
+pero que non estaban nos créditos. Persoas que deron boas opinións, se
+involucraron, e persoas que sempre tiveron un &amp;quot;SI A TODO&amp;quot; cando lle chamaba.
+Aquí tedes a lista:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;O xefe do departamento de informática do Concello de Vigo. Por que fixo todo o
+posible, traballou horas extras, durante as vacacións, para que esta hackathon
+fora realidade.&lt;/li&gt;
+&lt;li&gt;O &lt;a class="reference external" href="http://vigo.org"&gt;concello de Vigo&lt;/a&gt;, dado que o fácil sería dicirnos que
+isto era unha idea loca, ou unha fricada. Resultou todo o contrario e
+volcaronse con nós para que fora realidade.&lt;/li&gt;
+&lt;li&gt;A &lt;a class="reference external" href="https://twitter.com/LuisMirandaAceb"&gt;Luis Miranda&lt;/a&gt;, que ademais de ser
+unha persoa que axudou a lanzarnos ca idea, foi de esas persoas que colaborou en
+todo o posible, e traballou arreo para que todo estivera perfecto.&lt;/li&gt;
+&lt;li&gt;A &lt;a class="reference external" href="https://twitter.com/ediazcomellas"&gt;Edu de Ultreia&lt;/a&gt;, dado que o seu SI A
+TODO non ten fin, cada vez que lle pedía consello era unha mellora, cada vez que
+lle pedía unha favor sempre foi unha solución. Xente como Edu fai que organizar
+este tipo de eventos sexa un pracer.&lt;/li&gt;
+&lt;li&gt;A &lt;a class="reference external" href="https://www.linkedin.com/in/bruno-lema-baleato-0687bb59"&gt;Bruno Lema de Marine
+Instruments&lt;/a&gt;,
+coñecino nunha reunión para ver se Marine podía patrocinar. Ademais de escalar o
+patrocinio, Bruno involucrouse persoalmente, algo que lle estamos moi
+agradecidos.&lt;/li&gt;
+&lt;li&gt;A todos os patrocinadores, dado que patrocinar un evento de este tipo non é
+polo retorno económico, se non que é por mellorar o ecosistema da nosa
+cidade. Polo tanto moitas grazas a todos.&lt;/li&gt;
+&lt;li&gt;A &lt;a class="reference external" href="http://quobis.com/"&gt;Quobis&lt;/a&gt;: Toda a axuda que eles nos deron, dende cruzar algúns emails con
+algúns patrocinadores, ata deixarnos todo o que podían axudar. Unha pena que
+estiveran no MWC e que puideran estar durante todo o fin de semana no evento.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;En canto a hackathon, cando empezamos a lidar esta hackahton, tiña varios
+obxectivos persoais, que sendo realista, non cumprín como me esperaba!&lt;/p&gt;
+&lt;img alt="Hackathon Sanjurjo Badía Xurado" class="align-center" src="img/hacksb_1.jpg" /&gt;
+&lt;div class="section" id="sanjurjo-badia"&gt;
+&lt;h2&gt;Sanjurjo Badía&lt;/h2&gt;
+&lt;p&gt;Varios amigos (non vigueses) sempre menosprezan Vigo, algo que me repudia, unha
+cidade que ten séculos de historia, pero que nunca fai valer o que nela se
+viviu. Fomos clave na Reconquista (Que é mais que unha festa de chouripáns),
+aparece a cibdade nos libros de Xulio Verne, temos grandes inventores, obxectivo
+clave se entrabamos na segunda guerra mundial, etc.. . Pero para moitos
+vigueses, Sanjurjo Badía é soamente o nome dunha rúa, e iso é algo que me daña o
+corazón.&lt;/p&gt;
+&lt;p&gt;Poñer el valor a &lt;a class="reference external" href="http://vigopedia.com/biografias-antonio-sanjurjo-badia/"&gt;Sanjurjo Badía&lt;/a&gt;, as súas
+habilidades pra levar a industrialización o sector marítimo. Este enxeño era a
+crave para fomentar nesta hackathon a tecnificación no sector marítimo.&lt;/p&gt;
+&lt;p&gt;Teño a impresión, despois da hacakthon que a figura de Sanjurjo non quedou de
+todo salientada, algo que me queda moita pena. &lt;strong&gt;Sanjurjo merece en Vigo moito
+mais que o nome dunha rúa.&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="tecnoloxia-no-mar"&gt;
+&lt;h2&gt;Tecnoloxía no mar&lt;/h2&gt;
+&lt;p&gt;Algo que levo pensando anos, algo que Vigo ten que ter como prioridade número
+un, pero que por desgraza non existen plans sólidos ou consensuados para levar
+isto a cabo. Cando nos reunimos con &lt;a class="reference external" href="https://twitter.com/regades"&gt;David Regades(Concexal de
+Fomento)&lt;/a&gt;, este non dubidou nin un minuto en
+colaborar con nós. Agora toca darlle a continuidade necesaria.&lt;/p&gt;
+&lt;p&gt;A idea de tecnoloxía no mar era complexa, demasiado! Levamos décadas que os
+vigueses non pensamos en dicirlle aos nosos fillos dedícate o mar. E mais cando
+estaba no instituto todo o mundo me menosprezaba cando dicía que eu de maior
+quería ser arquitecto naval. &lt;strong&gt;Hai que cambiar iso!&lt;/strong&gt; levamos séculos vivindo do
+mar, non ten sentido cambiar o noso sistema produtivo onde a nosa situación
+xeográfica non e clave, o mar ten que ser parte primordial do noso futuro. Por
+iso cando pensaba nesta hackathon víñame a cabeza un poema de Eduardo Pondal,
+que di tal que así:&lt;/p&gt;
+&lt;blockquote class="epigraph"&gt;
+&lt;div class="line-block"&gt;
+&lt;div class="line"&gt;Non cantes tan tristemente,&lt;/div&gt;
+&lt;div class="line"&gt;probe e desolada nai;&lt;/div&gt;
+&lt;div class="line"&gt;non lle cantes cantos brandos&lt;/div&gt;
+&lt;div class="line"&gt;pra adormecer o rapaz;&lt;/div&gt;
+&lt;div class="line"&gt;onde está a cova do sono,&lt;/div&gt;
+&lt;div class="line"&gt;no céltico carballal;&lt;/div&gt;
+&lt;div class="line"&gt;cántalla cantos ousados&lt;/div&gt;
+&lt;div class="line"&gt;que esforzado o peito fan;&lt;/div&gt;
+&lt;div class="line"&gt;cántalle o que xa cantara&lt;/div&gt;
+&lt;div class="line"&gt;o nobre bardo Gundar;&lt;/div&gt;
+&lt;div class="line"&gt;A lus virá para a caduca Iberia,&lt;/div&gt;
+&lt;div class="line"&gt;dos fillos de Breogán!&lt;/div&gt;
+&lt;/div&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;O que tiña claro que nesta hackathon tiñamos que seguir a Pondal, e cantar un
+conto ousado que marcara un camiño. Creo que a idea de IoT e o Mar foi un conto
+ousado, que deu resultado e todos os asistentes sentiranse confortables a facer
+solucións hardware para o mar.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="mentores"&gt;
+&lt;h2&gt;Mentores&lt;/h2&gt;
+&lt;p&gt;Unha das cousas que traballamos arreo foi nos mentores, queriamos contar con
+todos os axentes do sector. Era clave que ademais de que os asistentes viran o
+mar como solucións válidas, tamén os axentes do sector (estaleiros, armadores,
+auxiliares, etc.. ) miraran que aquí tamén se poden facer cousas, o que tiña a
+impresión que melloraría a sua impresión sobre os informáticos galegos.&lt;/p&gt;
+&lt;p&gt;En Decembro fixemos unha reunión de 15 persoas, nunha sala onde estaba
+estaleiros, auxiliares é uns cantos informáticos, a reunión deunos as ideas
+iniciais, e ese foi o noso punto de partida.&lt;/p&gt;
+&lt;p&gt;Inda que había mentores, por desgraza non había todos os que nos queríamos. Pero
+expricar isto foi algo moi compricado e ademais da pouca xenerosidade que nos
+proporcionaba as nosas chamadas ou email.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Todos os informáticos temos que facernos valer ante os sectores marítimos&lt;/strong&gt;,
+aportarlle ideas, &lt;strong&gt;educarse sobre o que fan&lt;/strong&gt; e intentar tender pontes que poden
+marcar o futuro da cidade. Eles saben traballar o ferro e coñecen o mar, os
+informáticos sabemos facer sistemas intelixentes, &lt;strong&gt;fagamos pontes para que Vigo
+sexa a capital de solucións tecnolóxicas do sector marítimo.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Esta hackathon xa queda pechada, moito traballo, moitos meses e mais ilusión
+depositada nela. Para que vos fagades unha idea, esta é a gráfica de correos
+enviados e recibidos no meu correo electrónico ca etiqueta da hackathon.&lt;/p&gt;
+&lt;img alt="Hackathon Sanjurjo Badía Emails" class="align-center" src="img/hacksb_emails.png" /&gt;
+&lt;p&gt;Por outra parte gustaríame salientar dúas cousas que non me gustaron nada, e
+fan que me prántexe seguir con isto:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;No evento, 22 persoas non apareceron, e quedou xente na lista de espera. Unha
+auténtica pena. Moito traballo, moita xente na lista de espera, e cando o
+custo por participante era de 40€, foron 800€ mal gastados. Non vós podedes
+imaxinar o que custa conseguir eses 800€, hai que ter conciencia polo traballo
+do resto.&lt;/li&gt;
+&lt;li&gt;Un dos medos que tiñamos era a devolución das pracas Udoo, de todas as que
+tiñamos en réxime de alugueiro volveron todas. Pero por desgraza alguén roubou
+unha na mesa de Udoo non rexistrada, algo que me deixa MOI mal sabor de boca.&lt;/li&gt;
+&lt;li&gt;Despois de 16 chamadas a TVG, decidiron que era moito mais importante
+entrevistar a un home que foi a un prostíbulo, se emborrachou e caeu nun pozo,
+en vez de fomentar a innovación do mar. Unha auténtica pena :-(&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Teño que dicir que de todos os eventos nos que algún día eu estiben metido, este
+foi o que mais me reconfortou, non soamente polo resultado, se non por que creo
+que se cumpre o que algún día dicía Alfredo Brañas polo século XIX&lt;/p&gt;
+&lt;blockquote class="epigraph"&gt;
+As nogueiras e castiñeiros que dan hoxe noces e castañas non as prantáchedes
+vosoutros. Foron vosos avós. Eles o fixeron acordándose de vosoutros e para
+vosoutros. Tendes a obriga de face-lo mesmo. E se ademais de árbores que
+dean froito deixades en herdo aos vosos unha terra libre e rica, dentro do
+Estado español, faredes unha santa e redentora obra”&lt;/blockquote&gt;
+&lt;p&gt;Nós xa prántamos o nosa nogueira, se todo segue o camiño natural, o equipo
+gañador vai formalizarse nunha empresa. Isto é un orgullo para nós, dado que son
+catro rapaces que podían ser carne da emigración en calquera momento, pero van a
+focalizarse nun produto e mellorar a arte da pesca local, unha solución para
+venderlle aos nosos veciños!&lt;/p&gt;
+&lt;p&gt;Anímovos a fomentar empresas tecnolóxicas no mar, e facer o que algún día se
+fixo en Galicia a finais do século XX. Onde un viño que cultivaban catro frades
+no mosteiro de Armenteira, chamado Albariño, &lt;strong&gt;con esforzo, orgullo e valentía
+duns poucos converteuse nun dos viños de referencia a nivel mundial, con selo
+galego&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Xa rematando, para poñer en valor os proxectos da hackathon. Michelangello de
+Udoo, que o seu principal traballo é estar en hackathons de medio mundo, quedou
+alucinado ca calidade técnica dos proxectos. Parabéns a todos os participantes,
+non tiña dúbida de isto, pero é bo que quede reflexado.&lt;/p&gt;
+&lt;img alt="Hackahton Sanjurjo Badía participantes" class="align-center" src="img/hackathon-supertramp.jpg" /&gt;
+&lt;blockquote class="epigraph"&gt;
+O verdadeiro heroísmo está en convertir os anceios en realidades, e as ideas en feitos.
+-- CASTELAO&lt;/blockquote&gt;
+&lt;p&gt;Graciñas a todos!&lt;/p&gt;
+&lt;/div&gt;
+</summary><category term="hackathon"></category><category term="vigo"></category><category term="mar"></category></entry><entry><title>Voip talk at Librecon 2015</title><link href="http://www.acalustra.com/voip-talk-at-librecon-2015.html" rel="alternate"></link><updated>2015-10-29T16:00:00+01:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-10-29:voip-talk-at-librecon-2015.html</id><summary type="html">&lt;p&gt;I had the luck to gave a talk at &lt;a class="reference external" href="http://www.librecon.io/"&gt;Librecon 2015&lt;/a&gt;.The
+topic was about how I built a modern operator using asterisk, kamailio, and
+other tools for measure and deploy.&lt;/p&gt;
+&lt;div style="width: 70%;" class="align-center"&gt;
+&lt;script async class="speakerdeck-embed"
+data-id="abbbacd7686645a5a37408e7e713f564" data-ratio="1.77777777777778"
+src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
+&lt;/div&gt;&lt;p&gt;Thanks to &lt;a class="reference external" href="http://www.agasol.gal/"&gt;Agasol&lt;/a&gt; and big thanks to &lt;a class="reference external" href="https://twitter.com/xcastanho"&gt;Xavi
+Castaño&lt;/a&gt; and Cris to help me with all my doubts.&lt;/p&gt;
+&lt;p&gt;Happy code!&lt;/p&gt;
+</summary><category term="packer"></category><category term="consul"></category><category term="terraform"></category><category term="kamailio"></category><category term="asterisk"></category><category term="statsd"></category><category term="grafana"></category><category term="influxdb"></category></entry><entry><title>How can I monitor my Voip Application?</title><link href="http://www.acalustra.com/how-can-i-monitor-my-voip-application.html" rel="alternate"></link><updated>2015-07-24T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-07-24:how-can-i-monitor-my-voip-application.html</id><summary type="html">&lt;p&gt;In the last &lt;a class="reference external" href="http://www.acalustra.com/kamialio-world-2015.html"&gt;Kamailio World&lt;/a&gt; two of the
+hot topics were &lt;a class="reference external" href="https://www.elastic.co/products/beats"&gt;Packetbeat&lt;/a&gt; and
+&lt;a class="reference external" href="http://SIPCapture.org/"&gt;SIPCapture&lt;/a&gt;.  Both projects announced good news
+meanwhile the conference, people got excited about it.&lt;/p&gt;
+&lt;p&gt;SIPCapture released a new &lt;a class="reference external" href="http://www.voipusersconference.org/2015/vuc544-homer-open-source-sip-capture/"&gt;version 5&lt;/a&gt;,
+huge work from &lt;a class="reference external" href="https://twitter.com/adubovikov"&gt;Alex&lt;/a&gt; and Lorenzo. Both worked
+hard in this version. SIPCapture 5 provides the following new features:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;New captagent that allows lua scripting.&lt;/li&gt;
+&lt;li&gt;Frontend was rewrited from scratch and now it's a full html5 app.&lt;/li&gt;
+&lt;li&gt;New database structure, and full PostgresSQL support.&lt;/li&gt;
+&lt;li&gt;New database backends in the panel, now you can use InfluxDB and ElasticSearch as data source.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;SIPCapture review on VUC&lt;/strong&gt;&lt;/p&gt;
+&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/MtuvwgRLBUg" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;&lt;p&gt;Secondly Packetbeat announced that &lt;a class="reference external" href="http://apmdigest.com/elastic-acquires-Packetbeat"&gt;joined Elastic&lt;/a&gt; and started a new branch
+called &lt;a class="reference external" href="https://www.elastic.co/products/beats"&gt;Beats&lt;/a&gt;. Packetbeat provides
+an interface to monitor our application performance without pain. You can
+monitor all SQL information, Redis, HTTP information and get some insights of
+your application.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Packetbeat presentation on OSDC 2015&lt;/strong&gt;&lt;/p&gt;
+&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/sGvfrA5FI5E" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;&lt;p&gt;Finally, statsd module can be added in this list. This module provides some
+features to monitor your business logic. If you want to deep on this, please
+read the following posts:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html"&gt;Kamailio statsd installation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://www.acalustra.com/kamailio-statsd-explained.html"&gt;Kamailio statsd best practices&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html"&gt;Statsd on python Vigo Meetup&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;So three monitoring tools. Can we use only one? What is the strengths and the
+weaknesses of these software? Is all valid for our platform? Yes, but these
+projects fit for different situations, let me explain:&lt;/p&gt;
+&lt;p&gt;SIPCapture is an awesome tool, but it only can help with our SIP stack, I love
+it and I use to work with it. You can check what happens in your calls, and
+it's pretty useful in the following cases:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;In a production platform when you need to check what happens in a call.&lt;/li&gt;
+&lt;li&gt;If you run TLS calls, you can debug without SSL keys into wireshark.&lt;/li&gt;
+&lt;li&gt;You can monitor the MOS in realtime in your platform.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Packetbeat is to monitor your application performance. Nowadays Kamailio is
+using a lot 3 party software (databases, Messages Queues, Cache system).
+Monitoring errors or timeouts of those 3-party software can be done with
+Packetbeat without pain.&lt;/p&gt;
+&lt;p&gt;Business/personal metrics must to be done in statsd. In statsd you can't define
+what happens in a specific call or specific query, you're measuring the
+percentile of the metric that you want it's correct, for example:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Packetbeat said that your SQL queries took 14ms as average. But in kamailio
+you found a bottleneck in that query process, so you need to monitor into your
+code. You can use statsd_timer and found the bottleneck in the specified route.&lt;/li&gt;
+&lt;li&gt;Your average reply time in SIPCapture is upper than 1 second, you need to
+found the bottleneck into your 5000 lines of code. With Statsd you can measure
+your routes one by one, so it's easy to found the problem with few lines of
+code.&lt;/li&gt;
+&lt;li&gt;When new feature is implemented you want to know how many calls are using
+this feature. Statsd provides a one line code to measure your business
+statistics.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;UPDATE&lt;/strong&gt;: &lt;a class="reference external" href="https://twitter.com/adubovikov/status/624541282862518272"&gt;As Alex point me in Twitter&lt;/a&gt;, all the perf stats
+can be displayed in SIPCapture included Packetbeat metrics and Influxdb metrics
+sending by statsd. So SIPCapure it's perfect for support and operations.
+&lt;strong&gt;Awesome&lt;/strong&gt; work made by Lorenzo &amp;amp; Alex.&lt;/p&gt;
+&lt;p&gt;Some developers changed statsd for Logstash. My personal opinion about that is
+the following:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Logstash need to parse logs. Logs are slow and difficult to compute.&lt;/li&gt;
+&lt;li&gt;For timing functions, you need to write more lines of code. With statsd you
+only use 2 lines of code to monitor specific lines.&lt;/li&gt;
+&lt;li&gt;Logs can be broken easily in your config file.&lt;/li&gt;
+&lt;li&gt;ES query language is more complicated than use SQL'ish in InluxDB.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Finally for telecoms companies all of the explained projects are useful.
+SIPCapture is the swiss-knife for support teams. Packetbeat is an amazing tool
+for all the operations teams and statsd is good for operations team and
+marketing/business team to make decisions based on the current metrics.&lt;/p&gt;
+</summary><category term="kamailio"></category><category term="sip"></category><category term="SIPCapture"></category><category term="Packetbeat"></category><category term="statsd"></category></entry><entry><title>Kamialio World 2015</title><link href="http://www.acalustra.com/kamialio-world-2015.html" rel="alternate"></link><updated>2015-06-17T00:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-06-17:kamialio-world-2015.html</id><summary type="html">&lt;p&gt;Last week of May I had the luck to attend &lt;a class="reference external" href="http://conference.kamailio.com/k03/"&gt;Kamailio World Conference&lt;/a&gt;. It was my third time and as usually I
+learnt a lot. &lt;strong&gt;Kamailio was born fourteen years ago&lt;/strong&gt;, so a lot of people had a
+lot of things to show.&lt;/p&gt;
+&lt;p&gt;This year the conference was focused in the following topics:&lt;/p&gt;
+&lt;div class="section" id="webrtc"&gt;
+&lt;h2&gt;WebRTC&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;WebRTC&lt;/em&gt; is the highway to the future. HTML5 is a reality in web world nowadays.
+WebRTC is supported in some browsers and only need a push from Apple and
+Microsoft to reach all possible customers. Meanwhile companies like &lt;a class="reference external" href="http://corporate.tuenti.com/en/dev/blog/Building-a-VoIP-Service-using-WebRTC"&gt;Tuenti&lt;/a&gt;
+are using WebRTC in their apps and they provide some valuable feedback to the
+community.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://www.youtube.com/watch?v=5yPtUbZcaKs"&gt;Tim Panton&lt;/a&gt; explained how to
+make WebRTC interact with some other HTML features. I loved the concept and I
+think that WebRTC doesn't need to be another phone in the web. Innovation and
+integration with the web will be the key to the success.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://www.youtube.com/watch?v=cTEjYj0AUlM"&gt;Jssip&lt;/a&gt; was explained by José
+Luis Millán. I use to work with this library, so for me was not as interested
+as it could be. But if you want to add some SIP-over-websocket library you
+should definitely take a look to this talk.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="mobile-operators-ims"&gt;
+&lt;h2&gt;Mobile Operators- IMS&lt;/h2&gt;
+&lt;p&gt;I'm not an expert in IMS or mobile operators, but some of the talks gave us
+some insights about the IMS world. As every year I learnt a lot about IMS. This
+time &lt;a class="reference external" href="http://kamailio.org/docs/modules/devel/modules/smsops.html"&gt;3GPP-SMS-V2 kamailio module&lt;/a&gt; was presented
+by &lt;a class="reference external" href="https://www.youtube.com/watch?v=pgYVMHVUemM"&gt;Carsten Bock&lt;/a&gt;, and he
+introduced us in the SMS solutions using Kamailio.&lt;/p&gt;
+&lt;p&gt;About mobile operators &lt;a class="reference external" href="https://www.youtube.com/watch?v=R4iu7dIdczI"&gt;Dragos Vingarzan&lt;/a&gt; shows to us all the possible
+solutions about open mobile networks. He explained about how to build
+distributed mobile network and dived us into &lt;a class="reference external" href="http://www.openepc.com/"&gt;OpenEPC project&lt;/a&gt;. In case of natural disasters this project is a
+fast solution for rescue teams. Well done!&lt;/p&gt;
+&lt;p&gt;Every year FhG Fokus Institute exposes all the new stuff related with mobile
+network. This year &lt;a class="reference external" href="https://www.youtube.com/watch?v=SZ5hjvZnmUk"&gt;Thomas Magedanz&lt;/a&gt; explained all the work that
+they are doing in 5G technology.&lt;/p&gt;
+&lt;img alt="Daniel closed another great Kamaialio World" class="align-center" src="img/kworld-2015-daniel.jpg" /&gt;
+&lt;/div&gt;
+&lt;div class="section" id="pure-voip-applications"&gt;
+&lt;h2&gt;Pure Voip Applications&lt;/h2&gt;
+&lt;p&gt;The reason why I always go to KWorld is for Voice Apps and to learn about third
+party applications that integrates with Kamailio. Last year I had seen Cgrates
+and few months later I started to use it.&lt;/p&gt;
+&lt;p&gt;This year &lt;a class="reference external" href="https://www.youtube.com/watch?v=Hsvcwleb-fY"&gt;Dan presented Cgrates LCR&lt;/a&gt;, this technology is pretty
+interesting for wholesale providers. In the other hand Matt Jordan provided us
+some insights about how to &lt;a class="reference external" href="https://www.youtube.com/watch?v=9CnrU5A2g1Q"&gt;build voice apps with the new version of Asterisk&lt;/a&gt;. I really love the new ARI
+interface and it's matches perfectly with my idea of immutable servers.&lt;/p&gt;
+&lt;p&gt;On the other hand, &lt;a class="reference external" href="https://www.youtube.com/watch?v=4XIrR9bwUkM&amp;amp;index=23&amp;amp;list=PLDaEs5k2Xy-vZ_zyz989AWkz8txu7YQYY"&gt;Federico Cabiddu&lt;/a&gt;
+talked about the &lt;a class="reference external" href="http://kamailio.org/docs/modules/devel/modules/tsilo.html"&gt;TSILO&lt;/a&gt; module, it's
+gorgeous.  I think that TSILO module is too useful when your business logic is
+not into your kamailio config file. I'm looking forward to use TSILO with &lt;a class="reference external" href="http://kamailio.org/docs/modules/devel/modules/evapi.html"&gt;Evapi
+module&lt;/a&gt; and it'll
+help me a lot.&lt;/p&gt;
+&lt;p&gt;Another hot topic was application monitoring. &lt;a class="reference external" href="https://www.youtube.com/watch?v=Z5IllQMSyKY&amp;amp;index=8&amp;amp;list=PLDaEs5k2Xy-vZ_zyz989AWkz8txu7YQYY"&gt;Alexandr Dubovikov&lt;/a&gt;
+presented the new version of &lt;a class="reference external" href="http://sipcapture.org/"&gt;SIPcapture&lt;/a&gt;. Now you
+don't have any reason to don't start using it.  On the other hand, &lt;a class="reference external" href="https://www.youtube.com/watch?v=0udEXKF9nAk&amp;amp;index=25&amp;amp;list=PLDaEs5k2Xy-vZ_zyz989AWkz8txu7YQYY"&gt;Tudor
+Golubenco&lt;/a&gt;
+presented &lt;a class="reference external" href="https://www.elastic.co/products/beats"&gt;PacketBeat&lt;/a&gt; a software to
+monitor the performance of your application.&lt;/p&gt;
+&lt;p&gt;Sipgate always shows amazing use cases, &lt;a class="reference external" href="https://www.youtube.com/watch?v=OB8F2bxtsGU"&gt;last year they spoke&lt;/a&gt; about their infrastructure.
+This year &lt;a class="reference external" href="https://www.youtube.com/watch?v=j8e0D2aOE5A&amp;amp;list=PLDaEs5k2Xy-vZ_zyz989AWkz8txu7YQYY&amp;amp;index=9"&gt;Sebastian Damm gave a amazing talk&lt;/a&gt;
+about how they are providing services over IPv6. Hands-on with &lt;a class="reference external" href="https://docs.google.com/forms/d/1nnjfzVAWaqt9taCOsJcdEnlrJyxbAKVZRsUdunZGfF8/viewform"&gt;lunch.sipgate.de&lt;/a&gt;
+too, really nice initiative.&lt;/p&gt;
+&lt;p&gt;Kazoo &lt;strong&gt;is&lt;/strong&gt; the innovation player in Kamailio. Glad to have them onboard. They
+have all the config files in &lt;a class="reference external" href="https://github.com/2600hz/kazoo-configs"&gt;Github&lt;/a&gt; and you can learn a lot from them,
+it's a great example! This year &lt;a class="reference external" href="https://www.youtube.com/watch?v=ukioKekTHIg"&gt;Luis Azedo&lt;/a&gt; was speaking about kazoo
+module that is a message queue for Kamailio. Kazoo + TSILO + EVAPI can provide
+a new way to make things in Kamailio and I'm looking forward to use/write about
+it.&lt;/p&gt;
+&lt;p&gt;Another talk was given by &lt;a class="reference external" href="https://www.youtube.com/watch?v=LyZq8jZaJ7U"&gt;Simon Tennant&lt;/a&gt; about protocols and why some
+protocols were not successful. Simon is the CEO at Buddycloud. I met BuddyCloud
+early 2012 in Fosdem conference. Buddycloud is a chat/twitter service based on
+XMPP and open standards. You should keep an eye on this project.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="security"&gt;
+&lt;h2&gt;Security&lt;/h2&gt;
+&lt;p&gt;As often, &lt;a class="reference external" href="https://www.youtube.com/watch?v=NSZvMfDnLts"&gt;Olle E. Johansson&lt;/a&gt;
+gave one of the keynotes. He explained all the problems related with old
+technology and provide advices to be more secure, revolutionary and keep the
+open standards, you know &lt;a class="reference external" href="https://twitter.com/hashtag/morecrypto?src=hash"&gt;#morecrypto&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://github.com/jesusprubio/bluebox-ng"&gt;Bluebox-ng&lt;/a&gt; was presented by my
+friend &lt;a class="reference external" href="https://twitter.com/s3rgiogr"&gt;Sergio&lt;/a&gt; one of the core developers. He
+explained all the possible attacks in SIP and he provided some examples + tricks
+about how Bluebox can help you to keep your platform secure. He spoke about
+custom scripts in Bluebox so I'll check to integrate this in our Jenkis
+workflow.&lt;/p&gt;
+&lt;p&gt;The last talk was given by &lt;a class="reference external" href="https://www.youtube.com/watch?v=yWRQamkCtTs"&gt;Daniel&lt;/a&gt;. He spoke about some security
+tips in our kamailio config files. I need to say that I don't agree 100 percent
+with his point of view. I think that redis is more effective than any sql in
+memory database as backend, but same approach can be used with redis in this
+case.&lt;/p&gt;
+The last talk was given by &lt;a
+href="https://www.youtube.com/watch?v=yWRQamkCtTs"&gt;Daniel&lt;/a&gt;. He spoke
+about some security tips in our kamailio config files. &lt;strike&gt;I need to say
+that I don't agree 100 percent with his point of view. I think that redis is
+more effective than any sql in memory database as backend, but same approach
+can be used with redis in this case.&lt;/strike&gt; I saw again this talk and I
+misunderstanding a little bit. Daniel mentioned another databases and lua
+scripts, and all mysql was only a examples.  Nowadays in my cases I'm using
+redis as cache system, so I think that for us it's more useful &amp; simple. My
+advice you must use the backend that fit in your installation in my case
+Redis works perfect.&lt;p&gt;Finally I missed a lot of people: Carlos Ruiz from TokyApp, Torrey from Voxbone,
+Anton from Quobis... active members that I always learn a lot from them. In the
+other hand big thanks to all the people that were involved in this conference.
+It was a blast!&lt;/p&gt;
+&lt;img alt="Galician team at kamailio world 2015" class="align-center" src="img/galician_team_kworld_2015.jpg" /&gt;
+&lt;p&gt;Huge thanks from the people to &lt;a class="reference external" href="http://www.quobis.com"&gt;Quobis&lt;/a&gt; (&lt;a class="reference external" href="https://twitter.com/s3rgiogr"&gt;Sergio&lt;/a&gt; and &lt;a class="reference external" href="https://twitter.com/lauskin"&gt;Santi&lt;/a&gt;).
+I spent my trip with them and it was a pleasure, thanks guys.&lt;/p&gt;
+&lt;/div&gt;
+</summary><category term="kamailio"></category><category term="kamailio world"></category></entry><entry><title>My thoughts about CGRates</title><link href="http://www.acalustra.com/my-thoughts-about-cgrates.html" rel="alternate"></link><updated>2015-05-27T21:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-05-27:my-thoughts-about-cgrates.html</id><summary type="html">&lt;p&gt;At &lt;a class="reference external" href="http://www.foehn.co.uk"&gt;Foehn&lt;/a&gt;, we started to use
+&lt;a class="reference external" href="http://cgrates.org/"&gt;CGRateS&lt;/a&gt; earlier this year, nowadays (May-2015) the
+platform has rated tens of millions of calls. I want to share my experience.&lt;/p&gt;
+&lt;p&gt;I discovered CGRateS in 2014 at the &lt;a class="reference external" href="http://conference.kamailio.com/k03/"&gt;Kamailio World
+Conference&lt;/a&gt;. After a few years using
+different solutions we found that CGRateS suits all our needs, so I decided  to
+give it a try.&lt;/p&gt;
+&lt;p&gt;The project is written in &lt;a class="reference external" href="https://golang.org/"&gt;Golang&lt;/a&gt;, so this was the
+first challenge, it's not a bad idea to learn a bit of Golang before installing
+CGRateS.&lt;/p&gt;
+&lt;p&gt;One of our uses is based on &lt;a class="reference external" href="https://cgrates.readthedocs.org/en/latest/cdrclient.html"&gt;cdr client&lt;/a&gt;, we have some
+legacy installations where we wanted to use some CGRateS features. Every few
+minutes we send csv files to the platform. This method is fast, we are billing
+our daily traffic without problem. On the other hand I tested 10K calls per minute
+and it is still fast.&lt;/p&gt;
+&lt;p&gt;I can recommend this option if you are starting with CGRateS.&lt;/p&gt;
+&lt;p&gt;In the last weeks, we started working with &lt;a class="reference external" href="https://github.com/cgrates/kamevapi"&gt;kamailio
+evapi&lt;/a&gt; integration. This feature provides
+a realtime rating engine in the proxy. This integration is still in test-mode
+but I can recommend it well:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Performance in CGRateS is not a problem. We tested with 3K calls per minute in
+a t2-small instance. Very good result.&lt;/li&gt;
+&lt;li&gt;Kamailio configuration with CGRateS &lt;a class="reference external" href="https://github.com/cgrates/cgrates/blob/a2e36b6ae6273a61db2d5e3b2194cd281c105e0e/data/tutorials/kamevapi/kamailio/etc/kamailio/kamailio-cgrates.cfg"&gt;is easy&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;For every call, CGRateS has a cache map of the current calls, so the timeout
+is set based on the virtual balance.&lt;/li&gt;
+&lt;li&gt;With dialog module you can set the timeouts for these calls.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;On the other hand, I love the following points:&lt;/p&gt;
+&lt;div class="section" id="cdrstats"&gt;
+&lt;h2&gt;CDRStats&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://github.com/cgrates/cgrates/blob/a2e36b6ae6273a61db2d5e3b2194cd281c105e0e/data/tariffplans/cdrstats/CdrStats.csv"&gt;This feature&lt;/a&gt;
+provides some stats per account, tenant, time frame, call queues, etc.. This is
+pretty useful, for example with time frames of 24 hours, you can easily get the
+Total Cost of the calls in the last 24 hours per customer. Or the ACC (Average
+Call Cost) in the last 1000 calls.&lt;/p&gt;
+&lt;p&gt;It provides the best interface that I ever seen for fraud, for example:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;When TCC in the last 24 hours is more than £XXX&lt;/li&gt;
+&lt;li&gt;When the ACC in the last 200 calls queue are more than £2&lt;/li&gt;
+&lt;li&gt;When the ASR(Average success ratio) is less than 20%&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="section" id="derivate-charging"&gt;
+&lt;h2&gt;Derivate Charging:&lt;/h2&gt;
+&lt;p&gt;In our case we have some rates for customers, this was pretty easy, but we
+needed that every call bills three times. One for the cost of the customer, one
+for the cost of the reseller, and a one cost with our prices. With 2 lines into
+DerivedChargers.csv we can get this easily.&lt;/p&gt;
+&lt;p&gt;This is pretty useful, nowadays we have a graph with our benefits, costs, and
+customer costs in one single panel.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="bundles"&gt;
+&lt;h2&gt;Bundles:&lt;/h2&gt;
+&lt;p&gt;Bundles are a swiss knife for telecoms. The good thing about CGRates is that
+you can have more than one balance per account, moreover you can have two
+different balances, &lt;em&gt;monetary&lt;/em&gt; or &lt;em&gt;minutes&lt;/em&gt;, so you can set a destination
+included in a balance in minutes, when this balance finished account will be
+switching to monetary balance.&lt;/p&gt;
+&lt;p&gt;With Acions Triggers you can reset the bundle every first of the month, which
+means there are no problems with the recurrent balaces.&lt;/p&gt;
+&lt;p&gt;With Action Triggers you can call a action when the balance is less than XX
+minutes too. It's easy to make business logic based on minutes balances.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="api"&gt;
+&lt;h2&gt;API&lt;/h2&gt;
+&lt;p&gt;One of the best improvements in the new version(0.9.7) is the fact that the API
+is HTTP json-rpc, so it's easy to call to the API from a simple curl request or
+any other software like postman.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="fixedfees"&gt;
+&lt;h2&gt;FixedFees&lt;/h2&gt;
+&lt;p&gt;Another improvement in CGRateS 0.9.7 is the &lt;em&gt;cdrlog&lt;/em&gt; action. With this action
+you can log into the rated_cdrs table some actions. In this case I'm using it
+for the recurrent fees that the customer paid for. Rent of DDIs, number of
+extensions or support fees for example.&lt;/p&gt;
+&lt;p&gt;Finally I need to say, starting with CGRateS it's not easy, but when you have a
+little bit of knowledge you can get CGRateS do all the hard billing work for
+you.&lt;/p&gt;
+&lt;/div&gt;
+</summary><category term="kamailio"></category><category term="billing"></category><category term="cgrates"></category></entry><entry><title>Acelerate your Ansible playbooks with async tasks</title><link href="http://www.acalustra.com/acelerate-your-ansible-playbooks-with-async-tasks.html" rel="alternate"></link><updated>2015-05-08T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-05-08:acelerate-your-ansible-playbooks-with-async-tasks.html</id><summary type="html">&lt;p&gt;I'm always impressed with my friends of
 &lt;a class="reference external" href="https://www.streetlife.com/about/team/"&gt;Streetlife&lt;/a&gt;. They built a new
 infrastructure based on immutable deploys. I'm surprised about how fast they are
 able to build this
@@ -89,14 +617,12 @@ supported in Async tasks, but the following workaround can be used:&lt;/p&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;name&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;Installing dependencies&lt;/span&gt;
   &lt;span class="l-Scalar-Plain"&gt;apt&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt;
-    &lt;span class="l-Scalar-Plain"&gt;name&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;{{&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;.join(dependencies)&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;}}&amp;quot;&lt;/span&gt;
+    &lt;span class="l-Scalar-Plain"&gt;name&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;{{&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;,&amp;#39;.join(dependencies)&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;}}&amp;quot;&lt;/span&gt;
     &lt;span class="l-Scalar-Plain"&gt;update_cache&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;yes&lt;/span&gt;
     &lt;span class="l-Scalar-Plain"&gt;cache_valid_time&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;3600&lt;/span&gt;
   &lt;span class="l-Scalar-Plain"&gt;async&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;1000&lt;/span&gt;
   &lt;span class="l-Scalar-Plain"&gt;poll&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;0&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;This playbook will not work in Ansible Trunk version. &lt;a class="reference external" href="https://github.com/ansible/ansible-modules-core/pull/1255"&gt;I sent a new PR to enable&lt;/a&gt; multiple packages
-inline.&lt;/p&gt;
 &lt;p&gt;Happy deploy!&lt;/p&gt;
 &lt;/div&gt;
 </summary><category term="ansible"></category><category term="async"></category><category term="debian"></category><category term="devops"></category><category term="deploy"></category></entry><entry><title>Statsd talk at Python Vigo Meetup</title><link href="http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html" rel="alternate"></link><updated>2015-04-16T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-04-16:statsd-talk-at-python-vigo-meetup.html</id><summary type="html">&lt;p&gt;I had the luck to give a talk to the Python Vigo community. The topic was about
@@ -527,14 +1053,14 @@ Ansible repo.&lt;/p&gt;
 
 &lt;span class="n"&gt;exten&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;h&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;Noop&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Hangup into subrutine monkeys&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nl"&gt;outside&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;NoOp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000001&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Call from outside from eloy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
-&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nl"&gt;outside&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Gosub&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000001&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;monkeys,100,1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
-&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="nl"&gt;monkeys&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;NoOp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000001&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Subroutine Monkeys&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
-&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="nl"&gt;monkeys&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;While&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000001&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;1&amp;gt;0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
-&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="nl"&gt;monkeys&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Playback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000001&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;tt-monkeys&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;outside&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;NoOp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000001&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Call from outside from eloy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;outside&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Gosub&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000001&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;monkeys,100,1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;monkeys&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;NoOp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000001&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Subroutine Monkeys&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;monkeys&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;While&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000001&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;1&amp;gt;0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;monkeys&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Playback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000001&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;tt-monkeys&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
 &lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;SIP&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;eloy&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mo"&gt;00000001&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Playing&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;tt&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;monkeys&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gsm&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;language&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;en&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;Spawn&lt;/span&gt; &lt;span class="n"&gt;extension&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;monkeys&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;exited&lt;/span&gt; &lt;span class="n"&gt;non&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;zero&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;SIP&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;eloy&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mo"&gt;00000001&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;
-&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;h&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="nl"&gt;monkeys&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;NoOp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000001&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="n"&gt;Hangup&lt;/span&gt; &lt;span class="n"&gt;into&lt;/span&gt; &lt;span class="n"&gt;subrutine&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;h&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;monkeys&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;NoOp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000001&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="n"&gt;Hangup&lt;/span&gt; &lt;span class="n"&gt;into&lt;/span&gt; &lt;span class="n"&gt;subrutine&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;In this case, you should take care how to use asterisk hangup handlers into subroutines. You can't share subroutines between different logics if the hangup are different. In Asterisk 11 was added hangup handler options, and this, personally, is one of the best features added in asterisk.&lt;/p&gt;
 &lt;p&gt;You can add a simple new hangup handler adding a simple set in the context:&lt;/p&gt;
@@ -556,17 +1082,17 @@ Ansible repo.&lt;/p&gt;
 &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;hangup&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;handler&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 &lt;span class="n"&gt;exten&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;_X&lt;/span&gt;&lt;span class="p"&gt;.,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;Noop&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Hangup into the handler&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;outside&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nl"&gt;hangup&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;NoOp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Call from outside from eloy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
-&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;outside&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nl"&gt;hangup&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Set&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;CHANNEL(hangup_handler_push)=hangup-handler,100,1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
-&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;outside&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nl"&gt;hangup&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Gosub&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;monkeys,100,1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
-&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="nl"&gt;monkeys&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;NoOp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Subroutine Monkeys&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
-&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="nl"&gt;monkeys&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;While&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;1&amp;gt;0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
-&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="nl"&gt;monkeys&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Playback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;tt-monkeys&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;outside&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;hangup&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;NoOp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Call from outside from eloy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;outside&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;hangup&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Set&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;CHANNEL(hangup_handler_push)=hangup-handler,100,1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;outside&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;hangup&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Gosub&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;monkeys,100,1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;monkeys&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;NoOp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Subroutine Monkeys&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;monkeys&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;While&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;1&amp;gt;0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;monkeys&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Playback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;tt-monkeys&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
 &lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;SIP&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;eloy&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mo"&gt;00000006&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Playing&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;tt&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;monkeys&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gsm&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;language&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;en&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;Spawn&lt;/span&gt; &lt;span class="n"&gt;extension&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;monkeys&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;exited&lt;/span&gt; &lt;span class="n"&gt;non&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;zero&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;SIP&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;eloy&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mo"&gt;00000006&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;
 &lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;SIP&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;eloy&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mo"&gt;00000006&lt;/span&gt; &lt;span class="n"&gt;Internal&lt;/span&gt; &lt;span class="n"&gt;Gosub&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;hangup&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;handler&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt;
-&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;hangup&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nl"&gt;handler&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;NoOp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="n"&gt;Hangup&lt;/span&gt; &lt;span class="n"&gt;into&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;handler&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
-&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;hangup&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nl"&gt;handler&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Return&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;hangup&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;handler&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;NoOp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="n"&gt;Hangup&lt;/span&gt; &lt;span class="n"&gt;into&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;handler&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
+&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;hangup&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;handler&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;Return&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SIP/eloy-00000006&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;stack&lt;/span&gt;
 &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;Spawn&lt;/span&gt; &lt;span class="n"&gt;extension&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;monkeys&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;h&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;exited&lt;/span&gt; &lt;span class="n"&gt;non&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;zero&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;SIP&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;eloy&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mo"&gt;00000006&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;
 &lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="n"&gt;SIP&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;eloy&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mo"&gt;00000006&lt;/span&gt; &lt;span class="n"&gt;Internal&lt;/span&gt; &lt;span class="n"&gt;Gosub&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;hangup&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;handler&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;complete&lt;/span&gt; &lt;span class="n"&gt;GOSUB_RETVAL&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -613,7 +1139,7 @@ Ansible repo.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;route&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;gauge_method&lt;/span&gt;&lt;span class="p"&gt;]{&lt;/span&gt;
         &lt;span class="n"&gt;statsd_gauge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;method.count&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;rm&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-        &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;avp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nl"&gt;s&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;prepaid&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="n"&gt;statsd_gauge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;customer.prepaid&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;avp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;prepaid&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="n"&gt;statsd_gauge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;customer.prepaid&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/blockquote&gt;
@@ -773,7 +1299,7 @@ redis 127.0.0.1:6379&amp;gt; EXPIRE white_list:{SOURCE_IP} 3600
 &lt;p&gt;Para instalar este framework hay que seguir los siguientes pasos:&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Dependencias ruby&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;sudo apt-get install build-essential git --yes
-curl -L https://get.rvm.io &lt;span class="p"&gt;|&lt;/span&gt; bash -s stable
+curl -L https://get.rvm.io | bash -s stable
 &lt;span class="nb"&gt;source&lt;/span&gt; ~/.rvm/scripts/rvm
 rvm autolibs &lt;span class="nb"&gt;enable&lt;/span&gt;
 rvm install 1.9.3
@@ -848,8 +1374,8 @@ Password:
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Una vez instalado tenemos que comprobar que funciona correctamente, para ello ejecutamos los siguientes comandos:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;root@deb-pruebas:/opt/hubot&lt;span class="nv"&gt;$ &lt;/span&gt;./bin/hubot
-Hubot&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&lt;/span&gt; hubot ping
-Hubot&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&lt;/span&gt; PONG
+Hubot&amp;amp;gt; hubot ping
+Hubot&amp;amp;gt; PONG
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Ahora tenemos que crear el bot que sera la configuración que se conecte a nuestro servidor:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;/opt/hubot/bin/hubot -c ./xmpp

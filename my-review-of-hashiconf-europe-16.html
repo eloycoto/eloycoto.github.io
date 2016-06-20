@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> Hashiconf Europe 16 review about all the talks&annoucements.</title>
+    <link rel="canonical" href="http://www.acalustra.com/my-review-of-hashiconf-europe-16.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" hashiconf, hashicorp, docker, terraform, nomad, consul"/>
+    <meta name="description" content=" Hashiconf 2016 was a good conference. This is the review of the talks and best practices "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://www.acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A calustra Full Atom Feed" />
+
+
+
+
+
+
+
+    <meta name="tags" content="docker, kamailio, terraform, nomad, consul" />
+    <meta name="date" content=" 2016-06-20 16:00:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">My review of Hashiconf Europe 16</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2016-06-20T16:00:00" itemprop="datePublished">Monday June 20th 2016</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>Few days ago I was in Amsterdam, in the lovely <a class="reference external" href="https://www.hashiconf.eu/">Hashiconf EU</a>. This conference fulfilled all my expectations
+about hashi tools and the devops world. The conference was organized by <a class="reference external" href="https://xebia.com/">Xebia</a> with the help of <a class="reference external" href="https://www.hashicorp.com/">Hashicorp</a> and it was awesome, everything was great: venue,
+sound, food, talks and the party!</p>
+<img alt="Hashiconf Europe 2016" class="align-center" src="img/hashiconf_eu1.jpg" />
+<p>Let me explain why I went to this conference; the main reason is that nowadays
+I'm doing a lot of devops, the vision of Hashicorp is very similar to my
+ideas/problems so I'm learning a lot from them. In the other hand a lot of talks
+were case studies from companies, so I learnt from other people's problems.</p>
+<p>The conference started with <a class="reference external" href="https://twitter.com/mitchellh">Mitchell Hashimoto's</a> keynote, and  I want to emphasize the
+following points:</p>
+<ul class="simple">
+<li>The initial support to import in Terraform.</li>
+<li>Maps and list in Terraform.</li>
+<li>Terraform state cli.</li>
+<li>Vault code audit and the new features added in 0.6.</li>
+</ul>
+<p>Related with Nomad, they did a good improvement release, <cite>nomad plan</cite> is a boost
+to the project and being able to run 1M containers in less than 300 seconds is a
+good selling point. Also, he announced that <a class="reference external" href="https://www.hashicorp.com/blog/vektra-joins-hashicorp.html">Vektra joins Hashicorp</a> and they are
+going to release  a new log management tool called <a class="reference external" href="https://twitter.com/kelseyhightower/status/742624496763428864">Current</a>.</p>
+<p>The second keynote was from <a class="reference external" href="https://twitter.com/techiewatt">Nicki Watt</a> from
+the London based <a class="reference external" href="https://opencredo.com/">OpenCredo</a>. I loved this <a class="reference external" href="https://speakerdeck.com/nickithewatt/hashiconf-eu-2016-building-secure-environments-in-clouds-using-hashicorp-tools">talk</a>!
+Real problem was described from start and solutions were explained with the
+proper balance between code and theory. The integration and workflow between
+Terraform, Vault, Cloudinit gave me good insights for our infrastructure. In the
+other hand I got the following quote, that is great:</p>
+<blockquote class="epigraph">
+The only thing constant in life is change
+--  François de la Rochefoucauld</blockquote>
+<p>One of the topics that I was more interested was <a class="reference external" href="https://www.nomadproject.io/">Nomad</a>. A good review was given by <a class="reference external" href="https://twitter.com/diptanu">Diptanu</a>, he has a lot of experience in schedulers. In
+my opinion all schedulers will be a good trend to follow, and all related with
+the microservices. Some keypoints about it:</p>
+<ul class="simple">
+<li>It's simpler than other solutions.</li>
+<li>It's not as complete as kubernetes, but fill the gap for a lot of companies.</li>
+<li>I can't fully get how nomad can export public interfaces or network constraints.</li>
+<li>Traffic shaping it's good but not sure how nomad will work with media traffic.</li>
+<li>Restart on jitter is great.</li>
+<li><strong>Nomad fs</strong> is good, but need to change the paradigm in support teams.</li>
+<li>All this orchestrators lose the way about dependency requirements between microservices.</li>
+</ul>
+<img alt="Hashiconf Europe 2016" class="align-center" src="img/hashiconf_eu2.jpg" />
+<p><a class="reference external" href="https://www.vaultproject.io/">Vault</a> was another hot topic in the
+conference. This secret manager is great and the following uses are marvelous
+for all the companies:</p>
+<ul class="simple">
+<li>SSH credentials</li>
+<li>ACL policies</li>
+<li>DB credentials</li>
+</ul>
+<p>A lot of people use Vault on production environments, so I'll give a try soon.
+If you want to see an example, this is a good repository to start.</p>
+<p>Day two started with <a class="reference external" href="https://twitter.com/anne_e_currie">Anne Currie</a>
+keynote, it was awesome talk. The way how I think about resource efficiency was
+changed after I heard this keynote.  She went into details around
+container/server metadata, <a class="reference external" href="http://lavel-schema.org">lavel-schema.org</a> and
+<a class="reference external" href="http://microbadger.com/">microbadger.com</a> was introduced by her to all of
+us.</p>
+<p><a class="reference external" href="https://www.packer.io/">Packer</a> was mentioned in almost all the talks. OS
+Hardening using packer was presented by Xebia, they introduced a lot of security
+related tools, as for example <a class="reference external" href="https://github.com/ansible/ansible-lockdown">ansible-lockdown</a>. Faster and reliable deploys
+was explained by <a class="reference external" href="https://twitter.com/otaku_coder">Vik Bhatti</a> from Beamly,
+for me, it was one of the best talks in the conference, I must insight the
+following:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://sky-shiny.github.io/smolder/">Smolder test framework</a>: Looks great and maybe I'll do something similar for sip.</li>
+<li>They introduced consul distributed locks, I've never realized of this problem before.</li>
+<li>Consul KV locks and they daemon MarcoPolo =&gt; Great way to save config in runtime.</li>
+<li>He introduced <a class="reference external" href="https://github.com/beamly/se4">SE4</a>:  Simple Spec for Service Status and Health</li>
+</ul>
+<p>Day two finished with Nomad Demo by <a class="reference external" href="https://twitter.com/kelseyhightower">Kelsey Hightower</a>, live coding terraform provider and the
+final keynote about security from <cite>nuna.com &lt;https://www.nuna.com/&gt;__</cite>.</p>
+<p>I need to say big thanks to all the people that I spoke with and thanks to <a class="reference external" href="https://twitter.com/janaboruta">Jana</a>, Hashicorp and Xevia for organized this
+awesome conference.</p>
+<p>Finally, there are few things that I think should be improved so I will write
+them down here just in case it could be helpful:</p>
+<ul class="simple">
+<li>In my opinion, the talks finished too early in both days. I missed 1 or 2 more talks to finish around 17:30 or 18:00.</li>
+<li>I missed <em>Best-practices</em> talks around products, I mean, I would love to hear tips around Consul or Packer by the head of the projects. For example Diptanu talk was great around Nomad.</li>
+</ul>
+<p>This was my summary about Hashiconf EU2016. Thanks for reading!</p>
+<img alt="Hashiconf Europe 2016" class="align-center" src="img/hashiconf_eu3.jpg" />
+<p>PS: All photos are from <a class="reference external" href="https://www.flickr.com/photos/137604751&#64;N05/sets/72157667183542004/">Hashicorp flickr
+page</a></p>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> consul, docker, hashicorp, kamailio, nomad, terraform,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+            <ul>
+                <li><a href="http://www.acalustra.com/voip-talk-at-librecon-2015.html">Voip talk at Librecon 2015</a></li>
+                <li><a href="http://www.acalustra.com/dockercon-europe-14.html">Dockercon Europe 14</a></li>
+                <li><a href="http://www.acalustra.com/sistemas-de-colas-basado-en-redis-en-kamailio.html">sistemas de colas basado en redis en kamailio</a></li>
+                <li><a href="http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html">Kamailio statsd, better statistics in your voip platform.</a></li>
+                <li><a href="http://www.acalustra.com/kamailio-from-tables-to-htables.html">Kamailio from tables to htables</a></li>
+            </ul>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/consul.html" rel="tag">consul</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/docker.html" rel="tag">docker</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/hashicorp.html" rel="tag">hashicorp</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/kamailio.html" rel="tag">kamailio</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/nomad.html" rel="tag">nomad</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/terraform.html" rel="tag">terraform</a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=My review of Hashiconf Europe 16 via @eloycoto&url=http://www.acalustra.com/my-review-of-hashiconf-europe-16.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/my-review-of-hashiconf-europe-16.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/my-review-of-hashiconf-europe-16.html&title=My review of Hashiconf Europe 16"><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>

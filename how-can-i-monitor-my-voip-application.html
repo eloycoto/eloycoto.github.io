@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> How kamailio can be monitored with SIPCapture and other software</title>
+    <link rel="canonical" href="http://www.acalustra.com/how-can-i-monitor-my-voip-application.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" kamailio monitoring, kamailio statsd, SIPCapture, Packetbeat"/>
+    <meta name="description" content=" Kamailio can be monitored with different tools, in this post we're going to explain why tool platform needs. "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://www.acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A calustra Full Atom Feed" />
+
+
+
+
+
+
+
+    <meta name="tags" content="kamailio, graphite, influxdb, siphormer, beats" />
+    <meta name="date" content=" 2015-07-24 16:00:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+
+  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
+    <div class="col-9 col-offset-1">
+      <h1 itemprop="name headline">Kamailio monitoring with statsd, SIPCapture or Packetbeat</h1>
+      <div class="byline">
+        Escrito por:
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2015-07-24T16:00:00" itemprop="datePublished">Friday July 24th 2015</time>
+      </div>
+
+      <div class="content" itemprop="articleBody">
+        <p>In the last <a class="reference external" href="http://www.acalustra.com/kamialio-world-2015.html">Kamailio World</a> two of the
+hot topics were <a class="reference external" href="https://www.elastic.co/products/beats">Packetbeat</a> and
+<a class="reference external" href="http://SIPCapture.org/">SIPCapture</a>.  Both projects announced good news
+meanwhile the conference, people got excited about it.</p>
+<p>SIPCapture released a new <a class="reference external" href="http://www.voipusersconference.org/2015/vuc544-homer-open-source-sip-capture/">version 5</a>,
+huge work from <a class="reference external" href="https://twitter.com/adubovikov">Alex</a> and Lorenzo. Both worked
+hard in this version. SIPCapture 5 provides the following new features:</p>
+<ul class="simple">
+<li>New captagent that allows lua scripting.</li>
+<li>Frontend was rewrited from scratch and now it's a full html5 app.</li>
+<li>New database structure, and full PostgresSQL support.</li>
+<li>New database backends in the panel, now you can use InfluxDB and ElasticSearch as data source.</li>
+</ul>
+<p><strong>SIPCapture review on VUC</strong></p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/MtuvwgRLBUg" frameborder="0" allowfullscreen></iframe><p>Secondly Packetbeat announced that <a class="reference external" href="http://apmdigest.com/elastic-acquires-Packetbeat">joined Elastic</a> and started a new branch
+called <a class="reference external" href="https://www.elastic.co/products/beats">Beats</a>. Packetbeat provides
+an interface to monitor our application performance without pain. You can
+monitor all SQL information, Redis, HTTP information and get some insights of
+your application.</p>
+<p><strong>Packetbeat presentation on OSDC 2015</strong></p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/sGvfrA5FI5E" frameborder="0" allowfullscreen></iframe><p>Finally, statsd module can be added in this list. This module provides some
+features to monitor your business logic. If you want to deep on this, please
+read the following posts:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html">Kamailio statsd installation</a></li>
+<li><a class="reference external" href="http://www.acalustra.com/kamailio-statsd-explained.html">Kamailio statsd best practices</a></li>
+<li><a class="reference external" href="http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html">Statsd on python Vigo Meetup</a></li>
+</ul>
+<p>So three monitoring tools. Can we use only one? What is the strengths and the
+weaknesses of these software? Is all valid for our platform? Yes, but these
+projects fit for different situations, let me explain:</p>
+<p>SIPCapture is an awesome tool, but it only can help with our SIP stack, I love
+it and I use to work with it. You can check what happens in your calls, and
+it's pretty useful in the following cases:</p>
+<ul class="simple">
+<li>In a production platform when you need to check what happens in a call.</li>
+<li>If you run TLS calls, you can debug without SSL keys into wireshark.</li>
+<li>You can monitor the MOS in realtime in your platform.</li>
+</ul>
+<p>Packetbeat is to monitor your application performance. Nowadays Kamailio is
+using a lot 3 party software (databases, Messages Queues, Cache system).
+Monitoring errors or timeouts of those 3-party software can be done with
+Packetbeat without pain.</p>
+<p>Business/personal metrics must to be done in statsd. In statsd you can't define
+what happens in a specific call or specific query, you're measuring the
+percentile of the metric that you want it's correct, for example:</p>
+<ul class="simple">
+<li>Packetbeat said that your SQL queries took 14ms as average. But in kamailio
+you found a bottleneck in that query process, so you need to monitor into your
+code. You can use statsd_timer and found the bottleneck in the specified route.</li>
+<li>Your average reply time in SIPCapture is upper than 1 second, you need to
+found the bottleneck into your 5000 lines of code. With Statsd you can measure
+your routes one by one, so it's easy to found the problem with few lines of
+code.</li>
+<li>When new feature is implemented you want to know how many calls are using
+this feature. Statsd provides a one line code to measure your business
+statistics.</li>
+</ul>
+<p><strong>UPDATE</strong>: <a class="reference external" href="https://twitter.com/adubovikov/status/624541282862518272">As Alex point me in Twitter</a>, all the perf stats
+can be displayed in SIPCapture included Packetbeat metrics and Influxdb metrics
+sending by statsd. So SIPCapure it's perfect for support and operations.
+<strong>Awesome</strong> work made by Lorenzo &amp; Alex.</p>
+<p>Some developers changed statsd for Logstash. My personal opinion about that is
+the following:</p>
+<ul class="simple">
+<li>Logstash need to parse logs. Logs are slow and difficult to compute.</li>
+<li>For timing functions, you need to write more lines of code. With statsd you
+only use 2 lines of code to monitor specific lines.</li>
+<li>Logs can be broken easily in your config file.</li>
+<li>ES query language is more complicated than use SQL'ish in InluxDB.</li>
+</ul>
+<p>Finally for telecoms companies all of the explained projects are useful.
+SIPCapture is the swiss-knife for support teams. Packetbeat is an amazing tool
+for all the operations teams and statsd is good for operations team and
+marketing/business team to make decisions based on the current metrics.</p>
+
+      </div>
+
+      <p style="display:none" itemprop="keywords"> kamailio, Packetbeat, sip, SIPCapture, statsd,  </p>
+
+        <div class="comments">
+          <h4>Commentarios:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Artículos relacionados:</h4>
+            <ul>
+                <li><a href="http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html">Kamailio statsd, better statistics in your voip platform.</a></li>
+                <li><a href="http://www.acalustra.com/voip-talk-at-librecon-2015.html">Voip talk at Librecon 2015</a></li>
+                <li><a href="http://www.acalustra.com/kamailio-statsd-explained.html">Kamailio statsd explained</a></li>
+                <li><a href="http://www.acalustra.com/politicas-de-seguridad-en-kamailio.html">Politicas de seguridad en Kamailio</a></li>
+                <li><a href="http://www.acalustra.com/my-review-of-hashiconf-europe-16.html">My review of Hashiconf Europe 16</a></li>
+            </ul>
+      </div>
+
+
+    </div>
+    <div class="col-2">
+      <h3>Tags</h3>
+      <div class="tags">
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/kamailio.html" rel="tag">kamailio</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/packetbeat.html" rel="tag">Packetbeat</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/sip.html" rel="tag">sip</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/sipcapture.html" rel="tag">SIPCapture</a>
+          </span>
+          <span class="tag">
+            <a href="http://www.acalustra.com/tag/statsd.html" rel="tag">statsd</a>
+          </span>
+      </div><!--tags-->
+      <div class="share">
+        <a href="http://twitter.com/share?text=How can I monitor my Voip Application? via @eloycoto&url=http://www.acalustra.com/how-can-i-monitor-my-voip-application.html"><i class="fa fa-twitter"></i></a>
+        <br>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/how-can-i-monitor-my-voip-application.html"><i class="fa fa-facebook"></i></a>
+        <br>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/how-can-i-monitor-my-voip-application.html&title=How can I monitor my Voip Application?"><i class="fa fa-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>
