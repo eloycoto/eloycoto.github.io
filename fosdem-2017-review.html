@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> Fosdem 2017 Review</title>
+    <link rel="canonical" href="http://www.acalustra.com/fosdem-2017-review.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" fosdem, voip, asterisk, postgresql, gprc, cgrates"/>
+    <meta name="description" content=" Fosdem is the biggest Open Source conference. This 2017 I was present again mainly by the Real Time Comms room that have a lot of Sip/Webrtc content "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://www.acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A calustra Full Atom Feed" />
+
+
+
+
+
+
+
+    <meta name="tags" content="fosdem, kamailio, cgrates, go, postgresql" />
+    <meta name="date" content=" 2017-02-09 16:00:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+  <article>
+    <header>
+      <h1 itemprop="name headline">Fosdem 2017 Review</h1>
+      <div class="byline">
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2017-02-09T16:00:00" itemprop="datePublished">February 09th, 2017</time>
+      </div>
+    </header>
+
+
+    <div class="content" itemprop="articleBody">
+      <p>My third <a class="reference external" href="https://fosdem.org/2017/">FOSDEM</a> is over, this year there was a
+<a class="reference external" href="https://fosdem.org/2017/schedule/track/real_time_communications/">Real Time Comms dev room</a> in place,
+one of the best places to keep up to date with all VoIP technologies.
+Furthermore, in this conference, you can just jump into another track and learn
+from them, this helps you to be out of your comfort zone. I am so glad to be
+there and have the chance to have a chat with all open-source community.</p>
+<p>First I want to start thanking the RTC track organisers, <a class="reference external" href="https://twitter.com/saghul">Saúl Ibarra</a> and <a class="reference external" href="https://twitter.com/miconda">Daniel-Constantin Mierla</a>, organise this type of events is a tremendous
+amount of work.</p>
+<p>The day started with an excellent WebRTC introduction, I got in touch with
+<a class="reference external" href="https://github.com/webrtc/adapter">Adapter.js</a> library, Steven advised us to
+limit the endpoints if we can, and he shared that sometimes you should guess
+where is the media problem instead find it. The second talk, by <a class="reference external" href="https://fosdem.org/2017/schedule/speaker/martin_lagrange/">Martin</a>, was about
+real-time protocols and he made a splendid introduction about few tools.
+<a class="reference external" href="https://telepathy.freedesktop.org/">Telepathy</a> talk was quite sweet, it is
+nice to know that all this software still works and new ideas are on the
+roadmap. IoT XMPP by <a class="reference external" href="https://fosdem.org/2017/schedule/speaker/daniel_wisnewski/">Daniel</a> was great; I
+have some doubts about XMPP on the IoT world related to power consumption and
+bandwidth, but the idea behind <a class="reference external" href="http://xmpp.org/extensions/xep-0323.html">XEP-0323</a> is excellent.</p>
+<p>The best VoIP talk, from my point of view, was from <a class="reference external" href="https://twitter.com/mattcjordan">Matt Jordan</a> about Asterisk scalability. The concept is
+the same that Matt argued few times in the past conferences. It was awesome to
+see new <a class="reference external" href="https://wiki.asterisk.org/wiki/display/AST/Asterisk+14+Recordings+REST+API#Asterisk14RecordingsRESTAPI-getStoredFile">ARI methods for recordings</a>,
+the <a class="reference external" href="https://blogs.asterisk.org/2016/09/21/asterisk-14-publishing-extension-state/">publish-subscribe interface</a>
+(I did not have an idea about that and it fixes many problems). Following Matt,
+the Basque VoIP mafia took action, Saúl made an introduction to <a class="reference external" href="https://meet.jit.si">Jitsi WebRTC
+solutions</a>, <a class="reference external" href="https://github.com/jmillan">Jose Luis Millán</a> about <a class="reference external" href="http://www.jssip.net/">JsSIP</a>, and
+<a class="reference external" href="https://github.com/ibc/mediasoup">Mediasoup</a> was explained by <a class="reference external" href="https://twitter.com/ibc_tw">Iñaki Baz</a>. I recommend you to view those talks online if
+you weren't there.</p>
+<p><a class="reference external" href="https://fosdem.org/2017/schedule/event/ring_opendht/">Ring's presentation</a>
+was great to be out of my comfort zone and to see how other projects solve
+their problems. Next talk was by the energetic Olle; he showed a very clear
+state of the art why <a class="reference external" href="https://fosdem.org/2017/schedule/event/dualstack/">IPv6 implementation is failing</a>. It was good to hear from
+first-hand info about new <a class="reference external" href="https://fosdem.org/2017/schedule/event/opensips/">OpenSips</a>; new release looks
+promising based on Event Routes, plus the CGRates module or RabbitMQ
+integration. On the other hand, <a class="reference external" href="https://fosdem.org/2017/schedule/speaker/giovanni_maruzzelli_gmaruzz/">Giovanni</a> from
+OpenTelecoms made an excellent explanation about Freeswich scalability methods
+and explained very well the distribution and partition methods. After lunch,
+<a class="reference external" href="https://fosdem.org/2017/schedule/speaker/lorenzo_mangani/">Lorenzo</a> gave a
+talk about Hormer; I got a lot of new ideas, and things like <a class="reference external" href="https://siren.solutions/kibi-a-kibana-fork-for-data-intelligence/">Kibi</a> were mind
+blowing for me. I thoroughly recommend to follow <a class="reference external" href="https://github.com/lmangani">Lorenzo on Twitter and GitHub</a>; he is full of common-sense with innovative
+ideas. The last VoIP talk that I attend was given by Daniel about <a class="reference external" href="https://www.kamailio.org/w/2016/05/sip-routing-in-lua-or-python/">Kemi</a>, I need to
+say that he introduced something awesome in the next Kamailio version, this
+interface is going to be essential in the near future.</p>
+<img alt="Miconda about kemi" class="align-center" src="img/fosdem-1.jpg" />
+<p>After my RTC update, my idea for Fosdem was to taste Belgium beers and extend
+my knowledge of my second skills like DevOps, Python and Postgresql.</p>
+<p>I started with <a class="reference external" href="https://fosdem.org/2017/schedule/event/grpc101/">GRPC</a>; it is
+a high-performance RPC framework. I use to work with that on CGRates. It was
+good to know that Google is using GPRC over HTTP2, so it is much faster and
+bi-directional streaming can be used.</p>
+<p><a class="reference external" href="https://joshix.com/">CoreOS DocOps</a> introduced <a class="reference external" href="https://github.com/coreos/prometheus-operator">Kubernetes
+Operators</a>. From my point of
+view, all containers/microservers miss the point about the state, with
+Kubernetes operators this state can be dry or handled. This feature is
+game-changing in the world of the containers, plus some examples shown during
+the talk helped the audience to get it. This technology fixes something that I
+usually work around using Hashicorp tools, in the following months I am going
+to check k8s operators and deploy.</p>
+<p>Finally, I tried to be in a Testing dev room, but it had a massive queue, so I
+moved into the Postgresql track. <a class="reference external" href="https://fosdem.org/2017/schedule/speaker/jimmy_angelakos/">Jimmy</a> introduced RDF
+(Resource Description Framework). He provided some examples, and I think that I
+would use that in the future. Need to say that I learn something awesome
+Sqlalchemy stream_results.  After that, <a class="reference external" href="https://fosdem.org/2017/schedule/speaker/gulcin_yildirim/">Gülçin</a> from 2ndquadrant
+explained all the replication process for fault tolerance; she explained in
+cleartext the different wal level settings, something that I did not understand
+at all, but she made an awesome explanation, you should check the video. The
+last Postgres talk by <a class="reference external" href="https://fosdem.org/2017/schedule/speaker/gunnar_bluth_nick/">Gunnar Bluth</a>, introduced to
+me, two new concepts:</p>
+<ul class="simple">
+<li><em>RTO(recovery time objective)</em>: How long took to recover from an incident</li>
+<li><em>RPO(Recovery point objective)</em>: How many lost are you going to have from an incident.</li>
+</ul>
+<p>I knew all the technical details of this talk, but need to say that this
+presentation changed how I am going to think about redundancy in the future, I
+always looking for issues, but never think about RTO or RPO and never how to
+measure it.</p>
+<p>Fosdem is over. This year I shared this travel with some friends from Vigo,
+which made myself happy during all the trip. I learnt a lot from them too; <strong>I
+am so glad</strong> to share these days with a few python and ruby hackers, a <a class="reference external" href="https://twitter.com/diepg">Webkit
+committer</a> and the <a class="reference external" href="http://twitter.com/felixgomezlopez">Main dev</a> of one of the <a class="reference external" href="https://www.meneame.net/">largest Spain websites</a>. Thanks to you all! Besides it was good to see in
+person some people from the VoIP community, and meet some people that I didn't
+meet <a class="reference external" href="https://twitter.com/hellc2/status/827878864743518208">before</a>.</p>
+<img alt="Vigo dev community on fosdem 2017" class="align-center" src="img/fosdem-2.jpg" />
+<p>Finally, some people have problems with the Fosdem Agenda. I need to say that I
+did not have these problems, but a few weeks ago before Fosdem, I made my plan.
+Sometimes in this conference is better to see fewer talks but be at the door 10
+min before, and not leave some talks in the middle (that it is very
+unrespectful) or see the agenda in the laptops and check the content of the
+next speaker. This type of conference should be prepared in advance, if not you
+are going to be frustrated in the queues.</p>
+<p>Thanks to all, and see you next year!</p>
+
+
+      <div class="share">
+        <p>Share this:</>
+        <a href="http://twitter.com/share?text=Fosdem 2017 review via @eloycoto&url=http://www.acalustra.com/fosdem-2017-review.html"><i class="fa fa-twitter"></i></a>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/fosdem-2017-review.html"><i class="fa fa-facebook"></i></a>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/fosdem-2017-review.html&title=Fosdem 2017 review"><i class="fa fa-linkedin"></i></a>
+      </div>
+      <div class="tags">
+        <h3>Tags</h3>
+        <div class="taglist">
+            <span class="tag">
+              <a href="/tag/conferences.html" rel="tag">conferences</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/fosdem.html" rel="tag">fosdem</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/kamailio.html" rel="tag">kamailio</a>
+            </span>
+        </div><!--tags-->
+      </div>
+        <div class="comments">
+          <h4>Comments:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Related articles:</h4>
+          <ul>
+              <li><a href="http://www.acalustra.com/how-can-i-monitor-my-voip-application.html">How can I monitor my Voip Application?</a></li>
+              <li><a href="http://www.acalustra.com/kamailio-from-tables-to-htables.html">Kamailio from tables to htables</a></li>
+              <li><a href="http://www.acalustra.com/my-review-of-hashiconf-europe-16.html">My review of Hashiconf Europe 16</a></li>
+              <li><a href="http://www.acalustra.com/dockercon-europe-14.html">Dockercon Europe 14</a></li>
+              <li><a href="http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html">Kamailio statsd, better statistics in your voip platform.</a></li>
+          </ul>
+      </div>
+
+
+    </div>
+
+  </article>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>

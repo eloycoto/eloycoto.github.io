@@ -39,23 +39,23 @@
 
     <div class="container content">
 <div class="row">
-
-  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
-    <div class="col-9 col-offset-1">
+  <article>
+    <header>
       <h1 itemprop="name headline">6 funciones de Ansible que no conocías</h1>
       <div class="byline">
-        Escrito por:
         <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
           <span itemprop="name">
             <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
           </span>
         </span>
         on
-        <time datetime="2014-06-03T12:20:00" itemprop="datePublished">Tuesday June 03th 2014</time>
+        <time datetime="2014-06-03T12:20:00" itemprop="datePublished">June 03th, 2014</time>
       </div>
+    </header>
 
-      <div class="content" itemprop="articleBody">
-        <p>Hace aproximadamente dos años que empecé a trabajar con Ansible. Desde ese día después de usar algo de chef/puppet y darme cabezazos contra la pared (dada su complejidad), este stack se ha convertido en mi preferido, por lo sencillo que es. No es tan completo como los anteriormente comentados, pero para mis necesidades cumple perfectamente.</p>
+
+    <div class="content" itemprop="articleBody">
+      <p>Hace aproximadamente dos años que empecé a trabajar con Ansible. Desde ese día después de usar algo de chef/puppet y darme cabezazos contra la pared (dada su complejidad), este stack se ha convertido en mi preferido, por lo sencillo que es. No es tan completo como los anteriormente comentados, pero para mis necesidades cumple perfectamente.</p>
 <p>Durante este tiempo han sido muchas las cosas que he aprendido, de las cuales me parece bueno salientar:</p>
 <p><strong>Registro de variables</strong></p>
 <p>Cada tarea tiene un resultado, muchas veces creemos que no nos dan un resultado que no sea True/False. Pero muchos módulos devuelven mucha información en un objeto json. En el código fuente de los <a class="reference external" href="https://github.com/ansible/ansible/blob/devel/library/commands/command#L150-L160">módulos se pueden buscar que info es la que exporta</a>. Para poder utilizarla solo debemos hacer lo siguiente en nuestro playbook:</p>
@@ -130,58 +130,55 @@ ansible-playbook -i host playbook.yml -C
 <p>Con lo que tenemos una lista de resultados que se van a ejecutar en la máquina. En el caso de que existan cambios tengo una mini APP que nos notifica que estan pendiente cambios sin aplicar.</p>
 <p>Finalmente estas son las funciones que nunca ves en los ejemplos pero que son muy útiles a la hora de desarrollar y hacer despliegues en entornos de producción, pruebas y desarrollo. Yo tengo el 90% de mis servidores basados en Ansible y cada día que pasa estoy más alegre de utilizarlo.  ;-)</p>
 
+
+      <div class="share">
+        <p>Share this:</>
+        <a href="http://twitter.com/share?text=trick and tips en ansible via @eloycoto&url=http://www.acalustra.com/trick-and-tips-en-ansible.html"><i class="fa fa-twitter"></i></a>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/trick-and-tips-en-ansible.html"><i class="fa fa-facebook"></i></a>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/trick-and-tips-en-ansible.html&title=trick and tips en ansible"><i class="fa fa-linkedin"></i></a>
       </div>
-
-      <p style="display:none" itemprop="keywords"> ansible, asterisk, devops, howto, playbook,  </p>
-
+      <div class="tags">
+        <h3>Tags</h3>
+        <div class="taglist">
+            <span class="tag">
+              <a href="/tag/ansible.html" rel="tag">ansible</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/asterisk.html" rel="tag">asterisk</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/devops.html" rel="tag">devops</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/howto.html" rel="tag">howto</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/playbook.html" rel="tag">playbook</a>
+            </span>
+        </div><!--tags-->
+      </div>
         <div class="comments">
-          <h4>Commentarios:</h4>
+          <h4>Comments:</h4>
           <div id="disqus_thread"></div>
             <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
             <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
         </div> <!-- .comments-container -->
 
       <div class="row">
-        <h4>Artículos relacionados:</h4>
-            <ul>
-                <li><a href="http://www.acalustra.com/acelerate-your-ansible-playbooks-with-async-tasks.html">Acelerate your Ansible playbooks with async tasks</a></li>
-                <li><a href="http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html">Ansible: how to maintain multiple ssh-keys in different servers</a></li>
-                <li><a href="http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html">Haciendo test con sipp sin morir en el intento</a></li>
-                <li><a href="http://www.acalustra.com/voip-talk-at-librecon-2015.html">Voip talk at Librecon 2015</a></li>
-                <li><a href="http://www.acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html">Integrando hubot con nuestro servicio xmpp</a></li>
-            </ul>
+        <h4>Related articles:</h4>
+          <ul>
+              <li><a href="http://www.acalustra.com/acelerate-your-ansible-playbooks-with-async-tasks.html">Acelerate your Ansible playbooks with async tasks</a></li>
+              <li><a href="http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html">Ansible: how to maintain multiple ssh-keys in different servers</a></li>
+              <li><a href="http://www.acalustra.com/asterisk-11-hangups-handlers.html">Asterisk 11 hangups handlers</a></li>
+              <li><a href="http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html">Haciendo test con sipp sin morir en el intento</a></li>
+              <li><a href="http://www.acalustra.com/voip-talk-at-librecon-2015.html">Voip talk at Librecon 2015</a></li>
+          </ul>
       </div>
 
 
     </div>
-    <div class="col-2">
-      <h3>Tags</h3>
-      <div class="tags">
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/ansible.html" rel="tag">ansible</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/asterisk.html" rel="tag">asterisk</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/devops.html" rel="tag">devops</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/howto.html" rel="tag">howto</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/playbook.html" rel="tag">playbook</a>
-          </span>
-      </div><!--tags-->
-      <div class="share">
-        <a href="http://twitter.com/share?text=trick and tips en ansible via @eloycoto&url=http://www.acalustra.com/trick-and-tips-en-ansible.html"><i class="fa fa-twitter"></i></a>
-        <br>
-        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/trick-and-tips-en-ansible.html"><i class="fa fa-facebook"></i></a>
-        <br>
-        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/trick-and-tips-en-ansible.html&title=trick and tips en ansible"><i class="fa fa-linkedin"></i></a>
-      </div>
-    </div>
-  </div>
+
+  </article>
 </div>    </div><!--container-->
 
     <div class="row footer">

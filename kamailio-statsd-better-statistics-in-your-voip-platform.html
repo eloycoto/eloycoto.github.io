@@ -39,23 +39,23 @@
 
     <div class="container content">
 <div class="row">
-
-  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
-    <div class="col-9 col-offset-1">
+  <article>
+    <header>
       <h1 itemprop="name headline">Kamailio integration with Statsd and Graphite.</h1>
       <div class="byline">
-        Escrito por:
         <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
           <span itemprop="name">
             <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
           </span>
         </span>
         on
-        <time datetime="2014-10-22T16:00:00" itemprop="datePublished">Wednesday October 22th 2014</time>
+        <time datetime="2014-10-22T16:00:00" itemprop="datePublished">October 22th, 2014</time>
       </div>
+    </header>
 
-      <div class="content" itemprop="articleBody">
-        <p>I remember when I read about <a class="reference external" href="http://graphite.wikidot.com/">Graphite</a>. I was reading that Vimeo used it for making realtime monitoring in their projects and reporting for all the team. I got a chance to test with my local apps and after a few days I started to love graphite.</p>
+
+    <div class="content" itemprop="articleBody">
+      <p>I remember when I read about <a class="reference external" href="http://graphite.wikidot.com/">Graphite</a>. I was reading that Vimeo used it for making realtime monitoring in their projects and reporting for all the team. I got a chance to test with my local apps and after a few days I started to love graphite.</p>
 <p>I start to use graphite in my web apps. After few weeks I needed to monitor a new feature deployed in one of our kamailio. The first time I used mod_python+statsd, but I realise that using python module was not the best way so I write <a class="reference external" href="https://github.com/eloycoto/statsd">statsd module</a> that work native with kamailio.</p>
 <p><a class="reference external" href="https://github.com/eloycoto/statsd">I made this module, after 7 years working with Kamailio</a>, I read/modified a lot of modules, but I never had a chance to write a new one.</p>
 <p>Kamailio mod statsd provides just four functions. All of those functions are damn easy to understand but if you are not familiarized with this world, I would recommend you to check this posts:</p>
@@ -127,61 +127,58 @@
 <a class="reference external" href="https://github.com/eloycoto/statsd">https://github.com/eloycoto/statsd</a></p>
 </div>
 
+
+      <div class="share">
+        <p>Share this:</>
+        <a href="http://twitter.com/share?text=Kamailio statsd, better statistics in your voip platform. via @eloycoto&url=http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html"><i class="fa fa-twitter"></i></a>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html"><i class="fa fa-facebook"></i></a>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html&title=Kamailio statsd, better statistics in your voip platform."><i class="fa fa-linkedin"></i></a>
       </div>
-
-      <p style="display:none" itemprop="keywords"> grafana, graphite, kamailio, monitoring, statistics, statsd,  </p>
-
+      <div class="tags">
+        <h3>Tags</h3>
+        <div class="taglist">
+            <span class="tag">
+              <a href="/tag/grafana.html" rel="tag">grafana</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/graphite.html" rel="tag">graphite</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/kamailio.html" rel="tag">kamailio</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/monitoring.html" rel="tag">monitoring</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/statistics.html" rel="tag">statistics</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/statsd.html" rel="tag">statsd</a>
+            </span>
+        </div><!--tags-->
+      </div>
         <div class="comments">
-          <h4>Commentarios:</h4>
+          <h4>Comments:</h4>
           <div id="disqus_thread"></div>
             <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
             <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
         </div> <!-- .comments-container -->
 
       <div class="row">
-        <h4>Artículos relacionados:</h4>
-            <ul>
-                <li><a href="http://www.acalustra.com/kamailio-statsd-explained.html">Kamailio statsd explained</a></li>
-                <li><a href="http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html">Statsd talk at Python Vigo Meetup</a></li>
-                <li><a href="http://www.acalustra.com/voip-talk-at-librecon-2015.html">Voip talk at Librecon 2015</a></li>
-                <li><a href="http://www.acalustra.com/how-can-i-monitor-my-voip-application.html">How can I monitor my Voip Application?</a></li>
-                <li><a href="http://www.acalustra.com/my-review-of-hashiconf-europe-16.html">My review of Hashiconf Europe 16</a></li>
-            </ul>
+        <h4>Related articles:</h4>
+          <ul>
+              <li><a href="http://www.acalustra.com/kamailio-statsd-explained.html">Kamailio statsd explained</a></li>
+              <li><a href="http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html">Statsd talk at Python Vigo Meetup</a></li>
+              <li><a href="http://www.acalustra.com/voip-talk-at-librecon-2015.html">Voip talk at Librecon 2015</a></li>
+              <li><a href="http://www.acalustra.com/how-can-i-monitor-my-voip-application.html">How can I monitor my Voip Application?</a></li>
+              <li><a href="http://www.acalustra.com/kamailio-from-tables-to-htables.html">Kamailio from tables to htables</a></li>
+          </ul>
       </div>
 
 
     </div>
-    <div class="col-2">
-      <h3>Tags</h3>
-      <div class="tags">
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/grafana.html" rel="tag">grafana</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/graphite.html" rel="tag">graphite</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/kamailio.html" rel="tag">kamailio</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/monitoring.html" rel="tag">monitoring</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/statistics.html" rel="tag">statistics</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/statsd.html" rel="tag">statsd</a>
-          </span>
-      </div><!--tags-->
-      <div class="share">
-        <a href="http://twitter.com/share?text=Kamailio statsd, better statistics in your voip platform. via @eloycoto&url=http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html"><i class="fa fa-twitter"></i></a>
-        <br>
-        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html"><i class="fa fa-facebook"></i></a>
-        <br>
-        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html&title=Kamailio statsd, better statistics in your voip platform."><i class="fa fa-linkedin"></i></a>
-      </div>
-    </div>
-  </div>
+
+  </article>
 </div>    </div><!--container-->
 
     <div class="row footer">

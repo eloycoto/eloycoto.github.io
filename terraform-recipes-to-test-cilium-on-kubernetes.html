@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> Terraform recipes to test Cilium on Kubernetes</title>
+    <link rel="canonical" href="http://www.acalustra.com/terraform-recipes-to-test-cilium-on-kubernetes.html" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="keywords" content=" ubuntu, cilium, terraform, kubernetes"/>
+    <meta name="description" content=" A terraform recipe to build a kunernetes cluster on Google Cloud Platform using cilium networking "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://www.acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A calustra Full Atom Feed" />
+
+
+
+
+
+
+
+    <meta name="tags" content="bpf, ebpf, xdp, terraform, k8s, kubernetes, cni" />
+    <meta name="date" content=" 2017-08-29 12:00:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+  <div class="wrapper">
+    <div class="row nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="archives.html">Blog</a></li>
+      </ul>
+    </div><!--row nav-->
+
+    <div class="container content">
+<div class="row">
+  <article>
+    <header>
+      <h1 itemprop="name headline">Terraform recipes to test Cilium on Kubernetes</h1>
+      <div class="byline">
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="2017-08-29T12:00:00" itemprop="datePublished">August 29th, 2017</time>
+      </div>
+    </header>
+
+
+    <div class="content" itemprop="articleBody">
+      <p>After almost five years, I left my job at <a class="reference external" href="https://www.foehn.co.uk/">Foehn</a>;
+I need a personal break, and I have decided early this year that late August
+would be a good time for doing it.</p>
+<p>During this break, I'll be doing open source for few months before starting to
+look for a new place. I want to learn from the best software engineers, so I'll
+be contributing the next two months to <a class="reference external" href="https://www.cilium.io/">Cilium project</a>.</p>
+<p>If you don't know what is Cilium let me explain, Cilium is a software that
+enables network security mainly on container related projects, like Docker,
+Kuberntes or Itsio. The main difference between Cilium and other networking
+solutions is that Cilium relies in a heavy way on a lot of new technology that
+the kernel provides.</p>
+<div class="section" id="ebpf">
+<h2>eBPF</h2>
+<p>Firstly, we need to understand what <a class="reference external" href="https://en.wikipedia.org/wiki/Berkeley_Packet_Filter">BPF (Berkeley Packet Filter)</a> means. BPF is a Linux
+kernel bytecode interpreter originally introduced to filter network packets
+(tcpdump, ngrep).</p>
+<p>A BPF program is compiled to bytecode by the <a class="reference external" href="https://en.wikipedia.org/wiki/Just-in-time_compilation">JIT</a> compiler, it becomes
+a native CPU execution, as a consequence of that, the filter performance
+increases a lot.</p>
+<p>BPF does not allow loops, so it is not Turing complete. A few years ago, an
+extension to the original BPF was created: <a class="reference external" href="http://www.brendangregg.com/blog/2015-05-15/ebpf-one-small-step.html">eBPF(Enhanced BPF)</a> adding
+new data structures (hashtables, arrays), tail calls, kernel hooks, etc...
+Furthermore, nowadays BPF programs can be executed in multiple kernel hooks,
+like networking, kprobes or system calls.</p>
+<p>If you want to deep more about how to load BPF programs in your kernel I
+recommend <a class="reference external" href="http://cilium.readthedocs.io/en/latest/bpf/">Cilium docs</a>, <a class="reference external" href="http://www.brendangregg.com/index.html#Videos">Brendan
+Gregg talks</a> and <a class="reference external" href="https://www.iovisor.org/technology/bcc">bcc project</a>.</p>
+</div>
+<div class="section" id="xdp">
+<h2>XDP</h2>
+<p><a class="reference external" href="https://www.iovisor.org/technology/xdp">XDP</a> means Xpress Data Path; this
+technology was introduced in the kernel to make the packet processing much
+faster, so with XDP you can drop/pass packets very close to the network driver,
+without getting the packet into the kernel userspace. This technology made
+Facebook Load Balancers <a class="reference external" href="https://twitter.com/tgraf__/status/854420210362851328">10x faster</a> than IPVS
+deployments.</p>
+<p>To have a simple vision of this technology, the following image from Cilium is
+self-explanatory:</p>
+<div class="align-center" align="center">
+    <iframe src="//www.slideshare.net/slideshow/embed_code/key/5uvwUxYy1RjMd8?startSlide=60" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"></div>
+</div><p>If you have doubts about Cilium, you should check <a class="reference external" href="https://www.slideshare.net/ThomasGraf5">Thomas Graf presentations</a>, where you can learn the kernel
+technology on deep and how cilium implements it.</p>
+<p>If you want to try Cilium, in the <a class="reference external" href="http://cilium.readthedocs.io/en/latest/gettingstarted/">usage documentation</a> you have some
+examples and a <a class="reference external" href="http://cilium.readthedocs.io/en/latest/gettingstarted/#getting-started-using-docker">vagrant box</a>
+created for testing purpose. However, if you want to test it using Kubernetes,
+things get a bit more complicated, you can use Minikube, but for testing
+networking tunnels you need more nodes and minikube just provides one.</p>
+<p><a class="reference external" href="https://github.com/eloycoto/k8s-cilium-terraform">I created a Terraform recipe</a> where you can set-up a Kubernetes cluster with
+Cilium-cni on Google Cloud Platform in a few minutes. To start playing with
+that, you need to follow the process described in the Readme.</p>
+<div class="align-center" align="center">
+            <script type="text/javascript" src="https://asciinema.org/a/upgHBrafmBrKMMving98RQYAC.js" id="asciicast-upgHBrafmBrKMMving98RQYAC" data-speed="2" rows="10" data-theme="monokai" async></script>
+</div><p>As soon that you login into the master node, you can see a few cilium daemon set
+pods working. If you want to know the cilium status you can run the following
+command:</p>
+<div class="highlight"><pre><span class="k">for </span>cilium in <span class="k">$(</span>kubectl -n kube-system get pods --selector<span class="o">=</span>k8s-app<span class="o">=</span>cilium --output<span class="o">=</span><span class="nv">jsonpath</span><span class="o">={</span>.items..metadata.name<span class="o">}</span><span class="k">)</span>; <span class="k">do</span>
+<span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;===============${cilium}===============&quot;</span>
+        kubectl -n kube-system <span class="nb">exec</span> <span class="nv">$cilium</span> cilium status
+        <span class="k">return</span>
+<span class="k">done</span>
+</pre></div>
+<p>This command iterate over all cilium-agents pods, after that, it executes
+<cite>cilium status</cite> comand to know the status of the daemon set. The sample output
+is the following, where you can see the list of <a class="reference external" href="http://cilium.readthedocs.io/en/latest/concepts/#endpoints">endpoints</a> and the status
+of all 3-party integrations.</p>
+<div class="highlight"><pre><span class="o">===============</span>cilium-0m1gb<span class="o">===============</span>
+
+This <span class="nb">command </span>iterate over all cilium-agent pods
+Allocated IPv4 addresses:
+ 10.2.28.238
+ 10.2.42.252
+ 10.2.247.232
+Allocated IPv6 addresses:
+ f00d::ac10:2:0:1
+ f00d::ac10:2:0:ad
+ f00d::ac10:2:0:8ad6
+KVStore:            Ok   Etcd: http://172.16.0.2:9732 - <span class="o">(</span>Leader<span class="o">)</span> 3.1.0
+ContainerRuntime:   Ok
+Kubernetes:         Ok   OK
+Cilium:             Ok   OK
+</pre></div>
+<p>This setup is using VXLAN, a network virtualization technology that
+encapsulates Layer 2 frames within layer 4 UDP packets; Cilium also supports
+Geneve (If you want to deep more, you can read <a class="reference external" href="https://blog.russellbryant.net/2017/05/30/ovn-geneve-vs-vxlan-does-it-matter/">this post</a>
+by Russel Bryant).  To know the list of tunnels (The list of k8s nodes) that
+cilium is using, you can use the following command:</p>
+<div class="highlight"><pre><span class="k">for </span>cilium in <span class="k">$(</span>kubectl -n kube-system get pods --selector<span class="o">=</span>k8s-app<span class="o">=</span>cilium --output<span class="o">=</span><span class="nv">jsonpath</span><span class="o">={</span>.items..metadata.name<span class="o">}</span><span class="k">)</span>; <span class="k">do</span>
+<span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;===============${cilium}===============&quot;</span>
+        kubectl -n kube-system <span class="nb">exec</span> <span class="nv">$cilium</span> cilium bpf tunnel list
+        <span class="k">return</span>
+<span class="k">done</span>
+</pre></div>
+<p>This command iterate over all cilium-agent pods, after that, it executes the
+command <cite>cilium bpf tunnel list</cite> where you can see the network assigned per each
+node, and the IP address of the node. The correct output should be similar to
+this:</p>
+<div class="highlight"><pre><span class="o">===============</span>cilium-0m1gb<span class="o">===============</span>
+f00d::ac10:4:0:0     172.16.0.4
+10.2.0.0             172.16.0.2
+f00d::ac10:5:0:0     172.16.0.5
+10.5.0.0             172.16.0.5
+10.4.0.0             172.16.0.4
+f00d::ac10:3:0:0     172.16.0.3
+10.3.0.0             172.16.0.3
+f00d::ac10:2:0:0     172.16.0.2
+</pre></div>
+<p>When you try to schedule a new service, cilium will allocate a new IP to load
+balance the traffic, the list of the Load Balancers can be checked using the
+command <cite>cilium service list</cite> on any cilium-agent pod, the sample command is
+the following:</p>
+<div class="highlight"><pre><span class="k">for </span>cilium in <span class="k">$(</span>kubectl -n kube-system get pods --selector<span class="o">=</span>k8s-app<span class="o">=</span>cilium --output<span class="o">=</span><span class="nv">jsonpath</span><span class="o">={</span>.items..metadata.name<span class="o">}</span><span class="k">)</span>; <span class="k">do</span>
+<span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;===============${cilium}===============&quot;</span>
+        kubectl -n kube-system <span class="nb">exec</span> <span class="nv">$cilium</span> cilium service list
+        <span class="k">return</span>
+<span class="k">done</span>
+
+<span class="o">===============</span>cilium-0m1gb<span class="o">===============</span>
+ID   Frontend            Backend
+1    10.96.0.1:443       <span class="nv">1</span> <span class="o">=</span>&gt; 172.16.0.2:6443
+2    10.96.0.10:53       <span class="nv">1</span> <span class="o">=</span>&gt; 10.2.42.252:53
+3    10.109.204.101:80   <span class="nv">1</span> <span class="o">=</span>&gt; 10.3.15.138:5000
+                                                 <span class="nv">2</span> <span class="o">=</span>&gt; 10.4.15.138:5000
+                                                 <span class="nv">3</span> <span class="o">=</span>&gt; 10.5.114.197:5000
+</pre></div>
+<p>From here, you can follow the policy enforcement guide from the cilium docs. In
+the coming months, I will share with you all the stuff I am learning.</p>
+</div>
+
+
+      <div class="share">
+        <p>Share this:</>
+        <a href="http://twitter.com/share?text=Terraform recipes to test Cilium on Kubernetes via @eloycoto&url=http://www.acalustra.com/terraform-recipes-to-test-cilium-on-kubernetes.html"><i class="fa fa-twitter"></i></a>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/terraform-recipes-to-test-cilium-on-kubernetes.html"><i class="fa fa-facebook"></i></a>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/terraform-recipes-to-test-cilium-on-kubernetes.html&title=Terraform recipes to test Cilium on Kubernetes"><i class="fa fa-linkedin"></i></a>
+      </div>
+      <div class="tags">
+        <h3>Tags</h3>
+        <div class="taglist">
+            <span class="tag">
+              <a href="/tag/cilium.html" rel="tag">cilium</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/kubernetes.html" rel="tag">kubernetes</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/terraform.html" rel="tag">terraform</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/ubuntu.html" rel="tag">ubuntu</a>
+            </span>
+        </div><!--tags-->
+      </div>
+        <div class="comments">
+          <h4>Comments:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
+            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+
+      <div class="row">
+        <h4>Related articles:</h4>
+          <ul>
+              <li><a href="http://www.acalustra.com/how-vigo-council-migrate-to-linux.html">How Vigo Council migrate to Linux</a></li>
+              <li><a href="http://www.acalustra.com/voip-talk-at-librecon-2015.html">Voip talk at Librecon 2015</a></li>
+              <li><a href="http://www.acalustra.com/using-jenkins-pipelines-to-deploy-terraform.html">Using Jenkins Pipelines to deploy terraform</a></li>
+              <li><a href="http://www.acalustra.com/my-review-of-hashiconf-europe-16.html">My review of Hashiconf Europe 16</a></li>
+          </ul>
+      </div>
+
+
+    </div>
+
+  </article>
+</div>    </div><!--container-->
+
+    <div class="row footer">
+      <div class="container">
+        <div class="col-3">
+          <p>Eloy Coto</p>
+        </div>
+
+        <div class="col-3 col-offset-3">
+          <p> Contact: eloy.coto@gmail.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div><!--wrapper-->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36310774-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  </body>
+</html>

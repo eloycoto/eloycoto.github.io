@@ -39,23 +39,23 @@
 
     <div class="container content">
 <div class="row">
-
-  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
-    <div class="col-9 col-offset-1">
+  <article>
+    <header>
       <h1 itemprop="name headline">How to deploy multiple ssh-keys to different servers</h1>
       <div class="byline">
-        Escrito por:
         <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
           <span itemprop="name">
             <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
           </span>
         </span>
         on
-        <time datetime="2014-11-19T21:00:00" itemprop="datePublished">Wednesday November 19th 2014</time>
+        <time datetime="2014-11-19T21:00:00" itemprop="datePublished">November 19th, 2014</time>
       </div>
+    </header>
 
-      <div class="content" itemprop="articleBody">
-        <p>In <a class="reference external" href="http://www.ansible.com">Ansible</a> is quite easy add users, pubkeys and other stuff to any server. If
+
+    <div class="content" itemprop="articleBody">
+      <p>In <a class="reference external" href="http://www.ansible.com">Ansible</a> is quite easy add users, pubkeys and other stuff to any server. If
 you work in a organization where you have multiple servers, ssh-keys are a
 swiss-knife, but they are kinda difficult to handle if you create/destroy
 multiple servers every week.</p>
@@ -103,52 +103,49 @@ the <cite>vars</cite> section and their public keys to the <cite>public_keys</ci
 Ansible repo.</p>
 <p>Happy coding!</p>
 
+
+      <div class="share">
+        <p>Share this:</>
+        <a href="http://twitter.com/share?text=Ansible: how to maintain multiple ssh-keys in different servers via @eloycoto&url=http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html"><i class="fa fa-twitter"></i></a>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html"><i class="fa fa-facebook"></i></a>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html&title=Ansible: how to maintain multiple ssh-keys in different servers"><i class="fa fa-linkedin"></i></a>
       </div>
-
-      <p style="display:none" itemprop="keywords"> ansible, deploy, ssh, users,  </p>
-
+      <div class="tags">
+        <h3>Tags</h3>
+        <div class="taglist">
+            <span class="tag">
+              <a href="/tag/ansible.html" rel="tag">ansible</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/deploy.html" rel="tag">deploy</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/ssh.html" rel="tag">ssh</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/users.html" rel="tag">users</a>
+            </span>
+        </div><!--tags-->
+      </div>
         <div class="comments">
-          <h4>Commentarios:</h4>
+          <h4>Comments:</h4>
           <div id="disqus_thread"></div>
             <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
             <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
         </div> <!-- .comments-container -->
 
       <div class="row">
-        <h4>Artículos relacionados:</h4>
-            <ul>
-                <li><a href="http://www.acalustra.com/acelerate-your-ansible-playbooks-with-async-tasks.html">Acelerate your Ansible playbooks with async tasks</a></li>
-                <li><a href="http://www.acalustra.com/trick-and-tips-en-ansible.html">trick and tips en ansible</a></li>
-            </ul>
+        <h4>Related articles:</h4>
+          <ul>
+              <li><a href="http://www.acalustra.com/acelerate-your-ansible-playbooks-with-async-tasks.html">Acelerate your Ansible playbooks with async tasks</a></li>
+              <li><a href="http://www.acalustra.com/trick-and-tips-en-ansible.html">trick and tips en ansible</a></li>
+          </ul>
       </div>
 
 
     </div>
-    <div class="col-2">
-      <h3>Tags</h3>
-      <div class="tags">
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/ansible.html" rel="tag">ansible</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/deploy.html" rel="tag">deploy</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/ssh.html" rel="tag">ssh</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/users.html" rel="tag">users</a>
-          </span>
-      </div><!--tags-->
-      <div class="share">
-        <a href="http://twitter.com/share?text=Ansible: how to maintain multiple ssh-keys in different servers via @eloycoto&url=http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html"><i class="fa fa-twitter"></i></a>
-        <br>
-        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html"><i class="fa fa-facebook"></i></a>
-        <br>
-        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html&title=Ansible: how to maintain multiple ssh-keys in different servers"><i class="fa fa-linkedin"></i></a>
-      </div>
-    </div>
-  </div>
+
+  </article>
 </div>    </div><!--container-->
 
     <div class="row footer">

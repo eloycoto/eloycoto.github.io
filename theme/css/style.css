@@ -27,7 +27,7 @@ body {
   margin: 0;
   height: 100%;
   color: #3b3b3b;
-  font-family: "Arimo", "Helvetica Neue", Arial, sans-serif;
+  font-family: "medium-content-serif-font,Georgia,Cambria,Times,serif";
   line-height: 1.3;
 }
 h1 {
@@ -50,22 +50,37 @@ h3 a,
 h4 a {
   color: #649130;
 }
+.center {
+  text-align: center;
+}
 p {
   color: #3b3b3b;
-  font-family: "Arimo", "Helvetica Neue", Arial, sans-serif;
+  font-family: "medium-content-serif-font,Georgia,Cambria,Times,serif";
   line-height: 1.3;
   box-sizing: border-box;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1.58;
+  letter-spacing: -0.003em;
+}
+li {
+  color: #3b3b3b;
+  font-family: "medium-content-serif-font,Georgia,Cambria,Times,serif";
+  line-height: 1.3;
+  box-sizing: border-box;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1.58;
+  letter-spacing: -0.003em;
 }
 a {
   color: #3b3b3b;
 }
-img.profile {
-  width: 75%;
-  margin-left: 12.5%;
-  border: 4px solid #8bc34a;
-  border-radius: 3px;
-  margin-bottom: 12.5%;
-  margin-top: 10px;
+pre {
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 .btn {
   background-color: #8bc34a;
@@ -168,6 +183,46 @@ img.profile {
 }
 .strike {
   text-decoration: line-through;
+}
+.pr_list {
+  list-style-type: none;
+}
+.profile {
+  margin: 30px auto 30px;
+  width: 900px;
+}
+.profile .Headtitle {
+  display: block;
+  text-align: center;
+}
+.profile .Headtitle h1 {
+  display: inline-block;
+  padding-bottom: 5px;
+  position: relative;
+}
+.profile .Headtitle h1:before {
+  content: "";
+  position: absolute;
+  width: 50%;
+  height: 2px;
+  bottom: 0;
+  left: 25%;
+  border-bottom: 3px solid #abd47c;
+}
+.profile img.head {
+  width: 75%;
+  margin-left: 12.5%;
+  border-radius: 3px;
+  margin-top: 50px;
+}
+@media (max-width: 900px) {
+  .profile {
+    width: 100%;
+  }
+  .profile img.head {
+    margin-top: 10px;
+    margin-left: 0%;
+  }
 }
 .col-1 {
   width: 8.33333333%;
@@ -831,32 +886,74 @@ img.profile {
   border-bottom-left-radius: 3px;
   border-top-left-radius: 3px;
 }
-.blog {
-  padding-top: 20px;
+article {
+  background-color: white;
+  width: 900px;
+  margin: 30px auto 30px;
+  border: 1px solid #cfcfcf;
+  position: relative;
+  padding: 50px 0;
+  font-family: "medium-content-serif-font,Georgia,Cambria,Times,serif";
 }
-.blog img {
-  margin-left: auto;
-  margin-right: auto;
+article header {
+  text-align: center;
+  width: 720px;
+  margin: 0 auto 45px;
+}
+article header h1 a {
+  text-decoration: none;
+}
+article header h1 {
+  margin: 0;
+  color: #649130;
+  font-size: 3em;
+  line-height: 1.5;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+}
+article header h4 {
+  color: #649130;
+}
+article .content {
+  width: 720px;
+  margin: 0 auto;
+}
+article .content img {
+  margin: auto auto;
   display: block;
+  width: 100%;
 }
-.blog .byline {
-  color: #757575;
+article .byline a {
+  color: #649130;
 }
-.blog pre {
-  background-color: #d6d6d6;
+@media (max-width: 900px) {
+  article {
+    width: 100%;
+  }
+  article header {
+    width: 85%;
+  }
+  article .content {
+    width: 85%;
+  }
+  article .content img {
+    width: 85%;
+  }
+}
+.taglist {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.taglist a {
+  text-decoration: none;
+  padding-left: 0px;
+}
+.tag {
   border-radius: 4px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  padding-top: 10px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-.blog .tag {
-  border-radius: 4px;
-  background-color: #abd47c;
   color: #ffffff;
   cursor: pointer;
   display: inline-block;
+  border: 1px solid #8bc34a;
   margin-right: 5px;
   margin-bottom: 5px;
   overflow: hidden;
@@ -870,17 +967,13 @@ img.profile {
   padding-right: 10px;
   padding-left: 10px;
 }
-.blog .tag a {
-  color: #edf6e3;
+.tag a {
   text-decoration: none;
 }
-.taglist {
-  padding-left: 0px;
-  padding-right: 0px;
-}
-.taglist a {
-  text-decoration: none;
-  padding-left: 0px;
+.figure .caption {
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
 }
 blockquote {
   border-left: 10px solid #ccc;

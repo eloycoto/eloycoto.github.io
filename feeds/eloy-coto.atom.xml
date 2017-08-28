@@ -1,5 +1,1025 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>A calustra</title><link href="http://www.acalustra.com/" rel="alternate"></link><link href="http://www.acalustra.com/feeds/eloy-coto.atom.xml" rel="self"></link><id>http://www.acalustra.com/</id><updated>2016-06-20T16:00:00+02:00</updated><entry><title>My review of Hashiconf Europe 16</title><link href="http://www.acalustra.com/my-review-of-hashiconf-europe-16.html" rel="alternate"></link><updated>2016-06-20T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2016-06-20:my-review-of-hashiconf-europe-16.html</id><summary type="html">&lt;p&gt;Few days ago I was in Amsterdam, in the lovely &lt;a class="reference external" href="https://www.hashiconf.eu/"&gt;Hashiconf EU&lt;/a&gt;. This conference fulfilled all my expectations
+<feed xmlns="http://www.w3.org/2005/Atom"><title>A calustra</title><link href="http://www.acalustra.com/" rel="alternate"></link><link href="http://www.acalustra.com/feeds/eloy-coto.atom.xml" rel="self"></link><id>http://www.acalustra.com/</id><updated>2017-08-29T12:00:00+02:00</updated><entry><title>Terraform recipes to test Cilium on Kubernetes</title><link href="http://www.acalustra.com/terraform-recipes-to-test-cilium-on-kubernetes.html" rel="alternate"></link><updated>2017-08-29T12:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2017-08-29:terraform-recipes-to-test-cilium-on-kubernetes.html</id><summary type="html">&lt;p&gt;After almost five years, I left my job at &lt;a class="reference external" href="https://www.foehn.co.uk/"&gt;Foehn&lt;/a&gt;;
+I need a personal break, and I have decided early this year that late August
+would be a good time for doing it.&lt;/p&gt;
+&lt;p&gt;During this break, I'll be doing open source for few months before starting to
+look for a new place. I want to learn from the best software engineers, so I'll
+be contributing the next two months to &lt;a class="reference external" href="https://www.cilium.io/"&gt;Cilium project&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;If you don't know what is Cilium let me explain, Cilium is a software that
+enables network security mainly on container related projects, like Docker,
+Kuberntes or Itsio. The main difference between Cilium and other networking
+solutions is that Cilium relies in a heavy way on a lot of new technology that
+the kernel provides.&lt;/p&gt;
+&lt;div class="section" id="ebpf"&gt;
+&lt;h2&gt;eBPF&lt;/h2&gt;
+&lt;p&gt;Firstly, we need to understand what &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Berkeley_Packet_Filter"&gt;BPF (Berkeley Packet Filter)&lt;/a&gt; means. BPF is a Linux
+kernel bytecode interpreter originally introduced to filter network packets
+(tcpdump, ngrep).&lt;/p&gt;
+&lt;p&gt;A BPF program is compiled to bytecode by the &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Just-in-time_compilation"&gt;JIT&lt;/a&gt; compiler, it becomes
+a native CPU execution, as a consequence of that, the filter performance
+increases a lot.&lt;/p&gt;
+&lt;p&gt;BPF does not allow loops, so it is not Turing complete. A few years ago, an
+extension to the original BPF was created: &lt;a class="reference external" href="http://www.brendangregg.com/blog/2015-05-15/ebpf-one-small-step.html"&gt;eBPF(Enhanced BPF)&lt;/a&gt; adding
+new data structures (hashtables, arrays), tail calls, kernel hooks, etc...
+Furthermore, nowadays BPF programs can be executed in multiple kernel hooks,
+like networking, kprobes or system calls.&lt;/p&gt;
+&lt;p&gt;If you want to deep more about how to load BPF programs in your kernel I
+recommend &lt;a class="reference external" href="http://cilium.readthedocs.io/en/latest/bpf/"&gt;Cilium docs&lt;/a&gt;, &lt;a class="reference external" href="http://www.brendangregg.com/index.html#Videos"&gt;Brendan
+Gregg talks&lt;/a&gt; and &lt;a class="reference external" href="https://www.iovisor.org/technology/bcc"&gt;bcc project&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="xdp"&gt;
+&lt;h2&gt;XDP&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://www.iovisor.org/technology/xdp"&gt;XDP&lt;/a&gt; means Xpress Data Path; this
+technology was introduced in the kernel to make the packet processing much
+faster, so with XDP you can drop/pass packets very close to the network driver,
+without getting the packet into the kernel userspace. This technology made
+Facebook Load Balancers &lt;a class="reference external" href="https://twitter.com/tgraf__/status/854420210362851328"&gt;10x faster&lt;/a&gt; than IPVS
+deployments.&lt;/p&gt;
+&lt;p&gt;To have a simple vision of this technology, the following image from Cilium is
+self-explanatory:&lt;/p&gt;
+&lt;div class="align-center" align="center"&gt;
+    &lt;iframe src="//www.slideshare.net/slideshow/embed_code/key/5uvwUxYy1RjMd8?startSlide=60" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen&gt; &lt;/iframe&gt; &lt;div style="margin-bottom:5px"&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;If you have doubts about Cilium, you should check &lt;a class="reference external" href="https://www.slideshare.net/ThomasGraf5"&gt;Thomas Graf presentations&lt;/a&gt;, where you can learn the kernel
+technology on deep and how cilium implements it.&lt;/p&gt;
+&lt;p&gt;If you want to try Cilium, in the &lt;a class="reference external" href="http://cilium.readthedocs.io/en/latest/gettingstarted/"&gt;usage documentation&lt;/a&gt; you have some
+examples and a &lt;a class="reference external" href="http://cilium.readthedocs.io/en/latest/gettingstarted/#getting-started-using-docker"&gt;vagrant box&lt;/a&gt;
+created for testing purpose. However, if you want to test it using Kubernetes,
+things get a bit more complicated, you can use Minikube, but for testing
+networking tunnels you need more nodes and minikube just provides one.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://github.com/eloycoto/k8s-cilium-terraform"&gt;I created a Terraform recipe&lt;/a&gt; where you can set-up a Kubernetes cluster with
+Cilium-cni on Google Cloud Platform in a few minutes. To start playing with
+that, you need to follow the process described in the Readme.&lt;/p&gt;
+&lt;div class="align-center" align="center"&gt;
+            &lt;script type="text/javascript" src="https://asciinema.org/a/upgHBrafmBrKMMving98RQYAC.js" id="asciicast-upgHBrafmBrKMMving98RQYAC" data-speed="2" rows="10" data-theme="monokai" async&gt;&lt;/script&gt;
+&lt;/div&gt;&lt;p&gt;As soon that you login into the master node, you can see a few cilium daemon set
+pods working. If you want to know the cilium status you can run the following
+command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;for &lt;/span&gt;cilium in &lt;span class="k"&gt;$(&lt;/span&gt;kubectl -n kube-system get pods --selector&lt;span class="o"&gt;=&lt;/span&gt;k8s-app&lt;span class="o"&gt;=&lt;/span&gt;cilium --output&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;={&lt;/span&gt;.items..metadata.name&lt;span class="o"&gt;}&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;; &lt;span class="k"&gt;do&lt;/span&gt;
+&lt;span class="k"&gt;        &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;===============${cilium}===============&amp;quot;&lt;/span&gt;
+        kubectl -n kube-system &lt;span class="nb"&gt;exec&lt;/span&gt; &lt;span class="nv"&gt;$cilium&lt;/span&gt; cilium status
+        &lt;span class="k"&gt;return&lt;/span&gt;
+&lt;span class="k"&gt;done&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This command iterate over all cilium-agents pods, after that, it executes
+&lt;cite&gt;cilium status&lt;/cite&gt; comand to know the status of the daemon set. The sample output
+is the following, where you can see the list of &lt;a class="reference external" href="http://cilium.readthedocs.io/en/latest/concepts/#endpoints"&gt;endpoints&lt;/a&gt; and the status
+of all 3-party integrations.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;===============&lt;/span&gt;cilium-0m1gb&lt;span class="o"&gt;===============&lt;/span&gt;
+
+This &lt;span class="nb"&gt;command &lt;/span&gt;iterate over all cilium-agent pods
+Allocated IPv4 addresses:
+ 10.2.28.238
+ 10.2.42.252
+ 10.2.247.232
+Allocated IPv6 addresses:
+ f00d::ac10:2:0:1
+ f00d::ac10:2:0:ad
+ f00d::ac10:2:0:8ad6
+KVStore:            Ok   Etcd: http://172.16.0.2:9732 - &lt;span class="o"&gt;(&lt;/span&gt;Leader&lt;span class="o"&gt;)&lt;/span&gt; 3.1.0
+ContainerRuntime:   Ok
+Kubernetes:         Ok   OK
+Cilium:             Ok   OK
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This setup is using VXLAN, a network virtualization technology that
+encapsulates Layer 2 frames within layer 4 UDP packets; Cilium also supports
+Geneve (If you want to deep more, you can read &lt;a class="reference external" href="https://blog.russellbryant.net/2017/05/30/ovn-geneve-vs-vxlan-does-it-matter/"&gt;this post&lt;/a&gt;
+by Russel Bryant).  To know the list of tunnels (The list of k8s nodes) that
+cilium is using, you can use the following command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;for &lt;/span&gt;cilium in &lt;span class="k"&gt;$(&lt;/span&gt;kubectl -n kube-system get pods --selector&lt;span class="o"&gt;=&lt;/span&gt;k8s-app&lt;span class="o"&gt;=&lt;/span&gt;cilium --output&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;={&lt;/span&gt;.items..metadata.name&lt;span class="o"&gt;}&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;; &lt;span class="k"&gt;do&lt;/span&gt;
+&lt;span class="k"&gt;        &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;===============${cilium}===============&amp;quot;&lt;/span&gt;
+        kubectl -n kube-system &lt;span class="nb"&gt;exec&lt;/span&gt; &lt;span class="nv"&gt;$cilium&lt;/span&gt; cilium bpf tunnel list
+        &lt;span class="k"&gt;return&lt;/span&gt;
+&lt;span class="k"&gt;done&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This command iterate over all cilium-agent pods, after that, it executes the
+command &lt;cite&gt;cilium bpf tunnel list&lt;/cite&gt; where you can see the network assigned per each
+node, and the IP address of the node. The correct output should be similar to
+this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;===============&lt;/span&gt;cilium-0m1gb&lt;span class="o"&gt;===============&lt;/span&gt;
+f00d::ac10:4:0:0     172.16.0.4
+10.2.0.0             172.16.0.2
+f00d::ac10:5:0:0     172.16.0.5
+10.5.0.0             172.16.0.5
+10.4.0.0             172.16.0.4
+f00d::ac10:3:0:0     172.16.0.3
+10.3.0.0             172.16.0.3
+f00d::ac10:2:0:0     172.16.0.2
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;When you try to schedule a new service, cilium will allocate a new IP to load
+balance the traffic, the list of the Load Balancers can be checked using the
+command &lt;cite&gt;cilium service list&lt;/cite&gt; on any cilium-agent pod, the sample command is
+the following:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;for &lt;/span&gt;cilium in &lt;span class="k"&gt;$(&lt;/span&gt;kubectl -n kube-system get pods --selector&lt;span class="o"&gt;=&lt;/span&gt;k8s-app&lt;span class="o"&gt;=&lt;/span&gt;cilium --output&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;jsonpath&lt;/span&gt;&lt;span class="o"&gt;={&lt;/span&gt;.items..metadata.name&lt;span class="o"&gt;}&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;; &lt;span class="k"&gt;do&lt;/span&gt;
+&lt;span class="k"&gt;        &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;===============${cilium}===============&amp;quot;&lt;/span&gt;
+        kubectl -n kube-system &lt;span class="nb"&gt;exec&lt;/span&gt; &lt;span class="nv"&gt;$cilium&lt;/span&gt; cilium service list
+        &lt;span class="k"&gt;return&lt;/span&gt;
+&lt;span class="k"&gt;done&lt;/span&gt;
+
+&lt;span class="o"&gt;===============&lt;/span&gt;cilium-0m1gb&lt;span class="o"&gt;===============&lt;/span&gt;
+ID   Frontend            Backend
+1    10.96.0.1:443       &lt;span class="nv"&gt;1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; 172.16.0.2:6443
+2    10.96.0.10:53       &lt;span class="nv"&gt;1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; 10.2.42.252:53
+3    10.109.204.101:80   &lt;span class="nv"&gt;1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; 10.3.15.138:5000
+                                                 &lt;span class="nv"&gt;2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; 10.4.15.138:5000
+                                                 &lt;span class="nv"&gt;3&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; 10.5.114.197:5000
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;From here, you can follow the policy enforcement guide from the cilium docs. In
+the coming months, I will share with you all the stuff I am learning.&lt;/p&gt;
+&lt;/div&gt;
+</summary><category term="ubuntu"></category><category term="cilium"></category><category term="terraform"></category><category term="kubernetes"></category></entry><entry><title>España, o paraíso dos bocachanclas</title><link href="http://www.acalustra.com/espana-o-paraiso-dos-bocachanclas.html" rel="alternate"></link><updated>2017-07-31T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2017-07-31:espana-o-paraiso-dos-bocachanclas.html</id><summary type="html">&lt;p&gt;Sempre que escoito que en Galicia non contamos con talento, dánme ganas de
+pegar, non por que sexa agresivo, se non por quen fala nunca se parou a
+analizar os datos cun pouco de precisión, e van sacando as ganas a pouca xente
+que as ten.&lt;/p&gt;
+&lt;p&gt;Moitos dos que me coñecen saben que eu sempre estiven vinculado aos rallyes, un
+deporte que me namorou nos 90 no norte de Portugal, e que dende aquela nunca
+puiden deixar. Pero este artigo falaba de bocachanclas, e nos rallyes temos
+varios.&lt;/p&gt;
+&lt;p&gt;Fai &lt;a class="reference external" href="http://toyotagazooracing.com/release/2016/wrc/0929-01.html"&gt;dous anos Toyota MotorSport anunciou&lt;/a&gt; un novo
+programa dentro da máxima categoría dos Rallyes (WRC), esta nova infraestrutura
+deixaba as instalacións de Toyota en Alemania, e movíase as instalacións de
+Tommi Makinen Racing, en Finlandia. Todo o mundo dicía que era unha loucura,
+ninguén confiaba nos enxeñeiros finlandeses, e dende a prensa española xa se
+matou o proxecto antes de que arrancara. E mais, o ano pasado despois do Rally
+Finlandia, Pipo Lopez (experto no mundo dos rallyes) &lt;a class="reference external" href="http://blogs.as.com/sexta-a-fondo/2016/08/memorias-de-jyv%C3%A4skyl%C3%A4.html"&gt;escribía o seguinte&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote class="epigraph"&gt;
+&lt;p&gt;Un proyecto que ha perdido al director técnico, Michael Zotos, que ha tomado
+las de Villadiego. Hay dos teorías: que ha dejado el equipo por desavenencias
+con Makinen, y que lo ha hecho por cuestiones familiares, ya que para cualquier
+extranjero vivir en Finlandia no resulta nada fácil. Cualquiera de los dos
+motivos corrobora que no se están haciendo bien las cosas. Todos advertimos que
+montar la sede en Finlandia era un error, logísticamente, porque están lejos de
+los lugares de los test y de los proveedores, y a la hora de contratar gente,
+porque pocos extranjeros quieren ir a vivir a Finlandia, un país precioso, pero
+en el que la mitad del año es siempre de noche y está todo helado, la otra
+mitad es siempre de día, y, por ejemplo, no hay colegios internacionales, por
+lo que nadie con hijos quiere trasladarse allí (amén de su complicado idioma,
+que no habla casi nadie).&lt;/p&gt;
+&lt;p&gt;Los últimos rumores hablan de que los pilotos para el debut en 2017 serán Juho
+Hanninen y Esapekka Lappi. Dos grandísimos pilotos, pero no de primer nivel.
+Además, entiendo que el mercado finlandés no es el más importante para la
+marca, y centrarlo todo en el país nórdico no va a ser muy rentable
+comercialmente hablando. Y también cuentan que los tiempos de Makinen, que está
+compartiendo las labores de piloto probador con Hanninen, son tres segundos por
+kilómetro más lentos, con lo que poco puede aportar para el desarrollo del
+coche. Lo que nos da pena a todos es que el regreso de Toyota es una gran
+noticia para la familia del Mundial, y tal y como se están desarrollando las
+cosas, parece que podrían estrellarse…y eso no es bueno para nadie. ¡Ojalá se
+enderecen!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Pois xa me gustaría ter o nivel de fracaso de Toyota! O novo equipo tivo a
+sorte de fichar a un dos mellores pilotos, e coa súa axuda e poucos retoques
+conseguiron ter un coche moi competitivo, tanto que gañaron o segundo rally do
+ano. Un ano despois, un piloto que non era de primeiro nivel, gañou o seu
+primeiro rally do mundial, despois de soamente catro rallyes na máxima
+categoría, e con tan só 26 anos. A verdade que a min xa me gustaría fracasar
+así. Cabe salientar, que a día de hoxe, o equipo funciona moito mellor que o
+equipo de Citroen, e tivo moito mellor arranque que o proxecto Alemán de
+Hyundai ou do proxecto inglés de Mini.&lt;/p&gt;
+&lt;div class="align-center" align="center"&gt;
+    &lt;blockquote class="twitter-tweet" data-lang="es"&gt;&lt;p lang="en" dir="ltr"&gt;To win in Finland requires not only incredible driving skills, but bravery too. &lt;a href="https://twitter.com/EsapekkaLappi"&gt;@EsapekkaLappi&lt;/a&gt;, congratulations! &lt;a href="https://twitter.com/hashtag/WRC?src=hash"&gt;#WRC&lt;/a&gt; &lt;a href="https://t.co/G5V5mKOpeB"&gt;pic.twitter.com/G5V5mKOpeB&lt;/a&gt;&lt;/p&gt;&amp;mdash; Evan Rothman (@Evan_Rothman) &lt;a href="https://twitter.com/Evan_Rothman/status/891939842724171777"&gt;31 de julio de 2017&lt;/a&gt;&lt;/blockquote&gt;
+    &lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Quen me dera que Galicia tivera xente como Tommi Makinen&lt;/strong&gt;, un tipo con
+ambición para exportar o seu traballo a todo o mundo, un proxecto que unha
+persoa levou a unha zona “remota, pobre e sen talento”, pero que demostrou que
+moitas veces fai mais falla fouteza, que estrelas. Teño claro que as estrelas
+brillan de vez en cando, pero que o orgullo que representa para todo o equipo,
+que dende a remota Finlandia poder estar de ti a ti, co equipo de Alemáns e moi
+por riba dos parisinos vale moito mais que poder fichar a estrelas que igual
+non son capaces de render ao 100%.&lt;/p&gt;
+&lt;p&gt;Un bo amigo, sempre me di: &lt;em&gt;Eloy, que un proxecto que empeza en San Francisco ou
+Galicia ten o mesmo punto de partida, o acceso a tecnoloxía e a información é o
+mesmo, e non poñas esa desculpa por que non é válida&lt;/em&gt;. No mundo dos rallyes,
+catro equipos disputan a máxima categoría, a min encántame ver que un equipo
+esta situado nunha zona remota de Inglaterra, na que ningunha estrela quere
+estar, outro equipo en Finlandia. Que pena me queda que un deses equipos non
+este no Norte de Portugal, berce de moitos enxeñeiros destes equipos.&lt;/p&gt;
+&lt;p&gt;Oxalá, Luis Moya encabezara un proxecto así en Galicia. Oxalá, un día Juan López
+Frade, director de Suzuki, se embarcara nun proxecto de coche de rallyes
+eléctrico, dirixido por Luis Moya e feito en ARVidal. Un proxecto que estimule
+o potencial dos enxeñeiros galegos.&lt;/p&gt;
+&lt;p&gt;Finalmente, se algo me queda claro e que este é un pais de bocachanclas en
+todos os aspectos. Fai dous anos sentado nun despacho, propuxen que se lanzaran
+contactos polo centro de innovación marítima de Roll’s Royce, a resposta foi
+que Roll’s Royce era unha empresa en quebra, &lt;a class="reference external" href="http://www.helsinkitimes.fi/business/14596-rolls-royce-to-set-up-r-d-centre-in-turku-finland.html"&gt;poucos meses despois inverteron
+230 millóns de euros en Finlandia&lt;/a&gt;. Levo meses falando de promover un sistema
+que os contedores poidan ser descargados nas augas tranquilas das rías galegas,
+sempre me din que é imposible, pero os &lt;a class="reference external" href="https://www.youtube.com/watch?v=5VBD7hVRhx0"&gt;escandinavos xa traballan niso&lt;/a&gt;. Por
+outra parte carecemos de talento, pero este ano, todas as charlas de Vigolabs
+foron unha explicación de toda a tecnoloxía dos coches de Tesla.&lt;/p&gt;
+&lt;p&gt;Iso si, estou seguro que se Galicia fora un barrio de Madrid, ou unha rexión
+alemá, todo se podería facer. Pero estamos no fin do mundo, e aquí o talento
+non chega, grazas a deus, a conexión a internet, mal, pero algo chega.&lt;/p&gt;
+&lt;p&gt;Quédome contento por ver como os finlandeses de Jyväskylä demostran que moitas
+veces so fan falla vontade e bo facer, o resto ven só.&lt;/p&gt;
+</summary><category term="rally"></category><category term="galicia"></category></entry><entry><title>PyDay Galicia 2017: How to write better logs.</title><link href="http://www.acalustra.com/pyday-galicia-2017-how-to-write-better-logs.html" rel="alternate"></link><updated>2017-06-29T12:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2017-06-29:pyday-galicia-2017-how-to-write-better-logs.html</id><summary type="html">&lt;p&gt;Last Jun we had an excellent conference in Vigo Galicia. More than 180 python
+devs meet in the PyDay Galicia 2017. The conference was awesome; I learnt a lot
+of things related to Machine Learning, and I can catch up with some old friends
+like Ismael Hasan, who is now working in Elastic.&lt;/p&gt;
+&lt;p&gt;I gave a lighting talk related to logging. I want to explain the rules that I
+use to follow to write logs. Here you have the slides.&lt;/p&gt;
+&lt;div class="align-center" align="center"&gt;
+            &lt;script async class="speakerdeck-embed"
+                    data-id="54babce1fc51430ebdb88c2d4383458c"
+                    data-ratio="1.77777777777778"
+                    src="//speakerdeck.com/assets/embed.js"&gt;
+            &lt;/script&gt;
+&lt;/div&gt;&lt;p&gt;And many thanks to &lt;a class="reference external" href="https://twitter.com/alexhermida"&gt;&amp;#64;alexhermida&lt;/a&gt; and all &lt;a class="reference external" href="https://twitter.com/python_vigo"&gt;&amp;#64;python_vigo&lt;/a&gt; for organising it.&lt;/p&gt;
+</summary><category term="python"></category><category term="vigo"></category><category term="pyday"></category><category term="talks"></category></entry><entry><title>How Vigo Council migrate to Linux</title><link href="http://www.acalustra.com/how-vigo-council-migrate-to-linux.html" rel="alternate"></link><updated>2017-06-19T12:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2017-06-19:how-vigo-council-migrate-to-linux.html</id><summary type="html">&lt;p&gt;Last May I went to one of the most awesome meetups that were given in &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Vigo"&gt;Vigo&lt;/a&gt;.  Hugo, from Vigo council IT department,
+explained the process of how they migrated more than 800 workstations to Linux,
+a process that was started on 2007. I am sharing some notes about his
+presentation because I think it could be really useful and interesting for you
+to know how they made it.&lt;/p&gt;
+&lt;img alt="Vigo council HQ" class="align-center" src="img/concello.jpg" /&gt;
+&lt;p&gt;Firstly, let me introduce the IT part of the Vigo council. They have close to
+1000 workstations, and they need to help all the citizen (around 300K).  All
+the people that work in the council are public employees, so sometimes they are
+not that proactive, something hey made Hugo's team be aware from the beginning
+that the change would be difficult.&lt;/p&gt;
+&lt;p&gt;Over 2007, the IT department had multiple problems, all the workstations were
+pretty old, all the OS has self-login activated without any central credentials
+manager, workstations stored all the data, and sometimes user lost work.
+Besides, the council did not have much money (Spanish financial crisis had just
+started), and invest in IT was not a priority.&lt;/p&gt;
+&lt;p&gt;Due to budget problems, the first idea that they had was to start to use
+OpenOffice, so that they can save money from Microsoft Office licenses. Over
+three months one guy provided support around custom macros and other issues.
+After these months all the people were using the OpenOffice suite. To avoid
+problems they have some Workstations with Microsoft office to deal with
+non-compatible files, but the small migration was made without much trouble.&lt;/p&gt;
+&lt;p&gt;The next problem was to renew around 600 workstations, with the money that they
+had at that time they could only achieve 30 workstations using Windows so that
+the update will take too long. After a deep thinking, they made a proof of
+concept with custom workstations and Linux, with this approach they could
+upgrade around 100 workstations per year. Finally, they chose the risky
+solution, What brave people they are! &amp;quot;Afouteza&amp;quot; is called in Galicia :-)&lt;/p&gt;
+&lt;div class="align-center" align="center"&gt;
+&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;Vigo
+council have more than 800 users running on &lt;a
+href="https://twitter.com/ubuntu"&gt;@ubuntu&lt;/a&gt; 👏👏👏👏 &lt;a
+href="https://t.co/InxGR9ujFJ"&gt;pic.twitter.com/InxGR9ujFJ&lt;/a&gt;&lt;/p&gt;&amp;mdash; Eloy
+Coto 🐠 (@eloycoto) &lt;a
+href="https://twitter.com/eloycoto/status/860181098420207616"&gt;May 4,
+2017&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+&lt;/div&gt;&lt;p&gt;Consequently to this change, they knew that this migration would be hard, and
+people will complain, so they focused on providing more much value on Linux
+than Windows, their main idea was to seduce employees to request Linux, to
+achieve that, they made the following things before start:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;They created a new LDAP schema, this allows to all new users to login in any
+Linux workstations and always use the same credentials.&lt;/li&gt;
+&lt;li&gt;All the migrated users will have a new email server, so they can use IMAP,
+with the LDAP login and Thunderbird as a client.&lt;/li&gt;
+&lt;li&gt;They added some feature switches on the internal applications that made the
+Linux version more productive than the Windows version, as a consequence, users
+can finish their work faster on Linux.&lt;/li&gt;
+&lt;li&gt;Login in the shared folders with the LDAP credentials.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The decision was made, all the IT department agreed, so the next step was to
+start the migration with the less possible trouble. The process began with the
+smallest teams; firstly,  they provided all the peripherals that were Linux
+compatible (one of the hardest points at that time). Next, they got all the
+users in that department and showed them the basic use (one-day training),
+afterwards, they took the most proactive user in that department and gave him
+three days training so that user was the mentor for the team. The following two
+weeks after the migration, one member of the IT team was sitting close to them,
+so if they had any question they can ask directly, also they had a proper
+feedback from the users.&lt;/p&gt;
+&lt;p&gt;One of the hardest point to fix was when they users migrated to Linux; they
+forgot that the things in Windows sometimes fail too, consequently, the IT
+received many calls blaming Linux, but the issue was present in Windows too.
+Instead of lost hope, they only fixed problems in Linux using feature switches,
+but they did not found a good solution for this problem.&lt;/p&gt;
+&lt;p&gt;The first year was rough, a lot of new issues, making more mental training than
+software changes but the users after a while were happy, the next five years
+have continued without to much trouble. In the early months, to increase the
+success rate, they need to create an audience for all employees. To begin with,
+they started to write a blog in the council intranet, every month they shared
+something to make the work faster using Linux, in the second year a big
+percentage of the employees requested a new computer with Linux installed, they
+only see good things in the Linux workstations!&lt;/p&gt;
+&lt;p&gt;Apart from user's side, they had more challenges ahead: the hardware one was
+hard, at that time many scanners, printers and barcode scans were not Linux
+compatible, so when they bought a new peripheral, they sent that to the next
+department to migrate, so the problem was fixed.&lt;/p&gt;
+&lt;p&gt;Another fun history is around software! They started using Fedora 7, and they
+were happy until the day that they need to upgrade to a new version. When they
+tried, the update broke some packages, and they could not update with a simple
+shell script. After a few tries, they needed something that they can update
+without much trouble, at that time, Ubuntu was starting to make it famous, many
+users began to use it, they gave a try, and finally, Ubuntu 10.04 was the OS
+flavour for all users.&lt;/p&gt;
+&lt;div class="align-center" align="center"&gt;
+&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;We
+started using Fedora 8, but the updates were painful. With Ubuntu 10.04 we can
+update versions without problems. &lt;a
+href="https://twitter.com/hashtag/vigotech?src=hash"&gt;#vigotech&lt;/a&gt;&lt;/p&gt;&amp;mdash;
+Eloy Coto 🐠 (@eloycoto) &lt;a
+href="https://twitter.com/eloycoto/status/860190636158353411"&gt;May 4,
+2017&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+&lt;/div&gt;&lt;p&gt;The biggest problem that they found behind Ubuntu was the desktop environment,
+so they started using Gnome 2, but after a while, Ubuntu chose to move to
+Unity.  Furthermore, Gnome 3 was a big change from the previous version. They
+made a proof of concept with Gnome 3, and users were lost, so they decided to
+switch to Ubuntu Mate, that it is the default flavour that they are using now.&lt;/p&gt;
+&lt;p&gt;What about the OS updates? With more than 800 workstations they will be fun,
+isn’t it? How they made updates? How do they know that all will work when the
+update was applied? They created an excellent workflow, every day all the OS
+checked security’s issues, but an internal software controls the software
+updates/upgrades. Every day, ten workstations (from different departments) will
+be updated in non-working hours, if something fails, they only had ten
+co-workers with problems, this is slow, but they prevent to get a massive
+outage on the council. So, each computer gets two significant updates per year.&lt;/p&gt;
+&lt;p&gt;At the moment, the council only have the minimum computers running on Windows,
+due to some special requirements like CAD applications, or something similar.
+However, the root is based all on Linux OS.&lt;/p&gt;
+&lt;p&gt;I am sure that one question that you have is how many people are currently
+working on this, nowadays only one guy, who provide first line support to all
+users, and he is the person in charge to make updates and new features. He
+already mentions that they are collecting all the cultivated in the past, so
+nowadays add a new feature meant to add a few lines of code in their
+orchestration tool.&lt;/p&gt;
+&lt;p&gt;I learnt a lot on this meetup; I am glad to met these IT guys a few years ago,
+I have learnt a lot from them! They shared that sometimes you need to deal with
+persons instead computers, they made an excellent point, that when you make a
+change, you need to create an audience first, and gave to the proactive people
+what they want and they will pull their closer people to the success.&lt;/p&gt;
+&lt;p&gt;I am glad to share this history with you; I Hope you enjoyed it!&lt;/p&gt;
+</summary><category term="ubuntu"></category><category term="council"></category><category term="vigo"></category></entry><entry><title>Fosdem 2017 review</title><link href="http://www.acalustra.com/fosdem-2017-review.html" rel="alternate"></link><updated>2017-02-09T16:00:00+01:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2017-02-09:fosdem-2017-review.html</id><summary type="html">&lt;p&gt;My third &lt;a class="reference external" href="https://fosdem.org/2017/"&gt;FOSDEM&lt;/a&gt; is over, this year there was a
+&lt;a class="reference external" href="https://fosdem.org/2017/schedule/track/real_time_communications/"&gt;Real Time Comms dev room&lt;/a&gt; in place,
+one of the best places to keep up to date with all VoIP technologies.
+Furthermore, in this conference, you can just jump into another track and learn
+from them, this helps you to be out of your comfort zone. I am so glad to be
+there and have the chance to have a chat with all open-source community.&lt;/p&gt;
+&lt;p&gt;First I want to start thanking the RTC track organisers, &lt;a class="reference external" href="https://twitter.com/saghul"&gt;Saúl Ibarra&lt;/a&gt; and &lt;a class="reference external" href="https://twitter.com/miconda"&gt;Daniel-Constantin Mierla&lt;/a&gt;, organise this type of events is a tremendous
+amount of work.&lt;/p&gt;
+&lt;p&gt;The day started with an excellent WebRTC introduction, I got in touch with
+&lt;a class="reference external" href="https://github.com/webrtc/adapter"&gt;Adapter.js&lt;/a&gt; library, Steven advised us to
+limit the endpoints if we can, and he shared that sometimes you should guess
+where is the media problem instead find it. The second talk, by &lt;a class="reference external" href="https://fosdem.org/2017/schedule/speaker/martin_lagrange/"&gt;Martin&lt;/a&gt;, was about
+real-time protocols and he made a splendid introduction about few tools.
+&lt;a class="reference external" href="https://telepathy.freedesktop.org/"&gt;Telepathy&lt;/a&gt; talk was quite sweet, it is
+nice to know that all this software still works and new ideas are on the
+roadmap. IoT XMPP by &lt;a class="reference external" href="https://fosdem.org/2017/schedule/speaker/daniel_wisnewski/"&gt;Daniel&lt;/a&gt; was great; I
+have some doubts about XMPP on the IoT world related to power consumption and
+bandwidth, but the idea behind &lt;a class="reference external" href="http://xmpp.org/extensions/xep-0323.html"&gt;XEP-0323&lt;/a&gt; is excellent.&lt;/p&gt;
+&lt;p&gt;The best VoIP talk, from my point of view, was from &lt;a class="reference external" href="https://twitter.com/mattcjordan"&gt;Matt Jordan&lt;/a&gt; about Asterisk scalability. The concept is
+the same that Matt argued few times in the past conferences. It was awesome to
+see new &lt;a class="reference external" href="https://wiki.asterisk.org/wiki/display/AST/Asterisk+14+Recordings+REST+API#Asterisk14RecordingsRESTAPI-getStoredFile"&gt;ARI methods for recordings&lt;/a&gt;,
+the &lt;a class="reference external" href="https://blogs.asterisk.org/2016/09/21/asterisk-14-publishing-extension-state/"&gt;publish-subscribe interface&lt;/a&gt;
+(I did not have an idea about that and it fixes many problems). Following Matt,
+the Basque VoIP mafia took action, Saúl made an introduction to &lt;a class="reference external" href="https://meet.jit.si"&gt;Jitsi WebRTC
+solutions&lt;/a&gt;, &lt;a class="reference external" href="https://github.com/jmillan"&gt;Jose Luis Millán&lt;/a&gt; about &lt;a class="reference external" href="http://www.jssip.net/"&gt;JsSIP&lt;/a&gt;, and
+&lt;a class="reference external" href="https://github.com/ibc/mediasoup"&gt;Mediasoup&lt;/a&gt; was explained by &lt;a class="reference external" href="https://twitter.com/ibc_tw"&gt;Iñaki Baz&lt;/a&gt;. I recommend you to view those talks online if
+you weren't there.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://fosdem.org/2017/schedule/event/ring_opendht/"&gt;Ring's presentation&lt;/a&gt;
+was great to be out of my comfort zone and to see how other projects solve
+their problems. Next talk was by the energetic Olle; he showed a very clear
+state of the art why &lt;a class="reference external" href="https://fosdem.org/2017/schedule/event/dualstack/"&gt;IPv6 implementation is failing&lt;/a&gt;. It was good to hear from
+first-hand info about new &lt;a class="reference external" href="https://fosdem.org/2017/schedule/event/opensips/"&gt;OpenSips&lt;/a&gt;; new release looks
+promising based on Event Routes, plus the CGRates module or RabbitMQ
+integration. On the other hand, &lt;a class="reference external" href="https://fosdem.org/2017/schedule/speaker/giovanni_maruzzelli_gmaruzz/"&gt;Giovanni&lt;/a&gt; from
+OpenTelecoms made an excellent explanation about Freeswich scalability methods
+and explained very well the distribution and partition methods. After lunch,
+&lt;a class="reference external" href="https://fosdem.org/2017/schedule/speaker/lorenzo_mangani/"&gt;Lorenzo&lt;/a&gt; gave a
+talk about Hormer; I got a lot of new ideas, and things like &lt;a class="reference external" href="https://siren.solutions/kibi-a-kibana-fork-for-data-intelligence/"&gt;Kibi&lt;/a&gt; were mind
+blowing for me. I thoroughly recommend to follow &lt;a class="reference external" href="https://github.com/lmangani"&gt;Lorenzo on Twitter and GitHub&lt;/a&gt;; he is full of common-sense with innovative
+ideas. The last VoIP talk that I attend was given by Daniel about &lt;a class="reference external" href="https://www.kamailio.org/w/2016/05/sip-routing-in-lua-or-python/"&gt;Kemi&lt;/a&gt;, I need to
+say that he introduced something awesome in the next Kamailio version, this
+interface is going to be essential in the near future.&lt;/p&gt;
+&lt;img alt="Miconda about kemi" class="align-center" src="img/fosdem-1.jpg" /&gt;
+&lt;p&gt;After my RTC update, my idea for Fosdem was to taste Belgium beers and extend
+my knowledge of my second skills like DevOps, Python and Postgresql.&lt;/p&gt;
+&lt;p&gt;I started with &lt;a class="reference external" href="https://fosdem.org/2017/schedule/event/grpc101/"&gt;GRPC&lt;/a&gt;; it is
+a high-performance RPC framework. I use to work with that on CGRates. It was
+good to know that Google is using GPRC over HTTP2, so it is much faster and
+bi-directional streaming can be used.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://joshix.com/"&gt;CoreOS DocOps&lt;/a&gt; introduced &lt;a class="reference external" href="https://github.com/coreos/prometheus-operator"&gt;Kubernetes
+Operators&lt;/a&gt;. From my point of
+view, all containers/microservers miss the point about the state, with
+Kubernetes operators this state can be dry or handled. This feature is
+game-changing in the world of the containers, plus some examples shown during
+the talk helped the audience to get it. This technology fixes something that I
+usually work around using Hashicorp tools, in the following months I am going
+to check k8s operators and deploy.&lt;/p&gt;
+&lt;p&gt;Finally, I tried to be in a Testing dev room, but it had a massive queue, so I
+moved into the Postgresql track. &lt;a class="reference external" href="https://fosdem.org/2017/schedule/speaker/jimmy_angelakos/"&gt;Jimmy&lt;/a&gt; introduced RDF
+(Resource Description Framework). He provided some examples, and I think that I
+would use that in the future. Need to say that I learn something awesome
+Sqlalchemy stream_results.  After that, &lt;a class="reference external" href="https://fosdem.org/2017/schedule/speaker/gulcin_yildirim/"&gt;Gülçin&lt;/a&gt; from 2ndquadrant
+explained all the replication process for fault tolerance; she explained in
+cleartext the different wal level settings, something that I did not understand
+at all, but she made an awesome explanation, you should check the video. The
+last Postgres talk by &lt;a class="reference external" href="https://fosdem.org/2017/schedule/speaker/gunnar_bluth_nick/"&gt;Gunnar Bluth&lt;/a&gt;, introduced to
+me, two new concepts:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;em&gt;RTO(recovery time objective)&lt;/em&gt;: How long took to recover from an incident&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;RPO(Recovery point objective)&lt;/em&gt;: How many lost are you going to have from an incident.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I knew all the technical details of this talk, but need to say that this
+presentation changed how I am going to think about redundancy in the future, I
+always looking for issues, but never think about RTO or RPO and never how to
+measure it.&lt;/p&gt;
+&lt;p&gt;Fosdem is over. This year I shared this travel with some friends from Vigo,
+which made myself happy during all the trip. I learnt a lot from them too; &lt;strong&gt;I
+am so glad&lt;/strong&gt; to share these days with a few python and ruby hackers, a &lt;a class="reference external" href="https://twitter.com/diepg"&gt;Webkit
+committer&lt;/a&gt; and the &lt;a class="reference external" href="http://twitter.com/felixgomezlopez"&gt;Main dev&lt;/a&gt; of one of the &lt;a class="reference external" href="https://www.meneame.net/"&gt;largest Spain websites&lt;/a&gt;. Thanks to you all! Besides it was good to see in
+person some people from the VoIP community, and meet some people that I didn't
+meet &lt;a class="reference external" href="https://twitter.com/hellc2/status/827878864743518208"&gt;before&lt;/a&gt;.&lt;/p&gt;
+&lt;img alt="Vigo dev community on fosdem 2017" class="align-center" src="img/fosdem-2.jpg" /&gt;
+&lt;p&gt;Finally, some people have problems with the Fosdem Agenda. I need to say that I
+did not have these problems, but a few weeks ago before Fosdem, I made my plan.
+Sometimes in this conference is better to see fewer talks but be at the door 10
+min before, and not leave some talks in the middle (that it is very
+unrespectful) or see the agenda in the laptops and check the content of the
+next speaker. This type of conference should be prepared in advance, if not you
+are going to be frustrated in the queues.&lt;/p&gt;
+&lt;p&gt;Thanks to all, and see you next year!&lt;/p&gt;
+</summary><category term="fosdem"></category><category term="kamailio"></category><category term="conferences"></category></entry><entry><title>Postgresql Talk in the PHPVigo meetup</title><link href="http://www.acalustra.com/postgresql-talk-in-the-phpvigo-meetup.html" rel="alternate"></link><updated>2017-01-25T16:00:00+01:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2017-01-25:postgresql-talk-in-the-phpvigo-meetup.html</id><summary type="html">&lt;p&gt;I had the luck to gave a talk at  the &lt;a class="reference external" href="https://www.meetup.com/es-ES/PHPVigo/"&gt;PHPVigo Meetup&lt;/a&gt;. It was a postgresql introduction to
+all php community.&lt;/p&gt;
+&lt;div style="width: 70%;" class="align-center" align="center"&gt;
+&lt;script async class="speakerdeck-embed"
+data-id="0909c5cdb8224c25a3f88ef113968609" data-ratio="1.77777777777778"
+src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
+&lt;/div&gt;&lt;p&gt;Thanks to &lt;a class="reference external" href="https://twitter.com/felixgomezlopez"&gt;Félix&lt;/a&gt; and &lt;a class="reference external" href="https://twitter.com/sergiocarracedo?lang=en"&gt;Sergio&lt;/a&gt; for organising this &lt;strong&gt;awesome&lt;/strong&gt;
+meetup.&lt;/p&gt;
+&lt;p&gt;Happy code!&lt;/p&gt;
+</summary><category term="postgresql"></category><category term="phpvigo"></category><category term="talks"></category></entry><entry><title>O fracaso do MediaLab "A Industriosa"</title><link href="http://www.acalustra.com/o-fracaso-do-medialab-a-industriosa.html" rel="alternate"></link><updated>2016-12-29T10:00:00+01:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2016-12-29:o-fracaso-do-medialab-a-industriosa.html</id><summary type="html">&lt;p&gt;Poucas veces escribín con tanta tristeza, hoxe, pra finalizar con este 2016 vou
+documentar o fracaso de levar a cabo o &lt;strong&gt;MediaLab A industriosa&lt;/strong&gt;, un proxecto
+no que empecei a traballar aos inicios do ano, pra así promover unha necesidade
+que ten a cidade, ademais de facer e ese necesario &lt;a class="reference external" href="https://vigopedia.com/biografias-antonio-sanjurjo-badia/"&gt;homenaxe a Sanjurjo Badía&lt;/a&gt;.  Este proxecto,
+esta documentado na seguinte presentación:&lt;/p&gt;
+&lt;div style="width: 70%;" class="align-center" align="center"&gt;
+            &lt;script async style="witdth: 70%" class="speakerdeck-embed" data-id="d65d319f72324a50b554f9b88311b352" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
+    &lt;/div&gt;&lt;p&gt;Cando expuxemos este proxecto, tiñamos pensando arranxar os seguintes
+problemas:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Os universitarios terían un espazo onde coñecer xente que esta traballando en
+empresas de I+D locais. Estes poderían recibir consellos de xente que traballa,
+para así preparase mellor sobre as necesidades do futuro. Ao existir este fío
+condutor, moitas empresas contratarían directamente a xente que estivera
+presente no medialab.&lt;/li&gt;
+&lt;li&gt;Os traballadores que teñan ideas terían un sitio onde encontrar validación ou
+posibles solucións, polo que se conseguirían promover sinerxias en diferentes
+proxectos nun nivel técnico. Como pasa en menor media cas meetups de Vigolabs.&lt;/li&gt;
+&lt;li&gt;Sería un sitio de prototipado, polo que os asistentes a programas de
+aceleración de empresas poderían usalos. Sería un sitio perfecto pra facer
+xerminar produtos, cun custe so en tempo de traballo, non en ferramenta.&lt;/li&gt;
+&lt;li&gt;O espazo é idóneo para proxectos como UVigo Motorsport, hackahtons, etc..  e
+facer unha vinculación activa entre proxectos lúdicos  e a empresa. Proxectos
+que teñen unha gran repercusión noutros países, e aquí case non se aprecia o
+gran potencial que teñen.&lt;/li&gt;
+&lt;li&gt;Sería a porta de entrada pra que a industria do mar, viñera e propuxera
+proxectos ou ideas a un sector tecnolóxico. Como xa pasou no Hackathon Sanjurjo
+Badía.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As bases económicas deste proxecto son relativamente grandes para un
+traballador, pero relativamente pequenas para as administracións, sendo o custo
+o seguinte:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;strong&gt;Laborais&lt;/strong&gt;: serían un traballador, cun custo total en torno aos 35.000€. Esta
+persoa encargaríase dos socios, mantemento, promoción e abrir o espazo.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Espazo electrónica&lt;/strong&gt;: Isto suporía  en torno aos 5000€, debido a que o
+material é mínimo.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Espazo prototipado&lt;/strong&gt;: Isto sería un dos mais custosos, 8000€. Que constaría
+dun par de impresoras 3D, cortadora laser, etc..&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Espazo madeira/fibra&lt;/strong&gt;: pantoroutes, fresadoras, etc.. Isto serían en torno
+aos 5000€.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Espazo matricería&lt;/strong&gt;: Torno e fresadoras manuais pra facer pequenas cousas en
+ferro. Isto supón un custo en torno aos 9.000€, pero podería comprarse no
+segundo ano ou conseguir algunha doazón de segunda man.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Espazo eventos&lt;/strong&gt;: Cadeiras, mesas, proxector, estantes, iluminación etc..
+isto suporía uns 4.000€&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Temas legais&lt;/strong&gt;: Asesoría, Avogados, prevención de riscos laborais,
+extintores, etc.. isto sería o mais compricado, 10000€&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Espazo e gastos correntes&lt;/strong&gt;: Sen definir o espazo é compricado poder dar unha
+cifra sobre isto.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Contando, que moita xente, axudaría e abriría en horas non laborais. O espazo
+tería unha vida propia por moita xente da comunidade ao mais puro estilo
+asociación veciñal. En canto ao presuposto, e grande no inicio, pero reduciríase
+aos 80.000 euros anuais a partir do segundo ano(Laboral/Legais/Gastos
+correntes).  Sendo un presuposto minúsculo en relación cos presupostos das
+administracións localizadas en Vigo: Concello(230M€), Zona Franca (55M€),
+Autoridade Portuaria (25M€), Deputación de Pontevedra (150M), Eixo Atlántico
+(3M€), Xunta (9.000M€)&lt;/p&gt;
+&lt;img alt="Hackahton Sanjurjo Badía participantes" class="align-center" src="img/hackathon-supertramp.jpg" /&gt;
+&lt;p&gt;O espazo, que fala de aceleradoras, falase das existentes. En canto a empresa
+tractoras, eu ofrecín os meus contactos, entre os  que estaban: Intel, IBM,
+Udoo, Rolls&amp;amp;Royce, ademais de moitas empresas locais que querían ser padriños
+deste espazo.&lt;/p&gt;
+&lt;p&gt;O proxecto presentouse no Concello de Vigo inmediatamente despois do Hackathon
+Sanjurjo Badía. E presentouse en Zona Franca a inicios de Outubro. Ambas
+administracións, en maior ou menor media, amosaron a súa implicación no
+proxecto, polo menos escoitaron, o que xa significaba un triunfo.&lt;/p&gt;
+&lt;p&gt;Ca Autoridade portuaria de Vigo por desgraza, en ano e medio, non conseguimos ter
+unha reunión con eles. Intentamos contactar con eles antes da &lt;a class="reference external" href="http://hacksb.vigolabs.gal/"&gt;Hackathon
+Sanjurjo Badía&lt;/a&gt;, sendo imposible. Despois desta,
+foi imposible cadrar axenda para ter unha reunión. Debido a nula comunicación,
+temos que matar o proxecto. Non ten sentido facer un proxecto de &lt;a class="reference external" href="http://praza.gal/opinion/3527/vigo-capital-global-da-tecnoloxia-maritima/"&gt;Vigo cidade
+tecnolóxica do mar&lt;/a&gt;,
+sen a colaboración do Porto. Ademais nunca conseguimos, que se falara dun
+proxecto en conxunto das administracións, pra fomentar isto como marca de
+Vigo/Galicia.&lt;/p&gt;
+&lt;img alt="https://www.flickr.com/photos/argonavigo/15943434738/in/photolist-qhSgFQ-8daG5x-7zivjp-pfJNgA-pfuhya-8o2Zav-9jAB6V-ehAaFM-FC8XAJ-yKkQ8e-BUkJnp-7KDW4e-i6tfa7-eHjmUQ-auhgxn-6kPgUy-i8pskM-nmhQ8B-7VN7ou-7FkDRJ-e5znoR-EZosUz-rfGD49-8rqdYg-aB5DMP-Cqxv5q-pQKmWQ-AUdqDW-DuuYRf-8zqpdQ-52svDK-8qPv7n-6QM9pD-6mihKF-6F1L5P-5hesZt-fekEQf-5Px7nm-61SbbG-aibNxw-FSqudV-xPCzJn-bufpWr-CkuJXS-o6AAep-5CK8UX-6sm6dS-A2nXBS-agyJKm-8LaPMa" class="align-center" src="img/vigo_ship.jpg" /&gt;
+&lt;p&gt;Por desgraza no Gran Vigo somos soamente 600.000 persoas, Galicia ten menos de
+3 millóns. É incrible que esteamos pelexados sur con norte, azuis con roxos,
+fulanito con venganito, somos catro gatos e inda por riba non podemos poñer as
+raíces para un proxecto de futuro. Se de verdade queremos que os nosos fillos
+poidan vivir aquí teremos que entendernos, se non pasará como con pobos como
+Mondariz ou Tui, que de ser grandes pobos fai un par de séculos, hoxe en día
+quedaron reducidos a pequenos concellos. A globalización viu pra quedarse, e
+vives con ela, ou cómete. Vigo e Galicia, dende o meu punto de vista, vai ser
+comida, poñendo como exemplo a Detroit.&lt;/p&gt;
+&lt;p&gt;Para mais INRI, o porto de Rotterdam, a través dun patrocinador da Hackathon,
+mirou en internet o resultado da Hackathon Sanjurjo Badía. A raíz de un par de
+correos eles ofrecéronnos traballo para incorporarnos no seu &lt;a class="reference external" href="https://www.portofrotterdam.com/en/events/opening-ramlab"&gt;proxecto de
+promoción de empresas tecnolóxicas do mar&lt;/a&gt;. Temos envexa,
+que a Autoridade Portuaria de Rotterdam leva cinco edicións da súa &lt;a class="reference external" href="http://worldporthackathon.com/"&gt;Hackathon&lt;/a&gt;, chamada World, pelexando co Mundo, non con
+Marín ou Leixoes, e repartindo premios de 15.000€ aos asistentes. Mentres que a
+propia Autoridade portuaria dotou o seu MediaLab das últimas novidades de
+&lt;a class="reference external" href="https://www.portofrotterdam.com/en/news-and-press-releases/ramlab-opens-at-rdm-rotterdam"&gt;Impresión 3D en metal&lt;/a&gt;.
+É unha pena que estas iniciativas en Vigo teñan que vir da man de persoas
+alleas ao entorno marítimo, e que teñan que apostar o seu tempo e cartos en
+facer algo que debería facer a administración pública.&lt;/p&gt;
+&lt;p&gt;Todo parece indicar que o futuro de Vigo é &lt;a class="reference external" href="http://www.economiadigital.es/gles/notices/2016/12/crisis-galicia-industrias-77482.php"&gt;un destino turístico&lt;/a&gt;.
+Acabando con todo iso que nos gustaba os de aquí, ir a praia e poder respirar,
+ver as noticias de grandes barcos construídos, ou ir ao centro de Vigo e poder
+non sentirte un guiri. Moitos galegos escapamos da vida onde hai turistas, e
+&lt;strong&gt;Galicia estase convertendo nunha fulana barata do turismo&lt;/strong&gt;, e como
+consecuencia, perdendo parte do seu encanto.&lt;/p&gt;
+&lt;p&gt;Darlle, dende aquí, os meus parabéns aos proxectos de &lt;a class="reference external" href="http://www.matadoirocompostela.com/"&gt;Matadoiro (Compostela)&lt;/a&gt; e &lt;a class="reference external" href="http://colab.coruna.gal/es/"&gt;CoLab(A Coruña)&lt;/a&gt;, ambos proxectos de aprendizaxe aberto cun
+gran recorrido en ambas cidades. Tamén recordarlle que o realmente importante é
+buscarlle contexto local a eses espazos, e servir de utilidade a economía
+local, para que esta poda tirar do espazo. Un sitio onde se xeran ideas de casa
+intelixente non é sitio do que as economías locais poidan tirar, o contexto
+nestes espazos é todo.&lt;/p&gt;
+&lt;p&gt;Este artigo non significa unha despedida, significa que Vigolabs, vai dar un
+bandazo, que non pivotar, adicándose mais a electrónica e facendo mais
+tecnoloxía pura, sen estar enfocada ao mar. Abrindo o abanico de empresas que
+non sexan puramente marítimas e enfocarse mais o entorno industrial,
+automoción, e o mundo Maker, para así, ser de utilidade as empresas locais.&lt;/p&gt;
+&lt;p&gt;Tamén teño que facer autocrítica. Sei que fixen moitas cousas mal. Esa
+presentación chegou tarde (Xuño), o que eu ofrecía era algo moi innovador nunha
+sociedade pouco innovadora, estou seguro, que se o medialab fora enfocado a
+automoción tería moita mais tracción a curto prazo. Un dos errores mais grandes
+foi que ese presentación non poñía onde cazar diñeiro de subvencións europeas,
+algo que por desgraza era necesario. Ademais o meu artigo sobre empresas
+tecnolóxicas marítimas tiña que ser a base de traballo, e non a última rabexada
+da morte do proxecto.&lt;/p&gt;
+&lt;p&gt;Finalizo así, un ano nefasto, que non conseguín levar a cabo un proxecto dos
+que mais ilusión me fixo na miña vida. E moita xente terá envexa do que
+conseguín, este ano puiden &lt;a class="reference external" href="https://twitter.com/eloycoto/status/788065364370423812"&gt;coñecer a Bruce Springsteen&lt;/a&gt;, gozar dun test
+privado co &lt;a class="reference external" href="https://twitter.com/eloycoto/status/730831190350036992"&gt;4 veces campión do mundo de rallyes&lt;/a&gt;, estar presente na
+inauguración da expo de &lt;a class="reference external" href="https://twitter.com/eloycoto/status/776131854046994432"&gt;50 anos de Volkswagen en competición&lt;/a&gt; en Berlin, ademais
+de varios éxitos profesionais. Pero non conseguín que xente da cidade
+escoitara, o que para min era o mais importante. Ademais, tamén levou a
+desilusión a un grupo de excelentes enxeñeiros, que con isto, tamén estaban
+ilusionados. Eles miraron que fallei, pedirlle as miñas desculpas a todos eles.&lt;/p&gt;
+&lt;p&gt;Este post recórdame que meu apelido é Coto, que son a cuarta xeración que
+emigra. En 1927, no Barco Almanzora, meu bisavó despediuse dende o peirao de
+Vigo dirección Bos Aires. Meus avós acabaron en Amsterdam, meu pai volveu
+despois de 20 anos. O 1 de Setembro do 2012 quedaron a chorar no aeroporto por
+ver marchar o seu fillo. Este o 2016, foi o primeiro ano que mirei a miña avoa
+dúas veces no mesmo ano, fíxome recordar que a emigración estragoume parte da
+miña infancia. O nadal, pra min, xa non é estar ca familia, e estar cos amigos
+que volven. Así de triste é a sociedade que lle deixamos aos futuros rapaces
+galegos.&lt;/p&gt;
+&lt;p&gt;Eu mentres seguirei collendo avións, e recordando, que en Galicia somos
+incapaces de ver vinte metros mais aló, que seguimos sen coñecer a nosa
+historia. Entrementres seguiremos discutindo  que o marco moveuse dous
+centímetros, fraternité que din os franceses.&lt;/p&gt;
+&lt;p&gt;Feliz ano novo.&lt;/p&gt;
+&lt;div style="width: 100%;" class="align-center" align="center"&gt;
+            &lt;iframe src="https://embed.spotify.com/?uri=spotify%3Atrack%3A2KQq1pn2eUDEFitdQ4WzzZ"  height="80" frameborder="0" width="60%"&gt;&lt;/iframe&gt;
+    &lt;/div&gt;</summary><category term="tecnoloxía"></category><category term="vigo"></category><category term="mar"></category></entry><entry><title>Estase a converter Vigo nunha potencia tecnolóxica do mar?</title><link href="http://www.acalustra.com/estase-a-converter-vigo-nunha-potencia-tecnoloxica-do-mar.html" rel="alternate"></link><updated>2016-12-12T10:00:00+01:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2016-12-12:estase-a-converter-vigo-nunha-potencia-tecnoloxica-do-mar.html</id><summary type="html">&lt;p&gt;Quen me coñece sabe que ultimamente so falo de tecnoloxía orientada ao mar. Xa
+escribín os motivos neste artigo de &lt;a class="reference external" href="http://praza.gal/opinion/3527/vigo-capital-global-da-tecnoloxia-maritima/"&gt;praza.gal&lt;/a&gt;. Aproveitando o final de ano
+fixen unha nova revisión de empresas tecnolóxicas galegas orientadas a
+tecnoloxía no mar. Un traballo que fixera o ano pasado pra preparar a
+&lt;a class="reference external" href="http://hacksb.vigolabs.gal/"&gt;Hackathon Sanjurjo Badía&lt;/a&gt; e que cría conveniente
+volver a revisar. Os datos, dende o meu punto de vista, creo que son &lt;em&gt;mellores e
+esperanzadores&lt;/em&gt;. Ademais, gustaríame que este artigo dera visión deste tipo de
+empresas, moitas veces, descoñecidas.&lt;/p&gt;
+&lt;p&gt;A punta de lanza, sen ningunha dúbida, segue sendo &lt;a class="reference external" href="http://www.marineinstruments.es/"&gt;Marine Instruments&lt;/a&gt;. Cunha facturación cércana aos &lt;strong&gt;40 millóns
+de euros&lt;/strong&gt;, e mais de un centenar traballadores, están en pleno proceso de
+diversificación, con proxectos de tanto interesante como &lt;a class="reference external" href="http://www.marineinstruments.es/marine-instruments-on-the-press/?lang=en"&gt;o dron&lt;/a&gt;
+pra detectar bancos de atúns ou o unha &lt;a class="reference external" href="http://www.marineinstruments.es/monitoring-systems/electronic-eye-plus/?lang=en"&gt;cámara&lt;/a&gt;
+pra contribuír a pesca sostible. Un dez pra eles! Son un unicornio galego en
+tecnoloxía, e dende o meu punto de vista, unha das empresas con mais futuro da
+cidade.&lt;/p&gt;
+&lt;div align="center" class="align-center"&gt;
+    &lt;iframe width="560" height="315" src="https://www.youtube.com/embed/46vB4zRS6Nk"
+    frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/div&gt;&lt;p&gt;Seguindo co peixe, temos que destacar a empresa &lt;a class="reference external" href="http://www.marexi.com/MUSE/index.html"&gt;MarexiTech&lt;/a&gt;. A viguesa esta usando tecnoloxía
+punta pra varios dos seus produtos. O seu último produto baséase na loita contra
+o Anisakis, aportando unha solución moi interesante pra varios puntos da cadena
+alimentaria, cómpre destacar este &lt;a class="reference external" href="http://elcomidista.elpais.com/elcomidista/2016/07/15/articulo/1468600066_893151.html"&gt;artigo&lt;/a&gt;
+do periódico &lt;em&gt;El Pais&lt;/em&gt;. En Nigrán, tamén esta a empresa &lt;a class="reference external" href="http://oceanvisiongroup.com/"&gt;Ocean Vision&lt;/a&gt;, que subministra solucións pra a mellora
+continua nas granxas acuicolas, un sector, case non exprotado na Galicia, pero
+que pode ser un piar moi forte pra economía Galega na próxima década.&lt;/p&gt;
+&lt;p&gt;Nos inicios de decembro, botouse, o que pra mín, &lt;strong&gt;é un dos proxectos mais
+innovadores deste 2016&lt;/strong&gt;. A viguesa &lt;a class="reference external" href="http://ferri-sa.es/gl/"&gt;Industrias Ferri&lt;/a&gt;, fabricou o &lt;a class="reference external" href="http://www.farodevigo.es/economia/2016/12/02/ferri-espera-cliente-pronto-dron/1580908.html"&gt;dron mais grande de Europa&lt;/a&gt;
+pra o rescate rápido, e vixilancia marítima. Este é un enorme caso de éxito!
+Primeiro: demostra como unha empresa metalúrxica pode ser moi innovadora da man
+da tecnoloxía e a universidade, pra continuar, este dron pon en releve a
+transversalidade de sistemas usados na automoción ou aviación no sector
+marítimo.&lt;/p&gt;
+&lt;div align="center" class="align-center"&gt;
+            &lt;blockquote class="twitter-tweet" data-lang="es"&gt;&lt;p lang="es" dir="ltr"&gt;Llegó el día! Hoy botamos el primer no tripulado marino!! &lt;a href="https://t.co/hdJ1cTMCrA"&gt;pic.twitter.com/hdJ1cTMCrA&lt;/a&gt;&lt;/p&gt;&amp;mdash; Industrias FERRI (@IndustriasFERRI) &lt;a href="https://twitter.com/IndustriasFERRI/status/804199544313540608"&gt;1 de diciembre de 2016&lt;/a&gt;&lt;/blockquote&gt;
+            &lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+&lt;/div&gt;&lt;p&gt;En termos de enerxías renovables tamén se pode falar de melloría. Ademais do
+proxecto moi avanzado de &lt;a class="reference external" href="http://www.magallanesrenovables.com/es/proyecto"&gt;Magallanes Renovables&lt;/a&gt;, neste ano tamén se iniciou
+un proxecto dende a Universidade de Vigo, &lt;a class="reference external" href="http://www.life-demowave.eu/en/"&gt;life-demowave&lt;/a&gt;, pra aproveitar a enerxía das correntes
+mariñas. Este proxecto será finalizado no 2018, e temos que poñer en relevancia
+que existen varias empresas privadas involucradas (ACSM, Grupo Josmar). En canto
+ao futuro deste tipo de enerxía, teño o presentimento de que crecerá dunha forma
+exponencial, despois do paquete de 110 Billóns de euros promovidos por parte da
+&lt;a class="reference external" href="http://europa.eu/rapid/press-release_IP-16-4009_en.htm"&gt;comunidade europea ata o 2021&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;No ámbito portuario, os puntos de innovación son mais versátiles, dado a que se
+involucra opcións terrestres. A axencia Portuaria de Vigo esta levando a cabo un
+conxunto de proxectos de innovación chamado &lt;a class="reference external" href="http://bluegrowthvigo.eu/en/"&gt;Blue-growth&lt;/a&gt;. Este plan implica a mellora da eficiencia en
+varias áreas. Neste último ano tamen se  poden salientar os últimos proxectos de
+I+D da empresa tecnolóxica &lt;a class="reference external" href="https://www.imatia.com/"&gt;Imatia&lt;/a&gt;, eles actualmente
+contan cun equipo adicado a un &lt;a class="reference external" href="https://www.imatia.com/autoport-automated-vehicles-for-seaports/"&gt;proxecto de vehículos autónomos&lt;/a&gt; pra a
+carga e descarga en terminais RO-RO.  Por outra parte, a viguesa &lt;a class="reference external" href="http://www.ibercisa.es/"&gt;Ibercisa&lt;/a&gt; despregou un sistema revolucionario de atraque pra
+condicións adversas nun dos maiores portos de &lt;a class="reference external" href="http://www.farodevigo.es/economia/2016/07/31/ibercisa-entrega-26-maquinillas-amarre/1507610.html"&gt;Latinoamérica&lt;/a&gt;,
+actualmente encontrase en negociacións de imprementalo en mais portos. Pra
+rematar, nos temas portuarios, &lt;a class="reference external" href="http://www.kaleidologistics.com/"&gt;Kaleido Logistics&lt;/a&gt;, que inda que é unha empresa loxística,
+esta levando a cabo unha &lt;a class="reference external" href="http://info.rocketspace.com/logistics-tech-accelerator"&gt;aceleración de startups, con moita base tecnolóxica,&lt;/a&gt; que favorece a este
+ecosistema. Ademais, eles mesmos, están impremtando tecnoloxía blockchain, neste
+caso, pra os seus procesos internos.&lt;/p&gt;
+&lt;div class="align-center" align="center"&gt;
+&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="es" dir="ltr"&gt;Grande
+como siempre Xoan Martinez de &lt;a
+href="https://twitter.com/KALEIDOLogistic"&gt;@KALEIDOLogistic&lt;/a&gt; contando en &lt;a
+href="https://twitter.com/circulogalicia"&gt;@circulogalicia&lt;/a&gt; su experiencia con
+&lt;a href="https://twitter.com/hashtag/Blockchain?src=hash"&gt;#Blockchain&lt;/a&gt;
+aplicado en la &lt;a
+href="https://twitter.com/hashtag/log%C3%ADstica?src=hash"&gt;#logística&lt;/a&gt; &lt;a
+href="https://t.co/oxoSoMVwEI"&gt;pic.twitter.com/oxoSoMVwEI&lt;/a&gt;&lt;/p&gt;&amp;mdash; Roberto
+P. Marijuán (@robervigo) &lt;a
+href="https://twitter.com/robervigo/status/804290750498406400"&gt;December 1,
+2016&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+&lt;/div&gt;&lt;p&gt;O futuro, a curto prazo, parece que será mellor. Todo indica que o Porto de Vigo
+vai lanzar unha aceleradora de startups no 2017, seguindo o modelo de &lt;a class="reference external" href="http://www.zfv.es/viavigo/index.php?option=com_content&amp;amp;task=view&amp;amp;id=72&amp;amp;Itemid=36&amp;amp;idth5=117"&gt;ViaVigo&lt;/a&gt;
+e &lt;a class="reference external" href="http://www.bfauto.es/gl/"&gt;BFAuto&lt;/a&gt;.  &lt;a class="reference external" href="http://www.astilleroscardama.com/en/"&gt;Astilleros Cardama&lt;/a&gt; esta traballando en varios proxectos de
+I+D con moita base tecnolóxica. Por outra parte o &lt;a class="reference external" href="http://www.cetmar.org/?lang=en"&gt;CETMAR&lt;/a&gt; (Centro tecnolóxico Mariño) segue sendo ese
+partner perfecto pra todos estas startups que empezan neste mundo.&lt;/p&gt;
+&lt;p&gt;O número de empresas locais con base tecnolóxica marítima esta crecendo. Estou
+seguro que falta algunha, que non coñezo, e non están aquí citadas. Creo que é
+hora de que os case 8.000 millóns de euros que xera o Mar en Galicia (Informe
+Ardan 2016) se poidan &lt;strong&gt;investir en innovación galega&lt;/strong&gt;. Igual é o momento de que
+dende as instucións teñan un plan de promoción de &lt;strong&gt;&amp;quot;Vigo/Galicia capital
+tecnolóxica do mar&amp;quot;&lt;/strong&gt;, que dende o meu punto de vista, debería consistir nos
+seguintes temas:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Unha plan estratéxico pra fomentar a marca internacionalmente.&lt;/li&gt;
+&lt;li&gt;Unha universidade que xere mais proxectos coas carreiras de
+Industrias(Materiais), TI (Electrónica e comunicacións) e Bioloxía &amp;amp; campus do
+mar.E fomentar a creación de equipos multi-disciplinares pra fomentar novas ideas.&lt;/li&gt;
+&lt;li&gt;A promoción dun Medialab urbano pra a promoción de proxectos e que sirva
+pra prototipar proxectos de forma transversal. E ao mesmo tempo dar cabida a
+proxectos como &lt;a class="reference external" href="http://www.gciencia.com/ciencia-en-vivo/pole-position-uvigo-motorsport/"&gt;UVigo Motorsport&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Plan de promoción pra que estas empresas estean presentes en &lt;a class="reference external" href="http://www.navalia.es/en/"&gt;Navalia&lt;/a&gt; e &lt;a class="reference external" href="http://www.conxemar.com/v_portal/apartados/apartado.asp"&gt;Conxemar&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Crear un Máster Universitario relacionado ca tecnoloxía do mar pra reter e
+atraer talento.&lt;/li&gt;
+&lt;li&gt;Empezar o estudo pra traer a Vigo a
+&lt;a class="reference external" href="http://www.oceanologyinternational.com/"&gt;Oceanology&lt;/a&gt; (Feira tecnolóxica do
+mar) nun futuro proximo.&lt;/li&gt;
+&lt;li&gt;Facer unha conferencia adicada aos técnicos sobre a tecnoloxía aplicable ao
+mar (Sonars, comunicacións satélites, conexións de radio, acústica, materiais,
+deseño).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Esta é o meu resume do 2016. Oxalá poida publicar un novo artigo no 2017, no que
+poida por en valor novos proxectos, novas ideas. Que o MediaLab se faga
+realidade, poder escribir que a universidade colabora estreitamente cas
+asociacións tecnolóxicas de Vigo (&lt;a class="reference external" href="http://phpvigo.com/"&gt;PhpVigo&lt;/a&gt;, &lt;a class="reference external" href="https://www.python-vigo.es/"&gt;Python Vigo&lt;/a&gt;, &lt;a class="reference external" href="http://vigolabs.gal/"&gt;Vigolabs&lt;/a&gt;, &lt;a class="reference external" href="https://plus.google.com/u/0/communities/104458805154699272096"&gt;GDG Vigo&lt;/a&gt;,etc..), poder
+resaltar a colaboración da axencia portuaria con Vigolabs, que axude a educar
+sobre o mar a todos eses técnicos. E en definitiva, &lt;strong&gt;que o 2017 poda escribir
+que moitos dos galegos volveron por un proxecto ilusiónante, que é converter
+Galicia en capital tecnolóxica do mar.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Tamén me gustaría poder escribir sobre a finalización do minifundismo
+empresarial Galego. Por desgraza, existen moitas empresas galegas con menos de
+10 traballadores. É esencial que estas empresas crezan por enriba da media
+centea, pra de verdade poderse adicar a innovación e reducir a competencia entre
+nós. En galicia, temos demasiados medos as unións, xa se esas unións foran entre
+empresas tecnolóxicas e metalúrxicas; &lt;strong&gt;sería unha detonación enorme que levaría
+a cidade a un éxito rotundo.&lt;/strong&gt;&lt;/p&gt;
+</summary><category term="tecnoloxía"></category><category term="vigo"></category><category term="mar"></category></entry><entry><title>Pycon Galicia 2016 talk</title><link href="http://www.acalustra.com/pycon-galicia-2016-talk.html" rel="alternate"></link><updated>2016-09-17T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2016-09-17:pycon-galicia-2016-talk.html</id><summary type="html">&lt;p&gt;I had the luck to gave a talk at &lt;a class="reference external" href="http://https://python-vigo.github.io/pyday-2016//"&gt;PyCon Galicia 2016&lt;/a&gt;.The topic was about the
+future of developement from my POV.&lt;/p&gt;
+&lt;div style="width: 70%;" class="align-center" align="center"&gt;
+&lt;script async class="speakerdeck-embed"
+data-id="aa586cf790a24bbc84707189435e2c42" data-ratio="1.77777777777778"
+src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
+&lt;/div&gt;&lt;p&gt;Thanks to &lt;a class="reference external" href="https://twitter.com/python_vigo"&gt;Python Vigo&lt;/a&gt; and big thanks to
+&lt;a class="reference external" href="https://twitter.com/alexhermida"&gt;Alex Hermida&lt;/a&gt; and &lt;a class="reference external" href="https://twitter.com/fpuga"&gt;Fran Puga&lt;/a&gt; to organize it.&lt;/p&gt;
+&lt;p&gt;Happy code!&lt;/p&gt;
+</summary><category term="gordon"></category><category term="python"></category><category term="pycon galicia"></category><category term="pyvigo"></category><category term="lamdba"></category><category term="talks"></category></entry><entry><title>Why Tesla should build the European factory in Vigo?</title><link href="http://www.acalustra.com/why-tesla-should-build-the-european-factory-in-vigo.html" rel="alternate"></link><updated>2016-07-26T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2016-07-26:why-tesla-should-build-the-european-factory-in-vigo.html</id><summary type="html">&lt;p&gt;Let me introduce you into &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Galicia_(Spain)"&gt;Galicia&lt;/a&gt;. Galicia is in the north-west
+of Spain and up-north of Portugal. Galicia is a historic state that is part of
+Spain since hundred of years ago. The primary industries of Galicia are fishing,
+automotive, farming and textile. In the last years is know as &lt;strong&gt;Galifornia&lt;/strong&gt;,
+you can read &lt;a class="reference external" href="https://www.quobis.com/2013/08/09/come-to-galifornia-galician-california/"&gt;here&lt;/a&gt;
+more about it.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;a class="reference external image-reference" href="https://www.flickr.com/photos/dfvergara/15433431851/in/photolist-pvNnAB-mwxFnv-F4nP3t-qNnT1A-8qjxqR-qNnT1W-nHaWPs-sckuDw-c1SsT9-cP6RUy-ayECzA-gTCkRb-pmh4Do-sckuCQ-6B5kaS-gissgj-aKVQNt-pv4eWe-oUxx8U-sckuDb-b6jNGn-bf38c4-oYVCYj-63ZfVW-qoWYbe-5HHWxF-5BgYsR-d9Xeo6-ptYGLM-pq22XU-rTps4i-pvFiNa-ugHU2p-byqTcS-bDHqv2-bwAMjn-cTAFVf-fjMCXw-7kVNe9-8gvoDT-rtwTLB-qUKBGj-5vHYgH-dWZdh5-iMobvy-rVhy3M-byBYyF-4y7vad-dNJ336-q9gmq4"&gt;&lt;img alt="class" src="img/tesla/vigo_ria.jpg" /&gt;&lt;/a&gt;
+&lt;p class="caption"&gt;Vigo landscape&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;But without being boring, let me introduce you why next Tesla factory should be
+in &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Vigo"&gt;Vigo-Galicia&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="section" id="plenty-of-cheap-lands-to-set-up-a-factory"&gt;
+&lt;h2&gt;Plenty of cheap lands to set up a factory&lt;/h2&gt;
+&lt;p&gt;From early 1940 &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Vigo"&gt;Vigo&lt;/a&gt; has grown a lot,
+from 20K people to 300K, it was caused by the industrial sector and led by
+&lt;a class="reference external" href="https://www.google.es/search?q=citroen+Vigo&amp;amp;client=firefox-b&amp;amp;source=lnms&amp;amp;tbm=isch&amp;amp;sa=X&amp;amp;ved=0ahUKEwjwwPexw4fOAhWH7xQKHXBTBLUQ_AUICCgB&amp;amp;biw=1920&amp;amp;bih=995#imgrc=gj4X5UCQAMnUgM%3A"&gt;Citroen car factory&lt;/a&gt;.
+Since then a lot of factories have moved their manufacturing to Vigo Area. At
+the moment Vigo is the biggest city in population in Galicia and 9th in Spain.&lt;/p&gt;
+&lt;p&gt;Industrial is a hight priority of the council and the government, so they use to
+anticipate to the companies and new plans to accommodate more factories are
+designed continuously. In early 2012, a new &lt;a class="reference external" href="http://www.zonafrancavigo.com/red/index.php?id=642&amp;amp;option=com_content&amp;amp;task=view&amp;amp;idth1=7&amp;amp;Itemid=262&amp;amp;idioma=en"&gt;3M square meters area was developed
+with all services&lt;/a&gt;
+(highway, train, high-speed Internet connection) and it's ready for all the
+facilities for company's employees (residential areas, public transport, hotels,
+restaurants, etc.. )&lt;/p&gt;
+&lt;p&gt;This space was developed in 2005, and the idea was to host the first Mitsubishi
+Batteries factory in Europe. However the Tsunami in Japan and its consequences
+resulted in a cancellation of the project, so now that space is ready to be
+taken by another company.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="good-logistics-port-airport-train-ave"&gt;
+&lt;h2&gt;Good Logistics: port, airport, train, AVE&lt;/h2&gt;
+&lt;p&gt;Automotive factories and heavy industry have a problem that it’s not easy to
+solve, distribution. Vigo hosts one of the most productive PSA group factory
+per-square-meter in the world, so the city has learnt a lot from the last fifty
+years about logistics.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://puertodevigo.com/category/portada/"&gt;Vigo Port&lt;/a&gt; is one of the biggest
+Europe ports. At the moment council and government are working to extend it a
+bit more. Last May the council started a project to provide service to the new
+&lt;a class="reference external" href="https://en.wikipedia.org/wiki/Roll-on/roll-off"&gt;RO-RO&lt;/a&gt; ships with two access
+ramps. In terms of shipping lines, Vigo counts with more than 50 shipping lines
+as you can see in the following map.&lt;/p&gt;
+&lt;iframe width="100%" height="520" frameborder="0" src="https://eloycoto.carto.com/viz/2156f488-4d80-11e6-aa0f-0ee66e2c9693/embed_map" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen&gt;&lt;/iframe&gt;&lt;p&gt;Concerning Iberia distribution can be done using the train. It has gotten
+improved in the last years, and all Iberia and France will be connected using
+the high-speed train. This high-speed train is under development and in the
+following years a lot of new routes will be opened.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="class" src="img/tesla/bouzas.jpg" /&gt;
+&lt;p class="caption"&gt;Ro-Ro terminal, 900K square meters and nine ramps&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;I spoke about the car’s movement, but logistics is not only about cars. In
+Galicia(A Coruña) is located Inditex (Zara) headquarters, one of the TOP-25
+companies in Europe. Zara has a good compromise with the quality and all batch
+of clothes are checked in Galicia offices, so container logistic is well
+structured over Galicia.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="class" src="img/tesla/fly_to_vigo.jpg" /&gt;
+&lt;p class="caption"&gt;Current Vigo aiport direct connections to the main EU airports&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;It’s important to mention a few companies that are making some innovations in
+logistics. Our flagship, &lt;a class="reference external" href="http://www.kaleidologistics.com/"&gt;Kaleido Logistic&lt;/a&gt;, is one of the most innovative logistics
+enterprises in europe, for example, &lt;a class="reference external" href="http://info.rocketspace.com/logistics-tech-accelerator"&gt;last March they announced a new startup
+accelerator&lt;/a&gt; with the
+San Francisco based RockSpace.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="hundreds-of-well-educated-engineers-and-scientists"&gt;
+&lt;h2&gt;Hundreds of well-educated engineers and scientists&lt;/h2&gt;
+&lt;p&gt;So as you see the government quite focuses in the well-equipped space to do
+business and make companies life easier. But it'll be difficult to be located
+here if you don’t have a good workforce. So the three universities are the key
+of our successful histories. Vigo University is quite young (~25 years), the
+main topics are industrial, electronics and telecommunications. A second branch
+is under development with BioTechnologies and Sea (is the second main industry
+in the city).&lt;/p&gt;
+&lt;p&gt;Spanish university, in general, improved a lot in the last years and keeps
+growing each year. These well-educated students are providing results now, for
+example, tech companies like &lt;a class="reference external" href="http://quobis.com"&gt;Quobis&lt;/a&gt; (World leader in
+WebRTC solutions), &lt;a class="reference external" href="https://www.televes.com/en/eng/home"&gt;Televes&lt;/a&gt; (World
+leader in TV communications), &lt;a class="reference external" href="http://www.marineinstruments.es/?lang=en"&gt;Marine Instruments&lt;/a&gt; (World Leader in buoys for
+fishing). These companies were founded by local students.&lt;/p&gt;
+&lt;p&gt;But these students are part of multiple foreign companies that are based here
+and they provide quite successful products. For example, all the robots that
+Citroen are using in Vigo factory were made by local workforce; I need to say
+that the CNC expertise in Vigo is quite valueable.&lt;/p&gt;
+&lt;p&gt;As each city, we have a startup movement; a few entrepreneur try to build their
+companies. There is a gap between Galicia and startup ecosystem; VC capital is
+too small. In the last year, some R&amp;amp;D projects died during cash-flow problems.
+There were some real projects: like Satelite launch and some Electric car
+charger; both died caused by cash.&lt;/p&gt;
+&lt;p&gt;In 2008 Spain had a big bank crisis, so getting foreign investment were too
+difficult. Meanwhile, all the hundred well-educated students finish their
+studies, and they can't get work. The result of this equation was that a lot of
+young people move to work abroad (Me included). Nowadays thousands of Vigo
+students moved to UK, France, Germany, etc... Linkedin says that more than 1000
+engineers from the University of Vigo are in London, more than 300 in France,
+and more than 500 in Germany. These are only from Vigo University, in Galicia,
+we had three different Universities. These engineers want to be in their
+hometown with their families so a new Tesla Factory will be an excellent option
+to come back to home.&lt;/p&gt;
+&lt;p&gt;On the other hand, a recent study made by &lt;a class="reference external" href="http://www.elconfidencial.com/"&gt;&amp;quot;El
+Confidencial&amp;quot;&lt;/a&gt; reported that &lt;a class="reference external" href="https://translate.google.com/translate?hl=en&amp;amp;sl=es&amp;amp;tl=en&amp;amp;u=www.elconfidencial.com%2Fespana%2Fgalicia%2F2016-07-25%2Fgalicia-morrina-emigracion-argentina-europa_1237613%2F"&gt;20% of the total
+Spain immigration is from
+Galicia&lt;/a&gt;.
+In 2015 Galicia represented around 5.5% of the Spanish population.&lt;/p&gt;
+&lt;iframe width="100%" height="520" frameborder="0" src="https://manuelvarfar.carto.com/viz/704e1a5c-442b-11e6-a868-0e787de82d45/embed_map" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen&gt;&lt;/iframe&gt;&lt;/div&gt;
+&lt;div class="section" id="public-support"&gt;
+&lt;h2&gt;Public support&lt;/h2&gt;
+&lt;p&gt;As you read, the government is pretty involved with the private company's
+success. Being part of Vigo means that a new factory like Tesla can use the Duty
+Free area, where goods that are meant to be reshipped to another country don’t
+need to pay duties. This will be useful for Tesla logistics in Europe.&lt;/p&gt;
+&lt;p&gt;In the other hand, nowadays Galicia government has a financial plan called
+&lt;a class="reference external" href="http://www.igape.es/es/ser-mais-competitivo/galiciaindustria4-0"&gt;Industry 4.0&lt;/a&gt;. This
+program is based to help private companies with grants up to 40% of the private
+investment in the automatization of the process, without limit in the top, so
+for each $1M that Tesla invest in innovation, Galicia government will return
+$400K (This have some constraints, but that is the main idea)&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="automotive-cluster-in-the-region"&gt;
+&lt;h2&gt;Automotive cluster in the region&lt;/h2&gt;
+&lt;p&gt;As I started before, Vigo is pretty involved in the automotive sector. The Citroen
+Factory building was a boost for the city in 1960, and nowadays we have a
+high-quality network of automotive providers in the area.&lt;/p&gt;
+&lt;p&gt;In the early 2000s, which were good years to all of these vendors, some of them
+started to work with different brands, so nowadays all the auxiliary providers
+had experience with more vendors, they are not locked with Citroen. This network
+built a few years ago a new association of companies to set waypoints for the
+near future about the common benefits.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="class" src="img/tesla/valladares.jpg" /&gt;
+&lt;/div&gt;
+&lt;p&gt;Close to this cluster of providers and related to provide solutions to this
+companies, the government launched innovation centers to provide high-tech
+solutions to local factories. &lt;a class="reference external" href="http://ctag.com/"&gt;CTAG&lt;/a&gt; is the flagship for
+innovation in cars; this 500 people company provides crash tech services, sounds
+experience and all kind of technology related to automobiles. Another technology
+center that needs to be mention is &lt;a class="reference external" href="http://www.aimen.es/index.php?option=com_content&amp;amp;task=view&amp;amp;id=13&amp;amp;Itemid=59"&gt;Aimen&lt;/a&gt;,
+it is focussed on the material resistance, durability, and automatic cutting
+process.&lt;/p&gt;
+&lt;div style="text-align: center;"&gt;&lt;iframe src="https://player.vimeo.com/video/120029828?title=0&amp;byline=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;
+&lt;p&gt;&lt;a href="https://vimeo.com/120029828"&gt;CTAG - Automotive Techonology Centre of Galicia&lt;/a&gt; from &lt;a href="https://vimeo.com/user25279529"&gt;CTAG&lt;/a&gt; on &lt;a href="https://vimeo.com"&gt;Vimeo&lt;/a&gt;.&lt;/p&gt;&lt;/div&gt;&lt;p&gt;It’s quite remarkable that this is not new, this is a historical, in 1950 in
+Ourense we had the luck to have one of the biggest creators of the century:
+&lt;a class="reference external" href="http://yale.universitypressscholarship.com/view/10.12987/yale/9780300121094.001.0001/upso-9780300121094"&gt;Eduardo
+Barreiros&lt;/a&gt;,
+this guy built a company that converts petrol truck engines to diesel. Bussines
+was very successful and in 1959 it was acquired by Chrysler.&lt;/p&gt;
+&lt;p&gt;Around all car manufacturing and the provider network, Galicia can be proud to
+host some automotive companies. For example, &lt;a class="reference external" href="http://www.urovesa.com/en/vehiculos.php"&gt;Urovesa&lt;/a&gt; provides car/trucks solutions to
+military and firefighters, that is used by almost all European armies. About
+trucks, Ourense based &lt;a class="reference external" href="http://www.unvibus.com/en/"&gt;UNVI&lt;/a&gt; build thousands of
+trucks and buses to all Europe. Related to the innovation, we need to mention a
+small company that produces &lt;a class="reference external" href="http://little-cars.es/"&gt;thousands of electric recreational cars per year&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="good-standard-of-life-for-the-employees"&gt;
+&lt;h2&gt;Good standard of life for the employees&lt;/h2&gt;
+&lt;p&gt;One of the things that I’m too proud to be in Galicia is the level of the
+living here. Galicia is a place that you can buy a home for €200.000, take a
+beer for €1.5 and dinner outside for €14. In the other hand, in Spain all the
+university/scholarship are nearly free, all the National Insurance Services is
+running by the local state so no one should be worried about nothing less than
+their work.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;a class="reference external image-reference" href="https://www.flickr.com/photos/laspatatastienenojos/13693274414/in/photolist-mS2Bqb-2UykCx-76mE3e-2UymBH-FyeWR-76mE2R-76mgU6-Fydab-b4bnJx-56ftrw-56ftpJ-3LBRhv-4KTJzG-7VvFnv-4KPtUT-2UCBJw-4KTJaE-76mE34-4KPtSx-2UCJgm-2Uyi3P-2UykSn-4KTJ6s-4KPsJx-7VvWUt-4KPtuT-2UyiwK-4KPsEk-2UCKZE-i17rgY-4KPtkv-3Mb74p-4KPu9F-4KPtdv-5FncpS-bMUkJc-qBTRwM-9EFppY-9EFm9N-9EFiwQ-FydfE-9BoNEu-9BoUJd-9BkFsa-9BkfcF-9Bosx5-9Boy3Q-9BojkN-9BoCRj-9BoJgL"&gt;&lt;img alt="class" src="img/tesla/baiona.jpg" /&gt;&lt;/a&gt;
+&lt;/div&gt;
+&lt;p&gt;Regarding of living here, you can go to one of the &lt;a class="reference external" href="https://www.theguardian.com/travel/2007/feb/16/beach.top10"&gt;best beaches&lt;/a&gt; in the world
+(Guardian said that), you can go to the top of the mountains and enjoy the
+&lt;a class="reference external" href="http://www.mirror.co.uk/lifestyle/travel/europe-short-haul/spains-galicia-region-gold-star-7085073"&gt;Galician lifestyle.&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="renewables-energy-ecosystem"&gt;
+&lt;h2&gt;Renewables energy ecosystem&lt;/h2&gt;
+&lt;p&gt;Renewables energy means a lot for a company like Tesla, a lot of us want the
+world more sustainable, but for that, we need to work together. Galicia is too
+green, and we want to keep at it is, for that in 2006-2008 the government made
+a plan to be 100% sustainable using renewable energy. In 2008, Spain fall into
+the crisis and this plan can’t be executed at all, but we have a good
+renewables bases.&lt;/p&gt;
+&lt;p&gt;Nowadays the 30% of the total energy is generated by wind power. On the other
+hand, the hydropower represents another 40%. In few years I’m sure that Galicia
+will be 100% green.&lt;/p&gt;
+&lt;p&gt;Related with the companies working in the renewables energy? Yes! &lt;a class="reference external" href="http://www.ganomagoga.es/en/"&gt;Gamonagoga&lt;/a&gt; and &lt;a class="reference external" href="http://www.gestampren.com/"&gt;Gestamp&lt;/a&gt;
+are one of our biggest companies around the wind power; they can build all
+aerogenerator pieces. But our experience in ship building industry create third
+party companies like &lt;a class="reference external" href="http://ferri-sa.es/en/"&gt;Industrias Ferri&lt;/a&gt;; they make
+cranes to Ocean Wind Power farms. This shipbuilding expertise help to innovate
+on tidal energy, at the moment three different companies are working in
+validation this technology. &lt;a class="reference external" href="http://ecoforest.es/en/"&gt;Ecoforest&lt;/a&gt; can’t be
+forgotten, one of the first enterprises that think in pellet boilers, and
+nowadays they are pretty big for the country.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;a class="reference external image-reference" href="http://www.lavozdegalicia.es/noticia/empresas/2015/10/30/cardama-bota-trimaran-magallanes/0003_201510V30C5993.htm"&gt;&lt;img alt="Cardama's Shipyard Tidal energy factory" src="img/tesla/cardama.jpg" /&gt;&lt;/a&gt;
+&lt;p class="caption"&gt;Cardama Shipyard Tidal energy generator prototype launched last year&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;I need to mention the bad parts, two years ago Spanish government added a
+penalty to the sun energy, so in the last few years, this generated a lot of
+controversial issues about that. I hope that this bill will be removed and keep
+Spain as green as all Spanish people want!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="industrial-ecosystem"&gt;
+&lt;h2&gt;Industrial ecosystem&lt;/h2&gt;
+&lt;p&gt;A lot of things related to cars manufacturing, but what about the industrial
+ecosystem?. The Industrial Revolution was not too big in Vigo, &lt;a class="reference external" href="https://es.wikipedia.org/wiki/Antonio_Sanjurjo"&gt;Sanjurjo Badía&lt;/a&gt; led this revolution, he was
+one of the first businessmen that created the first factories and shipyards in
+the city, it’s nice to see that in early &lt;a class="reference external" href="http://www.vigoenfotos.com/es/vigo/museo/mar-galicia/submarino-sanjurjo"&gt;1900 he built a submarine.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Speaking about Galicia is too important to mention the shipyards, more than then
+thousand employees are working directly in the shipyards. Moreover, Galicia is
+the first door of the Atlantic Ocean means that it has one of the biggest
+fishing ports in Europe, and it’s the central point of freezing fish in Europe.
+I can’t found a real statistics of how many people is working related with the
+sea, but it’ll close to 50.000 people.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="Vigo Shipyards" src="img/tesla/vigo_shipyards.jpg" /&gt;
+&lt;p class="caption"&gt;Barreras shipyards. Offshore support vessel&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Related with metal/aluminium there are some top companies in the area, as an
+example, &lt;a class="reference external" href="https://www.cortizo.com/"&gt;Cortizo&lt;/a&gt; is one of the biggest companies
+associated with aluminum.&lt;/p&gt;
+&lt;p&gt;And Inditex(Zara) can’t be forgotten in this section; the company has their
+&lt;a class="reference external" href="https://www.inditex.com/en/media/multimedia_gallery/video/arteixo"&gt;headquarters in A coruña&lt;/a&gt; and all
+concerned with their new stores, design, tools, etc… Is built/managed mainly
+from Galicia. So it have been a boost for our industrial ecosystem.&lt;/p&gt;
+&lt;p&gt;I don’t have more reasons why Tesla must build their next factory in Galicia. In
+the last years I took more than 200 flights; saw a lot of cities and I were on a
+few continents, I’m in love with the city where I was born! There are some
+problems in Galicia, but in the last years, I also learnt that there are
+problems everywhere, and Galicia is too awesome as it appears.&lt;/p&gt;
+&lt;p&gt;I invite to Tesla managers to meet Vigo; it’s an awesome city! It has &lt;strong&gt;a lot of
+resources&lt;/strong&gt; and with &lt;strong&gt;a lot of people with the can be done aptitude&lt;/strong&gt;, with a
+green mentality and with thousands and thousands of wonderful people around.&lt;/p&gt;
+&lt;p&gt;So the only thing that I can say, if any Tesla Managers read this post and you
+want to visit Vigo, I’ll pay your flight, I will love that you come to here, I
+know that when you arrive, you don’t want to leave!&lt;/p&gt;
+&lt;/div&gt;
+</summary><category term="tesla"></category><category term="vigo"></category><category term="galicia"></category></entry><entry><title>Using Jenkins Pipelines to deploy terraform</title><link href="http://www.acalustra.com/using-jenkins-pipelines-to-deploy-terraform.html" rel="alternate"></link><updated>2016-07-05T10:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2016-07-05:using-jenkins-pipelines-to-deploy-terraform.html</id><summary type="html">&lt;p&gt;&lt;a class="reference external" href="https://jenkins.io/2.0/"&gt;Jenkins 2.0&lt;/a&gt; was released a few weeks ago. One of
+the main problems that I use to had in Jenkins was multi-stages jobs, there was
+a plugin from Cloudbees but it was difficult to use. This new version
+&lt;a class="reference external" href="https://jenkins.io/doc/pipeline/jenkinsfile/"&gt;implements pipelines based on a Jenkinsfile&lt;/a&gt; in the root of the project.
+This is easier, quicker and in one word: &lt;strong&gt;awesome&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;So, in jenkins 2.0 &amp;quot;stages&amp;quot; can be described in the Jenkinsfile. Stage can be
+explained as the different status that a job need to have. In a typical web
+application the stages will be the following:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;strong&gt;test&lt;/strong&gt;: Run in parallel unittest and integration test.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;artifact&lt;/strong&gt;: Compile the source&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Staging&lt;/strong&gt;: to update your staging platform&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Prod&lt;/strong&gt;: Update your prod infraestructure.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A very simple multi-stage Jenkinsfile looks like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;node &lt;span class="o"&gt;{&lt;/span&gt;
+    stage &lt;span class="s1"&gt;&amp;#39;Stage 1&amp;#39;&lt;/span&gt;
+       &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Hello World 1&amp;#39;&lt;/span&gt;
+    stage &lt;span class="s1"&gt;&amp;#39;Stage 2&amp;#39;&lt;/span&gt;
+       &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Hello World 2&amp;#39;&lt;/span&gt;
+    stage &lt;span class="s1"&gt;&amp;#39;Stage 3&amp;#39;&lt;/span&gt;
+       &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Hello World 3&amp;#39;&lt;/span&gt;
+    stage &lt;span class="s1"&gt;&amp;#39;Stage 4&amp;#39;&lt;/span&gt;
+       &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Hello World 4&amp;#39;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And you're going to have a lovely dashboard like this:&lt;/p&gt;
+&lt;img alt="Jenkins pipeline example" class="align-center" src="img/jenkins_pipeline_stage_example.png" /&gt;
+&lt;p&gt;Checkout, run test and compile the artifacts can be done in the past without
+pipelines, but what about the deploys? It was possible, but human integration
+was added in pipelines and the solution is great for tools like Terraform.&lt;/p&gt;
+&lt;p&gt;Review a plan is one of the best features of &lt;a class="reference external" href="https://www.hashicorp.com/atlas.html"&gt;Hashicorp Atlas&lt;/a&gt;. An engineer will always be sure that
+the plan will be applied correctly using &lt;a class="reference external" href="https://www.terraform.io/"&gt;terraform&lt;/a&gt;.  Now this can be possible with a few lines of
+code:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;node &lt;span class="o"&gt;{&lt;/span&gt;
+   stage &lt;span class="s1"&gt;&amp;#39;checkout&amp;#39;&lt;/span&gt;
+        checkout scm
+
+   stage &lt;span class="s1"&gt;&amp;#39;test&amp;#39;&lt;/span&gt;
+        parallel &lt;span class="o"&gt;(&lt;/span&gt;
+            phase1: &lt;span class="o"&gt;{&lt;/span&gt; sh &lt;span class="s2"&gt;&amp;quot;echo p1; sleep 20s; echo phase1&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;}&lt;/span&gt;,
+            phase2: &lt;span class="o"&gt;{&lt;/span&gt; sh &lt;span class="s2"&gt;&amp;quot;echo p2; sleep 40s; echo phase2&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;}&lt;/span&gt;
+        &lt;span class="o"&gt;)&lt;/span&gt;
+   stage name: &lt;span class="s1"&gt;&amp;#39;build&amp;#39;&lt;/span&gt;, concurrency: 1
+        sh &lt;span class="s2"&gt;&amp;quot;packer build project.json&amp;quot;&lt;/span&gt;
+
+   stage name: &lt;span class="s1"&gt;&amp;#39;plan&amp;#39;&lt;/span&gt;, concurrency: 1
+        sh &lt;span class="s2"&gt;&amp;quot;terraform plan --out plan&amp;quot;&lt;/span&gt;
+
+   stage name: &lt;span class="s1"&gt;&amp;#39;deploy&amp;#39;&lt;/span&gt;, concurrency: 1
+        def &lt;span class="nv"&gt;deploy_validation&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; input&lt;span class="o"&gt;(&lt;/span&gt;
+            id: &lt;span class="s1"&gt;&amp;#39;Deploy&amp;#39;&lt;/span&gt;,
+            message: &lt;span class="s1"&gt;&amp;#39;Let\&amp;#39;s continue the deploy plan&amp;#39;&lt;/span&gt;,
+            &lt;span class="nb"&gt;type&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;boolean&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+
+        sh &lt;span class="s2"&gt;&amp;quot;terraform apply plan&amp;quot;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;img alt="Jenkins Terraform pipeline" class="align-center" src="img/jenkis_terraform.png" /&gt;
+&lt;p&gt;With this code you can easy review changes that terraform will make and deploy
+your infrastructure with the right human interaction. This code is too
+simplified but you can do all the business logic that you want. Complete list of
+examples can be found in &lt;a class="reference external" href="https://github.com/jenkinsci/pipeline-examples/tree/master/pipeline-examples"&gt;github&lt;/a&gt;.&lt;/p&gt;
+&lt;img alt="Jenkins pipeline terraform plan" class="align-center" src="img/jenkis_terraform_plan.png" /&gt;
+&lt;p&gt;From my point of view this is a big step forward for continuous delivery, I
+always miss a tool that I can make pipelines into our organization. From now all
+my fellows can see in what state is each build. In the other hand, &lt;a class="reference external" href="https://www.cloudbees.com/"&gt;Cloudbees&lt;/a&gt; is working in a new UI, &lt;a class="reference external" href="https://jenkins.io/blog/2016/05/26/introducing-blue-ocean/"&gt;blueocean&lt;/a&gt;, it is great and
+it'll make even simpler to review it.&lt;/p&gt;
+&lt;p&gt;Related with the Jenkinsfile DSL reference, &lt;a class="reference external" href="https://jenkins.io/blog/2016/05/26/introducing-blue-ocean/"&gt;Cloudbees wrote&lt;/a&gt; a complete blog
+post with all commands. Furthermore full pipelines &lt;a class="reference external" href="https://jenkins.io/solutions/pipeline/"&gt;documentation&lt;/a&gt; can be found in jenkins webpage.&lt;/p&gt;
+</summary><category term="terraform"></category><category term="jenkins"></category><category term="packer"></category></entry><entry><title>My review of Hashiconf Europe 16</title><link href="http://www.acalustra.com/my-review-of-hashiconf-europe-16.html" rel="alternate"></link><updated>2016-06-20T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2016-06-20:my-review-of-hashiconf-europe-16.html</id><summary type="html">&lt;p&gt;Few days ago I was in Amsterdam, in the lovely &lt;a class="reference external" href="https://www.hashiconf.eu/"&gt;Hashiconf EU&lt;/a&gt;. This conference fulfilled all my expectations
 about hashi tools and the devops world. The conference was organized by &lt;a class="reference external" href="https://xebia.com/"&gt;Xebia&lt;/a&gt; with the help of &lt;a class="reference external" href="https://www.hashicorp.com/"&gt;Hashicorp&lt;/a&gt; and it was awesome, everything was great: venue,
 sound, food, talks and the party!&lt;/p&gt;
 &lt;img alt="Hashiconf Europe 2016" class="align-center" src="img/hashiconf_eu1.jpg" /&gt;
@@ -83,6 +1103,7 @@ them down here just in case it could be helpful:&lt;/p&gt;
 &lt;img alt="Hashiconf Europe 2016" class="align-center" src="img/hashiconf_eu3.jpg" /&gt;
 &lt;p&gt;PS: All photos are from &lt;a class="reference external" href="https://www.flickr.com/photos/137604751&amp;#64;N05/sets/72157667183542004/"&gt;Hashicorp flickr
 page&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;PS2: Videos are &lt;a class="reference external" href="https://www.youtube.com/watch?list=PL81sUbsFNc5b-Gd59Lpz7BW0eHJBt0GvE&amp;amp;v=Ps44n1de0Js"&gt;now online&lt;/a&gt;&lt;/p&gt;
 </summary><category term="docker"></category><category term="kamailio"></category><category term="hashicorp"></category><category term="terraform"></category><category term="nomad"></category><category term="consul"></category></entry><entry><title>Resume persoal da hackathon Sanjurjo Badía</title><link href="http://www.acalustra.com/resume-persoal-da-hackathon-sanjurjo-badia.html" rel="alternate"></link><updated>2016-03-25T16:00:00+01:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2016-03-25:resume-persoal-da-hackathon-sanjurjo-badia.html</id><summary type="html">&lt;p&gt;Como algún ben sabedes estaba involucrado xunto con Jesús na Hackathon Sanjurjo
 Badía.  Gustaríame facer unha reflexión persoal e &amp;quot;en voz alta&amp;quot;, dado que creo
 que é importante compartir este tipo de información.&lt;/p&gt;
@@ -258,14 +1279,14 @@ O verdadeiro heroísmo está en convertir os anceios en realidades, e as ideas e
 </summary><category term="hackathon"></category><category term="vigo"></category><category term="mar"></category></entry><entry><title>Voip talk at Librecon 2015</title><link href="http://www.acalustra.com/voip-talk-at-librecon-2015.html" rel="alternate"></link><updated>2015-10-29T16:00:00+01:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-10-29:voip-talk-at-librecon-2015.html</id><summary type="html">&lt;p&gt;I had the luck to gave a talk at &lt;a class="reference external" href="http://www.librecon.io/"&gt;Librecon 2015&lt;/a&gt;.The
 topic was about how I built a modern operator using asterisk, kamailio, and
 other tools for measure and deploy.&lt;/p&gt;
-&lt;div style="width: 70%;" class="align-center"&gt;
+&lt;div style="width: 70%;" class="align-center" align="center"&gt;
 &lt;script async class="speakerdeck-embed"
 data-id="abbbacd7686645a5a37408e7e713f564" data-ratio="1.77777777777778"
 src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
 &lt;/div&gt;&lt;p&gt;Thanks to &lt;a class="reference external" href="http://www.agasol.gal/"&gt;Agasol&lt;/a&gt; and big thanks to &lt;a class="reference external" href="https://twitter.com/xcastanho"&gt;Xavi
 Castaño&lt;/a&gt; and Cris to help me with all my doubts.&lt;/p&gt;
 &lt;p&gt;Happy code!&lt;/p&gt;
-</summary><category term="packer"></category><category term="consul"></category><category term="terraform"></category><category term="kamailio"></category><category term="asterisk"></category><category term="statsd"></category><category term="grafana"></category><category term="influxdb"></category></entry><entry><title>How can I monitor my Voip Application?</title><link href="http://www.acalustra.com/how-can-i-monitor-my-voip-application.html" rel="alternate"></link><updated>2015-07-24T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-07-24:how-can-i-monitor-my-voip-application.html</id><summary type="html">&lt;p&gt;In the last &lt;a class="reference external" href="http://www.acalustra.com/kamialio-world-2015.html"&gt;Kamailio World&lt;/a&gt; two of the
+</summary><category term="packer"></category><category term="consul"></category><category term="terraform"></category><category term="kamailio"></category><category term="asterisk"></category><category term="statsd"></category><category term="grafana"></category><category term="influxdb"></category><category term="talks"></category></entry><entry><title>How can I monitor my Voip Application?</title><link href="http://www.acalustra.com/how-can-i-monitor-my-voip-application.html" rel="alternate"></link><updated>2015-07-24T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2015-07-24:how-can-i-monitor-my-voip-application.html</id><summary type="html">&lt;p&gt;In the last &lt;a class="reference external" href="http://www.acalustra.com/kamialio-world-2015.html"&gt;Kamailio World&lt;/a&gt; two of the
 hot topics were &lt;a class="reference external" href="https://www.elastic.co/products/beats"&gt;Packetbeat&lt;/a&gt; and
 &lt;a class="reference external" href="http://SIPCapture.org/"&gt;SIPCapture&lt;/a&gt;.  Both projects announced good news
 meanwhile the conference, people got excited about it.&lt;/p&gt;
@@ -1037,7 +2058,7 @@ Ansible repo.&lt;/p&gt;
 &lt;/ul&gt;
 &lt;/dd&gt;
 &lt;/dl&gt;
-</summary><category term="Docker"></category><category term="betabeers"></category></entry><entry><title>Asterisk 11 hangups handlers</title><link href="http://www.acalustra.com/asterisk-11-hangups-handlers.html" rel="alternate"></link><updated>2014-10-22T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2014-10-22:asterisk-11-hangups-handlers.html</id><summary type="html">&lt;p&gt;I don't know what I was doing when I read &lt;strong&gt;Asterisk 11 new features&lt;/strong&gt;. Last week I read in the asterisk &lt;a class="reference external" href="http://lists.digium.com/pipermail/asterisk-users/2014-October/284839.html"&gt;mailing list about hangup handlers.&lt;/a&gt;&lt;/p&gt;
+</summary><category term="Docker"></category><category term="betabeers"></category><category term="talks"></category></entry><entry><title>Asterisk 11 hangups handlers</title><link href="http://www.acalustra.com/asterisk-11-hangups-handlers.html" rel="alternate"></link><updated>2014-10-22T16:00:00+02:00</updated><author><name>Eloy Coto</name></author><id>tag:www.acalustra.com,2014-10-22:asterisk-11-hangups-handlers.html</id><summary type="html">&lt;p&gt;I don't know what I was doing when I read &lt;strong&gt;Asterisk 11 new features&lt;/strong&gt;. Last week I read in the asterisk &lt;a class="reference external" href="http://lists.digium.com/pipermail/asterisk-users/2014-October/284839.html"&gt;mailing list about hangup handlers.&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;One of the pains in large apps based on asterisk are hangups. If one customer hangups in the middle of one subroutine, you need to add h exten in all subroutines. This make the code difficult to maintain. This is a normal subroutine in asterisk application:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;outside&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 &lt;span class="n"&gt;exten&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;_X&lt;/span&gt;&lt;span class="p"&gt;.,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;Noop&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Call&lt;/span&gt; &lt;span class="n"&gt;from&lt;/span&gt; &lt;span class="n"&gt;outside&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;callerid&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;CALLERID&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;num&lt;/span&gt;&lt;span class="p"&gt;)})&lt;/span&gt;

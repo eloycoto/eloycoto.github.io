@@ -39,23 +39,23 @@
 
     <div class="container content">
 <div class="row">
-
-  <div id="blog_post" class="blog" itemscope="" itemprop="blogPost" itemtype="http://schema.org/BlogPosting">
-    <div class="col-9 col-offset-1">
+  <article>
+    <header>
       <h1 itemprop="name headline">Kamailio statsd best practices</h1>
       <div class="byline">
-        Escrito por:
         <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
           <span itemprop="name">
             <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
           </span>
         </span>
         on
-        <time datetime="2015-03-16T16:00:00" itemprop="datePublished">Monday March 16th 2015</time>
+        <time datetime="2015-03-16T16:00:00" itemprop="datePublished">March 16th, 2015</time>
       </div>
+    </header>
 
-      <div class="content" itemprop="articleBody">
-        <p>I remember when I heard about graphite/statsd. It was late of 2012 in the Python London Group. Few weeks before I read <em>Lean Startup</em> and I learnt to measure all the things to improve our business.</p>
+
+    <div class="content" itemprop="articleBody">
+      <p>I remember when I heard about graphite/statsd. It was late of 2012 in the Python London Group. Few weeks before I read <em>Lean Startup</em> and I learnt to measure all the things to improve our business.</p>
 <p>In early 2013 I started to use graphite. I tracked all logins, custom events, machine performance and all the running calls in the Foehn platform. After a few weeks I felt in love with Statsd/Graphite.</p>
 <div class="section" id="about-statsd-graphite">
 <h2>About Statsd/Graphite</h2>
@@ -152,61 +152,58 @@
 </ul>
 </div>
 
+
+      <div class="share">
+        <p>Share this:</>
+        <a href="http://twitter.com/share?text=Kamailio statsd explained via @eloycoto&url=http://www.acalustra.com/kamailio-statsd-explained.html"><i class="fa fa-twitter"></i></a>
+        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/kamailio-statsd-explained.html"><i class="fa fa-facebook"></i></a>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/kamailio-statsd-explained.html&title=Kamailio statsd explained"><i class="fa fa-linkedin"></i></a>
       </div>
-
-      <p style="display:none" itemprop="keywords"> grafana, graphite, kamailio, monitoring, statistics, statsd,  </p>
-
+      <div class="tags">
+        <h3>Tags</h3>
+        <div class="taglist">
+            <span class="tag">
+              <a href="/tag/grafana.html" rel="tag">grafana</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/graphite.html" rel="tag">graphite</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/kamailio.html" rel="tag">kamailio</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/monitoring.html" rel="tag">monitoring</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/statistics.html" rel="tag">statistics</a>
+            </span>
+            <span class="tag">
+              <a href="/tag/statsd.html" rel="tag">statsd</a>
+            </span>
+        </div><!--tags-->
+      </div>
         <div class="comments">
-          <h4>Commentarios:</h4>
+          <h4>Comments:</h4>
           <div id="disqus_thread"></div>
             <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
             <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
         </div> <!-- .comments-container -->
 
       <div class="row">
-        <h4>Artículos relacionados:</h4>
-            <ul>
-                <li><a href="http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html">Kamailio statsd, better statistics in your voip platform.</a></li>
-                <li><a href="http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html">Statsd talk at Python Vigo Meetup</a></li>
-                <li><a href="http://www.acalustra.com/voip-talk-at-librecon-2015.html">Voip talk at Librecon 2015</a></li>
-                <li><a href="http://www.acalustra.com/how-can-i-monitor-my-voip-application.html">How can I monitor my Voip Application?</a></li>
-                <li><a href="http://www.acalustra.com/my-review-of-hashiconf-europe-16.html">My review of Hashiconf Europe 16</a></li>
-            </ul>
+        <h4>Related articles:</h4>
+          <ul>
+              <li><a href="http://www.acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html">Kamailio statsd, better statistics in your voip platform.</a></li>
+              <li><a href="http://www.acalustra.com/statsd-talk-at-python-vigo-meetup.html">Statsd talk at Python Vigo Meetup</a></li>
+              <li><a href="http://www.acalustra.com/voip-talk-at-librecon-2015.html">Voip talk at Librecon 2015</a></li>
+              <li><a href="http://www.acalustra.com/how-can-i-monitor-my-voip-application.html">How can I monitor my Voip Application?</a></li>
+              <li><a href="http://www.acalustra.com/kamailio-from-tables-to-htables.html">Kamailio from tables to htables</a></li>
+          </ul>
       </div>
 
 
     </div>
-    <div class="col-2">
-      <h3>Tags</h3>
-      <div class="tags">
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/grafana.html" rel="tag">grafana</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/graphite.html" rel="tag">graphite</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/kamailio.html" rel="tag">kamailio</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/monitoring.html" rel="tag">monitoring</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/statistics.html" rel="tag">statistics</a>
-          </span>
-          <span class="tag">
-            <a href="http://www.acalustra.com/tag/statsd.html" rel="tag">statsd</a>
-          </span>
-      </div><!--tags-->
-      <div class="share">
-        <a href="http://twitter.com/share?text=Kamailio statsd explained via @eloycoto&url=http://www.acalustra.com/kamailio-statsd-explained.html"><i class="fa fa-twitter"></i></a>
-        <br>
-        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/kamailio-statsd-explained.html"><i class="fa fa-facebook"></i></a>
-        <br>
-        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/kamailio-statsd-explained.html&title=Kamailio statsd explained"><i class="fa fa-linkedin"></i></a>
-      </div>
-    </div>
-  </div>
+
+  </article>
 </div>    </div><!--container-->
 
     <div class="row footer">
