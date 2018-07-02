@@ -5,29 +5,43 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/</loc>
-<lastmod>2017-08-28T21:17:11-00:00</lastmod>
+<lastmod>2018-07-02T19:26:59-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/archives.html</loc>
-<lastmod>2017-08-28T21:17:11-00:00</lastmod>
+<lastmod>2018-07-02T19:26:59-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/tags.html</loc>
-<lastmod>2017-08-28T21:17:11-00:00</lastmod>
+<lastmod>2018-07-02T19:26:59-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/categories.html</loc>
-<lastmod>2017-08-28T21:17:11-00:00</lastmod>
+<lastmod>2018-07-02T19:26:59-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/jenkins-slides-from-my-vigojug-meetup.html</loc>
+<lastmod>2018-07-02T20:00:00-00:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.acalustra.com/perseguir-un-sono-e-que-se-convirte-nunha-trampa.html</loc>
+<lastmod>2017-12-14T12:00:00-00:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -285,7 +299,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/category/blog.html</loc>
-<lastmod>2017-08-29T12:00:00-00:15</lastmod>
+<lastmod>2018-07-02T20:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -341,7 +355,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/tag/talks.html</loc>
-<lastmod>2017-06-29T12:00:00-00:15</lastmod>
+<lastmod>2018-07-02T20:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -607,7 +621,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/tag/vigo.html</loc>
-<lastmod>2017-06-29T12:00:00-00:15</lastmod>
+<lastmod>2018-07-02T20:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -831,14 +845,14 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/tag/jenkins.html</loc>
-<lastmod>2016-07-05T10:00:00-00:15</lastmod>
+<lastmod>2018-07-02T20:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.acalustra.com/tag/mar.html</loc>
-<lastmod>2016-12-29T10:00:00-00:15</lastmod>
+<lastmod>2017-12-14T12:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -914,6 +928,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>http://www.acalustra.com/tag/aindustriosa.html</loc>
+<lastmod>2017-12-14T12:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://www.acalustra.com/tag/push.html</loc>
 <lastmod>2013-03-15T12:25:00-00:15</lastmod>
 <changefreq>daily</changefreq>
@@ -936,7 +957,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.acalustra.com/author/eloy-coto.html</loc>
-<lastmod>2017-08-29T12:00:00-00:15</lastmod>
+<lastmod>2018-07-02T20:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>

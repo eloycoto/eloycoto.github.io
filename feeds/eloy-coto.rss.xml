@@ -1,5 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>A calustra</title><link>http://www.acalustra.com/</link><description></description><atom:link href="http://www.acalustra.com/feeds/eloy-coto.rss.xml" rel="self"></atom:link><lastBuildDate>Tue, 29 Aug 2017 12:00:00 +0200</lastBuildDate><item><title>Terraform recipes to test Cilium on Kubernetes</title><link>http://www.acalustra.com/terraform-recipes-to-test-cilium-on-kubernetes.html</link><description>&lt;p&gt;After almost five years, I left my job at &lt;a class="reference external" href="https://www.foehn.co.uk/"&gt;Foehn&lt;/a&gt;;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>A calustra</title><link>http://www.acalustra.com/</link><description></description><atom:link href="http://www.acalustra.com/feeds/eloy-coto.rss.xml" rel="self"></atom:link><lastBuildDate>Mon, 02 Jul 2018 20:00:00 +0200</lastBuildDate><item><title>Jenkins Slides from my VigoJug meetup</title><link>http://www.acalustra.com/jenkins-slides-from-my-vigojug-meetup.html</link><description>&lt;p&gt;&lt;a class="reference external" href="https://www.meetup.com/es-ES/VigoJUG/"&gt;VigoJug&lt;/a&gt; meetup is one of the best
+meetups that we have in the town, my close friend &lt;a class="reference external" href="https://twitter.com/antonmry"&gt;Anton&lt;/a&gt; always help me with my Groovy skills and he
+helped me to get some Jenkins pipelines to the next level!&lt;/p&gt;
+&lt;p&gt;Due the job that I made in the last years, I know a lot of Jenkins and he asked
+me to give a talk and explain the declarative pipelines, shared libraries and
+job-dsl.&lt;/p&gt;
+&lt;p&gt;The meetup was awesome, we have a full house and &lt;a class="reference external" href="http://optaresolutions.com/"&gt;Optare Solutions&lt;/a&gt; sponsored the beers. Here you have the slides,
+sadly this time the meetup was not recorded.&lt;/p&gt;
+&lt;div class="align-center" align="center"&gt;
+            &lt;script async class="speakerdeck-embed"
+                    data-id="8c046a529fba4a05ae4028ca6459dead"
+                    data-ratio="1.77777777777778"
+                    src="//speakerdeck.com/assets/embed.js"&gt;
+            &lt;/script&gt;
+&lt;/div&gt;&lt;p&gt;For the track of some questions that I received:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://jenkins.io/doc/pipeline/steps/"&gt;Pipeline steps reference&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://job-dsl.herokuapp.com/"&gt;JobDSL job sandbox&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://wiki.jenkins.io/display/JENKINS/Amazon+EC2+Fleet+Plugin"&gt;Amazon ec2 autoscaling spot instances&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Mon, 02 Jul 2018 20:00:00 +0200</pubDate><guid>tag:www.acalustra.com,2018-07-02:jenkins-slides-from-my-vigojug-meetup.html</guid><category>jenkins</category><category>vigo</category><category>talks</category></item><item><title>Perseguir un soño e que se convirte nunha trampa.</title><link>http://www.acalustra.com/perseguir-un-sono-e-que-se-convirte-nunha-trampa.html</link><description>&lt;p&gt;Como ben sabedes levo anos loitando por crear &lt;a class="reference external" href="intranet.aindustriosa.org"&gt;A Industriosa&lt;/a&gt;, un obxectivo que eu consideraba primordial para
+Vigo e que a miña cabeza non parou ata conseguilo.  Grazas a un &lt;strong&gt;equipazo&lt;/strong&gt; de
+xente este proxecto foi adiante pero eu teño que dicir basta, isto converteuse
+nun traballo, polo que teño que renunciar.&lt;/p&gt;
+&lt;img alt="Espazo A Industriosa" class="align-center" src="img/aindustriosa.jpg" /&gt;
+&lt;p&gt;A miña adicación, nos últimos meses, foi en case media xornada de traballo, polo
+que empuxaba ao 300%, pero este último impulso foi desmesurado e teño que baixar
+o acelerador, apartarme para que outros fagan as cousas, ademais, a miña
+incorporación a un novo traballo non me deixa outra opción que perder impulso.&lt;/p&gt;
+&lt;p&gt;Neste camiño os números son entre alarmantes e impresionantes:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Mais de 1300 emails escritos relacionados ca Industriosa.&lt;/li&gt;
+&lt;li&gt;Mais de 16 meetups + Workshops&lt;/li&gt;
+&lt;li&gt;Dúas hackathons organizadas&lt;/li&gt;
+&lt;li&gt;Mais de 60 reunións presenciais&lt;/li&gt;
+&lt;li&gt;Mais de 400 chamadas (SMS Backup + ftw)&lt;/li&gt;
+&lt;li&gt;Conseguidos case 8000€ de patrocinios.&lt;/li&gt;
+&lt;li&gt;Aportados mais de 200€ a fondo perdido + 350€ da fianza do local.(Que
+recuperaremos) + Material que doei a fondo perdido.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Creo que A Industriosa é un proxecto grandioso, e o seu futuro esta fora de toda
+dúbida, agora toca que en os enxeñeiros de Vigo lle dean contido e que este se
+aliene aos proxectos das empresas. &lt;strong&gt;Por outra parte a autoxestión do espazo&lt;/strong&gt;,
+que a comunidade sea capaz de aportar 1000€ mensuais para ter un espazo a
+disposición de todos e que as empresas so teñan que colaborar para mellorar o
+espazo ou futuros proxectos é algo primordial.&lt;/p&gt;
+&lt;p&gt;Que ese espazo sirva como revulsivo para os rapaces da zona inda é mellor! No
+futuro, moitas veces, igual non lle vemos valor ao espazo, pero a semente moitas
+veces é o mais importante. Oxala isto sexa como unha plantación de Eucaliptos e
+se propaguen a toda hostia.&lt;/p&gt;
+&lt;p&gt;Eu seguirei, xa mais tranquilo, na directiva ata Setembro. A partir de Setembro
+xa non serei parte da Industriosa e xa solo colaborarei axudando os rapaces. E
+moi posible que pague a cota a a estudantes e que os intente foguear en
+proxectos reais que poidan crear valor e axudalos a mellorar, pero iso xa
+falaremos en Setembro do 2018 ^__^.&lt;/p&gt;
+&lt;p&gt;Ata Setembro sigo na industriosa, empuxando con todo &lt;strong&gt;o marabilloso equipo&lt;/strong&gt;.
+Ao mesmo tempo darlle as grazas a &lt;a class="reference external" href="https://twitter.com/LuisMirandaAceb"&gt;Luis Miranda&lt;/a&gt;, o home que colleu a Industriosa e
+deulle o último empuxón ao espazo xunto con todo o equipo para que isto
+despegara. (O de Luís ten moito mérito)&lt;/p&gt;
+&lt;p&gt;Unha autentica sorte ser parte deste equipo de xente, graciñas polo viaxe e a
+desfutrar/empuxar do que me queda.&lt;/p&gt;
+&lt;p&gt;PS: Agora é o teu momento, da persoa que esta lendo, ti podes colaborar
+activamente nisto.&lt;/p&gt;
+&lt;p&gt;PS: Onte dicíame un patrocinador que somos uns heroes, eu son mais de que somos
+un &lt;strong&gt;matados&lt;/strong&gt;. Unha sociedade que deixa a un dos mellores grupos de enxeñeiros
+teñan que buscar locais, que teñan que xestionar altas de actividade e facer
+traballo de xestión é unha sociedade podre. Así é a nosa sociedade, a que se
+tira o mar para limpa chapapote, a que se tira ao monte a apagar lumes ou a que
+enche hospitais para doar sangre nunha desgraza, estas imaxes son infames, pero
+para nós un orgullo! Non debería enorgullecermos, senón avergoñarnos, unha
+mostra da resignación do pobo galego.&lt;/p&gt;
+&lt;blockquote class="epigraph"&gt;
+La mitad de los gallegos no sabemos nadar, dijo al fin. Nos ahogamos resignados, y punto.
+-- Perez Reverte, La reina del sur&lt;/blockquote&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eloy Coto</dc:creator><pubDate>Thu, 14 Dec 2017 12:00:00 +0100</pubDate><guid>tag:www.acalustra.com,2017-12-14:perseguir-un-sono-e-que-se-convirte-nunha-trampa.html</guid><category>aindustriosa</category><category>mar</category><category>vigo</category></item><item><title>Terraform recipes to test Cilium on Kubernetes</title><link>http://www.acalustra.com/terraform-recipes-to-test-cilium-on-kubernetes.html</link><description>&lt;p&gt;After almost five years, I left my job at &lt;a class="reference external" href="https://www.foehn.co.uk/"&gt;Foehn&lt;/a&gt;;
 I need a personal break, and I have decided early this year that late August
 would be a good time for doing it.&lt;/p&gt;
 &lt;p&gt;During this break, I'll be doing open source for few months before starting to
