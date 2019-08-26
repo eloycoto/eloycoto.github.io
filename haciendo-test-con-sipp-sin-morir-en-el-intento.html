@@ -1,81 +1,180 @@
 <!DOCTYPE html>
-<html lang="es-ES">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<html lang="en">
 
-    <title> Validacion sencilla de sipp con sippy_cup</title>
-    <link rel="canonical" href="http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html" />
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <meta name="keywords" content=" sipp, sip, voip, ims, testing, asterisk, kamailio, mojolingo, bklang"/>
-    <meta name="description" content=" Sippy_cup es una herramienta de test que utiliza sipp en backend. Hace fácil probar herramientas en la web "/>
-
-    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
-    <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="http://www.acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A calustra Full Atom Feed" />
+<head>
+    <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
 
+  <title>Haciendo test con sipp sin morir en el intento</title>
+
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="origin" />
+  <meta name="generator" content="Pelican" />
+  <link href="https://acalustra.com/" rel="canonical" />
+
+  <!-- Feed -->
+        <link href="https://acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A Calustra Full Atom Feed" />
+
+  <link href="https://acalustra.com/theme/css/style.css" type="text/css" rel="stylesheet" />
+
+  <!-- Code highlight color scheme -->
+      <link href="https://acalustra.com/theme/css/code_blocks/github.css" rel="stylesheet">
+
+
+  <!-- Custom fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,300' rel='stylesheet' type='text/css' />
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css" />
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+
+  <link href="https://acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html" rel="canonical" />
+  <meta name="keywords" content="sipp, sip, voip, ims, testing, asterisk, kamailio, mojolingo, bklang" >
+
+    <meta name="description" content="En el pasado Febrero cerramos un proyecto muy importante. Dicho proyecto necesita una cantidad de test, no porque el cliente lo pidiera,...">
+
+    <meta name="author" content="eloycoto">
+
+    <meta name="tags" content="sip">
+    <meta name="tags" content="sipp">
+    <meta name="tags" content="ruby">
+    <meta name="tags" content="sippy_cup">
+    <meta name="tags" content="test">
+    <meta name="tags" content="asterisk">
+    <meta name="tags" content="asteriskTestSuite">
 
 
 
 
+<!-- Open Graph -->
+<meta property="og:site_name" content="A Calustra"/>
+<meta property="og:title" content="Haciendo test con sipp sin morir en el intento"/>
+<meta property="og:description" content="En el pasado Febrero cerramos un proyecto muy importante. Dicho proyecto necesita una cantidad de test, no porque el cliente lo pidiera,..."/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="https://acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2013-08-30 10:10:00+02:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="https://acalustra.com/author/eloycoto.html">
+<meta property="article:section" content="blog"/>
+<meta property="article:tag" content="sip"/>
+<meta property="article:tag" content="sipp"/>
+<meta property="article:tag" content="ruby"/>
+<meta property="article:tag" content="sippy_cup"/>
+<meta property="article:tag" content="test"/>
+<meta property="article:tag" content="asterisk"/>
+<meta property="article:tag" content="asteriskTestSuite"/>
+<meta property="og:image" content="https://acalustra.com/img/oia.jpg">
 
-    <meta name="tags" content="sip, sipp, sippy_cup, asterisk, voip" />
-    <meta name="date" content=" 2013-08-30 10:10:00" />
-    <meta name="category" content="blog" />
-    <meta name="author" content="Eloy coto" />
-    <meta name="robots" content="index,follow" />
-  </head>
-  <body>
-  <div class="wrapper">
-    <div class="row nav">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="archives.html">Blog</a></li>
-      </ul>
-    </div><!--row nav-->
+<!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@eloycoto">
+    <meta name="twitter:title" content="Haciendo test con sipp sin morir en el intento">
+    <meta name="twitter:url" content="https://acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html">
 
-    <div class="container content">
-<div class="row">
-  <article>
-    <header>
-      <h1 itemprop="name headline">Validar instalaciones de SIPP con sippy_cup</h1>
-      <div class="byline">
-        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <span itemprop="name">
-            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+        <meta name="twitter:image:src" content="https://acalustra.com/img/oia.jpg">
+
+      <meta name="twitter:description" content="En el pasado Febrero cerramos un proyecto muy importante. Dicho proyecto necesita una cantidad de test, no porque el cliente lo pidiera,...">
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "name": "Haciendo test con sipp sin morir en el intento",
+  "headline": "Haciendo test con sipp sin morir en el intento",
+  "datePublished": "2013-08-30 10:10:00+02:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "eloycoto",
+    "url": "https://acalustra.com/author/eloycoto.html"
+  },
+  "image": "https://acalustra.com/img/oia.jpg",
+  "url": "https://acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html",
+  "description": "En el pasado Febrero cerramos un proyecto muy importante. Dicho proyecto necesita una cantidad de test, no porque el cliente lo pidiera,..."
+}
+</script>
+</head>
+<!-- TODO : Body class -->
+<body class="home-template">
+
+<nav id="menu">
+  <a class="close-button">Close</a>
+  <div class="nav-wrapper">
+    <p class="nav-label">Menu</p>
+    <ul>
+
+              <li role="presentation"><a href="https://acalustra.com/pages/about.html">About</a></li>
+
+    </ul>
+  </div>
+</nav>
+    <!-- Progressbar -->
+    <div class="progress-container">
+        <span class="progress-bar"></span>
+    </div>
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header id="post-header" class="has-cover">
+      <div class="inner">
+        <nav id="navigation">
+            <span id="home-button" class="nav-button">
+                <a class="home-button" href="https://acalustra.com/" title="Home"><i class="ic ic-arrow-left"></i> Home</a>
+            </span>
+          <span id="menu-button" class="nav-button">
+            <a class="menu-button"><i class="ic ic-menu"></i> Menu</a>
           </span>
+        </nav>
+        <h1 class="post-title">Haciendo test con sipp sin morir en el intento</h1>
+        <!-- TODO : Proper class for headline -->
+        <span class="post-meta">
+                <a href="https://acalustra.com/author/eloycoto.html">Eloy Coto</a>
+            | <time datetime="Friday 30-08-2013">Friday 30-08-2013</time>
         </span>
-        on
-        <time datetime="2013-08-30T10:10:00" itemprop="datePublished">August 30th, 2013</time>
+        <!-- TODO : Modified check -->
+            <div class="post-cover cover" style="background-image: url('https://acalustra.com/img/oia.jpg')">
       </div>
     </header>
 
+  <section id="wrapper">
+    <a class="hidden-close"></a>
 
-    <div class="content" itemprop="articleBody">
-      <p>En el pasado Febrero cerramos un proyecto muy importante. Dicho proyecto necesita una cantidad de test, no porque el cliente lo pidiera, si no porque el SLA que teníamos con ellos nos hacia que con cualquier cambio solo teníamos ventanas muy pequeñas de tiempo. Lo que nos hizo tener que programar todos los escenarios posibles para una validación más eficiente.</p>
+    <!-- Post content -->
+    <main class="content" role="main">
+        <article class="post">
+        <div class="inner">
+            <section class="post-content">
+                <p>En el pasado Febrero cerramos un proyecto muy importante. Dicho proyecto necesita una cantidad de test, no porque el cliente lo pidiera, si no porque el SLA que teníamos con ellos nos hacia que con cualquier cambio solo teníamos ventanas muy pequeñas de tiempo. Lo que nos hizo tener que programar todos los escenarios posibles para una validación más eficiente.</p>
 <p>Desde ese proyecto y usando <a class="reference external" href="http://sipsimpleclient.org/">python-sipsimple</a> hice un pequeño framework, para hacer test sin ser la locura de los ficheros xml de <a class="reference external" href="http://sipp.sourceforge.net/">sipp</a>. En los últimos meses estaba pensando en como poder hacer un framework libre, que pudiera ser útil para demás proyectos. Cuando tenía algo de código han salido a la luz dos proyectos muy interesantes.</p>
 <p>El primero ha sido el que ha realizado <a class="reference external" href="http://www.metaswitch.com/">metaswitch</a>, que <a class="reference external" href="https://github.com/Metaswitch">han liberado muchas partes de sus herramientas/productos</a> y tiene un <a class="reference external" href="https://github.com/Metaswitch/clearwater-live-test">framework de test muy orientado a su plataforma.</a></p>
 <p>El framework esta bien, pero era costoso de hacer sin ser referido a Metaswitch.</p>
 <p>Esta semana <a class="reference external" href="https://twitter.com/bklang">Ben Klang</a> ha liberado <a class="reference external" href="http://bklang.github.io/sippy_cup/">sippy_cup</a>, un framework que la verdad me ha dejado muy contento. Es justo lo que estaba haciendo, por lo que a partir de ahora, usare este sistema y me <a class="reference external" href="https://github.com/bklang/sippy_cup/pull/8">centraré en enviar pull-request</a> si algo veo que se puede mejorar.</p>
 <p>Para instalar este framework hay que seguir los siguientes pasos:</p>
 <p><strong>Dependencias ruby</strong></p>
-<div class="highlight"><pre>sudo apt-get install build-essential git --yes
-curl -L https://get.rvm.io | bash -s stable
+<div class="highlight"><pre><span></span>sudo apt-get install build-essential git --yes
+curl -L https://get.rvm.io <span class="p">|</span> bash -s stable
 <span class="nb">source</span> ~/.rvm/scripts/rvm
 rvm autolibs <span class="nb">enable</span>
-rvm install 1.9.3
-rvm use 1.9.3
+rvm install <span class="m">1</span>.9.3
+rvm use <span class="m">1</span>.9.3
 gem install sippy_cup
 </pre></div>
 <p><strong>Instalando sipp</strong></p>
-<div class="highlight"><pre>apt-get install libpcap-dev
+<div class="highlight"><pre><span></span>apt-get install libpcap-dev
 <span class="nb">cd</span> /tmp/
 git clone https://github.com/polysics/sipp_dynamic_pcapp_play.git
 tar -xvzf sipp-xxx.tar.gz
-<span class="nb">cd </span>sipp-*
+<span class="nb">cd</span> sipp-*
 patch -p1 -i /tmp/sipp_dynamic_pcapp_play/
 autoreconf -ivf
 ./configure --with-pcap
@@ -84,20 +183,20 @@ cp sipp /usr/local/bin/
 </pre></div>
 <p><strong>Usando sippy_cup</strong></p>
 <p>Para empezar con sippy_cup se necesita crear un fichero .yml con la siguiente estructura</p>
-<div class="highlight"><pre>---
-<span class="nb">source</span>: 192.168.1.114
-destination: 192.168.1.120
-max_concurrent: 10
-calls_per_second: 5
-number_of_calls: 20
-sip_user: 100
+<div class="highlight"><pre><span></span>---
+source: <span class="m">192</span>.168.1.114
+destination: <span class="m">192</span>.168.1.120
+max_concurrent: <span class="m">10</span>
+calls_per_second: <span class="m">5</span>
+number_of_calls: <span class="m">20</span>
+sip_user: <span class="m">100</span>
 steps:
   - invite
   - wait_for_answer
   - ack_answer
-  - sleep 3
+  - sleep <span class="m">3</span>
   - send_digits <span class="s1">&#39;3125551234&#39;</span>
-  - sleep 5
+  - sleep <span class="m">5</span>
   - send_digits <span class="s1">&#39;#&#39;</span>
   - wait_for_hangup
 </pre></div>
@@ -109,7 +208,7 @@ steps:
 </ul>
 </dd>
 </dl>
-<div class="highlight"><pre>sippy_cup -cr my_test_scenario.yml
+<div class="highlight"><pre><span></span>sippy_cup -cr my_test_scenario.yml
 Compiling media to /Users/eloycotopereiro/dev/sipp/sippcup/my_test_scenario.xml...done.
 Compiling scenario to /Users/eloycotopereiro/dev/sipp/sippcup/my_test_scenario.pcap...done.
 <span class="s2">&quot;Preparing to run SIPp command: sudo sipp -i 192.168.1.114 -p 8836 -sf /Users/eloycotopereiro/dev/sipp/sippcup/my_test_scenario.xml -l 10 -m 20 -r 5 -s 100 192.168.1.120 &gt; /dev/null 2&gt;&amp;1&quot;</span>
@@ -118,85 +217,100 @@ Password:
 </pre></div>
 <p>Ahora ya tenemos nuestro servicio de testing mas sencillo de leer, y mas fácil para hacer pruebas en nuestros servicios de voip.</p>
 
+            </section>
 
-      <div class="share">
-        <p>Share this:</>
-        <a href="http://twitter.com/share?text=Haciendo test con sipp sin morir en el intento via @eloycoto&url=http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html"><i class="fa fa-twitter"></i></a>
-        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html"><i class="fa fa-facebook"></i></a>
-        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html&title=Haciendo test con sipp sin morir en el intento"><i class="fa fa-linkedin"></i></a>
+            <section class="post-info">
+                <div class="post-share">
+                    <a class="twitter" href="https://twitter.com/share?text=Haciendo test con sipp sin morir en el intento&amp;url=https://acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <i class="ic ic-twitter"></i><span class="hidden">Twitter</span>
+                    </a>
+                    <a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <i class="ic ic-facebook"></i><span class="hidden">Facebook</span>
+                    </a>
+                    <a class="googleplus" href="https://plus.google.com/share?url=https://acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <i class="ic ic-googleplus"></i><span class="hidden">Google+</span>
+                    </a>
+                    <div class="clear"></div>
+                </div>
+
+                <aside class="post-tags">
+<a href="https://acalustra.com/tag/sip.html">sip</a><a href="https://acalustra.com/tag/sipp.html">sipp</a><a href="https://acalustra.com/tag/ruby.html">ruby</a><a href="https://acalustra.com/tag/sippy_cup.html">sippy_cup</a><a href="https://acalustra.com/tag/test.html">test</a><a href="https://acalustra.com/tag/asterisk.html">asterisk</a><a href="https://acalustra.com/tag/asterisktestsuite.html">asteriskTestSuite</a>                </aside>
+
+                <div class="clear"></div>
+
+                <aside class="post-author">
+
+
+                        <figure class="post-author-avatar">
+                            <img src="https://acalustra.com/img/profile.jpg" alt="Eloy Coto" />
+                        </figure>
+                    <div class="post-author-bio">
+                        <h4 class="post-author-name"><a href="https://acalustra.com/author/eloycoto.html">Eloy Coto</a></h4>
+                            <p class="post-author-about">Senior software engineer with experience in Golang, C and Python and CI/CD</p>
+                            <span class="post-author-location"><i class="ic ic-location"></i> Galicia</span>
+                            <span class="post-author-website"><a href="http://acalustra.com"><i class="ic ic-link"></i> Website</a></span>
+                        <!-- Social linkes in alphabet order. -->
+                            <span class="post-author-github"><a target="_blank" href="https://github.com/eloycoto"><i class="ic ic-link"></i> GitHub</a></span>
+                            <span class="post-author-linkedin"><a target="_blank" href="https://www.linkedin.com/in/eloycoto"><i class="ic ic-link"></i> LinkedIn</a></span>
+                            <span class="post-author-twitter"><a target="_blank" href="https://twitter.com/eloycoto"><i class="ic ic-twitter"></i> Twitter</a></span>
+                    </div>
+                    <div class="clear"></div>
+                </aside>
+
+                </section>
+
+                <script type="text/javascript">
+                    var disqus = 'acalustra';
+                    var disqus_shortname = 'acalustra';
+                    var disqus_identifier = '/haciendo-test-con-sipp-sin-morir-en-el-intento.html';
+                    var disqus_url = 'https://acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html';
+                </script>
+                <noscript>Please enable JavaScript to view the comments.</noscript>
+                <section class="post-comments">
+                        <a id="show-disqus" class="post-comments-activate" data-disqus-identifier="/haciendo-test-con-sipp-sin-morir-en-el-intento.html" >Show Comments</a>
+                    <div id="disqus_thread"></div>
+                </section>
+
+                <aside class="post-nav">
+                    <div class="clear"></div>
+                </aside>
+
+            </div>
+        </article>
+    </main>
+      <!-- TODO : Body class -->
+    <div id="body-class" style="display: none;" class=""></div>
+
+    <footer id="footer">
+      <div class="inner">
+        <section class="credits">
+
+
+          <span class="credits-theme">Theme <a href="https://github.com/arulrajnet/attila" rel="nofollow">Attila</a></span>
+          <span class="credits-software">Published with <a href="https://github.com/getpelican/pelican" rel="nofollow">Pelican</a></span>
+        </section>
       </div>
-      <div class="tags">
-        <h3>Tags</h3>
-        <div class="taglist">
-            <span class="tag">
-              <a href="/tag/asterisk.html" rel="tag">asterisk</a>
-            </span>
-            <span class="tag">
-              <a href="/tag/asterisktestsuite.html" rel="tag">asteriskTestSuite</a>
-            </span>
-            <span class="tag">
-              <a href="/tag/ruby.html" rel="tag">ruby</a>
-            </span>
-            <span class="tag">
-              <a href="/tag/sip.html" rel="tag">sip</a>
-            </span>
-            <span class="tag">
-              <a href="/tag/sipp.html" rel="tag">sipp</a>
-            </span>
-            <span class="tag">
-              <a href="/tag/sippy_cup.html" rel="tag">sippy_cup</a>
-            </span>
-            <span class="tag">
-              <a href="/tag/test.html" rel="tag">test</a>
-            </span>
-        </div><!--tags-->
-      </div>
-        <div class="comments">
-          <h4>Comments:</h4>
-          <div id="disqus_thread"></div>
-            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
-            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
-        </div> <!-- .comments-container -->
+    </footer>
+  </section>
 
-      <div class="row">
-        <h4>Related articles:</h4>
-          <ul>
-              <li><a href="http://www.acalustra.com/trick-and-tips-en-ansible.html">trick and tips en ansible</a></li>
-              <li><a href="http://www.acalustra.com/how-can-i-monitor-my-voip-application.html">How can I monitor my Voip Application?</a></li>
-              <li><a href="http://www.acalustra.com/voip-talk-at-librecon-2015.html">Voip talk at Librecon 2015</a></li>
-              <li><a href="http://www.acalustra.com/asterisk-11-hangups-handlers.html">Asterisk 11 hangups handlers</a></li>
-              <li><a href="http://www.acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html">Integrando hubot con nuestro servicio xmpp</a></li>
-          </ul>
-      </div>
+  <script type="text/javascript" src="https://acalustra.com/theme/js/script.js"></script>
 
-
-    </div>
-
-  </article>
-</div>    </div><!--container-->
-
-    <div class="row footer">
-      <div class="container">
-        <div class="col-3">
-          <p>Eloy Coto</p>
-        </div>
-
-        <div class="col-3 col-offset-3">
-          <p> Contact: eloy.coto@gmail.com</p>
-        </div>
-
-      </div>
-    </div>
-  </div><!--wrapper-->
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-36310774-1', 'auto');
-    ga('send', 'pageview');
-
-  </script>
-  </body>
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-36310774-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-36310774-1', { 'anonymize_ip': true });
+    </script>
+<script type="text/javascript">
+    var disqus_shortname = 'acalustra';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
 </html>

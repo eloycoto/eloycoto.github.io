@@ -1,89 +1,186 @@
 <!DOCTYPE html>
-<html lang="es-ES">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<html lang="en">
 
-    <title> Hubot integrado con el servidor Prosody o otro Jabber.</title>
-    <link rel="canonical" href="http://www.acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html" />
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <meta name="keywords" content=" xmpp, github, jingle, hubot, asterisk, queue, integracion, jira."/>
-    <meta name="description" content=" Instalar Hubot con interfaz Jabber para nuestras instalaciones realtime. "/>
-
-    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
-    <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="http://www.acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A calustra Full Atom Feed" />
+<head>
+    <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
 
+  <title>Integrando hubot con nuestro servicio xmpp</title>
+
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="origin" />
+  <meta name="generator" content="Pelican" />
+  <link href="https://acalustra.com/" rel="canonical" />
+
+  <!-- Feed -->
+        <link href="https://acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A Calustra Full Atom Feed" />
+
+  <link href="https://acalustra.com/theme/css/style.css" type="text/css" rel="stylesheet" />
+
+  <!-- Code highlight color scheme -->
+      <link href="https://acalustra.com/theme/css/code_blocks/github.css" rel="stylesheet">
+
+
+  <!-- Custom fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,300' rel='stylesheet' type='text/css' />
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css" />
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+
+  <link href="https://acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html" rel="canonical" />
+  <meta name="keywords" content="xmpp, github, jingle, hubot, asterisk, queue, integracion, jira." >
+
+    <meta name="description" content="Hubot es uno de los productos más de moda en el panorama de empresas desarrolladoras de software Americanas. Iniciado y comandado por...">
+
+    <meta name="author" content="eloycoto">
+
+    <meta name="tags" content="xmpp">
+    <meta name="tags" content="github">
+    <meta name="tags" content="productividad">
+    <meta name="tags" content="hubot">
+    <meta name="tags" content="asterisk">
+    <meta name="tags" content="jabber">
 
 
 
 
+<!-- Open Graph -->
+<meta property="og:site_name" content="A Calustra"/>
+<meta property="og:title" content="Integrando hubot con nuestro servicio xmpp"/>
+<meta property="og:description" content="Hubot es uno de los productos más de moda en el panorama de empresas desarrolladoras de software Americanas. Iniciado y comandado por..."/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="https://acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2013-05-10 00:30:00+02:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="https://acalustra.com/author/eloycoto.html">
+<meta property="article:section" content="blog"/>
+<meta property="article:tag" content="xmpp"/>
+<meta property="article:tag" content="github"/>
+<meta property="article:tag" content="productividad"/>
+<meta property="article:tag" content="hubot"/>
+<meta property="article:tag" content="asterisk"/>
+<meta property="article:tag" content="jabber"/>
+<meta property="og:image" content="https://acalustra.com/img/oia.jpg">
 
-    <meta name="tags" content="xmpp, github, productividad, hubot, asterisk, jabber" />
-    <meta name="date" content=" 2013-05-10 00:30:00" />
-    <meta name="category" content="blog" />
-    <meta name="author" content="Eloy coto" />
-    <meta name="robots" content="index,follow" />
-  </head>
-  <body>
-  <div class="wrapper">
-    <div class="row nav">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="archives.html">Blog</a></li>
-      </ul>
-    </div><!--row nav-->
+<!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@eloycoto">
+    <meta name="twitter:title" content="Integrando hubot con nuestro servicio xmpp">
+    <meta name="twitter:url" content="https://acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html">
 
-    <div class="container content">
-<div class="row">
-  <article>
-    <header>
-      <h1 itemprop="name headline">Instalar Hubot con nuestro servidor jabber</h1>
-      <div class="byline">
-        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <span itemprop="name">
-            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+        <meta name="twitter:image:src" content="https://acalustra.com/img/oia.jpg">
+
+      <meta name="twitter:description" content="Hubot es uno de los productos más de moda en el panorama de empresas desarrolladoras de software Americanas. Iniciado y comandado por...">
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "name": "Integrando hubot con nuestro servicio xmpp",
+  "headline": "Integrando hubot con nuestro servicio xmpp",
+  "datePublished": "2013-05-10 00:30:00+02:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "eloycoto",
+    "url": "https://acalustra.com/author/eloycoto.html"
+  },
+  "image": "https://acalustra.com/img/oia.jpg",
+  "url": "https://acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html",
+  "description": "Hubot es uno de los productos más de moda en el panorama de empresas desarrolladoras de software Americanas. Iniciado y comandado por..."
+}
+</script>
+</head>
+<!-- TODO : Body class -->
+<body class="home-template">
+
+<nav id="menu">
+  <a class="close-button">Close</a>
+  <div class="nav-wrapper">
+    <p class="nav-label">Menu</p>
+    <ul>
+
+              <li role="presentation"><a href="https://acalustra.com/pages/about.html">About</a></li>
+
+    </ul>
+  </div>
+</nav>
+    <!-- Progressbar -->
+    <div class="progress-container">
+        <span class="progress-bar"></span>
+    </div>
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header id="post-header" class="has-cover">
+      <div class="inner">
+        <nav id="navigation">
+            <span id="home-button" class="nav-button">
+                <a class="home-button" href="https://acalustra.com/" title="Home"><i class="ic ic-arrow-left"></i> Home</a>
+            </span>
+          <span id="menu-button" class="nav-button">
+            <a class="menu-button"><i class="ic ic-menu"></i> Menu</a>
           </span>
+        </nav>
+        <h1 class="post-title">Integrando hubot con nuestro servicio xmpp</h1>
+        <!-- TODO : Proper class for headline -->
+        <span class="post-meta">
+                <a href="https://acalustra.com/author/eloycoto.html">Eloy Coto</a>
+            | <time datetime="Friday 10-05-2013">Friday 10-05-2013</time>
         </span>
-        on
-        <time datetime="2013-05-10T00:30:00" itemprop="datePublished">May 10th, 2013</time>
+        <!-- TODO : Modified check -->
+            <div class="post-cover cover" style="background-image: url('https://acalustra.com/img/oia.jpg')">
       </div>
     </header>
 
+  <section id="wrapper">
+    <a class="hidden-close"></a>
 
-    <div class="content" itemprop="articleBody">
-      <p><a class="reference external" href="http://hubot.github.com/">Hubot</a> es uno de los productos más de moda en el panorama de empresas desarrolladoras de software Americanas. Iniciado y comandado por <a class="reference external" href="http://github.com/">Github</a>, Hubot permite automatizar muchas tareas a través de tu chat de grupo.</p>
+    <!-- Post content -->
+    <main class="content" role="main">
+        <article class="post">
+        <div class="inner">
+            <section class="post-content">
+                <p><a class="reference external" href="http://hubot.github.com/">Hubot</a> es uno de los productos más de moda en el panorama de empresas desarrolladoras de software Americanas. Iniciado y comandado por <a class="reference external" href="http://github.com/">Github</a>, Hubot permite automatizar muchas tareas a través de tu chat de grupo.</p>
 <p>La propia descripción de Hubot en la página web es la siguiente:</p>
-<div class="highlight"><pre><span class="nx">GitHub</span><span class="p">,</span> <span class="nx">Inc</span><span class="p">.,</span> <span class="nx">wrote</span> <span class="nx">the</span> <span class="nx">first</span> <span class="nx">version</span> <span class="nx">of</span> <span class="nx">Hubot</span> <span class="nx">to</span> <span class="nx">automate</span> <span class="nx">our</span> <span class="nx">company</span> <span class="nx">chat</span> <span class="nx">room</span><span class="p">.</span> <span class="nx">Hubot</span> <span class="nx">knew</span> <span class="nx">how</span> <span class="nx">to</span> <span class="nx">deploy</span> <span class="nx">the</span> <span class="nx">site</span><span class="p">,</span> <span class="nx">automate</span> <span class="nx">a</span> <span class="nx">lot</span> <span class="nx">of</span> <span class="nx">tasks</span><span class="p">,</span> <span class="nx">and</span> <span class="nx">be</span> <span class="nx">a</span> <span class="nx">source</span> <span class="nx">of</span> <span class="nx">fun</span> <span class="k">in</span> <span class="nx">the</span> <span class="nx">company</span><span class="p">.</span> <span class="nx">Eventually</span> <span class="nx">he</span> <span class="nx">grew</span> <span class="nx">to</span> <span class="nx">become</span> <span class="nx">a</span> <span class="nx">formidable</span> <span class="nx">force</span> <span class="k">in</span> <span class="nx">GitHub</span><span class="p">.</span> <span class="nx">But</span> <span class="nx">he</span> <span class="nx">led</span> <span class="nx">a</span> <span class="kr">private</span><span class="p">,</span> <span class="nx">messy</span> <span class="nx">life</span><span class="p">.</span> <span class="nx">So</span> <span class="nx">we</span> <span class="nx">rewrote</span> <span class="nx">him</span><span class="p">.</span>
+<div class="highlight"><pre><span></span><span class="nx">GitHub</span><span class="p">,</span> <span class="nx">Inc</span><span class="p">.,</span> <span class="nx">wrote</span> <span class="nx">the</span> <span class="nx">first</span> <span class="nx">version</span> <span class="k">of</span> <span class="nx">Hubot</span> <span class="nx">to</span> <span class="nx">automate</span> <span class="nx">our</span> <span class="nx">company</span> <span class="nx">chat</span> <span class="nx">room</span><span class="p">.</span> <span class="nx">Hubot</span> <span class="nx">knew</span> <span class="nx">how</span> <span class="nx">to</span> <span class="nx">deploy</span> <span class="nx">the</span> <span class="nx">site</span><span class="p">,</span> <span class="nx">automate</span> <span class="nx">a</span> <span class="nx">lot</span> <span class="k">of</span> <span class="nx">tasks</span><span class="p">,</span> <span class="nx">and</span> <span class="nx">be</span> <span class="nx">a</span> <span class="nx">source</span> <span class="k">of</span> <span class="nx">fun</span> <span class="k">in</span> <span class="nx">the</span> <span class="nx">company</span><span class="p">.</span> <span class="nx">Eventually</span> <span class="nx">he</span> <span class="nx">grew</span> <span class="nx">to</span> <span class="nx">become</span> <span class="nx">a</span> <span class="nx">formidable</span> <span class="nx">force</span> <span class="k">in</span> <span class="nx">GitHub</span><span class="p">.</span> <span class="nx">But</span> <span class="nx">he</span> <span class="nx">led</span> <span class="nx">a</span> <span class="kr">private</span><span class="p">,</span> <span class="nx">messy</span> <span class="nx">life</span><span class="p">.</span> <span class="nx">So</span> <span class="nx">we</span> <span class="nx">rewrote</span> <span class="nx">him</span><span class="p">.</span>
 </pre></div>
 <img alt="hubot-fast-integration" class="align-center" src="img/hubot.jpg" />
 <p>En este caso Hubot es muy potente. Además es muy fácil extender los módulos existentes. La situación más normal es tenerlo integrado con Hipchat, o campfire. Pero pocas veces se ve integrado con XMPP. En mi empresa usamos bastante el XMPP, por lo que poder integrar esta herramienta es increíble para nosotros, no solo por los script existentes, si no también por lo que podemos generar.</p>
 <p>Para instalar hubot lo primero que hay que hacer es tener la versión de <a class="reference external" href="http://nodejs.org/">node</a> / <a class="reference external" href="http://coffeescript.org/">coffee-script</a> correcta:</p>
-<div class="highlight"><pre><span class="c"># apt-get install build-essential libssl-dev git-core redis-server libexpat1-dev</span>
-<span class="c"># cd /usr/src/</span>
-<span class="c"># wget http://nodejs.org/dist/v0.8.17/node-v0.8.17.tar.gz</span>
-<span class="c"># tar xf node-v0.8.17.tar.gz -C /usr/local/src &amp;amp;&amp;amp; cd /usr/local/src/node-v0.8.17</span>
-<span class="c"># ./configure &amp;amp;&amp;amp; make &amp;amp;&amp;amp; make install</span>
-<span class="c"># npm install -g coffee-script</span>
+<div class="highlight"><pre><span></span><span class="c1"># apt-get install build-essential libssl-dev git-core redis-server libexpat1-dev</span>
+<span class="c1"># cd /usr/src/</span>
+<span class="c1"># wget http://nodejs.org/dist/v0.8.17/node-v0.8.17.tar.gz</span>
+<span class="c1"># tar xf node-v0.8.17.tar.gz -C /usr/local/src &amp;amp;&amp;amp; cd /usr/local/src/node-v0.8.17</span>
+<span class="c1"># ./configure &amp;amp;&amp;amp; make &amp;amp;&amp;amp; make install</span>
+<span class="c1"># npm install -g coffee-script</span>
 </pre></div>
 <p>Una vez instaladas todas las dependencias solamente hay que hacer el deploy del código base.</p>
-<div class="highlight"><pre><span class="c"># cd /opt</span>
-<span class="c"># git clone git://github.com/github/hubot.git &amp;amp;&amp;amp; cd hubot</span>
-<span class="c"># npm install</span>
+<div class="highlight"><pre><span></span><span class="c1"># cd /opt</span>
+<span class="c1"># git clone git://github.com/github/hubot.git &amp;amp;&amp;amp; cd hubot</span>
+<span class="c1"># npm install</span>
 </pre></div>
 <p>Una vez instalado tenemos que comprobar que funciona correctamente, para ello ejecutamos los siguientes comandos:</p>
-<div class="highlight"><pre>root@deb-pruebas:/opt/hubot<span class="nv">$ </span>./bin/hubot
-Hubot&amp;gt; hubot ping
-Hubot&amp;gt; PONG
+<div class="highlight"><pre><span></span>root@deb-pruebas:/opt/hubot$ ./bin/hubot
+Hubot<span class="p">&amp;</span>gt<span class="p">;</span> hubot ping
+Hubot<span class="p">&amp;</span>gt<span class="p">;</span> PONG
 </pre></div>
 <p>Ahora tenemos que crear el bot que sera la configuración que se conecte a nuestro servidor:</p>
-<div class="highlight"><pre>/opt/hubot/bin/hubot -c ./xmpp
+<div class="highlight"><pre><span></span>/opt/hubot/bin/hubot -c ./xmpp
 </pre></div>
 <p>Eso nos crea una carpeta llamada xmpp, ahora tenemos que entrar y editar las dependencias en el package.json para añadir nuestras necesidades:</p>
-<div class="highlight"><pre><span class="s2">&quot;dependencies&quot;</span>: <span class="o">{</span>
+<div class="highlight"><pre><span></span><span class="s2">&quot;dependencies&quot;</span>: <span class="o">{</span>
     <span class="s2">&quot;hubot&quot;</span>: <span class="s2">&quot;&amp;gt;=2.3.2&quot;</span>,
     <span class="s2">&quot;hubot-scripts&quot;</span>: <span class="s2">&quot;&amp;gt;= 2.1.0&quot;</span>,
     <span class="s2">&quot;optparse&quot;</span>: <span class="s2">&quot;&amp;gt;=1.0.3&quot;</span>,
@@ -96,94 +193,112 @@ Hubot&amp;gt; PONG
 <span class="o">}</span>
 </pre></div>
 <p>Ahora solo tenemos que instalar las dependencias con <strong>npm install</strong>. Una vez instaladas tenemos que configurar las env variables.  Donde le decimos a donde/como se tiene que conectar:</p>
-<div class="highlight"><pre><span class="nb">export </span><span class="nv">HUBOT_XMPP_USERNAME</span><span class="o">=</span>hubot@deb-pruebas
-<span class="nb">export </span><span class="nv">HUBOT_XMPP_PASSWORD</span><span class="o">=</span>hubot
-<span class="nb">export </span><span class="nv">HUBOT_XMPP_ROOMS</span><span class="o">=</span>dev@dev-pruebas
+<div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">HUBOT_XMPP_USERNAME</span><span class="o">=</span>hubot@deb-pruebas
+<span class="nb">export</span> <span class="nv">HUBOT_XMPP_PASSWORD</span><span class="o">=</span>hubot
+<span class="nb">export</span> <span class="nv">HUBOT_XMPP_ROOMS</span><span class="o">=</span>dev@dev-pruebas
 </pre></div>
 <p>Una vez configurado solo tenemos que ejecutarlo y empezar a jugar en nuestro chat de grupo:</p>
-<div class="highlight"><pre>root@deb-pruebas:/<span class="nv">$ </span>/opt/hubot/xmpp/bin/hubot --adapter xmpp
+<div class="highlight"><pre><span></span>root@deb-pruebas:/$ /opt/hubot/xmpp/bin/hubot --adapter xmpp
 </pre></div>
 <p>En ese momento veremos que se conecta el usuario hubot a la conferencia y ya podemos empezar a usar los comandos en la sala.  Para listar todos los comandos y ver que se puede hacer solamente hay que ejecutar <strong>hubot help</strong></p>
 <p>Si necesitais mas scripts, <a class="reference external" href="https://github.com/github/hubot-scripts/">en este repositorio de github</a>, existen un ciento de ellos totalmente diferentes. <a class="reference external" href="http://net.tutsplus.com/tutorials/javascript-ajax/writing-hubot-plugins-with-coffeescript/">Por otra parte aquí os dejo un tutorial para poder escribir vuestros propios plugins</a></p>
 <p>Este es una pequeña demo de lo que se puede hacer.</p>
 <iframe src="http://player.vimeo.com/video/57637316" width="500" height="314" frameborder="0"></iframe><p>Yo lo he instalado recientemente, durante esta semana creo que voy a escribir varios módulos. Te imaginas obtener cuantas llamadas existen en vuestra plataforma, o quizás añadir/expulsar a un usuario a la cola solamente con un comando xmpp :-)</p>
 
+            </section>
 
-      <div class="share">
-        <p>Share this:</>
-        <a href="http://twitter.com/share?text=Integrando hubot con nuestro servicio xmpp via @eloycoto&url=http://www.acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html"><i class="fa fa-twitter"></i></a>
-        <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html"><i class="fa fa-facebook"></i></a>
-        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html&title=Integrando hubot con nuestro servicio xmpp"><i class="fa fa-linkedin"></i></a>
+            <section class="post-info">
+                <div class="post-share">
+                    <a class="twitter" href="https://twitter.com/share?text=Integrando hubot con nuestro servicio xmpp&amp;url=https://acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <i class="ic ic-twitter"></i><span class="hidden">Twitter</span>
+                    </a>
+                    <a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <i class="ic ic-facebook"></i><span class="hidden">Facebook</span>
+                    </a>
+                    <a class="googleplus" href="https://plus.google.com/share?url=https://acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <i class="ic ic-googleplus"></i><span class="hidden">Google+</span>
+                    </a>
+                    <div class="clear"></div>
+                </div>
+
+                <aside class="post-tags">
+<a href="https://acalustra.com/tag/xmpp.html">xmpp</a><a href="https://acalustra.com/tag/github.html">github</a><a href="https://acalustra.com/tag/productividad.html">productividad</a><a href="https://acalustra.com/tag/hubot.html">hubot</a><a href="https://acalustra.com/tag/asterisk.html">asterisk</a><a href="https://acalustra.com/tag/jabber.html">jabber</a>                </aside>
+
+                <div class="clear"></div>
+
+                <aside class="post-author">
+
+
+                        <figure class="post-author-avatar">
+                            <img src="https://acalustra.com/img/profile.jpg" alt="Eloy Coto" />
+                        </figure>
+                    <div class="post-author-bio">
+                        <h4 class="post-author-name"><a href="https://acalustra.com/author/eloycoto.html">Eloy Coto</a></h4>
+                            <p class="post-author-about">Senior software engineer with experience in Golang, C and Python and CI/CD</p>
+                            <span class="post-author-location"><i class="ic ic-location"></i> Galicia</span>
+                            <span class="post-author-website"><a href="http://acalustra.com"><i class="ic ic-link"></i> Website</a></span>
+                        <!-- Social linkes in alphabet order. -->
+                            <span class="post-author-github"><a target="_blank" href="https://github.com/eloycoto"><i class="ic ic-link"></i> GitHub</a></span>
+                            <span class="post-author-linkedin"><a target="_blank" href="https://www.linkedin.com/in/eloycoto"><i class="ic ic-link"></i> LinkedIn</a></span>
+                            <span class="post-author-twitter"><a target="_blank" href="https://twitter.com/eloycoto"><i class="ic ic-twitter"></i> Twitter</a></span>
+                    </div>
+                    <div class="clear"></div>
+                </aside>
+
+                </section>
+
+                <script type="text/javascript">
+                    var disqus = 'acalustra';
+                    var disqus_shortname = 'acalustra';
+                    var disqus_identifier = '/integrando-hubot-con-nuestro-servicio-xmpp.html';
+                    var disqus_url = 'https://acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html';
+                </script>
+                <noscript>Please enable JavaScript to view the comments.</noscript>
+                <section class="post-comments">
+                        <a id="show-disqus" class="post-comments-activate" data-disqus-identifier="/integrando-hubot-con-nuestro-servicio-xmpp.html" >Show Comments</a>
+                    <div id="disqus_thread"></div>
+                </section>
+
+                <aside class="post-nav">
+                    <div class="clear"></div>
+                </aside>
+
+            </div>
+        </article>
+    </main>
+      <!-- TODO : Body class -->
+    <div id="body-class" style="display: none;" class=""></div>
+
+    <footer id="footer">
+      <div class="inner">
+        <section class="credits">
+
+
+          <span class="credits-theme">Theme <a href="https://github.com/arulrajnet/attila" rel="nofollow">Attila</a></span>
+          <span class="credits-software">Published with <a href="https://github.com/getpelican/pelican" rel="nofollow">Pelican</a></span>
+        </section>
       </div>
-      <div class="tags">
-        <h3>Tags</h3>
-        <div class="taglist">
-            <span class="tag">
-              <a href="/tag/asterisk.html" rel="tag">asterisk</a>
-            </span>
-            <span class="tag">
-              <a href="/tag/github.html" rel="tag">github</a>
-            </span>
-            <span class="tag">
-              <a href="/tag/hubot.html" rel="tag">hubot</a>
-            </span>
-            <span class="tag">
-              <a href="/tag/jabber.html" rel="tag">jabber</a>
-            </span>
-            <span class="tag">
-              <a href="/tag/productividad.html" rel="tag">productividad</a>
-            </span>
-            <span class="tag">
-              <a href="/tag/xmpp.html" rel="tag">xmpp</a>
-            </span>
-        </div><!--tags-->
-      </div>
-        <div class="comments">
-          <h4>Comments:</h4>
-          <div id="disqus_thread"></div>
-            <script type="text/javascript" src="http://acalustra.disqus.com/embed.js"></script>
-            <noscript><a href="http://acalustra.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
-        </div> <!-- .comments-container -->
+    </footer>
+  </section>
 
-      <div class="row">
-        <h4>Related articles:</h4>
-          <ul>
-              <li><a href="http://www.acalustra.com/notificaciones-de-github-mediante-xmpp.html">Notificaciones de Github mediante XMPP.</a></li>
-              <li><a href="http://www.acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html">Haciendo test con sipp sin morir en el intento</a></li>
-              <li><a href="http://www.acalustra.com/trick-and-tips-en-ansible.html">trick and tips en ansible</a></li>
-              <li><a href="http://www.acalustra.com/para-hacerlo-mal-mejor-no-hacerlo.html">Para hacerlo mal, mejor no hacerlo</a></li>
-              <li><a href="http://www.acalustra.com/voip-talk-at-librecon-2015.html">Voip talk at Librecon 2015</a></li>
-          </ul>
-      </div>
+  <script type="text/javascript" src="https://acalustra.com/theme/js/script.js"></script>
 
-
-    </div>
-
-  </article>
-</div>    </div><!--container-->
-
-    <div class="row footer">
-      <div class="container">
-        <div class="col-3">
-          <p>Eloy Coto</p>
-        </div>
-
-        <div class="col-3 col-offset-3">
-          <p> Contact: eloy.coto@gmail.com</p>
-        </div>
-
-      </div>
-    </div>
-  </div><!--wrapper-->
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-36310774-1', 'auto');
-    ga('send', 'pageview');
-
-  </script>
-  </body>
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-36310774-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-36310774-1', { 'anonymize_ip': true });
+    </script>
+<script type="text/javascript">
+    var disqus_shortname = 'acalustra';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
 </html>
