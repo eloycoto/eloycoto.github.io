@@ -168,12 +168,12 @@ in the apt task. This is pretty useful, but painful with different roles.</p>
 <a class="reference external" href="http://docs.ansible.com/apt_module.html">cache_valid_time</a> option. If you
 enable it, Ansible will check the cache age. If cache age is less than your
 value, apt-get update will be ignored.</p>
-<div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Installing useful packages</span>
-  <span class="l l-Scalar l-Scalar-Plain">apt</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&quot;</span>
-    <span class="l l-Scalar l-Scalar-Plain">update_cache</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
-    <span class="l l-Scalar l-Scalar-Plain">cache_valid_time</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">3600</span>
-  <span class="l l-Scalar l-Scalar-Plain">with_items</span><span class="p p-Indicator">:</span>
+<div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Installing useful packages</span>
+  <span class="nt">apt</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&quot;</span>
+    <span class="nt">update_cache</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+    <span class="nt">cache_valid_time</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3600</span>
+  <span class="nt">with_items</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">htop</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ngrep</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">vim</span>
@@ -231,20 +231,20 @@ finished, it's going to be checked if the coroutines has finished properly.</p>
 <p>When you start with Ansible, you use a lot of <em>with_items</em>. Loops are not
 supported in Async tasks, but the following workaround can be used:</p>
 <div class="highlight"><pre><span></span><span class="c1"># vars.yml</span>
-<span class="l l-Scalar l-Scalar-Plain">dependencies</span><span class="p p-Indicator">:</span>
+<span class="nt">dependencies</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">bison</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">gcc</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">git</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">make</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">mercurial</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Installing dependencies</span>
-  <span class="l l-Scalar l-Scalar-Plain">apt</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">&#39;,&#39;.join(dependencies)</span><span class="nv"> </span><span class="s">}}&quot;</span>
-    <span class="l l-Scalar l-Scalar-Plain">update_cache</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
-    <span class="l l-Scalar l-Scalar-Plain">cache_valid_time</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">3600</span>
-  <span class="l l-Scalar l-Scalar-Plain">async</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1000</span>
-  <span class="l l-Scalar l-Scalar-Plain">poll</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+<div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Installing dependencies</span>
+  <span class="nt">apt</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">&#39;,&#39;.join(dependencies)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+    <span class="nt">update_cache</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+    <span class="nt">cache_valid_time</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3600</span>
+  <span class="nt">async</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1000</span>
+  <span class="nt">poll</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
 </pre></div>
 <p>Happy deploy!</p>
 </div>

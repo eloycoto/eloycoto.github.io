@@ -1,11 +1,446 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>A Calustra</title><link href="https://acalustra.com/" rel="alternate"></link><link href="https://acalustra.com/rss.xml" rel="self"></link><id>https://acalustra.com/</id><updated>2019-08-26T12:00:00+02:00</updated><entry><title>Proyecto Morriña e o dramita de colaborar con empresas</title><link href="https://acalustra.com/proyecto-morrina-e-o-dramita-de-colaborar-con-empresas.html" rel="alternate"></link><published>2019-08-26T12:00:00+02:00</published><updated>2019-08-26T12:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2019-08-26:/proyecto-morrina-e-o-dramita-de-colaborar-con-empresas.html</id><summary type="html">&lt;p&gt;Onte aquí, un minifundista galego, xa a &lt;a class="reference external" href="https://twitter.com/eloycoto/status/1165559874677329920"&gt;liou parda en twitter&lt;/a&gt;. Onte lanzouse a web
-de &lt;a class="reference external" href="https://operacionmorriña.com/es/"&gt;proxecto Morriña&lt;/a&gt;, unha iniciativa
+<feed xmlns="http://www.w3.org/2005/Atom"><title>A Calustra</title><link href="https://acalustra.com/" rel="alternate"></link><link href="https://acalustra.com/rss.xml" rel="self"></link><id>https://acalustra.com/</id><updated>2021-01-19T23:00:00+01:00</updated><entry><title>Envoy WASM debugging with BPFtrace</title><link href="https://acalustra.com/envoy-wasm-debugging-with-bpftrace.html" rel="alternate"></link><published>2021-01-19T23:00:00+01:00</published><updated>2021-01-19T23:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2021-01-19:/envoy-wasm-debugging-with-bpftrace.html</id><summary type="html">&lt;p&gt;A few days back, I was checking &lt;a class="reference external" href="https://www.envoyproxy.io/"&gt;Envoy&lt;/a&gt;
+performance when WASM is in use. &lt;a class="reference external" href="https://github.com/envoyproxy/envoy/blob/main/bazel/PPROF.md"&gt;PPROF&lt;/a&gt; can be enabled
+quite easily in Envoy, but I wanted to have less intrusive experience.&lt;/p&gt;
+&lt;p&gt;In the past, to debug things like this I always use &lt;a class="reference external" href="https://www.sourceware.org/systemtap/"&gt;Systemtap&lt;/a&gt;, (super intrusive) but &lt;a class="reference external" href="https://github.com/iovisor/bpftrace"&gt;BPFtrace&lt;/a&gt; is straightforward and fast …&lt;/p&gt;</summary><content type="html">&lt;p&gt;A few days back, I was checking &lt;a class="reference external" href="https://www.envoyproxy.io/"&gt;Envoy&lt;/a&gt;
+performance when WASM is in use. &lt;a class="reference external" href="https://github.com/envoyproxy/envoy/blob/main/bazel/PPROF.md"&gt;PPROF&lt;/a&gt; can be enabled
+quite easily in Envoy, but I wanted to have less intrusive experience.&lt;/p&gt;
+&lt;p&gt;In the past, to debug things like this I always use &lt;a class="reference external" href="https://www.sourceware.org/systemtap/"&gt;Systemtap&lt;/a&gt;, (super intrusive) but &lt;a class="reference external" href="https://github.com/iovisor/bpftrace"&gt;BPFtrace&lt;/a&gt; is straightforward and fast.&lt;/p&gt;
+&lt;p&gt;So I did this super simple &lt;a class="reference external" href="https://github.com/eloycoto/envoy_playground/tree/master/bpftrace"&gt;docker-compose project&lt;/a&gt; where you
+can run bpftrace meanwhile you run Envoy, and here is the bpftrace script that
+you can see the list of WASM functions used by Envoy, and the time that was
+used.&lt;/p&gt;
+&lt;p&gt;Over the next weeks, I'll keep adding bpftrace scripts &lt;a class="reference external" href="https://github.com/eloycoto/envoy_playground/tree/master/bpftrace/traces"&gt;here&lt;/a&gt;,
+because they are quite useful on my day job.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;#!/usr/bin/env bpftrace
+BEGIN
+{
+  printf(&amp;quot;Tracing proxy-wasm call in envoy...Hit Ctrl-C to end.\n&amp;quot;);
+}
+
+uprobe:/usr/bin/envoy:proxy_wasm*exports* {
+  @start[tid] = nsecs;
+}
+
+uretprobe:/usr/bin/envoy:proxy_wasm*exports*
+/@start[tid]/
+{
+  @ns[func] = hist(nsecs - @start[tid]);
+  delete(@start[tid]);
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And running it using the following command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;#-&amp;gt; bpftrace -p $(pgrep envoy) /traces/proxy_wasm_calls_time.bt
+Attaching 249 probes...
+Tracing proxy-wasm call in envoy...Hit Ctrl-C to end.
+^C
+@ns[proxy_wasm::exports::get_current_time_nanoseconds(void*, proxy_wasm::Word)]:
+[2K, 4K)               2 |@@@@@@@@@@@@@@@@@@@@                                |
+[4K, 8K)               5 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+[8K, 16K)              2 |@@@@@@@@@@@@@@@@@@@@                                |
+
+@ns[proxy_wasm::exports::send_local_response(void*, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word)]:
+[1K, 2K)             544 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+[2K, 4K)             419 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@            |
+[4K, 8K)              31 |@@                                                  |
+[8K, 16K)              3 |                                                    |
+[16K, 32K)             1 |                                                    |
+[32K, 64K)             1 |                                                    |
+[64K, 128K)            1 |                                                    |
+
+@ns[proxy_wasm::exports::send_local_response(void*, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word)]:
+[2K, 4K)             653 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+[4K, 8K)             295 |@@@@@@@@@@@@@@@@@@@@@@@                             |
+[8K, 16K)             47 |@@@                                                 |
+[16K, 32K)             5 |                                                    |
+
+@ns[proxy_wasm::exports::get_header_map_pairs(void*, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word)]:
+[1K, 2K)             295 |@@@@@@@@@@@@@@@@@@@@@@@                             |
+[2K, 4K)             653 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+[4K, 8K)              47 |@@@                                                 |
+[8K, 16K)              3 |                                                    |
+[16K, 32K)             2 |                                                    |
+
+@ns[proxy_wasm::exports::log(void*, proxy_wasm::Word, proxy_wasm::Word, proxy_wasm::Word)]:
+[1K, 2K)            4036 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ |
+[2K, 4K)            4098 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+[4K, 8K)             746 |@@@@@@@@@                                           |
+[8K, 16K)            106 |@                                                   |
+[16K, 32K)            14 |                                                    |
+[32K, 64K)             6 |                                                    |
+[64K, 128K)            1 |                                                    |
+[128K, 256K)           1 |                                                    |
+[256K, 512K)           0 |                                                    |
+[512K, 1M)             0 |                                                    |
+[1M, 2M)               1 |                                                    |
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;If you want to learn bpftrace, I highly recommend to have a look at &lt;a class="reference external" href="https://github.com/iovisor/bpftrace/blob/master/docs/tutorial_one_liners.md"&gt;bpftrace
+one-liners&lt;/a&gt;
+tutorial, is made for dummies like me.&lt;/p&gt;
+&lt;p&gt;Enjoy!&lt;/p&gt;
+</content><category term="blog"></category><category term="bpf"></category><category term="envoy"></category><category term="wasm"></category></entry><entry><title>My Fosdem 2020 review list of talks</title><link href="https://acalustra.com/my-fosdem-2020-review-list-of-talks.html" rel="alternate"></link><published>2020-02-05T23:00:00+01:00</published><updated>2020-02-05T23:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2020-02-05:/my-fosdem-2020-review-list-of-talks.html</id><summary type="html">&lt;p&gt;This year I can't attend Fosdem! this, for me, is one of the best conference in
+the world, so in the following weeks I will catch up with some talks videos,
+something that I always use to do, but this year I'll make the list public, so
+people can see …&lt;/p&gt;</summary><content type="html">&lt;p&gt;This year I can't attend Fosdem! this, for me, is one of the best conference in
+the world, so in the following weeks I will catch up with some talks videos,
+something that I always use to do, but this year I'll make the list public, so
+people can see in what I'm interested in, and hopefully will help someone.&lt;/p&gt;
+&lt;div class="section" id="network-protocols"&gt;
+&lt;h2&gt;Network &amp;amp; protocols&lt;/h2&gt;
+&lt;p&gt;HTTP/3 for everyone, by Curl creator about HTTP3&amp;amp;QUIC
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/http3/"&gt;https://fosdem.org/2020/schedule/event/http3/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The ultimate guide to HTTP resource prioritization by  Robin Marx
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/webperf_http_prioritization/"&gt;https://fosdem.org/2020/schedule/event/webperf_http_prioritization/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;SCION: Future internet that you can use today by Kamila Součková&amp;amp;Mateusz Kowalski
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/scion/"&gt;https://fosdem.org/2020/schedule/event/scion/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;SWIM - Protocol to Build a Cluster by Vladislav Shpilevoy
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/swim/"&gt;https://fosdem.org/2020/schedule/event/swim/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Making &amp;amp; Breaking Matrix's E2E encryption by Matthew Hodgson
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/matrix/"&gt;https://fosdem.org/2020/schedule/event/matrix/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Fundamental Technologies We Need to Work on for Cloud-Native Networking by Magnus Karlsson
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/fundamental_technologies_we_need_to_work_on_for_cloud_native_networking/"&gt;https://fosdem.org/2020/schedule/event/fundamental_technologies_we_need_to_work_on_for_cloud_native_networking/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The hairy issue of e2e encryption in instant messaging by Winfried Tilanus
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/security_the_hairy_issue_of_e2e_encryption_in_instant_messaging/"&gt;https://fosdem.org/2020/schedule/event/security_the_hairy_issue_of_e2e_encryption_in_instant_messaging/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Identity Box: Decentralized Web of the Future by Marcin Czenko
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/dip_identity_box/"&gt;https://fosdem.org/2020/schedule/event/dip_identity_box/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Decentralizing OAuth2.0 in a post-GDPR world for full privacy and portability
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/dip_decentralizing_oauth/"&gt;https://fosdem.org/2020/schedule/event/dip_decentralizing_oauth/&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="culture-and-personal-behaviour"&gt;
+&lt;h2&gt;Culture and personal behaviour&lt;/h2&gt;
+&lt;p&gt;The Linux Kernel: We have to finish this thing one day, by Thorsten Leemhuis
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/linux_kernel/"&gt;https://fosdem.org/2020/schedule/event/linux_kernel/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;How Containers and Kubernetes re-defined the GNU/Linux Operating System by Daniel Riek
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/riek_kubernetes/"&gt;https://fosdem.org/2020/schedule/event/riek_kubernetes/&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="golang"&gt;
+&lt;h2&gt;Golang&lt;/h2&gt;
+&lt;p&gt;TinyGo on microcontrollers and WebAssembly by Ron Evans
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/bof_tinygo/"&gt;https://fosdem.org/2020/schedule/event/bof_tinygo/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The State of Go by Francesc Campoy, Maartje Eyskens
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/stateofgo/"&gt;https://fosdem.org/2020/schedule/event/stateofgo/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Functional Programming with Go by Dylan Meeus
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/functionalgo/"&gt;https://fosdem.org/2020/schedule/event/functionalgo/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;From Go to Kubernetes CRDs and Back by Stefan Schimanski
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/gokubernetes/"&gt;https://fosdem.org/2020/schedule/event/gokubernetes/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Deterministic debugging with Delve by Derek Parker
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/debuggingwithdelve/"&gt;https://fosdem.org/2020/schedule/event/debuggingwithdelve/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Advanced debugging techniques of Go code by Andrii Soldatenko
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/advanceddebugginggo/"&gt;https://fosdem.org/2020/schedule/event/advanceddebugginggo/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Speed up the monolith: building a smart reverse proxy in Go by Alessio Caiazza
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/speedupmonolith/"&gt;https://fosdem.org/2020/schedule/event/speedupmonolith/&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="linux-and-friends"&gt;
+&lt;h2&gt;Linux and friends&lt;/h2&gt;
+&lt;p&gt;Address Space Isolation in the Linux Kernel by James Bottomley and Mike Rapoport
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/kernel_address_space_isolation/"&gt;https://fosdem.org/2020/schedule/event/kernel_address_space_isolation/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Fixing the Kubernetes clusterfuck by Kris Nova
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/kubernetes/"&gt;https://fosdem.org/2020/schedule/event/kubernetes/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Tools and mechanisms to debug BPF programs by Quentin Monnet
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/debugging_bpf/"&gt;https://fosdem.org/2020/schedule/event/debugging_bpf/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Debugging apps running in Kubernetes by Jeff Knurek
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/debugging_kubernetes/"&gt;https://fosdem.org/2020/schedule/event/debugging_kubernetes/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Skydive A real time network topology and protocols analyzer by Sylvain Baubeau and Sylvain Afchain
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/real_time_network_topology_and_protocols_analyzer/"&gt;https://fosdem.org/2020/schedule/event/real_time_network_topology_and_protocols_analyzer/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Endless Network Programming − An Update from eBPF Land by Quentin Monnet
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/endless_network_programming/"&gt;https://fosdem.org/2020/schedule/event/endless_network_programming/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Replacing iptables with eBPF in Kubernetes with Cilium by Michal Rostecki
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/replacing_iptables_with_ebpf/"&gt;https://fosdem.org/2020/schedule/event/replacing_iptables_with_ebpf/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Fast QUIC sockets for cloud networking by Nathan Skrzypczak and Aloys Augustin
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/fast_quic_sockets_for_cloud_networking/"&gt;https://fosdem.org/2020/schedule/event/fast_quic_sockets_for_cloud_networking/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Falco Internals 101 : Syscalls processing for security analysis by Lorenzo Fontana
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/security_falco_internals_101/"&gt;https://fosdem.org/2020/schedule/event/security_falco_internals_101/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Docker Security considerations &amp;amp; Incident Analysis by John Lionis
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/security_docker_security_considerations_incident_analysis/"&gt;https://fosdem.org/2020/schedule/event/security_docker_security_considerations_incident_analysis/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Protecting plaintext secrets in configuration files by Moisés Guimarães
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/security_protecting_plaintext_secrets_in_configuration_files/"&gt;https://fosdem.org/2020/schedule/event/security_protecting_plaintext_secrets_in_configuration_files/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Kernel Runtime Security Instrumentation by Florent Revest
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/security_kernel_runtime_security_instrumentation/"&gt;https://fosdem.org/2020/schedule/event/security_kernel_runtime_security_instrumentation/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;How secure is your build/server?  a story of packages and trust by Patrick Debois
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/kubernetes_gitops/"&gt;https://fosdem.org/2020/schedule/event/kubernetes_gitops/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Welcome to KernelCI by Guillaume Tucker
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/testing_welcome_kernelci/"&gt;https://fosdem.org/2020/schedule/event/testing_welcome_kernelci/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;How to measure Linux Performance Wrong by Peter Zaitsev
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/measure_linux_performance/"&gt;https://fosdem.org/2020/schedule/event/measure_linux_performance/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Supervising and emulating syscalls by Christian Brauner
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/containers_syscall_emulation/"&gt;https://fosdem.org/2020/schedule/event/containers_syscall_emulation/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;BPF as a revolutionary technology for the container landscape by Daniel Borkmann
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/containers_bpf/"&gt;https://fosdem.org/2020/schedule/event/containers_bpf/&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="programming-ops"&gt;
+&lt;h2&gt;Programming &amp;amp;&amp;amp; ops&lt;/h2&gt;
+&lt;p&gt;Writing Go(od) Tests by Nikki Attea
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/testing_writing_go_tests/"&gt;https://fosdem.org/2020/schedule/event/testing_writing_go_tests/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Boosting Python with Rust by Raphaël Gomès
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/python2020_rust/"&gt;https://fosdem.org/2020/schedule/event/python2020_rust/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Introducing HTTPX by Tom Christie
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/python2020_httpx/"&gt;https://fosdem.org/2020/schedule/event/python2020_httpx/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Testing, releasing and deploying Tekton with Tekton by Andrea Frittoli, Vincent Demeester
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/marios_adventures_in_tekton_land/"&gt;https://fosdem.org/2020/schedule/event/marios_adventures_in_tekton_land/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Precise, cross-project code navigation at GitHub scale by Douglas Creager
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/github_cross_project_code_navigation/"&gt;https://fosdem.org/2020/schedule/event/github_cross_project_code_navigation/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Distributed Tracing for beginners by Juraci Paixão
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/tracing_beginners/"&gt;https://fosdem.org/2020/schedule/event/tracing_beginners/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Grafana: Successfully correlate metrics, logs, and traces by Andrej Ocenas
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/tracing_grafana/"&gt;https://fosdem.org/2020/schedule/event/tracing_grafana/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Container Live Migration by Adrian Reber
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/containers_live_migration/"&gt;https://fosdem.org/2020/schedule/event/containers_live_migration/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Minimalistic typed Lua is here by Hisham Muhammad
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/minimalistictypedlua/"&gt;https://fosdem.org/2020/schedule/event/minimalistictypedlua/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;RaptorJIT: a fast, dynamic systems programming language by      Max Rottenkolber
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/raptorjit_lua/"&gt;https://fosdem.org/2020/schedule/event/raptorjit_lua/&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="misc"&gt;
+&lt;h2&gt;Misc&lt;/h2&gt;
+&lt;p&gt;Continuous Integration for Open Hardware Projects by Mario Behling
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/oshw_ci/"&gt;https://fosdem.org/2020/schedule/event/oshw_ci/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Open Source Hardware for Industrial use by Tsvetan Usunov
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/olimex_oshw/"&gt;https://fosdem.org/2020/schedule/event/olimex_oshw/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;FOSDEM Video Box by Mark Van den Borre, Luc Verhaegen and Gerry Demaret
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/videobox/"&gt;https://fosdem.org/2020/schedule/event/videobox/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Discover the New Firefox Profiler by Nazım Can Altınova
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/discover_the_new_firefox_profiler/"&gt;https://fosdem.org/2020/schedule/event/discover_the_new_firefox_profiler/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Facilitating distributed deterministic computation with WASI by  Jakub Konka
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/facilitating_distributed_deterministic_computation_with_wasi/"&gt;https://fosdem.org/2020/schedule/event/facilitating_distributed_deterministic_computation_with_wasi/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Fixing healthcare data exchange with decentralized FOSS by Steven van der Vegt
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/dip_fixing_healthcare_data/"&gt;https://fosdem.org/2020/schedule/event/dip_fixing_healthcare_data/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Modern VoIP in Modern Infrastructures by Giacomo Vacca
+&lt;a class="reference external" href="https://fosdem.org/2020/schedule/event/modern_voip_infra/"&gt;https://fosdem.org/2020/schedule/event/modern_voip_infra/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Hope it helps!&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="blog"></category><category term="fosdem"></category></entry><entry><title>Kubernetes Network Policies talk at AtlanticaConf19</title><link href="https://acalustra.com/kubernetes-network-policies-talk-at-atlanticaconf19.html" rel="alternate"></link><published>2019-10-15T16:00:00+02:00</published><updated>2019-10-15T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2019-10-15:/kubernetes-network-policies-talk-at-atlanticaconf19.html</id><summary type="html">&lt;p&gt;I had the luck to gave a talk at &lt;a class="reference external" href="https://www.atlanticaconf.com/"&gt;AtlanticaConf&lt;/a&gt;. The topic was about Kubernetes Network
+Policies and a bit of Istio&lt;/p&gt;
+&lt;script async class="speakerdeck-embed"
+data-id="edc88328c1d34c6da8d2fa9f004c57e8" data-ratio="1.77777777777778"
+src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;&lt;p&gt;Thanks to all organizers for doing that, I really enjoyed my time at the
+conference.&lt;/p&gt;
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Full room for &lt;a href="https://twitter.com/eloycoto?ref_src=twsrc%5Etfw"&gt;@eloycoto&lt;/a&gt; in the &lt;a href="https://twitter.com/atlanticaConf?ref_src=twsrc%5Etfw"&gt;@atlanticaConf&lt;/a&gt;. A very top &lt;a href="https://twitter.com/hashtag/kubernetes?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#kubernetes&lt;/a&gt; talk! &lt;a href="https://t.co/Lr7U1UTAoL"&gt;pic …&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;</summary><content type="html">&lt;p&gt;I had the luck to gave a talk at &lt;a class="reference external" href="https://www.atlanticaconf.com/"&gt;AtlanticaConf&lt;/a&gt;. The topic was about Kubernetes Network
+Policies and a bit of Istio&lt;/p&gt;
+&lt;script async class="speakerdeck-embed"
+data-id="edc88328c1d34c6da8d2fa9f004c57e8" data-ratio="1.77777777777778"
+src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;&lt;p&gt;Thanks to all organizers for doing that, I really enjoyed my time at the
+conference.&lt;/p&gt;
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Full room for &lt;a href="https://twitter.com/eloycoto?ref_src=twsrc%5Etfw"&gt;@eloycoto&lt;/a&gt; in the &lt;a href="https://twitter.com/atlanticaConf?ref_src=twsrc%5Etfw"&gt;@atlanticaConf&lt;/a&gt;. A very top &lt;a href="https://twitter.com/hashtag/kubernetes?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#kubernetes&lt;/a&gt; talk! &lt;a href="https://t.co/Lr7U1UTAoL"&gt;pic.twitter.com/Lr7U1UTAoL&lt;/a&gt;&lt;/p&gt;&amp;mdash; Antón (@antonmry) &lt;a href="https://twitter.com/antonmry/status/1180443235304517634?ref_src=twsrc%5Etfw"&gt;October 5, 2019&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;p&gt;I also had the opportunity to moderate an Open Space around remote work, and it
+was awesome. A lot of feedback and useful tips were shared.&lt;/p&gt;
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="es" dir="ltr"&gt;Lleno en el Open Space sobre trabajo remoto en &lt;a href="https://twitter.com/atlanticaConf?ref_src=twsrc%5Etfw"&gt;@atlanticaConf&lt;/a&gt; con &lt;a href="https://twitter.com/eloycoto?ref_src=twsrc%5Etfw"&gt;@eloycoto&lt;/a&gt; moderando. &lt;a href="https://t.co/F2IvfIlesc"&gt;pic.twitter.com/F2IvfIlesc&lt;/a&gt;&lt;/p&gt;&amp;mdash; Orestes Carracedo (@OrestesCA) &lt;a href="https://twitter.com/OrestesCA/status/1180483979213971457?ref_src=twsrc%5Etfw"&gt;October 5, 2019&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;</content><category term="blog"></category><category term="cilium"></category><category term="kubernetes"></category><category term="network policies"></category><category term="security"></category></entry><entry><title>Propostas a Vigotech</title><link href="https://acalustra.com/propostas-a-vigotech.html" rel="alternate"></link><published>2019-10-15T16:00:00+02:00</published><updated>2019-10-15T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2019-10-15:/propostas-a-vigotech.html</id><summary type="html">&lt;p&gt;Co drama do ocurrido da Operación Morriña -e todo o que se montou despois-
+varias debilidades sairon a relucir no ámbito de Vigotech. O 12 de Setembro
+mandei un email a lista de organizadores con propstas claras de facer, o que
+para min, sería unha mellor organización.&lt;/p&gt;
+&lt;p&gt;Creo que sería …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Co drama do ocurrido da Operación Morriña -e todo o que se montou despois-
+varias debilidades sairon a relucir no ámbito de Vigotech. O 12 de Setembro
+mandei un email a lista de organizadores con propstas claras de facer, o que
+para min, sería unha mellor organización.&lt;/p&gt;
+&lt;p&gt;Creo que sería bo que este email fora público, axudaría a entender o que pasou e
+as razóns polas que pasou, ao mesmo tempo, da visión do que pasa dentro de
+Vigotech.&lt;/p&gt;
+&lt;p&gt;Ao mesmo tempo, creo que é bo momento &lt;strong&gt;para desmarcarme totalmente de
+Vigotech&lt;/strong&gt;. Quen me coñece sabe que son un rapaz con principios, que non me
+gusta errar, e que non me gusta ter que pedir perdón, gústame que a xente cando
+confía saiba que non vou cometer un erro.&lt;/p&gt;
+&lt;p&gt;Moitas foron as chamadas que tiven que responder por cousas que se fixeron na
+comunidade, dende Meetups que acabaron tarde, problemas de organización con
+espazos, tratar de defender o indefendible, e ver como non cuidamos de quen nos
+cuida.&lt;/p&gt;
+&lt;p&gt;Eu son dos que pensa: &amp;quot;quen non suma, resta!&amp;quot; Agora mesmo, en Vigotech resto,
+e segundo chegou a min, non pouco! O meu soño nunca foi molar na comunidade,
+-nesta ou en ámbito nacional-, meu soño sempre foi que este recuncho fora algo
+mellor, espero que o que fixen axudara.&lt;/p&gt;
+&lt;p&gt;Graciñas por todo.&lt;/p&gt;
+&lt;p&gt;Correo enviado a lista de organizadores, con formato para axudar a lectura.&lt;/p&gt;
+&lt;hr class="docutils" /&gt;
+&lt;p&gt;Rapaces,&lt;/p&gt;
+&lt;p&gt;Fai uns días tivemos o drama da operación morriña, este drama creo que causou, e
+demostrou, unha certas debilidades como organización. Creo que agora, pasada a
+PulpoConf, deberíase ver como atallalas. Deixo unha serie de propostas que creo
+que son de interese para que faledes na seguinte reunión.&lt;/p&gt;
+&lt;div class="section" id="ofertas-de-traballo-integracion-de-empresas"&gt;
+&lt;h2&gt;Ofertas de traballo, integración de empresas:&lt;/h2&gt;
+&lt;p&gt;Foi un  tema que se tocou, e que se falou, e no que se acordou que Vigotech non
+debería ter ningún tipo de colaboración, permiso para usar Vigotech en proxectos
+que tiveran un fin comercial.&lt;/p&gt;
+&lt;p&gt;Creo que despois da Operación Morriña todo cambia, un proxecto con fin
+económica, que inda que bonito - e ilusiónante- demostrou unha serie de
+problemas en como se ven as cousas dentro de Vigotech. Para min, o principal
+problema, dixémoslle a empresas amigas de todos os eventos de Vigo que non se
+podía, e un día -cunha forte campaña de publicidade-  apareceu o logo nun sitio,
+que para min, non debería estar. Que agora esta -inda que estou en desacordo-,
+pero cun texto moito mais acertado que o inicial.&lt;/p&gt;
+&lt;p&gt;Eu son dos que pensa, que non hai nada mellor que ser querido na casa, e creo
+que as empresas -da casa- deberían ser queridas. Neses días, por un erro de
+comunicación, a miña impresión (e de algunha xente que se manifestou en
+privado), fallamos a quen no se lle tiña que fallar, aos que algún día confiaron
+en nós sen saber que iría a pasar con todos os nosos grupos.&lt;/p&gt;
+&lt;p&gt;Si, Vigotech non tiña acordos con empresas, pero todo o mundo fala coas mesmas
+empresas, e moitas delas, de forma recorrente, axudaron, de moitas e diferentes
+formas, non só falo de cartos.&lt;/p&gt;
+&lt;p&gt;Creo que unha boa forma de remedialo, e voltar ao que se falou das ofertas de
+traballo, e poder ofrecerlle as empresas un listado de ofertas de traballo de
+empresas “amigas de Vigotech”. Para facer este listado, pódense poñer unhas
+normas, eu propoño as seguintes:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Para colgar a oferta en Vigotech, unha empresa ten que &lt;strong&gt;aportar&lt;/strong&gt; antes a
+comunidade, para aportar eu entendo que podemos falar das seguintes opcións:&lt;ul&gt;
+&lt;li&gt;Opción de por unha oferta: Un empregado de esa empresa da unha charla (nalgúns dos grupos de Vigotech) nos últimos 6 meses. O prazo de validade da oferta remata ao cumprir os 6 meses da charla.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Opción de por dúas ofertas: a empresa colabora economicamente cun evento,
+neste caso a oferta porase un mes antes do evento, e terá unha validez de dous
+meses.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Temos o drama das ofertas de traballo malas, creo que temos que ter unhas
+normas, para que non pase como pasou con xente que aportou unha oferta de
+traballo ao canal, e logo marchou do slack escaldada, para min as normas de
+poder publicar poden ser:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Ten que ter un rango salarial.&lt;/li&gt;
+&lt;li&gt;O rango salarial, non pode ser cunha diferencia mais grande do 20%, así evitamos as ofertas de 20-50K.&lt;/li&gt;
+&lt;li&gt;A oferta ten que ter base en Vigo ou 40km a redonda.&lt;/li&gt;
+&lt;li&gt;Ten que ter uns requisitos ben estipulados, que o comité pode validar.  (Falarei mais tarde do comité)&lt;/li&gt;
+&lt;li&gt;En temas de campañas de anuncios, eu creo que se pode facer o seguinte:&lt;ul&gt;
+&lt;li&gt;Terá unha sección na web onde van aparecer todas.&lt;/li&gt;
+&lt;li&gt;Un chío para cando se publique, nun horario normal.&lt;/li&gt;
+&lt;li&gt;Unha mensaxe no canal xeral do slack de Vigotech.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Creo que con isto gañase nos seguintes puntos:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;As empresas, se queren, poden beneficiarse de Vigotech, están obrigadas a
+colaborar previamente, nos somos claros, isto ten que ser un win-win para
+todos.&lt;/li&gt;
+&lt;li&gt;A comunidade sae beneficiada, se as ofertas teñen tirón, o final terase menos
+problema para encontrar charlas&lt;/li&gt;
+&lt;li&gt;A oferta será mandada en formato PR a web de Vigotech, polo que non temos que
+traballar nesa parte. So en eliminalas.&lt;/li&gt;
+&lt;li&gt;Os que dan as charlas poden pedir un referral na empresa, polo tanto saen
+gañando.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;FAQ:&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Eloy, a empresa XXX é unha cárnica, consultoría e non deberíamos publicar
+ofertas deles! Certo, a min as empresas cárnicas non me gustan, tampouco as
+axencias de emprego, pero aquí non falamos de que empresa X mole ou non, estamos
+falando de que somos neutrais e so teñen que colaborar con nos, que elas
+colaboraron con nós, e que importa é que eles tamén melloran o ecosistema, eu
+son dos que penso que todo se pode cambiar. Se alguén é capaz de aportar unha
+charla a Vigotech, esa empresa, inda que pode ser mala, algo xa esta cambiando.&lt;/p&gt;
+&lt;p&gt;Volvo a dicir, isto para min, estaba ben como estaba, pero ca entrada de
+operación morriña creo que un dos nosos fundamentos cambiou, e eu creo que se o
+fundamento cambiou, Vigotech ten que ver a capacidade de restauralo ou de facer
+do erro unha virtude.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="comite-de-direccion"&gt;
+&lt;h2&gt;Comite de dirección&lt;/h2&gt;
+&lt;p&gt;Outra das cousas que quedou clara é que as decisións de Vigotech non son fáciles
+de tomar, moita xente cunha opinión e faixe moi difícil saber con quen contactar
+nun caso como o citado.&lt;/p&gt;
+&lt;p&gt;Eu teño claro que Vigotech non significa para todos o mesmo, para min é todas
+esas reunións nas empresas nas que eu falaba do bo que era Vigotech, para outras
+persoas poden ser a xente que viña as meetups que organizaba, para outros pode
+ser o bo traballo feito co deseño do logo, estou seguro que cada un ten un
+sentimento diferente.&lt;/p&gt;
+&lt;p&gt;Creo que vai sendo hora de que Vigotech teña un comité de dirección, que os que
+organizan podan elixir a catro representantes que se encarguen deste tipo de
+cousas, a miña idea é propoñer o proceso da CNCF, que elixe cada ano uns
+membros, e estes duran 2 anos, a idea sería tal que así:&lt;/p&gt;
+&lt;p&gt;2019: Novo comité formado por 4 persoas, 2 estarán dous anos, as outras un ano.
+2020: Dúas persoas do comité teñen que saír, e dúas entran para dous anos.
+2021: Os dous membros mais vellos marchan, e entran outros dous.&lt;/p&gt;
+&lt;p&gt;Desta forma conséguese que este comité poda tomar as decisións, tomar un acordo
+estas 4 persoas, e cando teñan unha resolución mandáselle un correo aos
+organizadores onde teñan que decidir si ou no, se é o número de negativos  é
+superior ao 30% dos organizadores, entón tocará discutilo. Este prazo pode ser
+de 5 días laborais, polo que se non se vota ou non sae que non, pois dáselle
+para adiante a opción que o comité decida.&lt;/p&gt;
+&lt;p&gt;Como actuaría o comité?&lt;/p&gt;
+&lt;p&gt;Vou facer unha analoxía co pasado na Operación Morriña, non é ningún ataque a
+ninguén, e autocrítica. Cando chegou iso, segundo o que comentou Orestes era tal
+que así:&lt;/p&gt;
+&lt;blockquote&gt;
+Con David hablé personalmente, y lo que le trasladé es: esto es cosa de
+todo VigoTech, lo hablamos en la lista de organizadores
+En la lista de organizadores decidimos que nos parecía bien apoyar la
+iniciativa, y que nuestro mensaje era. &amp;quot;Si te vuelves a Galicia, esto ya no
+es un desierto. Hay mucha comunidad, no estarás solo/a.&amp;quot;
+El diff con el mensaje final ha sido:
+Parece que solo hablan de Coruña
+Parece que colaboramos con Corunet.
+En la web lo dice, que Corunet es solo la primera empresa, que es una
+iniciativa a la que se unirán mas.
+Esto no es lo que habíamos acordado.
+Ahora tenemos en la lista una propuesta  para aclarar el texto, y podemos
+enviar el texto que nos dé la gana.
+Abramos hilo para discutir el texto en concreto aquí&lt;/blockquote&gt;
+&lt;p&gt;O comité nesta situación debería pensar:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cal é o beneficio de Vigotech?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;O retorno de galegos, poñer en valor esta terra e dicir que non están sós.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cal é o fin de David Bonilla/Corunet?&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;Claramente a inversión para facer unha boa campaña para que Corunet e Manfred
+poidan fichar, na que os dous queren poñer ofertas de traballo. Teñen intención
+de facelo global? si, cal é o primeiro obxectivo? que a campaña atraia talento a
+Corunet.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Como o mirara a comunidade?&lt;/strong&gt;
+ben, todo o mundo ten amigos fora, estou seguro que algunha xente queres que
+volva!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Como se poden sentir as empresas que colaboraron cos grupos de Vigotech?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Neste caso as empresas comentóuselles que ningunha relación directa coas
+empresas, tampouco as ofertas de traballo, igual isto levanta un fundamento de
+Vigotech e alguén pode sentirse molesto. O mesmo a ver un logo de Vigotech nunha
+landing dunha empresa, etc..&lt;/p&gt;
+&lt;p&gt;Unha vez feito este traballo(polo comité), e valorando que gaña e perde
+Vigotech(Como marca), o que propón, a comunidade de desenvolvedores, e as
+empresas que colaboraron, pódese facer un resume e mandalo os organizadores,
+eles poden ratificar o denegar a decisión do comité.&lt;/p&gt;
+&lt;p&gt;O final, isto solucionaría os seguintes problemas:&lt;/p&gt;
+&lt;p&gt;David Bonilla sentiuse atacado por min, volvo a dicilo, foi mais tristeza por
+fallar aos nosos que ataque. Se temos un comité de dirección, se alguén ten
+dubidas sabe que hai catro persoas as que contactar antes de dar un paso en
+falso, volvo a dicilo, tiña que facer unhas chamadas antes de por o chío, pero a
+tristeza actúa así :-(&lt;/p&gt;
+&lt;p&gt;Claramente díxose si, igual pecouse de pouca visión crítica e logo co texto
+inicial todo era unha mala mensaxe, deuse un paso en falso e logo volveuse
+atrás. Neste caso temos un marco no que pensar para toda a comunidade, que
+entendo axudará para que este tipo de situacións non volvan suceder.&lt;/p&gt;
+&lt;p&gt;Cónstame, que a comunicación durante o proceso foi malo, moita xente, etc.. con
+comité todo é mais rápido e sinxelo para todos, pero se te chega unha landing o
+sábado pola tarde de Agosto pouco se iba a solucionar...&lt;/p&gt;
+&lt;p&gt;Eu creo que é un paso natural facer algo deste estilo. E volvo a dicir, isto non
+é un ataque a ninguén, colectivamente fallouse e isto é o que temos que valorar,
+que faga a analoxía co que pasou non significa que teña ningún tipo de rancor
+polo sucedido, eu fun o primeiro que fallei! inda que continuo pensando que o
+erro do mensaxe por parte de Manfred foi claro, e a resposta dada, non foi
+respectuosa, eu non fun o único que quedou cabreado co asunto, quizais o único
+que alzou a voz.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="comparte-vigotech"&gt;
+&lt;h2&gt;Comparte-VigoTech&lt;/h2&gt;
+&lt;p&gt;Unha das cousas que mais me molaba en Isovalent era que os xoves tiñamos unha
+sesión que lle chamabamos isoshare, eran 30 min de chamada na que uns falabamos
+de tecnoloxía, algún update de clientes ou tips varios.&lt;/p&gt;
+&lt;p&gt;Creo que podemos exportar iso a facer unha videoCall unha mañá cada 15 días na
+que a xente poida comentar cousas de tecnoloxía, o último de WASM, un update en
+Kubernetes, etc.. Algo que se todo o mundo fai en remoto pode coller certa
+tracción, eu creo que a única condición que poño é que non se poñan despois no
+Youtube, ao final o importante é que a xente se una e pregunte. Isto podemos
+velo, pero se queredes eu podo ver a opción de lideralo os primeiros meses ata
+que colla algo de tracción.&lt;/p&gt;
+&lt;p&gt;E isto é todos rapaces, volvo dicilo, non é ningún ataque a ningunha persoa polo
+pasado. Ao final, creo que se fallou por moitos lados, eu creo que disto só
+podemos aprender!&lt;/p&gt;
+&lt;p&gt;PS: No meu caso, ademais de aprender, tamén levo unha ducia de horas de risas a
+conta de que son un minifundista, creo que non recordo pásalo tan ben en moito
+tempo :-)&lt;/p&gt;
+&lt;p&gt;Cañas cando queirades :D&lt;/p&gt;
+&lt;p&gt;Apertas!&lt;/p&gt;
+&lt;hr class="docutils" /&gt;
+&lt;p&gt;Fin do correo, espero que a todo o mundo lle quede claro o que pasou.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="blog"></category><category term="operaracion morriña"></category><category term="vigotech"></category></entry><entry><title>Proyecto Morriña e o dramita de colaborar con empresas</title><link href="https://acalustra.com/proyecto-morrina-e-o-dramita-de-colaborar-con-empresas.html" rel="alternate"></link><published>2019-08-26T12:00:00+02:00</published><updated>2019-08-26T12:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2019-08-26:/proyecto-morrina-e-o-dramita-de-colaborar-con-empresas.html</id><summary type="html">&lt;p&gt;Onte aquí, un minifundista galego, xa a &lt;a class="reference external" href="https://twitter.com/eloycoto/status/1165559874677329920"&gt;liou parda en twitter&lt;/a&gt;. Onte lanzouse a web
+de &lt;a class="reference external" href="https://operacionmorriña.com/es/"&gt;Operación Morriña&lt;/a&gt;, unha iniciativa
 privada e cun claro fin económico, que quere atraer talento a Galicia. A idea,
 en si, esta xenial, apadriñada pola empresa Coruñesa Corunet, e pola startup
 madrileña Mandfred Tech.&lt;/p&gt;
 &lt;p&gt;Coñezo …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Onte aquí, un minifundista galego, xa a &lt;a class="reference external" href="https://twitter.com/eloycoto/status/1165559874677329920"&gt;liou parda en twitter&lt;/a&gt;. Onte lanzouse a web
-de &lt;a class="reference external" href="https://operacionmorriña.com/es/"&gt;proxecto Morriña&lt;/a&gt;, unha iniciativa
+de &lt;a class="reference external" href="https://operacionmorriña.com/es/"&gt;Operación Morriña&lt;/a&gt;, unha iniciativa
 privada e cun claro fin económico, que quere atraer talento a Galicia. A idea,
 en si, esta xenial, apadriñada pola empresa Coruñesa Corunet, e pola startup
 madrileña Mandfred Tech.&lt;/p&gt;
@@ -15,7 +450,7 @@ saliu o Brexit, para que lle dixera que cousas podería facer para voltar xente
 que estaba en Londres.&lt;/p&gt;
 &lt;p&gt;Miña tristeza viu, cando na landing da páxina aparecía o seguinte texto, co logo
 de VigoTech.&lt;/p&gt;
-&lt;img alt="Proyecto morriña" class="align-center" src="img/manfred_morrinha.png" /&gt;
+&lt;img alt="Operación morriña" class="align-center" src="img/manfred_morrinha.png" /&gt;
 &lt;p&gt;Cando foi que se fundou &lt;a class="reference external" href="https://vigotech.org"&gt;Vigotech&lt;/a&gt;, unha das premisas
 era que non tivera integración con ningún tipo de empresa externa, era un
 metagrupo para dar cabida a todas as empresas, cunha serie de regras, pero que
@@ -50,8 +485,8 @@ poder contratar, sen cartos, díxenlle que si, que non problema. Nas seguintes
 edicións, nunca quixeron colaborar, pero sempre aparecían polo café para dicir o
 ben que traballaban. Dende aquela, sempre valoro os feitos, nunca o futuro.&lt;/p&gt;
 &lt;/div&gt;
-&lt;div class="section" id="permiso-para-poner-el-logo"&gt;
-&lt;h2&gt;Permiso para  poñer el logo&lt;/h2&gt;
+&lt;div class="section" id="permiso-para-poner-o-logo"&gt;
+&lt;h2&gt;Permiso para  poñer o logo&lt;/h2&gt;
 &lt;p&gt;David Bonilla, de Manfred Tech, comentou que o logo si que estaba pedido, e que
 estaba posto dado que Vigotech o autorizou, isto é correcto. Tamén o que me
 chegou, e o que se falou no chat de Vigotech, e que o tema vendeuse que sería a
@@ -146,7 +581,7 @@ algo que non me pareceu ben, sen intentar caer en facer a crítica fácil, como
 todos, eu tamén podo equivocarme :-)&lt;/p&gt;
 &lt;p&gt;Abur!&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="morriña"></category><category term="vigotech"></category><category term="manfred"></category><category term="corunet"></category></entry><entry><title>JQ functions, modules and dotfiles tips</title><link href="https://acalustra.com/jq-functions-modules-and-dotfiles-tips.html" rel="alternate"></link><published>2019-02-02T15:01:01+01:00</published><updated>2019-02-02T15:01:01+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2019-02-02:/jq-functions-modules-and-dotfiles-tips.html</id><summary type="html">&lt;p&gt;Over the last months I’m using quite a lot &lt;a class="reference external" href="https://stedolan.github.io/jq/manual/#DefiningFunctions"&gt;JQ&lt;/a&gt; custom functions and
+</content><category term="blog"></category><category term="morriña"></category><category term="vigotech"></category><category term="manfred"></category><category term="corunet"></category></entry><entry><title>JQ functions, modules and dotfiles tips</title><link href="https://acalustra.com/jq-functions-modules-and-dotfiles-tips.html" rel="alternate"></link><published>2019-02-02T15:01:01+01:00</published><updated>2019-02-02T15:01:01+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2019-02-02:/jq-functions-modules-and-dotfiles-tips.html</id><summary type="html">&lt;p&gt;Over the last months I’m using quite a lot &lt;a class="reference external" href="https://stedolan.github.io/jq/manual/#DefiningFunctions"&gt;JQ&lt;/a&gt; custom functions and
 &lt;a class="reference external" href="https://stedolan.github.io/jq/manual/#Modules"&gt;modules&lt;/a&gt;, If you need to deal
 with the same JSON multiples times, maybe you need to dump this information
 easily human-readable format.&lt;/p&gt;
@@ -255,7 +690,7 @@ easier.&lt;/p&gt;
 days:&lt;/p&gt;
 &lt;img alt="JQ modules example" class="align-center" src="img/jq.png" /&gt;
 &lt;p&gt;Hope you enjoy it!&lt;/p&gt;
-</content><category term="jq"></category><category term="kubernetes"></category></entry><entry><title>Six years working remotely, the good and the bad</title><link href="https://acalustra.com/six-years-working-remotely-the-good-and-the-bad.html" rel="alternate"></link><published>2019-01-06T15:01:01+01:00</published><updated>2019-01-06T15:01:01+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2019-01-06:/six-years-working-remotely-the-good-and-the-bad.html</id><summary type="html">&lt;p&gt;I always wanted to write this post, but I also wanted to wait until I have
+</content><category term="blog"></category><category term="jq"></category><category term="kubernetes"></category></entry><entry><title>Six years working remotely, the good and the bad</title><link href="https://acalustra.com/six-years-working-remotely-the-good-and-the-bad.html" rel="alternate"></link><published>2019-01-06T15:01:01+01:00</published><updated>2019-01-06T15:01:01+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2019-01-06:/six-years-working-remotely-the-good-and-the-bad.html</id><summary type="html">&lt;p&gt;I always wanted to write this post, but I also wanted to wait until I have
 enough experience with different companies to share it,  be able to explain in
 why I struggled, what I did right and what I did wrong. As you may have read in
 many places, working …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I always wanted to write this post, but I also wanted to wait until I have
@@ -422,7 +857,7 @@ super awesome!&lt;/p&gt;
 &lt;p&gt;That's all; these are my thoughts about working remotely  for three different
 companies over the last six years, I hope that helps!&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="remote"></category><category term="work"></category></entry><entry><title>Jenkins Slides from my VigoJug meetup</title><link href="https://acalustra.com/jenkins-slides-from-my-vigojug-meetup.html" rel="alternate"></link><published>2018-07-02T20:00:00+02:00</published><updated>2018-07-02T20:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2018-07-02:/jenkins-slides-from-my-vigojug-meetup.html</id><summary type="html">&lt;p&gt;&lt;a class="reference external" href="https://www.meetup.com/es-ES/VigoJUG/"&gt;VigoJug&lt;/a&gt; meetup is one of the best
+</content><category term="blog"></category><category term="remote"></category><category term="work"></category></entry><entry><title>Jenkins Slides from my VigoJug meetup</title><link href="https://acalustra.com/jenkins-slides-from-my-vigojug-meetup.html" rel="alternate"></link><published>2018-07-02T20:00:00+02:00</published><updated>2018-07-02T20:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2018-07-02:/jenkins-slides-from-my-vigojug-meetup.html</id><summary type="html">&lt;p&gt;&lt;a class="reference external" href="https://www.meetup.com/es-ES/VigoJUG/"&gt;VigoJug&lt;/a&gt; meetup is one of the best
 meetups that we have in the town, my close friend &lt;a class="reference external" href="https://twitter.com/antonmry"&gt;Anton&lt;/a&gt; always help me with my Groovy skills and he
 helped me to get some Jenkins pipelines to the next level!&lt;/p&gt;
 &lt;p&gt;Due the job that I made in the last years, I know …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a class="reference external" href="https://www.meetup.com/es-ES/VigoJUG/"&gt;VigoJug&lt;/a&gt; meetup is one of the best
@@ -445,7 +880,7 @@ sadly this time the meetup was not recorded.&lt;/p&gt;
 &lt;li&gt;&lt;a class="reference external" href="http://job-dsl.herokuapp.com/"&gt;JobDSL job sandbox&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="reference external" href="https://wiki.jenkins.io/display/JENKINS/Amazon+EC2+Fleet+Plugin"&gt;Amazon ec2 autoscaling spot instances&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</content><category term="jenkins"></category><category term="vigo"></category><category term="talks"></category></entry><entry><title>Perseguir un soño e que se convirte nunha trampa.</title><link href="https://acalustra.com/perseguir-un-sono-e-que-se-convirte-nunha-trampa.html" rel="alternate"></link><published>2017-12-14T12:00:00+01:00</published><updated>2017-12-14T12:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-12-14:/perseguir-un-sono-e-que-se-convirte-nunha-trampa.html</id><summary type="html">&lt;p&gt;Como ben sabedes levo anos loitando por crear &lt;a class="reference external" href="intranet.aindustriosa.org"&gt;A Industriosa&lt;/a&gt;, un obxectivo que eu consideraba primordial para
+</content><category term="blog"></category><category term="jenkins"></category><category term="vigo"></category><category term="talks"></category></entry><entry><title>Perseguir un soño e que se convirte nunha trampa.</title><link href="https://acalustra.com/perseguir-un-sono-e-que-se-convirte-nunha-trampa.html" rel="alternate"></link><published>2017-12-14T12:00:00+01:00</published><updated>2017-12-14T12:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-12-14:/perseguir-un-sono-e-que-se-convirte-nunha-trampa.html</id><summary type="html">&lt;p&gt;Como ben sabedes levo anos loitando por crear &lt;a class="reference external" href="intranet.aindustriosa.org"&gt;A Industriosa&lt;/a&gt;, un obxectivo que eu consideraba primordial para
 Vigo e que a miña cabeza non parou ata conseguilo.  Grazas a un &lt;strong&gt;equipazo&lt;/strong&gt; de
 xente este proxecto foi adiante pero eu teño que dicir basta, isto converteuse
 nun traballo, polo que teño …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Como ben sabedes levo anos loitando por crear &lt;a class="reference external" href="intranet.aindustriosa.org"&gt;A Industriosa&lt;/a&gt;, un obxectivo que eu consideraba primordial para
@@ -502,7 +937,7 @@ mostra da resignación do pobo galego.&lt;/p&gt;
 &lt;blockquote class="epigraph"&gt;
 La mitad de los gallegos no sabemos nadar, dijo al fin. Nos ahogamos resignados, y punto.
 -- Perez Reverte, La reina del sur&lt;/blockquote&gt;
-</content><category term="aindustriosa"></category><category term="mar"></category><category term="vigo"></category></entry><entry><title>Terraform recipes to test Cilium on Kubernetes</title><link href="https://acalustra.com/terraform-recipes-to-test-cilium-on-kubernetes.html" rel="alternate"></link><published>2017-08-29T12:00:00+02:00</published><updated>2017-08-29T12:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-08-29:/terraform-recipes-to-test-cilium-on-kubernetes.html</id><summary type="html">&lt;p&gt;After almost five years, I left my job at &lt;a class="reference external" href="https://www.foehn.co.uk/"&gt;Foehn&lt;/a&gt;;
+</content><category term="blog"></category><category term="aindustriosa"></category><category term="mar"></category><category term="vigo"></category></entry><entry><title>Terraform recipes to test Cilium on Kubernetes</title><link href="https://acalustra.com/terraform-recipes-to-test-cilium-on-kubernetes.html" rel="alternate"></link><published>2017-08-29T12:00:00+02:00</published><updated>2017-08-29T12:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-08-29:/terraform-recipes-to-test-cilium-on-kubernetes.html</id><summary type="html">&lt;p&gt;After almost five years, I left my job at &lt;a class="reference external" href="https://www.foehn.co.uk/"&gt;Foehn&lt;/a&gt;;
 I need a personal break, and I have decided early this year that late August
 would be a good time for doing it.&lt;/p&gt;
 &lt;p&gt;During this break, I'll be doing open source for few months before starting to
@@ -633,7 +1068,7 @@ ID   Frontend            Backend
 &lt;p&gt;From here, you can follow the policy enforcement guide from the cilium docs. In
 the coming months, I will share with you all the stuff I am learning.&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="ubuntu"></category><category term="cilium"></category><category term="terraform"></category><category term="kubernetes"></category></entry><entry><title>España, o paraíso dos bocachanclas</title><link href="https://acalustra.com/espana-o-paraiso-dos-bocachanclas.html" rel="alternate"></link><published>2017-07-31T16:00:00+02:00</published><updated>2017-07-31T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-07-31:/espana-o-paraiso-dos-bocachanclas.html</id><summary type="html">&lt;p&gt;Sempre que escoito que en Galicia non contamos con talento, dánme ganas de
+</content><category term="blog"></category><category term="ubuntu"></category><category term="cilium"></category><category term="terraform"></category><category term="kubernetes"></category></entry><entry><title>España, o paraíso dos bocachanclas</title><link href="https://acalustra.com/espana-o-paraiso-dos-bocachanclas.html" rel="alternate"></link><published>2017-07-31T16:00:00+02:00</published><updated>2017-07-31T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-07-31:/espana-o-paraiso-dos-bocachanclas.html</id><summary type="html">&lt;p&gt;Sempre que escoito que en Galicia non contamos con talento, dánme ganas de
 pegar, non por que sexa agresivo, se non por quen fala nunca se parou a
 analizar os datos cun pouco de precisión, e van sacando as ganas a pouca xente
 que as ten.&lt;/p&gt;
@@ -722,7 +1157,7 @@ alemá, todo se podería facer. Pero estamos no fin do mundo, e aquí o talento
 non chega, grazas a deus, a conexión a internet, mal, pero algo chega.&lt;/p&gt;
 &lt;p&gt;Quédome contento por ver como os finlandeses de Jyväskylä demostran que moitas
 veces so fan falla vontade e bo facer, o resto ven só.&lt;/p&gt;
-</content><category term="rally"></category><category term="galicia"></category></entry><entry><title>PyDay Galicia 2017: How to write better logs.</title><link href="https://acalustra.com/pyday-galicia-2017-how-to-write-better-logs.html" rel="alternate"></link><published>2017-06-29T12:00:00+02:00</published><updated>2017-06-29T12:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-06-29:/pyday-galicia-2017-how-to-write-better-logs.html</id><summary type="html">&lt;p&gt;Last Jun we had an excellent conference in Vigo Galicia. More than 180 python
+</content><category term="blog"></category><category term="rally"></category><category term="galicia"></category></entry><entry><title>PyDay Galicia 2017: How to write better logs.</title><link href="https://acalustra.com/pyday-galicia-2017-how-to-write-better-logs.html" rel="alternate"></link><published>2017-06-29T12:00:00+02:00</published><updated>2017-06-29T12:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-06-29:/pyday-galicia-2017-how-to-write-better-logs.html</id><summary type="html">&lt;p&gt;Last Jun we had an excellent conference in Vigo Galicia. More than 180 python
 devs meet in the PyDay Galicia 2017. The conference was awesome; I learnt a lot
 of things related to Machine Learning, and I can catch up with some old friends
 like Ismael Hasan, who is now …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Last Jun we had an excellent conference in Vigo Galicia. More than 180 python
@@ -738,7 +1173,7 @@ use to follow to write logs. Here you have the slides.&lt;/p&gt;
                     src="//speakerdeck.com/assets/embed.js"&gt;
             &lt;/script&gt;
 &lt;/div&gt;&lt;p&gt;And many thanks to &lt;a class="reference external" href="https://twitter.com/alexhermida"&gt;&amp;#64;alexhermida&lt;/a&gt; and all &lt;a class="reference external" href="https://twitter.com/python_vigo"&gt;&amp;#64;python_vigo&lt;/a&gt; for organising it.&lt;/p&gt;
-</content><category term="python"></category><category term="vigo"></category><category term="pyday"></category><category term="talks"></category></entry><entry><title>How Vigo Council migrate to Linux</title><link href="https://acalustra.com/how-vigo-council-migrate-to-linux.html" rel="alternate"></link><published>2017-06-19T12:00:00+02:00</published><updated>2017-06-19T12:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-06-19:/how-vigo-council-migrate-to-linux.html</id><summary type="html">&lt;p&gt;Last May I went to one of the most awesome meetups that were given in &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Vigo"&gt;Vigo&lt;/a&gt;.  Hugo, from Vigo council IT department,
+</content><category term="blog"></category><category term="python"></category><category term="vigo"></category><category term="pyday"></category><category term="talks"></category></entry><entry><title>How Vigo Council migrate to Linux</title><link href="https://acalustra.com/how-vigo-council-migrate-to-linux.html" rel="alternate"></link><published>2017-06-19T12:00:00+02:00</published><updated>2017-06-19T12:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-06-19:/how-vigo-council-migrate-to-linux.html</id><summary type="html">&lt;p&gt;Last May I went to one of the most awesome meetups that were given in &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Vigo"&gt;Vigo&lt;/a&gt;.  Hugo, from Vigo council IT department,
 explained the process of how they migrated more than 800 workstations to Linux,
 a process that was started on 2007. I am sharing some notes about his
 presentation …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Last May I went to one of the most awesome meetups that were given in &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Vigo"&gt;Vigo&lt;/a&gt;.  Hugo, from Vigo council IT department,
@@ -863,7 +1298,7 @@ persons instead computers, they made an excellent point, that when you make a
 change, you need to create an audience first, and gave to the proactive people
 what they want and they will pull their closer people to the success.&lt;/p&gt;
 &lt;p&gt;I am glad to share this history with you; I Hope you enjoyed it!&lt;/p&gt;
-</content><category term="ubuntu"></category><category term="council"></category><category term="vigo"></category></entry><entry><title>Fosdem 2017 review</title><link href="https://acalustra.com/fosdem-2017-review.html" rel="alternate"></link><published>2017-02-09T16:00:00+01:00</published><updated>2017-02-09T16:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-02-09:/fosdem-2017-review.html</id><summary type="html">&lt;p&gt;My third &lt;a class="reference external" href="https://fosdem.org/2017/"&gt;FOSDEM&lt;/a&gt; is over, this year there was a
+</content><category term="blog"></category><category term="ubuntu"></category><category term="council"></category><category term="vigo"></category></entry><entry><title>Fosdem 2017 review</title><link href="https://acalustra.com/fosdem-2017-review.html" rel="alternate"></link><published>2017-02-09T16:00:00+01:00</published><updated>2017-02-09T16:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-02-09:/fosdem-2017-review.html</id><summary type="html">&lt;p&gt;My third &lt;a class="reference external" href="https://fosdem.org/2017/"&gt;FOSDEM&lt;/a&gt; is over, this year there was a
 &lt;a class="reference external" href="https://fosdem.org/2017/schedule/track/real_time_communications/"&gt;Real Time Comms dev room&lt;/a&gt; in place,
 one of the best places to keep up to date with all VoIP technologies.
 Furthermore, in this conference, you can just jump into another track and learn
@@ -957,7 +1392,7 @@ unrespectful) or see the agenda in the laptops and check the content of the
 next speaker. This type of conference should be prepared in advance, if not you
 are going to be frustrated in the queues.&lt;/p&gt;
 &lt;p&gt;Thanks to all, and see you next year!&lt;/p&gt;
-</content><category term="fosdem"></category><category term="kamailio"></category><category term="conferences"></category></entry><entry><title>Postgresql Talk in the PHPVigo meetup</title><link href="https://acalustra.com/postgresql-talk-in-the-phpvigo-meetup.html" rel="alternate"></link><published>2017-01-25T16:00:00+01:00</published><updated>2017-01-25T16:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-01-25:/postgresql-talk-in-the-phpvigo-meetup.html</id><summary type="html">&lt;p&gt;I had the luck to gave a talk at  the &lt;a class="reference external" href="https://www.meetup.com/es-ES/PHPVigo/"&gt;PHPVigo Meetup&lt;/a&gt;. It was a postgresql introduction to
+</content><category term="blog"></category><category term="fosdem"></category><category term="kamailio"></category><category term="conferences"></category></entry><entry><title>Postgresql Talk in the PHPVigo meetup</title><link href="https://acalustra.com/postgresql-talk-in-the-phpvigo-meetup.html" rel="alternate"></link><published>2017-01-25T16:00:00+01:00</published><updated>2017-01-25T16:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2017-01-25:/postgresql-talk-in-the-phpvigo-meetup.html</id><content type="html">&lt;p&gt;I had the luck to gave a talk at  the &lt;a class="reference external" href="https://www.meetup.com/es-ES/PHPVigo/"&gt;PHPVigo Meetup&lt;/a&gt;. It was a postgresql introduction to
 all php community.&lt;/p&gt;
 &lt;div style="width: 70%;" class="align-center" align="center"&gt;
 &lt;script async class="speakerdeck-embed"
@@ -966,16 +1401,7 @@ src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
 &lt;/div&gt;&lt;p&gt;Thanks to &lt;a class="reference external" href="https://twitter.com/felixgomezlopez"&gt;Félix&lt;/a&gt; and &lt;a class="reference external" href="https://twitter.com/sergiocarracedo?lang=en"&gt;Sergio&lt;/a&gt; for organising this &lt;strong&gt;awesome&lt;/strong&gt;
 meetup.&lt;/p&gt;
 &lt;p&gt;Happy code!&lt;/p&gt;
-</summary><content type="html">&lt;p&gt;I had the luck to gave a talk at  the &lt;a class="reference external" href="https://www.meetup.com/es-ES/PHPVigo/"&gt;PHPVigo Meetup&lt;/a&gt;. It was a postgresql introduction to
-all php community.&lt;/p&gt;
-&lt;div style="width: 70%;" class="align-center" align="center"&gt;
-&lt;script async class="speakerdeck-embed"
-data-id="0909c5cdb8224c25a3f88ef113968609" data-ratio="1.77777777777778"
-src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
-&lt;/div&gt;&lt;p&gt;Thanks to &lt;a class="reference external" href="https://twitter.com/felixgomezlopez"&gt;Félix&lt;/a&gt; and &lt;a class="reference external" href="https://twitter.com/sergiocarracedo?lang=en"&gt;Sergio&lt;/a&gt; for organising this &lt;strong&gt;awesome&lt;/strong&gt;
-meetup.&lt;/p&gt;
-&lt;p&gt;Happy code!&lt;/p&gt;
-</content><category term="postgresql"></category><category term="phpvigo"></category><category term="talks"></category></entry><entry><title>O fracaso do MediaLab "A Industriosa"</title><link href="https://acalustra.com/o-fracaso-do-medialab-a-industriosa.html" rel="alternate"></link><published>2016-12-29T10:00:00+01:00</published><updated>2016-12-29T10:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-12-29:/o-fracaso-do-medialab-a-industriosa.html</id><summary type="html">&lt;p&gt;Poucas veces escribín con tanta tristeza, hoxe, pra finalizar con este 2016 vou
+</content><category term="blog"></category><category term="postgresql"></category><category term="phpvigo"></category><category term="talks"></category></entry><entry><title>O fracaso do MediaLab "A Industriosa"</title><link href="https://acalustra.com/o-fracaso-do-medialab-a-industriosa.html" rel="alternate"></link><published>2016-12-29T10:00:00+01:00</published><updated>2016-12-29T10:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-12-29:/o-fracaso-do-medialab-a-industriosa.html</id><summary type="html">&lt;p&gt;Poucas veces escribín con tanta tristeza, hoxe, pra finalizar con este 2016 vou
 documentar o fracaso de levar a cabo o &lt;strong&gt;MediaLab A industriosa&lt;/strong&gt;, un proxecto
 no que empecei a traballar aos inicios do ano, pra así promover unha necesidade
 que ten a cidade, ademais de facer e ese necesario …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Poucas veces escribín con tanta tristeza, hoxe, pra finalizar con este 2016 vou
@@ -1126,7 +1552,7 @@ centímetros, fraternité que din os franceses.&lt;/p&gt;
 &lt;p&gt;Feliz ano novo.&lt;/p&gt;
 &lt;div style="width: 100%;" class="align-center" align="center"&gt;
             &lt;iframe src="https://embed.spotify.com/?uri=spotify%3Atrack%3A2KQq1pn2eUDEFitdQ4WzzZ"  height="80" frameborder="0" width="60%"&gt;&lt;/iframe&gt;
-    &lt;/div&gt;</content><category term="tecnoloxía"></category><category term="vigo"></category><category term="mar"></category></entry><entry><title>Estase a converter Vigo nunha potencia tecnolóxica do mar?</title><link href="https://acalustra.com/estase-a-converter-vigo-nunha-potencia-tecnoloxica-do-mar.html" rel="alternate"></link><published>2016-12-12T10:00:00+01:00</published><updated>2016-12-12T10:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-12-12:/estase-a-converter-vigo-nunha-potencia-tecnoloxica-do-mar.html</id><summary type="html">&lt;p&gt;Quen me coñece sabe que ultimamente so falo de tecnoloxía orientada ao mar. Xa
+    &lt;/div&gt;</content><category term="blog"></category><category term="tecnoloxía"></category><category term="vigo"></category><category term="mar"></category></entry><entry><title>Estase a converter Vigo nunha potencia tecnolóxica do mar?</title><link href="https://acalustra.com/estase-a-converter-vigo-nunha-potencia-tecnoloxica-do-mar.html" rel="alternate"></link><published>2016-12-12T10:00:00+01:00</published><updated>2016-12-12T10:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-12-12:/estase-a-converter-vigo-nunha-potencia-tecnoloxica-do-mar.html</id><summary type="html">&lt;p&gt;Quen me coñece sabe que ultimamente so falo de tecnoloxía orientada ao mar. Xa
 escribín os motivos neste artigo de &lt;a class="reference external" href="http://praza.gal/opinion/3527/vigo-capital-global-da-tecnoloxia-maritima/"&gt;praza.gal&lt;/a&gt;. Aproveitando o final de ano
 fixen unha nova revisión de empresas tecnolóxicas galegas orientadas a
 tecnoloxía no mar. Un traballo que fixera o ano pasado pra preparar a …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Quen me coñece sabe que ultimamente so falo de tecnoloxía orientada ao mar. Xa
@@ -1243,7 +1669,7 @@ centea, pra de verdade poderse adicar a innovación e reducir a competencia entr
 nós. En galicia, temos demasiados medos as unións, xa se esas unións foran entre
 empresas tecnolóxicas e metalúrxicas; &lt;strong&gt;sería unha detonación enorme que levaría
 a cidade a un éxito rotundo.&lt;/strong&gt;&lt;/p&gt;
-</content><category term="tecnoloxía"></category><category term="vigo"></category><category term="mar"></category></entry><entry><title>Pycon Galicia 2016 talk</title><link href="https://acalustra.com/pycon-galicia-2016-talk.html" rel="alternate"></link><published>2016-09-17T16:00:00+02:00</published><updated>2016-09-17T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-09-17:/pycon-galicia-2016-talk.html</id><summary type="html">&lt;p&gt;I had the luck to gave a talk at &lt;a class="reference external" href="http://https://python-vigo.github.io/pyday-2016//"&gt;PyCon Galicia 2016&lt;/a&gt;.The topic was about the
+</content><category term="blog"></category><category term="tecnoloxía"></category><category term="vigo"></category><category term="mar"></category></entry><entry><title>Pycon Galicia 2016 talk</title><link href="https://acalustra.com/pycon-galicia-2016-talk.html" rel="alternate"></link><published>2016-09-17T16:00:00+02:00</published><updated>2016-09-17T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-09-17:/pycon-galicia-2016-talk.html</id><content type="html">&lt;p&gt;I had the luck to gave a talk at &lt;a class="reference external" href="http://https://python-vigo.github.io/pyday-2016//"&gt;PyCon Galicia 2016&lt;/a&gt;.The topic was about the
 future of developement from my POV.&lt;/p&gt;
 &lt;div style="width: 70%;" class="align-center" align="center"&gt;
 &lt;script async class="speakerdeck-embed"
@@ -1252,16 +1678,7 @@ src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
 &lt;/div&gt;&lt;p&gt;Thanks to &lt;a class="reference external" href="https://twitter.com/python_vigo"&gt;Python Vigo&lt;/a&gt; and big thanks to
 &lt;a class="reference external" href="https://twitter.com/alexhermida"&gt;Alex Hermida&lt;/a&gt; and &lt;a class="reference external" href="https://twitter.com/fpuga"&gt;Fran Puga&lt;/a&gt; to organize it.&lt;/p&gt;
 &lt;p&gt;Happy code!&lt;/p&gt;
-</summary><content type="html">&lt;p&gt;I had the luck to gave a talk at &lt;a class="reference external" href="http://https://python-vigo.github.io/pyday-2016//"&gt;PyCon Galicia 2016&lt;/a&gt;.The topic was about the
-future of developement from my POV.&lt;/p&gt;
-&lt;div style="width: 70%;" class="align-center" align="center"&gt;
-&lt;script async class="speakerdeck-embed"
-data-id="aa586cf790a24bbc84707189435e2c42" data-ratio="1.77777777777778"
-src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
-&lt;/div&gt;&lt;p&gt;Thanks to &lt;a class="reference external" href="https://twitter.com/python_vigo"&gt;Python Vigo&lt;/a&gt; and big thanks to
-&lt;a class="reference external" href="https://twitter.com/alexhermida"&gt;Alex Hermida&lt;/a&gt; and &lt;a class="reference external" href="https://twitter.com/fpuga"&gt;Fran Puga&lt;/a&gt; to organize it.&lt;/p&gt;
-&lt;p&gt;Happy code!&lt;/p&gt;
-</content><category term="gordon"></category><category term="python"></category><category term="pycon galicia"></category><category term="pyvigo"></category><category term="lamdba"></category><category term="talks"></category></entry><entry><title>Why Tesla should build the European factory in Vigo?</title><link href="https://acalustra.com/why-tesla-should-build-the-european-factory-in-vigo.html" rel="alternate"></link><published>2016-07-26T16:00:00+02:00</published><updated>2016-07-26T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-07-26:/why-tesla-should-build-the-european-factory-in-vigo.html</id><summary type="html">&lt;p&gt;Let me introduce you into &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Galicia_(Spain)"&gt;Galicia&lt;/a&gt;. Galicia is in the north-west
+</content><category term="blog"></category><category term="gordon"></category><category term="python"></category><category term="pycon galicia"></category><category term="pyvigo"></category><category term="lamdba"></category><category term="talks"></category></entry><entry><title>Why Tesla should build the European factory in Vigo?</title><link href="https://acalustra.com/why-tesla-should-build-the-european-factory-in-vigo.html" rel="alternate"></link><published>2016-07-26T16:00:00+02:00</published><updated>2016-07-26T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-07-26:/why-tesla-should-build-the-european-factory-in-vigo.html</id><summary type="html">&lt;p&gt;Let me introduce you into &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Galicia_(Spain)"&gt;Galicia&lt;/a&gt;. Galicia is in the north-west
 of Spain and up-north of Portugal. Galicia is a historic state that is part of
 Spain since hundred of years ago. The primary industries of Galicia are fishing,
 automotive, farming and textile. In the last years is know as …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Let me introduce you into &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Galicia_(Spain)"&gt;Galicia&lt;/a&gt;. Galicia is in the north-west
@@ -1497,7 +1914,7 @@ green mentality and with thousands and thousands of wonderful people around.&lt;
 want to visit Vigo, I’ll pay your flight, I will love that you come to here, I
 know that when you arrive, you don’t want to leave!&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="tesla"></category><category term="vigo"></category><category term="galicia"></category></entry><entry><title>Using Jenkins Pipelines to deploy terraform</title><link href="https://acalustra.com/using-jenkins-pipelines-to-deploy-terraform.html" rel="alternate"></link><published>2016-07-05T10:00:00+02:00</published><updated>2016-07-05T10:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-07-05:/using-jenkins-pipelines-to-deploy-terraform.html</id><summary type="html">&lt;p&gt;&lt;a class="reference external" href="https://jenkins.io/2.0/"&gt;Jenkins 2.0&lt;/a&gt; was released a few weeks ago. One of
+</content><category term="blog"></category><category term="tesla"></category><category term="vigo"></category><category term="galicia"></category></entry><entry><title>Using Jenkins Pipelines to deploy terraform</title><link href="https://acalustra.com/using-jenkins-pipelines-to-deploy-terraform.html" rel="alternate"></link><published>2016-07-05T10:00:00+02:00</published><updated>2016-07-05T10:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-07-05:/using-jenkins-pipelines-to-deploy-terraform.html</id><summary type="html">&lt;p&gt;&lt;a class="reference external" href="https://jenkins.io/2.0/"&gt;Jenkins 2.0&lt;/a&gt; was released a few weeks ago. One of
 the main problems that I use to had in Jenkins was multi-stages jobs, there was
 a plugin from Cloudbees but it was difficult to use. This new version
 &lt;a class="reference external" href="https://jenkins.io/doc/pipeline/jenkinsfile/"&gt;implements pipelines based on a Jenkinsfile&lt;/a&gt; in the root of the …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a class="reference external" href="https://jenkins.io/2.0/"&gt;Jenkins 2.0&lt;/a&gt; was released a few weeks ago. One of
@@ -1570,7 +1987,7 @@ my fellows can see in what state is each build. In the other hand, &lt;a class="
 it'll make even simpler to review it.&lt;/p&gt;
 &lt;p&gt;Related with the Jenkinsfile DSL reference, &lt;a class="reference external" href="https://jenkins.io/blog/2016/05/26/introducing-blue-ocean/"&gt;Cloudbees wrote&lt;/a&gt; a complete blog
 post with all commands. Furthermore full pipelines &lt;a class="reference external" href="https://jenkins.io/solutions/pipeline/"&gt;documentation&lt;/a&gt; can be found in jenkins webpage.&lt;/p&gt;
-</content><category term="terraform"></category><category term="jenkins"></category><category term="packer"></category></entry><entry><title>My review of Hashiconf Europe 16</title><link href="https://acalustra.com/my-review-of-hashiconf-europe-16.html" rel="alternate"></link><published>2016-06-20T16:00:00+02:00</published><updated>2016-06-20T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-06-20:/my-review-of-hashiconf-europe-16.html</id><summary type="html">&lt;p&gt;Few days ago I was in Amsterdam, in the lovely &lt;a class="reference external" href="https://www.hashiconf.eu/"&gt;Hashiconf EU&lt;/a&gt;. This conference fulfilled all my expectations
+</content><category term="blog"></category><category term="terraform"></category><category term="jenkins"></category><category term="packer"></category></entry><entry><title>My review of Hashiconf Europe 16</title><link href="https://acalustra.com/my-review-of-hashiconf-europe-16.html" rel="alternate"></link><published>2016-06-20T16:00:00+02:00</published><updated>2016-06-20T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-06-20:/my-review-of-hashiconf-europe-16.html</id><summary type="html">&lt;p&gt;Few days ago I was in Amsterdam, in the lovely &lt;a class="reference external" href="https://www.hashiconf.eu/"&gt;Hashiconf EU&lt;/a&gt;. This conference fulfilled all my expectations
 about hashi tools and the devops world. The conference was organized by &lt;a class="reference external" href="https://xebia.com/"&gt;Xebia&lt;/a&gt; with the help of &lt;a class="reference external" href="https://www.hashicorp.com/"&gt;Hashicorp&lt;/a&gt; and it was awesome, everything was great: venue,
 sound, food, talks and the party …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Few days ago I was in Amsterdam, in the lovely &lt;a class="reference external" href="https://www.hashiconf.eu/"&gt;Hashiconf EU&lt;/a&gt;. This conference fulfilled all my expectations
 about hashi tools and the devops world. The conference was organized by &lt;a class="reference external" href="https://xebia.com/"&gt;Xebia&lt;/a&gt; with the help of &lt;a class="reference external" href="https://www.hashicorp.com/"&gt;Hashicorp&lt;/a&gt; and it was awesome, everything was great: venue,
@@ -1657,7 +2074,7 @@ them down here just in case it could be helpful:&lt;/p&gt;
 &lt;p&gt;PS: All photos are from &lt;a class="reference external" href="https://www.flickr.com/photos/137604751&amp;#64;N05/sets/72157667183542004/"&gt;Hashicorp flickr
 page&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;PS2: Videos are &lt;a class="reference external" href="https://www.youtube.com/watch?list=PL81sUbsFNc5b-Gd59Lpz7BW0eHJBt0GvE&amp;amp;v=Ps44n1de0Js"&gt;now online&lt;/a&gt;&lt;/p&gt;
-</content><category term="docker"></category><category term="kamailio"></category><category term="hashicorp"></category><category term="terraform"></category><category term="nomad"></category><category term="consul"></category></entry><entry><title>Resume persoal da hackathon Sanjurjo Badía</title><link href="https://acalustra.com/resume-persoal-da-hackathon-sanjurjo-badia.html" rel="alternate"></link><published>2016-03-25T16:00:00+01:00</published><updated>2016-03-25T16:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-03-25:/resume-persoal-da-hackathon-sanjurjo-badia.html</id><summary type="html">&lt;p&gt;Como algún ben sabedes estaba involucrado xunto con Jesús na Hackathon Sanjurjo
+</content><category term="blog"></category><category term="docker"></category><category term="kamailio"></category><category term="hashicorp"></category><category term="terraform"></category><category term="nomad"></category><category term="consul"></category></entry><entry><title>Resume persoal da hackathon Sanjurjo Badía</title><link href="https://acalustra.com/resume-persoal-da-hackathon-sanjurjo-badia.html" rel="alternate"></link><published>2016-03-25T16:00:00+01:00</published><updated>2016-03-25T16:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2016-03-25:/resume-persoal-da-hackathon-sanjurjo-badia.html</id><summary type="html">&lt;p&gt;Como algún ben sabedes estaba involucrado xunto con Jesús na Hackathon Sanjurjo
 Badía.  Gustaríame facer unha reflexión persoal e &amp;quot;en voz alta&amp;quot;, dado que creo
 que é importante compartir este tipo de información.&lt;/p&gt;
 &lt;p&gt;Sobre a hackathon, non vou comentar nada mais do que xa esta escrito nas
@@ -1835,7 +2252,7 @@ O verdadeiro heroísmo está en convertir os anceios en realidades, e as ideas e
 -- CASTELAO&lt;/blockquote&gt;
 &lt;p&gt;Graciñas a todos!&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="hackathon"></category><category term="vigo"></category><category term="mar"></category></entry><entry><title>Voip talk at Librecon 2015</title><link href="https://acalustra.com/voip-talk-at-librecon-2015.html" rel="alternate"></link><published>2015-10-29T16:00:00+01:00</published><updated>2015-10-29T16:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-10-29:/voip-talk-at-librecon-2015.html</id><summary type="html">&lt;p&gt;I had the luck to gave a talk at &lt;a class="reference external" href="http://www.librecon.io/"&gt;Librecon 2015&lt;/a&gt;.The
+</content><category term="blog"></category><category term="hackathon"></category><category term="vigo"></category><category term="mar"></category></entry><entry><title>Voip talk at Librecon 2015</title><link href="https://acalustra.com/voip-talk-at-librecon-2015.html" rel="alternate"></link><published>2015-10-29T16:00:00+01:00</published><updated>2015-10-29T16:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-10-29:/voip-talk-at-librecon-2015.html</id><summary type="html">&lt;p&gt;I had the luck to gave a talk at &lt;a class="reference external" href="http://www.librecon.io/"&gt;Librecon 2015&lt;/a&gt;.The
 topic was about how I built a modern operator using asterisk, kamailio, and
 other tools for measure and deploy.&lt;/p&gt;
 &lt;div style="width: 70%;" class="align-center" align="center"&gt;
@@ -1854,7 +2271,7 @@ src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
 &lt;/div&gt;&lt;p&gt;Thanks to &lt;a class="reference external" href="http://www.agasol.gal/"&gt;Agasol&lt;/a&gt; and big thanks to &lt;a class="reference external" href="https://twitter.com/xcastanho"&gt;Xavi
 Castaño&lt;/a&gt; and Cris to help me with all my doubts.&lt;/p&gt;
 &lt;p&gt;Happy code!&lt;/p&gt;
-</content><category term="packer"></category><category term="consul"></category><category term="terraform"></category><category term="kamailio"></category><category term="asterisk"></category><category term="statsd"></category><category term="grafana"></category><category term="influxdb"></category><category term="talks"></category></entry><entry><title>How can I monitor my Voip Application?</title><link href="https://acalustra.com/how-can-i-monitor-my-voip-application.html" rel="alternate"></link><published>2015-07-24T16:00:00+02:00</published><updated>2015-07-24T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-07-24:/how-can-i-monitor-my-voip-application.html</id><summary type="html">&lt;p&gt;In the last &lt;a class="reference external" href="https://acalustra.com/kamialio-world-2015.html"&gt;Kamailio World&lt;/a&gt; two of the
+</content><category term="blog"></category><category term="packer"></category><category term="consul"></category><category term="terraform"></category><category term="kamailio"></category><category term="asterisk"></category><category term="statsd"></category><category term="grafana"></category><category term="influxdb"></category><category term="talks"></category></entry><entry><title>How can I monitor my Voip Application?</title><link href="https://acalustra.com/how-can-i-monitor-my-voip-application.html" rel="alternate"></link><published>2015-07-24T16:00:00+02:00</published><updated>2015-07-24T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-07-24:/how-can-i-monitor-my-voip-application.html</id><summary type="html">&lt;p&gt;In the last &lt;a class="reference external" href="https://acalustra.com/kamialio-world-2015.html"&gt;Kamailio World&lt;/a&gt; two of the
 hot topics were &lt;a class="reference external" href="https://www.elastic.co/products/beats"&gt;Packetbeat&lt;/a&gt; and
 &lt;a class="reference external" href="http://SIPCapture.org/"&gt;SIPCapture&lt;/a&gt;.  Both projects announced good news
 meanwhile the conference, people got excited about it.&lt;/p&gt;
@@ -1935,7 +2352,7 @@ only use 2 lines of code to monitor specific lines.&lt;/li&gt;
 SIPCapture is the swiss-knife for support teams. Packetbeat is an amazing tool
 for all the operations teams and statsd is good for operations team and
 marketing/business team to make decisions based on the current metrics.&lt;/p&gt;
-</content><category term="kamailio"></category><category term="sip"></category><category term="SIPCapture"></category><category term="Packetbeat"></category><category term="statsd"></category></entry><entry><title>Kamialio World 2015</title><link href="https://acalustra.com/kamialio-world-2015.html" rel="alternate"></link><published>2015-06-17T00:00:00+02:00</published><updated>2015-06-17T00:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-06-17:/kamialio-world-2015.html</id><summary type="html">&lt;p&gt;Last week of May I had the luck to attend &lt;a class="reference external" href="http://conference.kamailio.com/k03/"&gt;Kamailio World Conference&lt;/a&gt;. It was my third time and as usually I
+</content><category term="blog"></category><category term="kamailio"></category><category term="sip"></category><category term="SIPCapture"></category><category term="Packetbeat"></category><category term="statsd"></category></entry><entry><title>Kamialio World 2015</title><link href="https://acalustra.com/kamialio-world-2015.html" rel="alternate"></link><published>2015-06-17T00:00:00+02:00</published><updated>2015-06-17T00:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-06-17:/kamialio-world-2015.html</id><summary type="html">&lt;p&gt;Last week of May I had the luck to attend &lt;a class="reference external" href="http://conference.kamailio.com/k03/"&gt;Kamailio World Conference&lt;/a&gt;. It was my third time and as usually I
 learnt a lot. &lt;strong&gt;Kamailio was born fourteen years ago&lt;/strong&gt;, so a lot of people had a
 lot of things to show.&lt;/p&gt;
 &lt;p&gt;This year the conference was focused in …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Last week of May I had the luck to attend &lt;a class="reference external" href="http://conference.kamailio.com/k03/"&gt;Kamailio World Conference&lt;/a&gt;. It was my third time and as usually I
@@ -2045,7 +2462,7 @@ It was a blast!&lt;/p&gt;
 &lt;p&gt;Huge thanks from the people to &lt;a class="reference external" href="http://www.quobis.com"&gt;Quobis&lt;/a&gt; (&lt;a class="reference external" href="https://twitter.com/s3rgiogr"&gt;Sergio&lt;/a&gt; and &lt;a class="reference external" href="https://twitter.com/lauskin"&gt;Santi&lt;/a&gt;).
 I spent my trip with them and it was a pleasure, thanks guys.&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="kamailio"></category><category term="kamailio world"></category></entry><entry><title>My thoughts about CGRates</title><link href="https://acalustra.com/my-thoughts-about-cgrates.html" rel="alternate"></link><published>2015-05-27T21:00:00+02:00</published><updated>2015-05-27T21:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-05-27:/my-thoughts-about-cgrates.html</id><summary type="html">&lt;p&gt;At &lt;a class="reference external" href="http://www.foehn.co.uk"&gt;Foehn&lt;/a&gt;, we started to use
+</content><category term="blog"></category><category term="kamailio"></category><category term="kamailio world"></category></entry><entry><title>My thoughts about CGRates</title><link href="https://acalustra.com/my-thoughts-about-cgrates.html" rel="alternate"></link><published>2015-05-27T21:00:00+02:00</published><updated>2015-05-27T21:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-05-27:/my-thoughts-about-cgrates.html</id><summary type="html">&lt;p&gt;At &lt;a class="reference external" href="http://www.foehn.co.uk"&gt;Foehn&lt;/a&gt;, we started to use
 &lt;a class="reference external" href="http://cgrates.org/"&gt;CGRateS&lt;/a&gt; earlier this year, nowadays (May-2015) the
 platform has rated tens of millions of calls. I want to share my experience.&lt;/p&gt;
 &lt;p&gt;I discovered CGRateS in 2014 at the &lt;a class="reference external" href="http://conference.kamailio.com/k03/"&gt;Kamailio World
@@ -2130,7 +2547,7 @@ extensions or support fees for example.&lt;/p&gt;
 little bit of knowledge you can get CGRateS do all the hard billing work for
 you.&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="kamailio"></category><category term="billing"></category><category term="cgrates"></category></entry><entry><title>Acelerate your Ansible playbooks with async tasks</title><link href="https://acalustra.com/acelerate-your-ansible-playbooks-with-async-tasks.html" rel="alternate"></link><published>2015-05-08T16:00:00+02:00</published><updated>2015-05-08T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-05-08:/acelerate-your-ansible-playbooks-with-async-tasks.html</id><summary type="html">&lt;p&gt;I'm always impressed with my friends of
+</content><category term="blog"></category><category term="kamailio"></category><category term="billing"></category><category term="cgrates"></category></entry><entry><title>Acelerate your Ansible playbooks with async tasks</title><link href="https://acalustra.com/acelerate-your-ansible-playbooks-with-async-tasks.html" rel="alternate"></link><published>2015-05-08T16:00:00+02:00</published><updated>2015-05-08T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-05-08:/acelerate-your-ansible-playbooks-with-async-tasks.html</id><summary type="html">&lt;p&gt;I'm always impressed with my friends of
 &lt;a class="reference external" href="https://www.streetlife.com/about/team/"&gt;Streetlife&lt;/a&gt;. They built a new
 infrastructure based on immutable deploys. I'm surprised about how fast they are
 able to build this
@@ -2155,12 +2572,12 @@ in the apt task. This is pretty useful, but painful with different roles.&lt;/p&
 &lt;a class="reference external" href="http://docs.ansible.com/apt_module.html"&gt;cache_valid_time&lt;/a&gt; option. If you
 enable it, Ansible will check the cache age. If cache age is less than your
 value, apt-get update will be ignored.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;name&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;Installing useful packages&lt;/span&gt;
-  &lt;span class="l l-Scalar l-Scalar-Plain"&gt;apt&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt;
-    &lt;span class="l l-Scalar l-Scalar-Plain"&gt;name&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;{{&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;item&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;}}&amp;quot;&lt;/span&gt;
-    &lt;span class="l l-Scalar l-Scalar-Plain"&gt;update_cache&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;yes&lt;/span&gt;
-    &lt;span class="l l-Scalar l-Scalar-Plain"&gt;cache_valid_time&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;3600&lt;/span&gt;
-  &lt;span class="l l-Scalar l-Scalar-Plain"&gt;with_items&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;Installing useful packages&lt;/span&gt;
+  &lt;span class="nt"&gt;apt&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;{{&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;item&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;}}&amp;quot;&lt;/span&gt;
+    &lt;span class="nt"&gt;update_cache&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;yes&lt;/span&gt;
+    &lt;span class="nt"&gt;cache_valid_time&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;3600&lt;/span&gt;
+  &lt;span class="nt"&gt;with_items&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
     &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;htop&lt;/span&gt;
     &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;ngrep&lt;/span&gt;
     &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;vim&lt;/span&gt;
@@ -2218,24 +2635,24 @@ finished, it's going to be checked if the coroutines has finished properly.&lt;/
 &lt;p&gt;When you start with Ansible, you use a lot of &lt;em&gt;with_items&lt;/em&gt;. Loops are not
 supported in Async tasks, but the following workaround can be used:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# vars.yml&lt;/span&gt;
-&lt;span class="l l-Scalar l-Scalar-Plain"&gt;dependencies&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt;
+&lt;span class="nt"&gt;dependencies&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
   &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;bison&lt;/span&gt;
   &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;gcc&lt;/span&gt;
   &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;git&lt;/span&gt;
   &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;make&lt;/span&gt;
   &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;mercurial&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;name&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;Installing dependencies&lt;/span&gt;
-  &lt;span class="l l-Scalar l-Scalar-Plain"&gt;apt&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt;
-    &lt;span class="l l-Scalar l-Scalar-Plain"&gt;name&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;{{&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;,&amp;#39;.join(dependencies)&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;}}&amp;quot;&lt;/span&gt;
-    &lt;span class="l l-Scalar l-Scalar-Plain"&gt;update_cache&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;yes&lt;/span&gt;
-    &lt;span class="l l-Scalar l-Scalar-Plain"&gt;cache_valid_time&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;3600&lt;/span&gt;
-  &lt;span class="l l-Scalar l-Scalar-Plain"&gt;async&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;1000&lt;/span&gt;
-  &lt;span class="l l-Scalar l-Scalar-Plain"&gt;poll&lt;/span&gt;&lt;span class="p p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;0&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;Installing dependencies&lt;/span&gt;
+  &lt;span class="nt"&gt;apt&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;{{&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;,&amp;#39;.join(dependencies)&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;}}&amp;quot;&lt;/span&gt;
+    &lt;span class="nt"&gt;update_cache&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;yes&lt;/span&gt;
+    &lt;span class="nt"&gt;cache_valid_time&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;3600&lt;/span&gt;
+  &lt;span class="nt"&gt;async&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;1000&lt;/span&gt;
+  &lt;span class="nt"&gt;poll&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;0&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Happy deploy!&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="ansible"></category><category term="async"></category><category term="debian"></category><category term="devops"></category><category term="deploy"></category></entry><entry><title>Statsd talk at Python Vigo Meetup</title><link href="https://acalustra.com/statsd-talk-at-python-vigo-meetup.html" rel="alternate"></link><published>2015-04-16T16:00:00+02:00</published><updated>2015-04-16T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-04-16:/statsd-talk-at-python-vigo-meetup.html</id><summary type="html">&lt;p&gt;I had the luck to give a talk to the Python Vigo community. The topic was about
+</content><category term="blog"></category><category term="ansible"></category><category term="async"></category><category term="debian"></category><category term="devops"></category><category term="deploy"></category></entry><entry><title>Statsd talk at Python Vigo Meetup</title><link href="https://acalustra.com/statsd-talk-at-python-vigo-meetup.html" rel="alternate"></link><published>2015-04-16T16:00:00+02:00</published><updated>2015-04-16T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-04-16:/statsd-talk-at-python-vigo-meetup.html</id><summary type="html">&lt;p&gt;I had the luck to give a talk to the Python Vigo community. The topic was about
 how to measure our python applications with few lines of code.&lt;/p&gt;
 &lt;p&gt;As you know I love statsd, so I spoke about statsd data types, InfluxDB database
 and Grafana as dashboard.&lt;/p&gt;
@@ -2258,7 +2675,7 @@ will need docker).&lt;/p&gt;
 &lt;/ul&gt;
 &lt;p&gt;Now you can test with the different python apps that you have in the repo.&lt;/p&gt;
 &lt;p&gt;Happy code!&lt;/p&gt;
-</content><category term="statsd"></category><category term="grafana"></category><category term="statistics"></category><category term="monitoring"></category><category term="influxdb"></category></entry><entry><title>Kamailio from tables to htables</title><link href="https://acalustra.com/kamailio-from-tables-to-htables.html" rel="alternate"></link><published>2015-03-19T11:00:00+01:00</published><updated>2015-03-19T11:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-03-19:/kamailio-from-tables-to-htables.html</id><summary type="html">&lt;p&gt;Hash tables are one of the best features in Kamailio, but they can be a double
+</content><category term="blog"></category><category term="statsd"></category><category term="grafana"></category><category term="statistics"></category><category term="monitoring"></category><category term="influxdb"></category></entry><entry><title>Kamailio from tables to htables</title><link href="https://acalustra.com/kamailio-from-tables-to-htables.html" rel="alternate"></link><published>2015-03-19T11:00:00+01:00</published><updated>2015-03-19T11:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-03-19:/kamailio-from-tables-to-htables.html</id><summary type="html">&lt;p&gt;Hash tables are one of the best features in Kamailio, but they can be a double
 edged sword. Build web applications that work with the htables architecture can
 be difficult.&lt;/p&gt;
 &lt;p&gt;I am using Django since a few years ago. This framework had helped me a lot with
@@ -2341,7 +2758,7 @@ view that generates Kamailio htable format.&lt;/p&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;With this piece of code, we can use this &lt;a class="reference external" href="http://kamailio.org/docs/modules/stable/modules/htable.html"&gt;htable&lt;/a&gt; having our web
 developers happy which will definitely increase our dev speed.&lt;/p&gt;
-</content><category term="kamailio"></category><category term="postgresql"></category><category term="htables"></category></entry><entry><title>Kamailio statsd explained</title><link href="https://acalustra.com/kamailio-statsd-explained.html" rel="alternate"></link><published>2015-03-16T16:00:00+01:00</published><updated>2015-03-16T16:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-03-16:/kamailio-statsd-explained.html</id><summary type="html">&lt;p&gt;I remember when I heard about graphite/statsd. It was late of 2012 in the Python London Group. Few weeks before I read &lt;em&gt;Lean Startup&lt;/em&gt; and I learnt to measure all the things to improve our business.&lt;/p&gt;
+</content><category term="blog"></category><category term="kamailio"></category><category term="postgresql"></category><category term="htables"></category></entry><entry><title>Kamailio statsd explained</title><link href="https://acalustra.com/kamailio-statsd-explained.html" rel="alternate"></link><published>2015-03-16T16:00:00+01:00</published><updated>2015-03-16T16:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-03-16:/kamailio-statsd-explained.html</id><summary type="html">&lt;p&gt;I remember when I heard about graphite/statsd. It was late of 2012 in the Python London Group. Few weeks before I read &lt;em&gt;Lean Startup&lt;/em&gt; and I learnt to measure all the things to improve our business.&lt;/p&gt;
 &lt;p&gt;In early 2013 I started to use graphite. I tracked all logins, custom …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I remember when I heard about graphite/statsd. It was late of 2012 in the Python London Group. Few weeks before I read &lt;em&gt;Lean Startup&lt;/em&gt; and I learnt to measure all the things to improve our business.&lt;/p&gt;
 &lt;p&gt;In early 2013 I started to use graphite. I tracked all logins, custom events, machine performance and all the running calls in the Foehn platform. After a few weeks I felt in love with Statsd/Graphite.&lt;/p&gt;
 &lt;div class="section" id="about-statsd-graphite"&gt;
@@ -2438,7 +2855,7 @@ developers happy which will definitely increase our dev speed.&lt;/p&gt;
 &lt;li&gt;The learning curve of graphite is not easy. You can try with one metric and try every week to add a new graph in grafana.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
-</content><category term="kamailio"></category><category term="graphite"></category><category term="statsd"></category><category term="grafana"></category><category term="statistics"></category><category term="monitoring"></category></entry><entry><title>My first issue with Airbnb</title><link href="https://acalustra.com/my-first-issue-with-airbnb.html" rel="alternate"></link><published>2015-02-10T00:00:00+01:00</published><updated>2015-02-10T00:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-02-10:/my-first-issue-with-airbnb.html</id><summary type="html">&lt;p&gt;In early 2012 I met Airbnb. At the first time (I was living in Spain yet) I
+</content><category term="blog"></category><category term="kamailio"></category><category term="graphite"></category><category term="statsd"></category><category term="grafana"></category><category term="statistics"></category><category term="monitoring"></category></entry><entry><title>My first issue with Airbnb</title><link href="https://acalustra.com/my-first-issue-with-airbnb.html" rel="alternate"></link><published>2015-02-10T00:00:00+01:00</published><updated>2015-02-10T00:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2015-02-10:/my-first-issue-with-airbnb.html</id><summary type="html">&lt;p&gt;In early 2012 I met Airbnb. At the first time (I was living in Spain yet) I
 thought that was not a very good idea. I was mainly scared about the fact that
 I would be sharing a house with complete strangers.&lt;/p&gt;
 &lt;p&gt;When I arrived in London a lot of …&lt;/p&gt;</summary><content type="html">&lt;p&gt;In early 2012 I met Airbnb. At the first time (I was living in Spain yet) I
@@ -2495,7 +2912,7 @@ Europe customer service if they want to keep the good work.&lt;/p&gt;
 &lt;p&gt;On the other hand, and more related with my field, Airbnb needs to improve the
 calls quality. I had some issues with it and even some of the calls got dropped.&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="airbnb"></category><category term="travels"></category><category term="personal"></category></entry><entry><title>Dockercon Europe 14</title><link href="https://acalustra.com/dockercon-europe-14.html" rel="alternate"></link><published>2014-12-10T00:00:00+01:00</published><updated>2014-12-10T00:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-12-10:/dockercon-europe-14.html</id><summary type="html">&lt;p&gt;I was in the &lt;a class="reference external" href="http://europe.dockercon.com/"&gt;dockercon Europe&lt;/a&gt; only for one
+</content><category term="blog"></category><category term="airbnb"></category><category term="travels"></category><category term="personal"></category></entry><entry><title>Dockercon Europe 14</title><link href="https://acalustra.com/dockercon-europe-14.html" rel="alternate"></link><published>2014-12-10T00:00:00+01:00</published><updated>2014-12-10T00:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-12-10:/dockercon-europe-14.html</id><summary type="html">&lt;p&gt;I was in the &lt;a class="reference external" href="http://europe.dockercon.com/"&gt;dockercon Europe&lt;/a&gt; only for one
 reason: I think that docker and the VoIP world will be good friends. However,
 some problems will need to be sorted before that can happen. At the moment the
 state of the VoIP Docker support is far better than optimal, but …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I was in the &lt;a class="reference external" href="http://europe.dockercon.com/"&gt;dockercon Europe&lt;/a&gt; only for one
@@ -2601,7 +3018,7 @@ to the organizers. All conference was incredible, the venue, the party, ALL. I
 know that organize events like this it's a lot of effort. Big thanks.&lt;/p&gt;
 &lt;p&gt;Hopefully see you in the next Dockercon Europe!&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="docker"></category><category term="kamailio"></category></entry><entry><title>Ansible: how to maintain multiple ssh-keys in different servers</title><link href="https://acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html" rel="alternate"></link><published>2014-11-19T21:00:00+01:00</published><updated>2014-11-19T21:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-11-19:/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html</id><summary type="html">&lt;p&gt;In &lt;a class="reference external" href="http://www.ansible.com"&gt;Ansible&lt;/a&gt; is quite easy add users, pubkeys and other stuff to any server. If
+</content><category term="blog"></category><category term="docker"></category><category term="kamailio"></category></entry><entry><title>Ansible: how to maintain multiple ssh-keys in different servers</title><link href="https://acalustra.com/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html" rel="alternate"></link><published>2014-11-19T21:00:00+01:00</published><updated>2014-11-19T21:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-11-19:/ansible-how-to-maintain-multiple-ssh-keys-in-different-servers.html</id><summary type="html">&lt;p&gt;In &lt;a class="reference external" href="http://www.ansible.com"&gt;Ansible&lt;/a&gt; is quite easy add users, pubkeys and other stuff to any server. If
 you work in a organization where you have multiple servers, ssh-keys are a
 swiss-knife, but they are kinda difficult to handle if you create/destroy
 multiple servers every week.&lt;/p&gt;
@@ -2652,7 +3069,7 @@ in this small example &lt;cite&gt;playbook.yml&lt;/cite&gt;:&lt;/p&gt;
 the &lt;cite&gt;vars&lt;/cite&gt; section and their public keys to the &lt;cite&gt;public_keys&lt;/cite&gt; folder inside the
 Ansible repo.&lt;/p&gt;
 &lt;p&gt;Happy coding!&lt;/p&gt;
-</content><category term="ansible"></category><category term="ssh"></category><category term="deploy"></category><category term="users"></category></entry><entry><title>Hablando de Docker en betabeers Galicia</title><link href="https://acalustra.com/hablando-de-docker-en-betabeers-galicia.html" rel="alternate"></link><published>2014-11-14T16:00:00+01:00</published><updated>2014-11-14T16:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-11-14:/hablando-de-docker-en-betabeers-galicia.html</id><summary type="html">&lt;p&gt;Hace ya unos cuentos meses que estoy buceando en esto de Docker. Me parece un proyecto muy interesante tanto para proyectos de (&lt;a class="reference external" href="https://acalustra.com/asterisk-11-hangups-handlers.html"&gt;Asterisk&lt;/a&gt; o &lt;a class="reference external" href="https://acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html"&gt;Kamailio&lt;/a&gt;) como de web. Actualmente lo estoy usando en web, y espero que pronto de el paso a toda la voz.&lt;/p&gt;
+</content><category term="blog"></category><category term="ansible"></category><category term="ssh"></category><category term="deploy"></category><category term="users"></category></entry><entry><title>Hablando de Docker en betabeers Galicia</title><link href="https://acalustra.com/hablando-de-docker-en-betabeers-galicia.html" rel="alternate"></link><published>2014-11-14T16:00:00+01:00</published><updated>2014-11-14T16:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-11-14:/hablando-de-docker-en-betabeers-galicia.html</id><summary type="html">&lt;p&gt;Hace ya unos cuentos meses que estoy buceando en esto de Docker. Me parece un proyecto muy interesante tanto para proyectos de (&lt;a class="reference external" href="https://acalustra.com/asterisk-11-hangups-handlers.html"&gt;Asterisk&lt;/a&gt; o &lt;a class="reference external" href="https://acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html"&gt;Kamailio&lt;/a&gt;) como de web. Actualmente lo estoy usando en web, y espero que pronto de el paso a toda la voz.&lt;/p&gt;
 &lt;p&gt;Aqui estan las slides:&lt;/p&gt;
 &lt;script async class="speakerdeck-embed" data-id="411a4a904dfe0132b7887e32733ee33b" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;&lt;dl class="docutils"&gt;
 &lt;dt&gt;Y …&lt;/dt&gt;&lt;/dl&gt;</summary><content type="html">&lt;p&gt;Hace ya unos cuentos meses que estoy buceando en esto de Docker. Me parece un proyecto muy interesante tanto para proyectos de (&lt;a class="reference external" href="https://acalustra.com/asterisk-11-hangups-handlers.html"&gt;Asterisk&lt;/a&gt; o &lt;a class="reference external" href="https://acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html"&gt;Kamailio&lt;/a&gt;) como de web. Actualmente lo estoy usando en web, y espero que pronto de el paso a toda la voz.&lt;/p&gt;
@@ -2667,7 +3084,7 @@ Ansible repo.&lt;/p&gt;
 &lt;/ul&gt;
 &lt;/dd&gt;
 &lt;/dl&gt;
-</content><category term="Docker"></category><category term="betabeers"></category><category term="talks"></category></entry><entry><title>Asterisk 11 hangups handlers</title><link href="https://acalustra.com/asterisk-11-hangups-handlers.html" rel="alternate"></link><published>2014-10-22T16:00:00+02:00</published><updated>2014-10-22T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-10-22:/asterisk-11-hangups-handlers.html</id><summary type="html">&lt;p&gt;I don't know what I was doing when I read &lt;strong&gt;Asterisk 11 new features&lt;/strong&gt;. Last week I read in the asterisk &lt;a class="reference external" href="http://lists.digium.com/pipermail/asterisk-users/2014-October/284839.html"&gt;mailing list about hangup handlers.&lt;/a&gt;&lt;/p&gt;
+</content><category term="blog"></category><category term="Docker"></category><category term="betabeers"></category><category term="talks"></category></entry><entry><title>Asterisk 11 hangups handlers</title><link href="https://acalustra.com/asterisk-11-hangups-handlers.html" rel="alternate"></link><published>2014-10-22T16:00:00+02:00</published><updated>2014-10-22T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-10-22:/asterisk-11-hangups-handlers.html</id><summary type="html">&lt;p&gt;I don't know what I was doing when I read &lt;strong&gt;Asterisk 11 new features&lt;/strong&gt;. Last week I read in the asterisk &lt;a class="reference external" href="http://lists.digium.com/pipermail/asterisk-users/2014-October/284839.html"&gt;mailing list about hangup handlers.&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;One of the pains in large apps based on asterisk are hangups. If one customer hangups in the middle of one subroutine, you need …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I don't know what I was doing when I read &lt;strong&gt;Asterisk 11 new features&lt;/strong&gt;. Last week I read in the asterisk &lt;a class="reference external" href="http://lists.digium.com/pipermail/asterisk-users/2014-October/284839.html"&gt;mailing list about hangup handlers.&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;One of the pains in large apps based on asterisk are hangups. If one customer hangups in the middle of one subroutine, you need to add h exten in all subroutines. This make the code difficult to maintain. This is a normal subroutine in asterisk application:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;outside&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
@@ -2729,7 +3146,7 @@ Ansible repo.&lt;/p&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;You can check the docs into the &lt;a class="reference external" href="https://wiki.asterisk.org/wiki/display/AST/Hangup+Handlers"&gt;Aserisk wiki&lt;/a&gt;, more functions are available (push, pop, wipe). In the CLI you can check the hangup handlers with this command &lt;strong&gt;core show hanguphandlers &amp;lt;chan&amp;gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Happy coding!&lt;/p&gt;
-</content><category term="asterisk"></category><category term="dialplan"></category><category term="ari"></category><category term="hangup"></category></entry><entry><title>Kamailio statsd, better statistics in your voip platform.</title><link href="https://acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html" rel="alternate"></link><published>2014-10-22T16:00:00+02:00</published><updated>2014-10-22T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-10-22:/kamailio-statsd-better-statistics-in-your-voip-platform.html</id><summary type="html">&lt;p&gt;I remember when I read about &lt;a class="reference external" href="http://graphite.wikidot.com/"&gt;Graphite&lt;/a&gt;. I was reading that Vimeo used it for making realtime monitoring in their projects and reporting for all the team. I got a chance to test with my local apps and after a few days I started to love graphite.&lt;/p&gt;
+</content><category term="blog"></category><category term="asterisk"></category><category term="dialplan"></category><category term="ari"></category><category term="hangup"></category></entry><entry><title>Kamailio statsd, better statistics in your voip platform.</title><link href="https://acalustra.com/kamailio-statsd-better-statistics-in-your-voip-platform.html" rel="alternate"></link><published>2014-10-22T16:00:00+02:00</published><updated>2014-10-22T16:00:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-10-22:/kamailio-statsd-better-statistics-in-your-voip-platform.html</id><summary type="html">&lt;p&gt;I remember when I read about &lt;a class="reference external" href="http://graphite.wikidot.com/"&gt;Graphite&lt;/a&gt;. I was reading that Vimeo used it for making realtime monitoring in their projects and reporting for all the team. I got a chance to test with my local apps and after a few days I started to love graphite.&lt;/p&gt;
 &lt;p&gt;I start to …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I remember when I read about &lt;a class="reference external" href="http://graphite.wikidot.com/"&gt;Graphite&lt;/a&gt;. I was reading that Vimeo used it for making realtime monitoring in their projects and reporting for all the team. I got a chance to test with my local apps and after a few days I started to love graphite.&lt;/p&gt;
 &lt;p&gt;I start to use graphite in my web apps. After few weeks I needed to monitor a new feature deployed in one of our kamailio. The first time I used mod_python+statsd, but I realise that using python module was not the best way so I write &lt;a class="reference external" href="https://github.com/eloycoto/statsd"&gt;statsd module&lt;/a&gt; that work native with kamailio.&lt;/p&gt;
 &lt;p&gt;&lt;a class="reference external" href="https://github.com/eloycoto/statsd"&gt;I made this module, after 7 years working with Kamailio&lt;/a&gt;, I read/modified a lot of modules, but I never had a chance to write a new one.&lt;/p&gt;
@@ -2801,7 +3218,7 @@ Ansible repo.&lt;/p&gt;
 &lt;p&gt;You can get the source of the statsd module in github:
 &lt;a class="reference external" href="https://github.com/eloycoto/statsd"&gt;https://github.com/eloycoto/statsd&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="kamailio"></category><category term="graphite"></category><category term="statsd"></category><category term="grafana"></category><category term="statistics"></category><category term="monitoring"></category></entry><entry><title>trick and tips en ansible</title><link href="https://acalustra.com/trick-and-tips-en-ansible.html" rel="alternate"></link><published>2014-06-03T12:20:00+02:00</published><updated>2014-06-03T12:20:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-06-03:/trick-and-tips-en-ansible.html</id><summary type="html">&lt;p&gt;Hace aproximadamente dos años que empecé a trabajar con Ansible. Desde ese día después de usar algo de chef/puppet y darme cabezazos contra la pared (dada su complejidad), este stack se ha convertido en mi preferido, por lo sencillo que es. No es tan completo como los anteriormente comentados …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Hace aproximadamente dos años que empecé a trabajar con Ansible. Desde ese día después de usar algo de chef/puppet y darme cabezazos contra la pared (dada su complejidad), este stack se ha convertido en mi preferido, por lo sencillo que es. No es tan completo como los anteriormente comentados, pero para mis necesidades cumple perfectamente.&lt;/p&gt;
+</content><category term="blog"></category><category term="kamailio"></category><category term="graphite"></category><category term="statsd"></category><category term="grafana"></category><category term="statistics"></category><category term="monitoring"></category></entry><entry><title>trick and tips en ansible</title><link href="https://acalustra.com/trick-and-tips-en-ansible.html" rel="alternate"></link><published>2014-06-03T12:20:00+02:00</published><updated>2014-06-03T12:20:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-06-03:/trick-and-tips-en-ansible.html</id><summary type="html">&lt;p&gt;Hace aproximadamente dos años que empecé a trabajar con Ansible. Desde ese día después de usar algo de chef/puppet y darme cabezazos contra la pared (dada su complejidad), este stack se ha convertido en mi preferido, por lo sencillo que es. No es tan completo como los anteriormente comentados …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Hace aproximadamente dos años que empecé a trabajar con Ansible. Desde ese día después de usar algo de chef/puppet y darme cabezazos contra la pared (dada su complejidad), este stack se ha convertido en mi preferido, por lo sencillo que es. No es tan completo como los anteriormente comentados, pero para mis necesidades cumple perfectamente.&lt;/p&gt;
 &lt;p&gt;Durante este tiempo han sido muchas las cosas que he aprendido, de las cuales me parece bueno salientar:&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Registro de variables&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Cada tarea tiene un resultado, muchas veces creemos que no nos dan un resultado que no sea True/False. Pero muchos módulos devuelven mucha información en un objeto json. En el código fuente de los &lt;a class="reference external" href="https://github.com/ansible/ansible/blob/devel/library/commands/command#L150-L160"&gt;módulos se pueden buscar que info es la que exporta&lt;/a&gt;. Para poder utilizarla solo debemos hacer lo siguiente en nuestro playbook:&lt;/p&gt;
@@ -2875,7 +3292,7 @@ ansible-playbook -i host playbook.yml -C
 &lt;/pre&gt;
 &lt;p&gt;Con lo que tenemos una lista de resultados que se van a ejecutar en la máquina. En el caso de que existan cambios tengo una mini APP que nos notifica que estan pendiente cambios sin aplicar.&lt;/p&gt;
 &lt;p&gt;Finalmente estas son las funciones que nunca ves en los ejemplos pero que son muy útiles a la hora de desarrollar y hacer despliegues en entornos de producción, pruebas y desarrollo. Yo tengo el 90% de mis servidores basados en Ansible y cada día que pasa estoy más alegre de utilizarlo.  ;-)&lt;/p&gt;
-</content><category term="ansible"></category><category term="devops"></category><category term="howto"></category><category term="asterisk"></category><category term="playbook"></category></entry><entry><title>Politicas de seguridad en Kamailio</title><link href="https://acalustra.com/politicas-de-seguridad-en-kamailio.html" rel="alternate"></link><published>2014-04-05T12:20:00+02:00</published><updated>2014-04-05T12:20:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-04-05:/politicas-de-seguridad-en-kamailio.html</id><summary type="html">&lt;p&gt;El otro día a través de este &lt;a class="reference external" href="https://twitter.com/hellc2/status/448756126382034944"&gt;tuit de Elio Rojano&lt;/a&gt; me anime a  documentar una serie de procesos que estamos siguiendo para mantener nuestra infraestructura segura y al mismo tiempo poder mantener las excepciones para no cortar el servicio en falsos positivos.&lt;/p&gt;
+</content><category term="blog"></category><category term="ansible"></category><category term="devops"></category><category term="howto"></category><category term="asterisk"></category><category term="playbook"></category></entry><entry><title>Politicas de seguridad en Kamailio</title><link href="https://acalustra.com/politicas-de-seguridad-en-kamailio.html" rel="alternate"></link><published>2014-04-05T12:20:00+02:00</published><updated>2014-04-05T12:20:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2014-04-05:/politicas-de-seguridad-en-kamailio.html</id><summary type="html">&lt;p&gt;El otro día a través de este &lt;a class="reference external" href="https://twitter.com/hellc2/status/448756126382034944"&gt;tuit de Elio Rojano&lt;/a&gt; me anime a  documentar una serie de procesos que estamos siguiendo para mantener nuestra infraestructura segura y al mismo tiempo poder mantener las excepciones para no cortar el servicio en falsos positivos.&lt;/p&gt;
 &lt;p&gt;Para securizar kamailio lo más normal es …&lt;/p&gt;</summary><content type="html">&lt;p&gt;El otro día a través de este &lt;a class="reference external" href="https://twitter.com/hellc2/status/448756126382034944"&gt;tuit de Elio Rojano&lt;/a&gt; me anime a  documentar una serie de procesos que estamos siguiendo para mantener nuestra infraestructura segura y al mismo tiempo poder mantener las excepciones para no cortar el servicio en falsos positivos.&lt;/p&gt;
 &lt;p&gt;Para securizar kamailio lo más normal es usar el &lt;a class="reference external" href="http://kamailio.org/docs/modules/stable/modules/pike.html"&gt;módulo pike&lt;/a&gt;, teniendo un código muy parecido a este tipo:&lt;/p&gt;
 &lt;pre class="literal-block"&gt;
@@ -2924,7 +3341,7 @@ redis 127.0.0.1:6379&amp;gt; EXPIRE white_list:{SOURCE_IP} 3600
 &lt;p&gt;Por otra parte tenemos nuestro sistema de bloqueo por rates, en el momento que un cliente se dispara de rates en un momento, lo que hacemos es borrarlo de la white_list y volvemos a bloquearlo. Por otra parte estamos buscando una manera de añadir un counter con expire, para ver que una ip no hace 100 request en 5 minutos, pero esto, de momento, es una idea.&lt;/p&gt;
 &lt;p&gt;Esto, evidentemente, no es el mejor sistema de seguridad, un robot puede llegar a acceder a la url del sistema, pero bueno, al mismo tiempo intentamos que nuestros problemas no sean problemas de nuestros clientes ;-)&lt;/p&gt;
 &lt;p&gt;PS: Desde la pasada Kamailio World conference el siguiente punto será este usar los datos de &lt;a class="reference external" href="http://mirror.simwood.com/honeypot/"&gt;Ips de Simwood&lt;/a&gt;&lt;/p&gt;
-</content><category term="kamailio"></category><category term="redis"></category><category term="python"></category><category term="seguridad"></category><category term="ataques"></category><category term="voip"></category><category term="sip"></category></entry><entry><title>Haciendo test con sipp sin morir en el intento</title><link href="https://acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html" rel="alternate"></link><published>2013-08-30T10:10:00+02:00</published><updated>2013-08-30T10:10:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2013-08-30:/haciendo-test-con-sipp-sin-morir-en-el-intento.html</id><summary type="html">&lt;p&gt;En el pasado Febrero cerramos un proyecto muy importante. Dicho proyecto necesita una cantidad de test, no porque el cliente lo pidiera, si no porque el SLA que teníamos con ellos nos hacia que con cualquier cambio solo teníamos ventanas muy pequeñas de tiempo. Lo que nos hizo tener que …&lt;/p&gt;</summary><content type="html">&lt;p&gt;En el pasado Febrero cerramos un proyecto muy importante. Dicho proyecto necesita una cantidad de test, no porque el cliente lo pidiera, si no porque el SLA que teníamos con ellos nos hacia que con cualquier cambio solo teníamos ventanas muy pequeñas de tiempo. Lo que nos hizo tener que programar todos los escenarios posibles para una validación más eficiente.&lt;/p&gt;
+</content><category term="blog"></category><category term="kamailio"></category><category term="redis"></category><category term="python"></category><category term="seguridad"></category><category term="ataques"></category><category term="voip"></category><category term="sip"></category></entry><entry><title>Haciendo test con sipp sin morir en el intento</title><link href="https://acalustra.com/haciendo-test-con-sipp-sin-morir-en-el-intento.html" rel="alternate"></link><published>2013-08-30T10:10:00+02:00</published><updated>2013-08-30T10:10:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2013-08-30:/haciendo-test-con-sipp-sin-morir-en-el-intento.html</id><summary type="html">&lt;p&gt;En el pasado Febrero cerramos un proyecto muy importante. Dicho proyecto necesita una cantidad de test, no porque el cliente lo pidiera, si no porque el SLA que teníamos con ellos nos hacia que con cualquier cambio solo teníamos ventanas muy pequeñas de tiempo. Lo que nos hizo tener que …&lt;/p&gt;</summary><content type="html">&lt;p&gt;En el pasado Febrero cerramos un proyecto muy importante. Dicho proyecto necesita una cantidad de test, no porque el cliente lo pidiera, si no porque el SLA que teníamos con ellos nos hacia que con cualquier cambio solo teníamos ventanas muy pequeñas de tiempo. Lo que nos hizo tener que programar todos los escenarios posibles para una validación más eficiente.&lt;/p&gt;
 &lt;p&gt;Desde ese proyecto y usando &lt;a class="reference external" href="http://sipsimpleclient.org/"&gt;python-sipsimple&lt;/a&gt; hice un pequeño framework, para hacer test sin ser la locura de los ficheros xml de &lt;a class="reference external" href="http://sipp.sourceforge.net/"&gt;sipp&lt;/a&gt;. En los últimos meses estaba pensando en como poder hacer un framework libre, que pudiera ser útil para demás proyectos. Cuando tenía algo de código han salido a la luz dos proyectos muy interesantes.&lt;/p&gt;
 &lt;p&gt;El primero ha sido el que ha realizado &lt;a class="reference external" href="http://www.metaswitch.com/"&gt;metaswitch&lt;/a&gt;, que &lt;a class="reference external" href="https://github.com/Metaswitch"&gt;han liberado muchas partes de sus herramientas/productos&lt;/a&gt; y tiene un &lt;a class="reference external" href="https://github.com/Metaswitch/clearwater-live-test"&gt;framework de test muy orientado a su plataforma.&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;El framework esta bien, pero era costoso de hacer sin ser referido a Metaswitch.&lt;/p&gt;
@@ -2986,7 +3403,7 @@ Password:
 &lt;span class="s2"&gt;&amp;quot;Test completed successfully!&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Ahora ya tenemos nuestro servicio de testing mas sencillo de leer, y mas fácil para hacer pruebas en nuestros servicios de voip.&lt;/p&gt;
-</content><category term="sip"></category><category term="sipp"></category><category term="ruby"></category><category term="sippy_cup"></category><category term="test"></category><category term="asterisk"></category><category term="asteriskTestSuite"></category></entry><entry><title>Integrando hubot con nuestro servicio xmpp</title><link href="https://acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html" rel="alternate"></link><published>2013-05-10T00:30:00+02:00</published><updated>2013-05-10T00:30:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2013-05-10:/integrando-hubot-con-nuestro-servicio-xmpp.html</id><summary type="html">&lt;p&gt;&lt;a class="reference external" href="http://hubot.github.com/"&gt;Hubot&lt;/a&gt; es uno de los productos más de moda en el panorama de empresas desarrolladoras de software Americanas. Iniciado y comandado por &lt;a class="reference external" href="http://github.com/"&gt;Github&lt;/a&gt;, Hubot permite automatizar muchas tareas a través de tu chat de grupo.&lt;/p&gt;
+</content><category term="blog"></category><category term="sip"></category><category term="sipp"></category><category term="ruby"></category><category term="sippy_cup"></category><category term="test"></category><category term="asterisk"></category><category term="asteriskTestSuite"></category></entry><entry><title>Integrando hubot con nuestro servicio xmpp</title><link href="https://acalustra.com/integrando-hubot-con-nuestro-servicio-xmpp.html" rel="alternate"></link><published>2013-05-10T00:30:00+02:00</published><updated>2013-05-10T00:30:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2013-05-10:/integrando-hubot-con-nuestro-servicio-xmpp.html</id><summary type="html">&lt;p&gt;&lt;a class="reference external" href="http://hubot.github.com/"&gt;Hubot&lt;/a&gt; es uno de los productos más de moda en el panorama de empresas desarrolladoras de software Americanas. Iniciado y comandado por &lt;a class="reference external" href="http://github.com/"&gt;Github&lt;/a&gt;, Hubot permite automatizar muchas tareas a través de tu chat de grupo.&lt;/p&gt;
 &lt;p&gt;La propia descripción de Hubot en la página web es la siguiente:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nx"&gt;GitHub&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;Inc&lt;/span&gt;&lt;span class="p"&gt;.,&lt;/span&gt; &lt;span class="nx"&gt;wrote …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;&lt;a class="reference external" href="http://hubot.github.com/"&gt;Hubot&lt;/a&gt; es uno de los productos más de moda en el panorama de empresas desarrolladoras de software Americanas. Iniciado y comandado por &lt;a class="reference external" href="http://github.com/"&gt;Github&lt;/a&gt;, Hubot permite automatizar muchas tareas a través de tu chat de grupo.&lt;/p&gt;
 &lt;p&gt;La propia descripción de Hubot en la página web es la siguiente:&lt;/p&gt;
@@ -3040,7 +3457,7 @@ Hubot&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&lt;/s
 &lt;p&gt;Si necesitais mas scripts, &lt;a class="reference external" href="https://github.com/github/hubot-scripts/"&gt;en este repositorio de github&lt;/a&gt;, existen un ciento de ellos totalmente diferentes. &lt;a class="reference external" href="http://net.tutsplus.com/tutorials/javascript-ajax/writing-hubot-plugins-with-coffeescript/"&gt;Por otra parte aquí os dejo un tutorial para poder escribir vuestros propios plugins&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Este es una pequeña demo de lo que se puede hacer.&lt;/p&gt;
 &lt;iframe src="http://player.vimeo.com/video/57637316" width="500" height="314" frameborder="0"&gt;&lt;/iframe&gt;&lt;p&gt;Yo lo he instalado recientemente, durante esta semana creo que voy a escribir varios módulos. Te imaginas obtener cuantas llamadas existen en vuestra plataforma, o quizás añadir/expulsar a un usuario a la cola solamente con un comando xmpp :-)&lt;/p&gt;
-</content><category term="xmpp"></category><category term="github"></category><category term="productividad"></category><category term="hubot"></category><category term="asterisk"></category><category term="jabber"></category></entry><entry><title>Spring Hackaton London</title><link href="https://acalustra.com/spring-hackaton-london.html" rel="alternate"></link><published>2013-04-28T12:25:00+02:00</published><updated>2013-04-28T12:25:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2013-04-28:/spring-hackaton-london.html</id><summary type="html">&lt;p&gt;26-28 de Abril en Londres, 3 hackathones en apenas 300 metros de distancia y muchas ganas de programar. En el pasado mes de octubre había estado en la #angelhack me quedo con un poco mal sabor de boca debido a que no cumplió mis expectativas a nivel de proyectos.&lt;/p&gt;
+</content><category term="blog"></category><category term="xmpp"></category><category term="github"></category><category term="productividad"></category><category term="hubot"></category><category term="asterisk"></category><category term="jabber"></category></entry><entry><title>Spring Hackaton London</title><link href="https://acalustra.com/spring-hackaton-london.html" rel="alternate"></link><published>2013-04-28T12:25:00+02:00</published><updated>2013-04-28T12:25:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2013-04-28:/spring-hackaton-london.html</id><summary type="html">&lt;p&gt;26-28 de Abril en Londres, 3 hackathones en apenas 300 metros de distancia y muchas ganas de programar. En el pasado mes de octubre había estado en la #angelhack me quedo con un poco mal sabor de boca debido a que no cumplió mis expectativas a nivel de proyectos.&lt;/p&gt;
 &lt;p&gt;Este …&lt;/p&gt;</summary><content type="html">&lt;p&gt;26-28 de Abril en Londres, 3 hackathones en apenas 300 metros de distancia y muchas ganas de programar. En el pasado mes de octubre había estado en la #angelhack me quedo con un poco mal sabor de boca debido a que no cumplió mis expectativas a nivel de proyectos.&lt;/p&gt;
 &lt;p&gt;Este fin de semana, con la compañía de &lt;a class="reference external" href="https://twitter.com/agonzalezroro/"&gt;&amp;#64;agonzalezroro&lt;/a&gt;, nos fuimos a la &lt;a class="reference external" href="http://hackathoncentral.com/"&gt;hackatoncentral&lt;/a&gt;, que tenía una bases muy interesantes:&lt;/p&gt;
 &lt;ul class="simple"&gt;
@@ -3064,7 +3481,7 @@ Hubot&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&lt;/s
 &lt;p&gt;Al final el resultado: para ser un par de días, y no haber pasado mucho tiempo por la noche creo que ha sido bastante aceptable, como no el codigo esta en &lt;a class="reference external" href="http://kcy.me/joh2"&gt;github&lt;/a&gt; y &lt;a class="reference external" href="http://kcy.me/joog"&gt;se puede ver la aplicación online&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Me alegra haber asistido a esta hackaton. Alex me ha enseñado muchos tips que me van a servir mucho durante mis jornadas laborales. Además por fin he probado esas tecnologías que siempre lees, pero que siempre tienes la duda de usarlas o no.&lt;/p&gt;
 &lt;p&gt;Nos vemos en la próxima hackathon, que espero que sea pronto. :-)&lt;/p&gt;
-</content><category term="openlayers"></category><category term="twilio"></category><category term="cloud-communications"></category><category term="programacion"></category><category term="emberjs"></category><category term="python"></category></entry><entry><title>sistemas de colas basado en redis en kamailio</title><link href="https://acalustra.com/sistemas-de-colas-basado-en-redis-en-kamailio.html" rel="alternate"></link><published>2013-04-10T00:30:00+02:00</published><updated>2013-04-10T00:30:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2013-04-10:/sistemas-de-colas-basado-en-redis-en-kamailio.html</id><summary type="html">&lt;p&gt;Desde la versión
+</content><category term="blog"></category><category term="openlayers"></category><category term="twilio"></category><category term="cloud-communications"></category><category term="programacion"></category><category term="emberjs"></category><category term="python"></category></entry><entry><title>sistemas de colas basado en redis en kamailio</title><link href="https://acalustra.com/sistemas-de-colas-basado-en-redis-en-kamailio.html" rel="alternate"></link><published>2013-04-10T00:30:00+02:00</published><updated>2013-04-10T00:30:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2013-04-10:/sistemas-de-colas-basado-en-redis-en-kamailio.html</id><summary type="html">&lt;p&gt;Desde la versión
 &lt;a class="reference external" href="http://www.kamailio.org/wiki/features/new-in-3.2.x"&gt;3.2&lt;/a&gt;
 de&lt;a class="reference external" href="http://www.kamailio.org/"&gt;Kamailio&lt;/a&gt; tiene soporte para
 &lt;a class="reference external" href="http://redis.io/"&gt;Redis&lt;/a&gt;. Junto con el módulo
@@ -3146,7 +3563,7 @@ puramente de voz, viene muy bien para interaccionar con otros programas.&lt;/p&g
 &lt;p&gt;Dentro de poco mostraré la integración de Opensips con Mongodb. Esta
 database no es que me apasione, pero lo de poder escribir objetos json,
 es muy rápido para ciertos casos.&lt;/p&gt;
-</content><category term="kamailio"></category><category term="redis"></category><category term="python"></category><category term="notifications"></category><category term="voip"></category><category term="telefonia"></category></entry><entry><title>Notificaciones de Github mediante XMPP.</title><link href="https://acalustra.com/notificaciones-de-github-mediante-xmpp.html" rel="alternate"></link><published>2013-03-15T12:25:00+01:00</published><updated>2013-03-15T12:25:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2013-03-15:/notificaciones-de-github-mediante-xmpp.html</id><summary type="html">&lt;p&gt;El concepto de desarrollador ha cambiado desde hace un par de años.
+</content><category term="blog"></category><category term="kamailio"></category><category term="redis"></category><category term="python"></category><category term="notifications"></category><category term="voip"></category><category term="telefonia"></category></entry><entry><title>Notificaciones de Github mediante XMPP.</title><link href="https://acalustra.com/notificaciones-de-github-mediante-xmpp.html" rel="alternate"></link><published>2013-03-15T12:25:00+01:00</published><updated>2013-03-15T12:25:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2013-03-15:/notificaciones-de-github-mediante-xmpp.html</id><summary type="html">&lt;p&gt;El concepto de desarrollador ha cambiado desde hace un par de años.
 Antiguamente todo el mundo escribia sus programas, o se adaptaba algo de
 software libre. Ahora se busca la integración de todos los servicios
 mediante APIS.&lt;/p&gt;
@@ -3187,7 +3604,7 @@ un pequeño trozo de código que espera la entrada de un commit de github&lt;/p&
 los que cuando ocurra una accción que se notifique mediante XMPP. Hay
 librerías para todos los lenguajes y se puede reducir mucho las
 peticiones REST que simplemente se hacen si existe algún cambio.&lt;/p&gt;
-</content><category term="git"></category><category term="github"></category><category term="xmpp"></category><category term="triggers"></category><category term="push"></category></entry><entry><title>Para hacerlo mal, mejor no hacerlo</title><link href="https://acalustra.com/para-hacerlo-mal-mejor-no-hacerlo.html" rel="alternate"></link><published>2012-11-28T12:25:00+01:00</published><updated>2012-11-28T12:25:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2012-11-28:/para-hacerlo-mal-mejor-no-hacerlo.html</id><summary type="html">&lt;p&gt;Durante el tiempo que he trabajado siempre ha existido un problema, todo
+</content><category term="blog"></category><category term="git"></category><category term="github"></category><category term="xmpp"></category><category term="triggers"></category><category term="push"></category></entry><entry><title>Para hacerlo mal, mejor no hacerlo</title><link href="https://acalustra.com/para-hacerlo-mal-mejor-no-hacerlo.html" rel="alternate"></link><published>2012-11-28T12:25:00+01:00</published><updated>2012-11-28T12:25:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2012-11-28:/para-hacerlo-mal-mejor-no-hacerlo.html</id><summary type="html">&lt;p&gt;Durante el tiempo que he trabajado siempre ha existido un problema, todo
 el mundo quiere pagar por un taladro de primera calidad, pero nadie es
 capaz de pagar por un software de primera calidad.&lt;/p&gt;
 &lt;p&gt;Esto post va a ser referido a las herramientas que se usan en todo tipo
@@ -3292,7 +3709,7 @@ están trabajando en pantallas de 15”, con ordenadores Pentium 4, y con
 ratones de bola. Cuando las herramientas son buenas el trabajo será
 mejor, pero las buenas herramientas no suelen estar en manos de los
 &lt;em&gt;curritos&lt;/em&gt;.&lt;/p&gt;
-</content><category term="productividad"></category><category term="software libre"></category><category term="jira"></category><category term="bitbucket"></category><category term="googleapps"></category></entry><entry><title>La aventura de marcharche al Google Campus</title><link href="https://acalustra.com/la-aventura-de-marcharche-al-google-campus.html" rel="alternate"></link><published>2012-10-01T00:30:00+02:00</published><updated>2012-10-01T00:30:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2012-10-01:/la-aventura-de-marcharche-al-google-campus.html</id><summary type="html">&lt;p&gt;Como muchos sabéis desde Septiembre estoy trabajando desde Londres. Una
+</content><category term="blog"></category><category term="productividad"></category><category term="software libre"></category><category term="jira"></category><category term="bitbucket"></category><category term="googleapps"></category></entry><entry><title>La aventura de marcharche al Google Campus</title><link href="https://acalustra.com/la-aventura-de-marcharche-al-google-campus.html" rel="alternate"></link><published>2012-10-01T00:30:00+02:00</published><updated>2012-10-01T00:30:00+02:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2012-10-01:/la-aventura-de-marcharche-al-google-campus.html</id><summary type="html">&lt;p&gt;Como muchos sabéis desde Septiembre estoy trabajando desde Londres. Una
 ilusión que tenía desde pequeño. Vivir en una ciudad grande, que me
 pudiera dar en cualquier momento una sorpresa.&lt;/p&gt;
 &lt;p&gt;Todo este proyecto empezó en el 2010, cuando por una razón o por otra me
@@ -3344,4 +3761,4 @@ en el cual ahora mismo podemos hacer releases semanales, hemos mejorado
 la arquitectura, mejorado algunas funcionalidades y añadidas otras
 muchas. El resultado se verá en un plazo corto de tiempo :)&lt;/p&gt;
 &lt;p&gt;Desde&amp;nbsp;aquí&amp;nbsp;saludaros y daros la bienvenida a mi nuevo rinconcete.&lt;/p&gt;
-</content><category term="londres"></category><category term="webphone"></category><category term="techhub"></category><category term="googleCampus"></category></entry></feed>
+</content><category term="blog"></category><category term="londres"></category><category term="webphone"></category><category term="techhub"></category><category term="googleCampus"></category></entry></feed>
