@@ -1,5 +1,266 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>A Calustra - eloycoto</title><link href="https://acalustra.com/" rel="alternate"></link><link href="https://acalustra.com/feeds/eloycoto.atom.xml" rel="self"></link><id>https://acalustra.com/</id><updated>2021-01-19T23:00:00+01:00</updated><entry><title>Envoy WASM debugging with BPFtrace</title><link href="https://acalustra.com/envoy-wasm-debugging-with-bpftrace.html" rel="alternate"></link><published>2021-01-19T23:00:00+01:00</published><updated>2021-01-19T23:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2021-01-19:/envoy-wasm-debugging-with-bpftrace.html</id><summary type="html">&lt;p&gt;A few days back, I was checking &lt;a class="reference external" href="https://www.envoyproxy.io/"&gt;Envoy&lt;/a&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>A Calustra - eloycoto</title><link href="https://acalustra.com/" rel="alternate"></link><link href="https://acalustra.com/feeds/eloycoto.atom.xml" rel="self"></link><id>https://acalustra.com/</id><updated>2021-01-19T23:00:00+01:00</updated><entry><title>A smooth move to 4G using Linux</title><link href="https://acalustra.com/a-smooth-move-to-4g-using-linux.html" rel="alternate"></link><published>2021-01-19T23:00:00+01:00</published><updated>2021-01-19T23:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2021-01-19:/a-smooth-move-to-4g-using-linux.html</id><summary type="html">&lt;p&gt;One of the problems that I faced in the past is how I switched from DSL to 4G
+connection. Mi primary internet connection is DSL, and things are bad when you
+try to upload something big or want to do a videocall without issues.&lt;/p&gt;
+&lt;p&gt;I used 4G over the phone …&lt;/p&gt;</summary><content type="html">&lt;p&gt;One of the problems that I faced in the past is how I switched from DSL to 4G
+connection. Mi primary internet connection is DSL, and things are bad when you
+try to upload something big or want to do a videocall without issues.&lt;/p&gt;
+&lt;p&gt;I used 4G over the phone, but the experience it's terrible. Also, it's not a
+smooth change: disconnect the cable, connect to your mobile wifi, etc.  If you
+got a call, meanwhile you're using 4G connection, the connection goes down, a
+lot of downsides for a permanent workspace.&lt;/p&gt;
+&lt;p&gt;Over the last weeks, I'm running a new setup, where I still use ADSL as a
+primary connection, but If I use VLAN 100, I'll use an external 4G antenna. Let
+me explain how I build this setup.&lt;/p&gt;
+&lt;img alt="" src="img/4g.png" /&gt;
+&lt;div class="section" id="hardware-needed"&gt;
+&lt;h2&gt;Hardware needed&lt;/h2&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;strong&gt;Edgerouter X&lt;/strong&gt;: This is the primary router; it does the LoadBalance.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Zyxel LTE7460:&lt;/strong&gt; The 4G modem that I found. The best thing is that it supports
+bridge mode, so no double NAT issues.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Linux computer&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Wan connection&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="section" id="edgerouter-x-load-balance-based-on-vlan"&gt;
+&lt;h2&gt;Edgerouter X, load balance based on VLAN&lt;/h2&gt;
+&lt;p&gt;Edgerouter X is, in my opinion, one of the best purchases that you can do. An
+old, but a powerful router, where you can achieve many things with a super
+simple DSL (Domain-specific Language) config.&lt;/p&gt;
+&lt;p&gt;The main behaviour will be: SWITCH0 interface will support a VLAN 100, when
+traffic goes into this virtual interface, it'll use a modify rule that will send
+traffic to a different Load Balancer. Here is the config:&lt;/p&gt;
+&lt;p&gt;VLAN 100 definition:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+switch switch0 {
+  address 192.168.25.1/24
+  description Local
+  firewall {
+    in {
+      modify balance
+    }
+  }
+  mtu 1500
+  switch-port {
+    interface eth0 {
+    }
+    interface eth1 {
+    }
+    interface eth2 {
+    }
+    vlan-aware disable
+  }
+  vif 100 {
+    firewall {
+      in {
+        modify balance_100
+      }
+    }
+  }
+}
+&lt;/pre&gt;
+&lt;p&gt;Load Balance definition:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+load-balance {
+  group 4G {
+    interface eth4 {
+    }
+    interface pppoe0 {
+      failover-only
+    }
+    lb-local enable
+    lb-local-metric-change disable
+  }
+
+  group G {
+    interface pppoe0 {
+    }
+    interface pppoe1 {
+    }
+    interface eth4 {
+      failover-only
+    }
+    lb-local enable
+    lb-local-metric-change disable
+  }
+}
+&lt;/pre&gt;
+&lt;p&gt;Outbound Firewall modify rule:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+modify balance_100 {
+  rule 10 {
+    action modify
+    description &amp;quot;do not balance lan to lan&amp;quot;
+    destination {
+      group {
+        network-group PRIVATE_NETS
+      }
+    }
+    log disable
+    modify {
+      table main
+    }
+  }
+  rule 20 {
+    action modify
+    description &amp;quot;do NOT load balance destination public address&amp;quot;
+    destination {
+      group {
+        address-group ADDRv4_pppoe0
+      }
+    }
+    modify {
+      table main
+    }
+  }
+  rule 21 {
+    action modify
+    description &amp;quot;do NOT load balance destination public address&amp;quot;
+    destination {
+      group {
+        address-group ADDRv4_pppoe1
+      }
+    }
+    modify {
+      table main
+    }
+  }
+  rule 30 {
+    action modify
+    description &amp;quot;do NOT load balance destination public address&amp;quot;
+    destination {
+      group {
+        address-group ADDRv4_eth4
+      }
+    }
+    modify {
+      table main
+    }
+  }
+  rule 100 {
+    action modify
+    log disable
+    modify {
+      lb-group 4G
+    }
+  }
+}
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class="section" id="linux-set-vlan-on-the-fly"&gt;
+&lt;h2&gt;Linux set VLAN on the fly.&lt;/h2&gt;
+&lt;p&gt;When setting a VLAN on a Linux system, I always used vconfig, but I wanted
+something fast and no permanent networking configuration involved in this case.&lt;/p&gt;
+&lt;p&gt;Linux TC (Traffic-control) is not commonly used, but it has a lot of power to
+change interface datapath configurations on the fly. One of the options that you
+can do is adding a VLAN tag when a condition matches.&lt;/p&gt;
+&lt;p&gt;So, I made a simple script, it enables or disables the VLAN 100. The best way is
+to use QDISC(queueing discipline) filters on the egress, this is the main
+action:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;tc qdisc add dev &lt;span class="nv"&gt;$interface&lt;/span&gt; handle &lt;span class="m"&gt;1&lt;/span&gt;: root prio
+tc filter add dev &lt;span class="nv"&gt;$interface&lt;/span&gt; parent &lt;span class="m"&gt;1&lt;/span&gt;: protocol ip matchall action vlan push id &lt;span class="nv"&gt;$VLAN_TO_PUSH&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;If the traffic is IP, in my case, it will set the VLAN 100, and traffic goes
+over 4G connection. Actions can be more powerful such as port/IP filtering,
+etc..&lt;/p&gt;
+&lt;p&gt;The complete script is the following:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/bin/bash&lt;/span&gt;
+
+&lt;span class="nv"&gt;ACTION&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$1&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;VLAN_TO_PUSH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;100&lt;/span&gt;
+
+echoerr&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$@&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;&amp;gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;function&lt;/span&gt; get_local_interfaces&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+  &lt;span class="nv"&gt;LOCAL_INTERFACES&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;ip --json a show &lt;span class="p"&gt;|&lt;/span&gt; jq -r &lt;span class="s1"&gt;&amp;#39;.[] | select((.operstate == &amp;quot;UP&amp;quot;) and ((.addr_info?[0].local|tostring)|test(&amp;quot;^192.*&amp;quot;))) | .ifname+&amp;quot;\t&amp;quot;+.addr_info?[0].local&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+  &lt;span class="nb"&gt;echo&lt;/span&gt; -n &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$LOCAL_INTERFACES&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;function&lt;/span&gt; disable_4g &lt;span class="o"&gt;{&lt;/span&gt;
+  &lt;span class="nb"&gt;local&lt;/span&gt; &lt;span class="nv"&gt;interface&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$1&lt;/span&gt;
+  echoerr &lt;span class="s2"&gt;&amp;quot;Disable 4G connection&amp;quot;&lt;/span&gt;
+  tc qdisc del dev &lt;span class="nv"&gt;$interface&lt;/span&gt; root
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;function&lt;/span&gt; enable_4g &lt;span class="o"&gt;{&lt;/span&gt;
+  &lt;span class="nb"&gt;local&lt;/span&gt; &lt;span class="nv"&gt;interface&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$1&lt;/span&gt;
+  echoerr &lt;span class="s2"&gt;&amp;quot;Enable 4G connection&amp;quot;&lt;/span&gt;
+  tc qdisc add dev &lt;span class="nv"&gt;$interface&lt;/span&gt; handle &lt;span class="m"&gt;1&lt;/span&gt;: root prio
+  tc filter add dev &lt;span class="nv"&gt;$interface&lt;/span&gt; parent &lt;span class="m"&gt;1&lt;/span&gt;: protocol ip matchall action vlan push id &lt;span class="nv"&gt;$VLAN_TO_PUSH&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;function&lt;/span&gt; is_interface_on_4g &lt;span class="o"&gt;{&lt;/span&gt;
+  &lt;span class="nb"&gt;local&lt;/span&gt; &lt;span class="nv"&gt;interface&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$1&lt;/span&gt;
+  tc filter show dev &lt;span class="nv"&gt;$interface&lt;/span&gt; parent &lt;span class="m"&gt;1&lt;/span&gt;: &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s2"&gt;&amp;quot;^filter&amp;quot;&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;&amp;gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;
+  &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[[&lt;/span&gt; &lt;span class="nv"&gt;$?&lt;/span&gt; -eq &lt;span class="m"&gt;1&lt;/span&gt; &lt;span class="o"&gt;]]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+    echoerr &lt;span class="s2"&gt;&amp;quot;Inferface &amp;#39;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;interface&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#39; does not have tc filter&amp;quot;&lt;/span&gt;
+    &lt;span class="nb"&gt;false&lt;/span&gt;
+  &lt;span class="k"&gt;else&lt;/span&gt;
+    echoerr &lt;span class="s2"&gt;&amp;quot;Inferface &amp;#39;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;interface&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#39; contains tc filter&amp;quot;&lt;/span&gt;
+    &lt;span class="nb"&gt;true&lt;/span&gt;
+  &lt;span class="k"&gt;fi&lt;/span&gt;
+
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;function&lt;/span&gt; toggle_interface&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+  &lt;span class="nb"&gt;local&lt;/span&gt; &lt;span class="nv"&gt;interface&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$1&lt;/span&gt;
+  &lt;span class="k"&gt;if&lt;/span&gt; is_interface_on_4g &lt;span class="nv"&gt;$interface&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+    disable_4g &lt;span class="nv"&gt;$interface&lt;/span&gt;
+  &lt;span class="k"&gt;else&lt;/span&gt;
+    enable_4g &lt;span class="nv"&gt;$interface&lt;/span&gt;
+  &lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;function&lt;/span&gt; toggle&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+  &lt;span class="nv"&gt;IFS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;$&amp;#39;\n&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; line in &lt;span class="k"&gt;$(&lt;/span&gt;get_local_interfaces&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+    &lt;span class="nb"&gt;local&lt;/span&gt; &lt;span class="nv"&gt;interface&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -n &lt;span class="nv"&gt;$line&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; awk &lt;span class="s1"&gt;&amp;#39;{print $1}&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+    toggle_interface &lt;span class="nv"&gt;$interface&lt;/span&gt;
+  &lt;span class="k"&gt;done&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;function&lt;/span&gt; list&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+  &lt;span class="nb"&gt;local&lt;/span&gt; &lt;span class="nv"&gt;RESULT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+  &lt;span class="nv"&gt;IFS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;$&amp;#39;\n&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; line in &lt;span class="k"&gt;$(&lt;/span&gt;get_local_interfaces&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+    &lt;span class="nb"&gt;local&lt;/span&gt; &lt;span class="nv"&gt;interface&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -n &lt;span class="nv"&gt;$line&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; awk &lt;span class="s1"&gt;&amp;#39;{print $1}&amp;#39;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;
+    &lt;span class="nv"&gt;DEFAULT_MODE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;DSL&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; is_interface_on_4g &lt;span class="nv"&gt;$interface&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+      &lt;span class="nv"&gt;RESULT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;RESULT&lt;/span&gt;&lt;span class="si"&gt;}${&lt;/span&gt;&lt;span class="nv"&gt;interface&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;=4G &amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;
+      &lt;span class="nv"&gt;RESULT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;RESULT&lt;/span&gt;&lt;span class="si"&gt;}${&lt;/span&gt;&lt;span class="nv"&gt;interface&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;=DSL &amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;fi&lt;/span&gt;
+  &lt;span class="k"&gt;done&lt;/span&gt;
+  &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;$RESULT&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[[&lt;/span&gt; &lt;span class="nv"&gt;$ACTION&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;toggle&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;]]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+  toggle
+&lt;span class="k"&gt;else&lt;/span&gt;
+  list
+&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="argos-gnome-shell-extensions"&gt;
+&lt;h2&gt;Argos Gnome Shell Extensions&lt;/h2&gt;
+&lt;p&gt;Because I pay a lot of the 4G connection,  I want to have something seamless and
+be notified when I use it.  Argos Gnome Shell extension is the best way to get
+that info; a simple script displays if an interface is using DSL or 4G and I
+also add a toggle button, here is the complete script:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/usr/bin/env bash&lt;/span&gt;
+
+&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;STATUS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;~/bin/toggle_dsl.sh  &lt;span class="m"&gt;2&lt;/span&gt;&amp;gt;/dev/null&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;STATUS&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;---&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;📡toggle | bash=&amp;#39;~/bin/toggle_dsl.sh toggle&amp;#39; terminal=false&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Finally, this is the seamless setup, moving to 4G is easy; I do not need an
+external phone, I'm no longer worried about receiving calls. Because It uses a
+4G antenna when ADSL is down, I can failover without problems! By far, this was
+one of the best productivity hacks that I made in 2020!&lt;/p&gt;
+&lt;p&gt;Yup, I already sign up on Startlink.&lt;/p&gt;
+&lt;p&gt;Cover image: &lt;a class="reference external" href="https://pxhere.com/en/photo/1592827"&gt;https://pxhere.com/en/photo/1592827&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="blog"></category><category term="networking"></category><category term="vlan"></category><category term="tc"></category></entry><entry><title>Envoy WASM debugging with BPFtrace</title><link href="https://acalustra.com/envoy-wasm-debugging-with-bpftrace.html" rel="alternate"></link><published>2021-01-19T23:00:00+01:00</published><updated>2021-01-19T23:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2021-01-19:/envoy-wasm-debugging-with-bpftrace.html</id><summary type="html">&lt;p&gt;A few days back, I was checking &lt;a class="reference external" href="https://www.envoyproxy.io/"&gt;Envoy&lt;/a&gt;
 performance when WASM is in use. &lt;a class="reference external" href="https://github.com/envoyproxy/envoy/blob/main/bazel/PPROF.md"&gt;PPROF&lt;/a&gt; can be enabled
 quite easily in Envoy, but I wanted to have less intrusive experience.&lt;/p&gt;
 &lt;p&gt;In the past, to debug things like this I always use &lt;a class="reference external" href="https://www.sourceware.org/systemtap/"&gt;Systemtap&lt;/a&gt;, (super intrusive) but &lt;a class="reference external" href="https://github.com/iovisor/bpftrace"&gt;BPFtrace&lt;/a&gt; is straightforward and fast …&lt;/p&gt;</summary><content type="html">&lt;p&gt;A few days back, I was checking &lt;a class="reference external" href="https://www.envoyproxy.io/"&gt;Envoy&lt;/a&gt;

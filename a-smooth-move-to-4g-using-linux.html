@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+
+  <title>A smooth move to 4G using Linux</title>
+
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="origin" />
+  <meta name="generator" content="Pelican" />
+  <link href="https://acalustra.com/" rel="canonical" />
+
+  <!-- Feed -->
+        <link href="https://acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A Calustra Full Atom Feed" />
+
+  <link href="https://acalustra.com/theme/css/style.css" type="text/css" rel="stylesheet" />
+
+  <!-- Code highlight color scheme -->
+      <link href="https://acalustra.com/theme/css/code_blocks/monokai.css" rel="stylesheet">
+
+    <!-- CSS specified by the user -->
+
+
+    <link href="https://acalustra.com/theme/css/eloy.css" type="text/css" rel="stylesheet" />
+
+  <!-- Custom fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,300' rel='stylesheet' type='text/css' />
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css" />
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+
+  <link href="https://acalustra.com/a-smooth-move-to-4g-using-linux.html" rel="canonical" />
+  <meta name="keywords" content="edgerouter, networking, vlan, linux, home-office, 4G connection, edgeos" >
+
+    <meta name="description" content="One of the problems that I faced in the past is how I switched from DSL to 4G connection. Mi primary internet connection is DSL, and...">
+
+    <meta name="author" content="eloycoto">
+
+    <meta name="tags" content="networking">
+    <meta name="tags" content="vlan">
+    <meta name="tags" content="tc">
+
+
+
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="A Calustra"/>
+<meta property="og:title" content="A smooth move to 4G using Linux"/>
+<meta property="og:description" content="One of the problems that I faced in the past is how I switched from DSL to 4G connection. Mi primary internet connection is DSL, and..."/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="https://acalustra.com/a-smooth-move-to-4g-using-linux.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2021-01-19 23:00:00+01:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="https://acalustra.com/author/eloycoto.html">
+<meta property="article:section" content="blog"/>
+<meta property="article:tag" content="networking"/>
+<meta property="article:tag" content="vlan"/>
+<meta property="article:tag" content="tc"/>
+<meta property="og:image" content="https://acalustra.com//img/antenna.jpg">
+
+<!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@eloycoto">
+    <meta name="twitter:title" content="A smooth move to 4G using Linux">
+    <meta name="twitter:url" content="https://acalustra.com/a-smooth-move-to-4g-using-linux.html">
+
+        <meta name="twitter:image:src" content="https://acalustra.com//img/antenna.jpg">
+
+      <meta name="twitter:description" content="One of the problems that I faced in the past is how I switched from DSL to 4G connection. Mi primary internet connection is DSL, and...">
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "name": "A smooth move to 4G using Linux",
+  "headline": "A smooth move to 4G using Linux",
+  "datePublished": "2021-01-19 23:00:00+01:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "eloycoto",
+    "url": "https://acalustra.com/author/eloycoto.html"
+  },
+  "image": "https://acalustra.com//img/antenna.jpg",
+  "url": "https://acalustra.com/a-smooth-move-to-4g-using-linux.html",
+  "description": "One of the problems that I faced in the past is how I switched from DSL to 4G connection. Mi primary internet connection is DSL, and..."
+}
+</script>
+</head>
+<!-- TODO : Body class -->
+<body class="home-template">
+
+<nav id="menu">
+  <a class="close-button">Close</a>
+  <div class="nav-wrapper">
+    <p class="nav-label">Menu</p>
+    <ul>
+
+              <li role="presentation"><a href="https://acalustra.com/pages/about.html">About</a></li>
+
+    </ul>
+  </div>
+</nav>
+    <!-- Progressbar -->
+    <div class="progress-container">
+        <span class="progress-bar"></span>
+    </div>
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header id="post-header" class="has-cover">
+      <div class="inner">
+        <nav id="navigation">
+            <span id="home-button" class="nav-button">
+                <a class="home-button" href="https://acalustra.com/" title="Home"><i class="ic ic-arrow-left"></i> Home</a>
+            </span>
+          <span id="menu-button" class="nav-button">
+            <a class="menu-button"><i class="ic ic-menu"></i> Menu</a>
+          </span>
+        </nav>
+        <h1 class="post-title">A smooth move to 4G using Linux</h1>
+        <!-- TODO : Proper class for headline -->
+        <span class="post-meta">
+                <a href="https://acalustra.com/author/eloycoto.html">Eloy Coto</a>
+            | <time datetime="Tuesday 19-01-2021">Tuesday 19-01-2021</time>
+        </span>
+        <!-- TODO : Modified check -->
+            <div class="post-cover cover" style="background-image: url('https://acalustra.com//img/antenna.jpg')">
+      </div>
+    </header>
+
+  <section id="wrapper">
+    <a class="hidden-close"></a>
+
+    <!-- Post content -->
+    <main class="content" role="main">
+        <article class="post">
+        <div class="inner">
+            <section class="post-content">
+                <p>One of the problems that I faced in the past is how I switched from DSL to 4G
+connection. Mi primary internet connection is DSL, and things are bad when you
+try to upload something big or want to do a videocall without issues.</p>
+<p>I used 4G over the phone, but the experience it's terrible. Also, it's not a
+smooth change: disconnect the cable, connect to your mobile wifi, etc.  If you
+got a call, meanwhile you're using 4G connection, the connection goes down, a
+lot of downsides for a permanent workspace.</p>
+<p>Over the last weeks, I'm running a new setup, where I still use ADSL as a
+primary connection, but If I use VLAN 100, I'll use an external 4G antenna. Let
+me explain how I build this setup.</p>
+<img alt="" src="img/4g.png" />
+<div class="section" id="hardware-needed">
+<h2>Hardware needed</h2>
+<ul class="simple">
+<li><strong>Edgerouter X</strong>: This is the primary router; it does the LoadBalance.</li>
+<li><strong>Zyxel LTE7460:</strong> The 4G modem that I found. The best thing is that it supports
+bridge mode, so no double NAT issues.</li>
+<li><strong>Linux computer</strong></li>
+<li><strong>Wan connection</strong></li>
+</ul>
+</div>
+<div class="section" id="edgerouter-x-load-balance-based-on-vlan">
+<h2>Edgerouter X, load balance based on VLAN</h2>
+<p>Edgerouter X is, in my opinion, one of the best purchases that you can do. An
+old, but a powerful router, where you can achieve many things with a super
+simple DSL (Domain-specific Language) config.</p>
+<p>The main behaviour will be: SWITCH0 interface will support a VLAN 100, when
+traffic goes into this virtual interface, it'll use a modify rule that will send
+traffic to a different Load Balancer. Here is the config:</p>
+<p>VLAN 100 definition:</p>
+<pre class="literal-block">
+switch switch0 {
+  address 192.168.25.1/24
+  description Local
+  firewall {
+    in {
+      modify balance
+    }
+  }
+  mtu 1500
+  switch-port {
+    interface eth0 {
+    }
+    interface eth1 {
+    }
+    interface eth2 {
+    }
+    vlan-aware disable
+  }
+  vif 100 {
+    firewall {
+      in {
+        modify balance_100
+      }
+    }
+  }
+}
+</pre>
+<p>Load Balance definition:</p>
+<pre class="literal-block">
+load-balance {
+  group 4G {
+    interface eth4 {
+    }
+    interface pppoe0 {
+      failover-only
+    }
+    lb-local enable
+    lb-local-metric-change disable
+  }
+
+  group G {
+    interface pppoe0 {
+    }
+    interface pppoe1 {
+    }
+    interface eth4 {
+      failover-only
+    }
+    lb-local enable
+    lb-local-metric-change disable
+  }
+}
+</pre>
+<p>Outbound Firewall modify rule:</p>
+<pre class="literal-block">
+modify balance_100 {
+  rule 10 {
+    action modify
+    description &quot;do not balance lan to lan&quot;
+    destination {
+      group {
+        network-group PRIVATE_NETS
+      }
+    }
+    log disable
+    modify {
+      table main
+    }
+  }
+  rule 20 {
+    action modify
+    description &quot;do NOT load balance destination public address&quot;
+    destination {
+      group {
+        address-group ADDRv4_pppoe0
+      }
+    }
+    modify {
+      table main
+    }
+  }
+  rule 21 {
+    action modify
+    description &quot;do NOT load balance destination public address&quot;
+    destination {
+      group {
+        address-group ADDRv4_pppoe1
+      }
+    }
+    modify {
+      table main
+    }
+  }
+  rule 30 {
+    action modify
+    description &quot;do NOT load balance destination public address&quot;
+    destination {
+      group {
+        address-group ADDRv4_eth4
+      }
+    }
+    modify {
+      table main
+    }
+  }
+  rule 100 {
+    action modify
+    log disable
+    modify {
+      lb-group 4G
+    }
+  }
+}
+</pre>
+</div>
+<div class="section" id="linux-set-vlan-on-the-fly">
+<h2>Linux set VLAN on the fly.</h2>
+<p>When setting a VLAN on a Linux system, I always used vconfig, but I wanted
+something fast and no permanent networking configuration involved in this case.</p>
+<p>Linux TC (Traffic-control) is not commonly used, but it has a lot of power to
+change interface datapath configurations on the fly. One of the options that you
+can do is adding a VLAN tag when a condition matches.</p>
+<p>So, I made a simple script, it enables or disables the VLAN 100. The best way is
+to use QDISC(queueing discipline) filters on the egress, this is the main
+action:</p>
+<div class="highlight"><pre><span></span>tc qdisc add dev <span class="nv">$interface</span> handle <span class="m">1</span>: root prio
+tc filter add dev <span class="nv">$interface</span> parent <span class="m">1</span>: protocol ip matchall action vlan push id <span class="nv">$VLAN_TO_PUSH</span>
+</pre></div>
+<p>If the traffic is IP, in my case, it will set the VLAN 100, and traffic goes
+over 4G connection. Actions can be more powerful such as port/IP filtering,
+etc..</p>
+<p>The complete script is the following:</p>
+<div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="nv">ACTION</span><span class="o">=</span><span class="nv">$1</span>
+<span class="nb">export</span> <span class="nv">VLAN_TO_PUSH</span><span class="o">=</span><span class="m">100</span>
+
+echoerr<span class="o">()</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span> <span class="m">1</span>&gt;<span class="p">&amp;</span><span class="m">2</span><span class="p">;</span> <span class="o">}</span>
+
+<span class="k">function</span> get_local_interfaces<span class="o">()</span> <span class="o">{</span>
+  <span class="nv">LOCAL_INTERFACES</span><span class="o">=</span><span class="k">$(</span>ip --json a show <span class="p">|</span> jq -r <span class="s1">&#39;.[] | select((.operstate == &quot;UP&quot;) and ((.addr_info?[0].local|tostring)|test(&quot;^192.*&quot;))) | .ifname+&quot;\t&quot;+.addr_info?[0].local&#39;</span><span class="k">)</span>
+  <span class="nb">echo</span> -n <span class="s2">&quot;</span><span class="nv">$LOCAL_INTERFACES</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+
+<span class="k">function</span> disable_4g <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">interface</span><span class="o">=</span><span class="nv">$1</span>
+  echoerr <span class="s2">&quot;Disable 4G connection&quot;</span>
+  tc qdisc del dev <span class="nv">$interface</span> root
+<span class="o">}</span>
+
+<span class="k">function</span> enable_4g <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">interface</span><span class="o">=</span><span class="nv">$1</span>
+  echoerr <span class="s2">&quot;Enable 4G connection&quot;</span>
+  tc qdisc add dev <span class="nv">$interface</span> handle <span class="m">1</span>: root prio
+  tc filter add dev <span class="nv">$interface</span> parent <span class="m">1</span>: protocol ip matchall action vlan push id <span class="nv">$VLAN_TO_PUSH</span>
+<span class="o">}</span>
+
+<span class="k">function</span> is_interface_on_4g <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">interface</span><span class="o">=</span><span class="nv">$1</span>
+  tc filter show dev <span class="nv">$interface</span> parent <span class="m">1</span>: <span class="p">|</span> grep <span class="s2">&quot;^filter&quot;</span> <span class="m">1</span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+  <span class="k">if</span> <span class="o">[[</span> <span class="nv">$?</span> -eq <span class="m">1</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    echoerr <span class="s2">&quot;Inferface &#39;</span><span class="si">${</span><span class="nv">interface</span><span class="si">}</span><span class="s2">&#39; does not have tc filter&quot;</span>
+    <span class="nb">false</span>
+  <span class="k">else</span>
+    echoerr <span class="s2">&quot;Inferface &#39;</span><span class="si">${</span><span class="nv">interface</span><span class="si">}</span><span class="s2">&#39; contains tc filter&quot;</span>
+    <span class="nb">true</span>
+  <span class="k">fi</span>
+
+<span class="o">}</span>
+
+<span class="k">function</span> toggle_interface<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">interface</span><span class="o">=</span><span class="nv">$1</span>
+  <span class="k">if</span> is_interface_on_4g <span class="nv">$interface</span><span class="p">;</span> <span class="k">then</span>
+    disable_4g <span class="nv">$interface</span>
+  <span class="k">else</span>
+    enable_4g <span class="nv">$interface</span>
+  <span class="k">fi</span>
+<span class="o">}</span>
+
+<span class="k">function</span> toggle<span class="o">()</span> <span class="o">{</span>
+  <span class="nv">IFS</span><span class="o">=</span><span class="s1">$&#39;\n&#39;</span><span class="p">;</span> <span class="k">for</span> line in <span class="k">$(</span>get_local_interfaces<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+    <span class="nb">local</span> <span class="nv">interface</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> -n <span class="nv">$line</span> <span class="p">|</span> awk <span class="s1">&#39;{print $1}&#39;</span><span class="k">)</span>
+    toggle_interface <span class="nv">$interface</span>
+  <span class="k">done</span>
+<span class="o">}</span>
+
+<span class="k">function</span> list<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">RESULT</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+  <span class="nv">IFS</span><span class="o">=</span><span class="s1">$&#39;\n&#39;</span><span class="p">;</span> <span class="k">for</span> line in <span class="k">$(</span>get_local_interfaces<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+    <span class="nb">local</span> <span class="nv">interface</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> -n <span class="nv">$line</span> <span class="p">|</span> awk <span class="s1">&#39;{print $1}&#39;</span><span class="k">)</span>
+    <span class="nv">DEFAULT_MODE</span><span class="o">=</span><span class="s2">&quot;DSL&quot;</span>
+    <span class="k">if</span> is_interface_on_4g <span class="nv">$interface</span><span class="p">;</span> <span class="k">then</span>
+      <span class="nv">RESULT</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">RESULT</span><span class="si">}${</span><span class="nv">interface</span><span class="si">}</span><span class="s2">=4G &quot;</span>
+    <span class="k">else</span>
+      <span class="nv">RESULT</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">RESULT</span><span class="si">}${</span><span class="nv">interface</span><span class="si">}</span><span class="s2">=DSL &quot;</span>
+    <span class="k">fi</span>
+  <span class="k">done</span>
+  <span class="nb">echo</span> <span class="nv">$RESULT</span>
+<span class="o">}</span>
+
+<span class="k">if</span> <span class="o">[[</span> <span class="nv">$ACTION</span> <span class="o">==</span> <span class="s2">&quot;toggle&quot;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+  toggle
+<span class="k">else</span>
+  list
+<span class="k">fi</span>
+</pre></div>
+</div>
+<div class="section" id="argos-gnome-shell-extensions">
+<h2>Argos Gnome Shell Extensions</h2>
+<p>Because I pay a lot of the 4G connection,  I want to have something seamless and
+be notified when I use it.  Argos Gnome Shell extension is the best way to get
+that info; a simple script displays if an interface is using DSL or 4G and I
+also add a toggle button, here is the complete script:</p>
+<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="nb">export</span> <span class="nv">STATUS</span><span class="o">=</span><span class="k">$(</span>~/bin/toggle_dsl.sh  <span class="m">2</span>&gt;/dev/null<span class="k">)</span>
+<span class="nb">echo</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">STATUS</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;---&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;📡toggle | bash=&#39;~/bin/toggle_dsl.sh toggle&#39; terminal=false&quot;</span>
+</pre></div>
+<p>Finally, this is the seamless setup, moving to 4G is easy; I do not need an
+external phone, I'm no longer worried about receiving calls. Because It uses a
+4G antenna when ADSL is down, I can failover without problems! By far, this was
+one of the best productivity hacks that I made in 2020!</p>
+<p>Yup, I already sign up on Startlink.</p>
+<p>Cover image: <a class="reference external" href="https://pxhere.com/en/photo/1592827">https://pxhere.com/en/photo/1592827</a></p>
+</div>
+
+            </section>
+
+            <section class="post-info">
+                <div class="post-share">
+                    <a class="twitter" href="https://twitter.com/share?text=A smooth move to 4G using Linux&amp;url=https://acalustra.com/a-smooth-move-to-4g-using-linux.html" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <i class="ic ic-twitter"></i><span class="hidden">Twitter</span>
+                    </a>
+                    <a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://acalustra.com/a-smooth-move-to-4g-using-linux.html" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <i class="ic ic-facebook"></i><span class="hidden">Facebook</span>
+                    </a>
+                    <a class="googleplus" href="https://plus.google.com/share?url=https://acalustra.com/a-smooth-move-to-4g-using-linux.html" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <i class="ic ic-googleplus"></i><span class="hidden">Google+</span>
+                    </a>
+                    <div class="clear"></div>
+                </div>
+
+                <aside class="post-tags">
+<a href="https://acalustra.com/tag/networking.html">networking</a><a href="https://acalustra.com/tag/vlan.html">vlan</a><a href="https://acalustra.com/tag/tc.html">tc</a>                </aside>
+
+                <div class="clear"></div>
+
+                <aside class="post-author">
+
+
+                        <figure class="post-author-avatar">
+                            <img src="https://acalustra.com/img/profile.jpg" alt="Eloy Coto" />
+                        </figure>
+                    <div class="post-author-bio">
+                        <h4 class="post-author-name"><a href="https://acalustra.com/author/eloycoto.html">Eloy Coto</a></h4>
+                            <p class="post-author-about">Senior software engineer with experience in Golang, C and Python and CI/CD</p>
+                            <span class="post-author-location"><i class="ic ic-location"></i> Galicia</span>
+                            <span class="post-author-website"><a href="http://acalustra.com"><i class="ic ic-link"></i> Website</a></span>
+                        <!-- Social linkes in alphabet order. -->
+                            <span class="post-author-github"><a target="_blank" href="https://github.com/eloycoto"><i class="ic ic-link"></i> GitHub</a></span>
+                            <span class="post-author-linkedin"><a target="_blank" href="https://www.linkedin.com/in/eloycoto"><i class="ic ic-link"></i> LinkedIn</a></span>
+                            <span class="post-author-twitter"><a target="_blank" href="https://twitter.com/eloycoto"><i class="ic ic-twitter"></i> Twitter</a></span>
+                    </div>
+                    <div class="clear"></div>
+                </aside>
+
+                </section>
+
+                <script type="text/javascript">
+                    var disqus = 'acalustra';
+                    var disqus_shortname = 'acalustra';
+                    var disqus_identifier = '/a-smooth-move-to-4g-using-linux.html';
+                    var disqus_url = 'https://acalustra.com/a-smooth-move-to-4g-using-linux.html';
+                </script>
+                <noscript>Please enable JavaScript to view the comments.</noscript>
+                <section class="post-comments">
+                        <a id="show-disqus" class="post-comments-activate" data-disqus-identifier="/a-smooth-move-to-4g-using-linux.html" >Show Comments</a>
+                    <div id="disqus_thread"></div>
+                </section>
+
+                <aside class="post-nav">
+                    <div class="clear"></div>
+                </aside>
+
+            </div>
+        </article>
+    </main>
+      <!-- TODO : Body class -->
+    <div id="body-class" style="display: none;" class=""></div>
+
+    <footer id="footer">
+      <div class="inner">
+        <section class="credits">
+
+
+          <span class="credits-theme">Theme <a href="https://github.com/arulrajnet/attila" rel="nofollow">Attila</a></span>
+          <span class="credits-software">Published with <a href="https://github.com/getpelican/pelican" rel="nofollow">Pelican</a></span>
+        </section>
+      </div>
+    </footer>
+  </section>
+
+  <script type="text/javascript" src="https://acalustra.com/theme/js/script.js"></script>
+
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-36310774-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-36310774-1', { 'anonymize_ip': true });
+    </script>
+<script type="text/javascript">
+    var disqus_shortname = 'acalustra';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+</html>
