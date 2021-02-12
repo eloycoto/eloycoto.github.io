@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0"><channel><title>A Calustra - eloycoto</title><link>https://acalustra.com/</link><description></description><lastBuildDate>Tue, 19 Jan 2021 23:00:00 +0100</lastBuildDate><item><title>A smooth move to 4G using Linux</title><link>https://acalustra.com/a-smooth-move-to-4g-using-linux.html</link><description>&lt;p&gt;One of the problems that I faced in the past is how I switched from DSL to 4G
-connection. Mi primary internet connection is DSL, and things are bad when you
+connection. My primary internet connection is DSL, and things are bad when you
 try to upload something big or want to do a videocall without issues.&lt;/p&gt;
 &lt;p&gt;I used 4G over the phone …&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">eloycoto</dc:creator><pubDate>Tue, 19 Jan 2021 23:00:00 +0100</pubDate><guid isPermaLink="false">tag:acalustra.com,2021-01-19:/a-smooth-move-to-4g-using-linux.html</guid><category>blog</category><category>networking</category><category>vlan</category><category>tc</category></item><item><title>Envoy WASM debugging with BPFtrace</title><link>https://acalustra.com/envoy-wasm-debugging-with-bpftrace.html</link><description>&lt;p&gt;A few days back, I was checking &lt;a class="reference external" href="https://www.envoyproxy.io/"&gt;Envoy&lt;/a&gt;
 performance when WASM is in use. &lt;a class="reference external" href="https://github.com/envoyproxy/envoy/blob/main/bazel/PPROF.md"&gt;PPROF&lt;/a&gt; can be enabled
