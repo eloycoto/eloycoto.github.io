@@ -1,5 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>A Calustra - eloycoto</title><link href="https://acalustra.com/" rel="alternate"></link><link href="https://acalustra.com/feeds/eloycoto.atom.xml" rel="self"></link><id>https://acalustra.com/</id><updated>2021-01-19T23:00:00+01:00</updated><entry><title>A smooth move to 4G using Linux</title><link href="https://acalustra.com/a-smooth-move-to-4g-using-linux.html" rel="alternate"></link><published>2021-01-19T23:00:00+01:00</published><updated>2021-01-19T23:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2021-01-19:/a-smooth-move-to-4g-using-linux.html</id><summary type="html">&lt;p&gt;One of the problems that I faced in the past is how I switched from DSL to 4G
+<feed xmlns="http://www.w3.org/2005/Atom"><title>A Calustra - eloycoto</title><link href="https://acalustra.com/" rel="alternate"></link><link href="https://acalustra.com/feeds/eloycoto.atom.xml" rel="self"></link><id>https://acalustra.com/</id><updated>2021-02-18T21:00:00+01:00</updated><entry><title>Fosdem 2021 review</title><link href="https://acalustra.com/fosdem-2021-review.html" rel="alternate"></link><published>2021-02-18T21:00:00+01:00</published><updated>2021-02-18T21:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2021-02-18:/fosdem-2021-review.html</id><summary type="html">&lt;p&gt;As every year, the first week of February, Fosdem took place. The conference was
+online for the first time, and I think that we all missed the rain and the snow.&lt;/p&gt;
+&lt;p&gt;I really enjoyed the conference; it was not the same; also, it was hard to get
+time over the …&lt;/p&gt;</summary><content type="html">&lt;p&gt;As every year, the first week of February, Fosdem took place. The conference was
+online for the first time, and I think that we all missed the rain and the snow.&lt;/p&gt;
+&lt;p&gt;I really enjoyed the conference; it was not the same; also, it was hard to get
+time over the weekend to see the talks. Online conferences should rethink a bit
+the schedules, but overall I'm more than happy with the result!&lt;/p&gt;
+&lt;p&gt;As usual, I went to multiple talks. This year, the talk that I most enjoyed was
+the one given by &lt;a class="reference external" href="https://twitter.com/1nuritzi"&gt;Nuritzi Sanchez&lt;/a&gt;, she showed a
+different way to think about communication and how to build trust with other
+cultures, from now on, I'm going to share with many people &lt;a class="reference external" href="https://fosdem.org/2021/schedule/event/community_devroom_communication_hacks/attachments/slides/4675/export/events/attachments/community_devroom_communication_hacks/slides/4675/FOSDEM_2021_Communication_Hacks.pdf"&gt;[slides]&lt;/a&gt;.&lt;/p&gt;
+&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/4f4Za-X9CJQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;&lt;p&gt;Regarding other topics, quite impressed by the &lt;a class="reference external" href="https://fosdem.org/2021/schedule/event/tee_enarx/"&gt;Ernax project&lt;/a&gt; and &lt;a class="reference external" href="https://fosdem.org/2021/schedule/event/tee_veracruz/"&gt;ARM Veracruz&lt;/a&gt;, this technology will
+be crucial in the next couple of years, and I think this will change how Edge
+Computing will behave.&lt;/p&gt;
+&lt;p&gt;Regarding containers, I highly recommend the talk by my former colleague &lt;a class="reference external" href="https://fosdem.org/2021/schedule/event/containers_ebpf_kernel/"&gt;Daniel
+Borkmann&lt;/a&gt;,
+impressive work made by Cilium team. &lt;a class="reference external" href="https://fosdem.org/2021/schedule/speaker/viktor_farcic/"&gt;Viktor Farcic&lt;/a&gt; made an excellent
+presentation about Argo CD, also recommend his Youtube channel. Another famous
+Youtuber, &lt;a class="reference external" href="https://fosdem.org/2021/schedule/speaker/david_mckay/"&gt;David McKay&lt;/a&gt;, made two talks, I
+enjoyed Cluster API one, and the Telegraph one is worth to listen.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://fosdem.org/2021/schedule/speaker/peter_zaitsev/"&gt;Peter Zaitsev&lt;/a&gt; made
+many talks, this one about performance testing has very good tips, I'll keep in
+my bookmarks for the future, a lot of good things there.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://fosdem.org/2021/schedule/speaker/brad_fitzpatrick/"&gt;Brad Fitzpatrick&lt;/a&gt;
+background is unachievable, and he shared how Tailscale is using Golang. I loved
+Tailscale, and maybe I'm biased, but I found very interesting the problems
+regarding Golang net.IP types.&lt;/p&gt;
+&lt;p&gt;Finally, this was my Fosdem, and I'm so thankful to all organisers to keep the
+level so high! Thanks for always giving a weekend of joy!&lt;/p&gt;
+</content><category term="blog"></category><category term="fosdem"></category></entry><entry><title>A smooth move to 4G using Linux</title><link href="https://acalustra.com/a-smooth-move-to-4g-using-linux.html" rel="alternate"></link><published>2021-01-19T23:00:00+01:00</published><updated>2021-01-19T23:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2021-01-19:/a-smooth-move-to-4g-using-linux.html</id><summary type="html">&lt;p&gt;One of the problems that I faced in the past is how I switched from DSL to 4G
 connection. My primary internet connection is DSL, and things are bad when you
 try to upload something big or want to do a videocall without issues.&lt;/p&gt;
 &lt;p&gt;I used 4G over the phone …&lt;/p&gt;</summary><content type="html">&lt;p&gt;One of the problems that I faced in the past is how I switched from DSL to 4G
