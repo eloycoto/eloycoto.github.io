@@ -5,28 +5,28 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://acalustra.com/</loc>
-<lastmod>2021-11-03T22:09:30-00:00</lastmod>
+<lastmod>2022-09-15T22:22:36-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://acalustra.com/archives.html</loc>
-<lastmod>2021-11-03T22:09:30-00:00</lastmod>
+<lastmod>2022-09-15T22:22:36-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://acalustra.com/tags.html</loc>
-<lastmod>2021-11-03T22:09:30-00:00</lastmod>
+<lastmod>2022-09-15T22:22:36-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://acalustra.com/categories.html</loc>
-<lastmod>2021-11-03T22:09:30-00:00</lastmod>
+<lastmod>2022-09-15T22:22:36-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -34,6 +34,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://acalustra.com/pages/about.html</loc>
 <lastmod>2018-07-02T20:00:00+02:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://acalustra.com/speaking-at-pulpocon-2022-about-edge-computing.html</loc>
+<lastmod>2022-09-15T21:00:00+02:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -376,7 +383,28 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://acalustra.com/category/blog.html</loc>
-<lastmod>2021-11-03T21:00:00-00:15</lastmod>
+<lastmod>2022-09-15T21:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://acalustra.com/tag/talks.html</loc>
+<lastmod>2022-09-15T21:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://acalustra.com/tag/conference.html</loc>
+<lastmod>2022-09-15T21:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://acalustra.com/tag/edge-computing.html</loc>
+<lastmod>2022-09-15T21:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -537,13 +565,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://acalustra.com/tag/vigo.html</loc>
-<lastmod>2018-07-02T20:00:00-00:15</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>https://acalustra.com/tag/talks.html</loc>
 <lastmod>2018-07-02T20:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
@@ -1153,7 +1174,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://acalustra.com/author/eloycoto.html</loc>
-<lastmod>2021-11-03T21:00:00-00:15</lastmod>
+<lastmod>2022-09-15T21:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>

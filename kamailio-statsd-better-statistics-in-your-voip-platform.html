@@ -174,11 +174,11 @@
 <h2><a class="reference external" href="http://github.com/eloycoto/kamailio-statsd">Kamailio statsd parameters</a>:</h2>
 <dl class="docutils">
 <dt><strong>IP</strong>: Statsd listen IP.</dt>
-<dd><div class="first last"><div class="highlight"><pre><span></span><span class="n">modparam</span><span class="p">(</span><span class="s">&quot;statsd&quot;</span><span class="p">,</span> <span class="s">&quot;ip&quot;</span><span class="p">,</span> <span class="s">&quot;127.0.0.1&quot;</span><span class="p">)</span>
+<dd><div class="first last"><div class="highlight"><pre><span></span><span class="n">modparam</span><span class="p">(</span><span class="s">&quot;statsd&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ip&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div></dd>
 <dt><strong>PORT</strong>: Statsd listen port.</dt>
-<dd><div class="first last"><div class="highlight"><pre><span></span><span class="n">modparam</span><span class="p">(</span><span class="s">&quot;statsd&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">,</span> <span class="s">&quot;8125&quot;</span><span class="p">)</span>
+<dd><div class="first last"><div class="highlight"><pre><span></span><span class="n">modparam</span><span class="p">(</span><span class="s">&quot;statsd&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;port&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;8125&quot;</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div></dd>
 </dl>
@@ -187,37 +187,37 @@
 <h2><a class="reference external" href="http://github.com/eloycoto/kamailio-statsd">Kamailio statsd functions</a>:</h2>
 <dl class="docutils">
 <dt><strong>Set</strong>:  counting unique occurrences of events between flushes, using a Set to store all occurring events.</dt>
-<dd><div class="first last"><div class="highlight"><pre><span></span><span class="n">route</span> <span class="p">[</span><span class="n">customer_credit</span><span class="p">]{</span>
-    <span class="n">statsd_set</span><span class="p">(</span><span class="err">“</span><span class="n">customer</span><span class="p">.</span><span class="s">&quot;+$avp(customer)+”credit”, $var(credit))</span>
-<span class="p">}</span>
+<dd><div class="first last"><div class="highlight"><pre><span></span><span class="n">route</span><span class="w"> </span><span class="p">[</span><span class="n">customer_credit</span><span class="p">]{</span><span class="w"></span>
+<span class="w">    </span><span class="n">statsd_set</span><span class="p">(</span><span class="err">“</span><span class="n">customer</span><span class="p">.</span><span class="s">&quot;+$avp(customer)+”credit”, $var(credit))</span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div></dd>
 </dl>
 <p><strong>Gauge</strong>:  A gauge simply indicates an arbitrary value at a point in time. You can use like this:</p>
 <blockquote>
-<div class="highlight"><pre><span></span><span class="n">route</span> <span class="p">[</span><span class="n">gauge_method</span><span class="p">]{</span>
-        <span class="n">statsd_gauge</span><span class="p">(</span><span class="s">&quot;method.count&quot;</span><span class="o">+</span><span class="err">$</span><span class="n">rm</span><span class="p">,</span> <span class="err">“</span><span class="mi">1</span><span class="err">”</span><span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span><span class="err">$</span><span class="n">avp</span><span class="p">(</span><span class="nl">s</span><span class="p">:</span><span class="n">prepaid</span><span class="p">))</span> <span class="n">statsd_gauge</span><span class="p">(</span><span class="s">&quot;customer.prepaid&quot;</span><span class="p">,</span> <span class="err">“</span><span class="o">+</span><span class="mi">1</span><span class="err">”</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><span class="n">route</span><span class="w"> </span><span class="p">[</span><span class="n">gauge_method</span><span class="p">]{</span><span class="w"></span>
+<span class="w">        </span><span class="n">statsd_gauge</span><span class="p">(</span><span class="s">&quot;method.count&quot;</span><span class="o">+</span><span class="n">$rm</span><span class="p">,</span><span class="w"> </span><span class="err">“</span><span class="mi">1</span><span class="err">”</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">$avp</span><span class="p">(</span><span class="n">s</span><span class="o">:</span><span class="n">prepaid</span><span class="p">))</span><span class="w"> </span><span class="n">statsd_gauge</span><span class="p">(</span><span class="s">&quot;customer.prepaid&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">“</span><span class="o">+</span><span class="mi">1</span><span class="err">”</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </blockquote>
 <p><strong>Timing</strong>: You can use timing options in any function, or specific route, with code like this:</p>
 <blockquote>
-<div class="highlight"><pre><span></span><span class="n">route</span> <span class="p">[</span><span class="n">long_mysql_query</span><span class="p">]{</span>
-        <span class="n">statsd_start</span><span class="p">(</span><span class="s">&quot;long_mysql_query&quot;</span><span class="p">);</span>
-        <span class="n">sql_query</span><span class="p">(</span><span class="s">&quot;ca&quot;</span><span class="p">,</span> <span class="s">&quot;select sleep(rand()/4)&quot;</span><span class="p">,</span> <span class="s">&quot;ra&quot;</span><span class="p">);</span>
-        <span class="n">statsd_stop</span><span class="p">(</span><span class="s">&quot;long_mysql_query&quot;</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><span class="n">route</span><span class="w"> </span><span class="p">[</span><span class="n">long_mysql_query</span><span class="p">]{</span><span class="w"></span>
+<span class="w">        </span><span class="n">statsd_start</span><span class="p">(</span><span class="s">&quot;long_mysql_query&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">sql_query</span><span class="p">(</span><span class="s">&quot;ca&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;select sleep(rand()/4)&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ra&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">statsd_stop</span><span class="p">(</span><span class="s">&quot;long_mysql_query&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </blockquote>
 <p>Timers (statsd_start, statsd_stop) are an incredibly powerful tool for tracking application performance.</p>
 <p><strong>Counters</strong>:  You can use statsd_incr or statsd_decr for increment/decrement a counter. For example I used a lot the counter with GeoIP module or log any specific feature in the platform (Prepaid user, new features launch).</p>
 <blockquote>
-<div class="highlight"><pre><span></span><span class="n">route</span><span class="p">[</span><span class="n">country</span><span class="p">]{</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">geoip_match</span><span class="p">(</span><span class="s">&quot;$si&quot;</span><span class="p">,</span> <span class="s">&quot;src&quot;</span><span class="p">)){</span>
-           <span class="n">statsd_incr</span><span class="p">(</span><span class="s">&quot;country.&quot;</span><span class="o">+</span><span class="err">$</span><span class="p">(</span><span class="n">gip</span><span class="p">(</span><span class="n">src</span><span class="o">=&gt;</span><span class="n">cc</span><span class="p">)));</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><span class="n">route</span><span class="p">[</span><span class="n">country</span><span class="p">]{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">geoip_match</span><span class="p">(</span><span class="s">&quot;$si&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;src&quot;</span><span class="p">)){</span><span class="w"></span>
+<span class="w">           </span><span class="n">statsd_incr</span><span class="p">(</span><span class="s">&quot;country.&quot;</span><span class="o">+</span><span class="n">$</span><span class="p">(</span><span class="n">gip</span><span class="p">(</span><span class="n">src</span><span class="o">=&gt;</span><span class="n">cc</span><span class="p">)));</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </blockquote>
 <p>You can also check how many failure are coming from your providers, gateways, etc.</p>

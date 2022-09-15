@@ -361,7 +361,7 @@ echoerr<span class="o">()</span> <span class="o">{</span> <span class="nb">echo<
 <span class="o">}</span>
 
 <span class="k">function</span> toggle<span class="o">()</span> <span class="o">{</span>
-  <span class="nv">IFS</span><span class="o">=</span><span class="s1">$&#39;\n&#39;</span><span class="p">;</span> <span class="k">for</span> line in <span class="k">$(</span>get_local_interfaces<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+  <span class="nv">IFS</span><span class="o">=</span><span class="s1">$&#39;\n&#39;</span><span class="p">;</span> <span class="k">for</span> line <span class="k">in</span> <span class="k">$(</span>get_local_interfaces<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
     <span class="nb">local</span> <span class="nv">interface</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> -n <span class="nv">$line</span> <span class="p">|</span> awk <span class="s1">&#39;{print $1}&#39;</span><span class="k">)</span>
     toggle_interface <span class="nv">$interface</span>
   <span class="k">done</span>
@@ -369,7 +369,7 @@ echoerr<span class="o">()</span> <span class="o">{</span> <span class="nb">echo<
 
 <span class="k">function</span> list<span class="o">()</span> <span class="o">{</span>
   <span class="nb">local</span> <span class="nv">RESULT</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
-  <span class="nv">IFS</span><span class="o">=</span><span class="s1">$&#39;\n&#39;</span><span class="p">;</span> <span class="k">for</span> line in <span class="k">$(</span>get_local_interfaces<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+  <span class="nv">IFS</span><span class="o">=</span><span class="s1">$&#39;\n&#39;</span><span class="p">;</span> <span class="k">for</span> line <span class="k">in</span> <span class="k">$(</span>get_local_interfaces<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
     <span class="nb">local</span> <span class="nv">interface</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> -n <span class="nv">$line</span> <span class="p">|</span> awk <span class="s1">&#39;{print $1}&#39;</span><span class="k">)</span>
     <span class="nv">DEFAULT_MODE</span><span class="o">=</span><span class="s2">&quot;DSL&quot;</span>
     <span class="k">if</span> is_interface_on_4g <span class="nv">$interface</span><span class="p">;</span> <span class="k">then</span>

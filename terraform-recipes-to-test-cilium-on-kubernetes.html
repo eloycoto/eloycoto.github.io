@@ -207,7 +207,7 @@ that, you need to follow the process described in the Readme.</p>
 </div><p>As soon that you login into the master node, you can see a few cilium daemon set
 pods working. If you want to know the cilium status you can run the following
 command:</p>
-<div class="highlight"><pre><span></span><span class="k">for</span> cilium in <span class="k">$(</span>kubectl -n kube-system get pods --selector<span class="o">=</span>k8s-app<span class="o">=</span>cilium --output<span class="o">=</span><span class="nv">jsonpath</span><span class="o">={</span>.items..metadata.name<span class="o">}</span><span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+<div class="highlight"><pre><span></span><span class="k">for</span> cilium <span class="k">in</span> <span class="k">$(</span>kubectl -n kube-system get pods --selector<span class="o">=</span>k8s-app<span class="o">=</span>cilium --output<span class="o">=</span><span class="nv">jsonpath</span><span class="o">={</span>.items..metadata.name<span class="o">}</span><span class="k">)</span><span class="p">;</span> <span class="k">do</span>
         <span class="nb">echo</span> <span class="s2">&quot;===============</span><span class="si">${</span><span class="nv">cilium</span><span class="si">}</span><span class="s2">===============&quot;</span>
         kubectl -n kube-system <span class="nb">exec</span> <span class="nv">$cilium</span> cilium status
         <span class="k">return</span>
@@ -238,7 +238,7 @@ encapsulates Layer 2 frames within layer 4 UDP packets; Cilium also supports
 Geneve (If you want to deep more, you can read <a class="reference external" href="https://blog.russellbryant.net/2017/05/30/ovn-geneve-vs-vxlan-does-it-matter/">this post</a>
 by Russel Bryant).  To know the list of tunnels (The list of k8s nodes) that
 cilium is using, you can use the following command:</p>
-<div class="highlight"><pre><span></span><span class="k">for</span> cilium in <span class="k">$(</span>kubectl -n kube-system get pods --selector<span class="o">=</span>k8s-app<span class="o">=</span>cilium --output<span class="o">=</span><span class="nv">jsonpath</span><span class="o">={</span>.items..metadata.name<span class="o">}</span><span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+<div class="highlight"><pre><span></span><span class="k">for</span> cilium <span class="k">in</span> <span class="k">$(</span>kubectl -n kube-system get pods --selector<span class="o">=</span>k8s-app<span class="o">=</span>cilium --output<span class="o">=</span><span class="nv">jsonpath</span><span class="o">={</span>.items..metadata.name<span class="o">}</span><span class="k">)</span><span class="p">;</span> <span class="k">do</span>
         <span class="nb">echo</span> <span class="s2">&quot;===============</span><span class="si">${</span><span class="nv">cilium</span><span class="si">}</span><span class="s2">===============&quot;</span>
         kubectl -n kube-system <span class="nb">exec</span> <span class="nv">$cilium</span> cilium bpf tunnel list
         <span class="k">return</span>
@@ -262,7 +262,7 @@ f00d::ac10:2:0:0     <span class="m">172</span>.16.0.2
 balance the traffic, the list of the Load Balancers can be checked using the
 command <cite>cilium service list</cite> on any cilium-agent pod, the sample command is
 the following:</p>
-<div class="highlight"><pre><span></span><span class="k">for</span> cilium in <span class="k">$(</span>kubectl -n kube-system get pods --selector<span class="o">=</span>k8s-app<span class="o">=</span>cilium --output<span class="o">=</span><span class="nv">jsonpath</span><span class="o">={</span>.items..metadata.name<span class="o">}</span><span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+<div class="highlight"><pre><span></span><span class="k">for</span> cilium <span class="k">in</span> <span class="k">$(</span>kubectl -n kube-system get pods --selector<span class="o">=</span>k8s-app<span class="o">=</span>cilium --output<span class="o">=</span><span class="nv">jsonpath</span><span class="o">={</span>.items..metadata.name<span class="o">}</span><span class="k">)</span><span class="p">;</span> <span class="k">do</span>
         <span class="nb">echo</span> <span class="s2">&quot;===============</span><span class="si">${</span><span class="nv">cilium</span><span class="si">}</span><span class="s2">===============&quot;</span>
         kubectl -n kube-system <span class="nb">exec</span> <span class="nv">$cilium</span> cilium service list
         <span class="k">return</span>
