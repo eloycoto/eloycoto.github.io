@@ -1,160 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-<head>
-    <meta charset="utf-8">
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title> How kamailio can be monitored with SIPCapture and other software</title>
+    <link rel="canonical" href="https://acalustra.com/how-can-i-monitor-my-voip-application.html" />
+    <meta name="keywords" content=" kamailio monitoring, kamailio statsd, SIPCapture, Packetbeat"/>
+    <meta name="description" content=" Kamailio can be monitored with different tools, in this post we're going to explain why tool platform needs. "/>
 
-
-  <title>How can I monitor my Voip Application?</title>
-
-
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="referrer" content="origin" />
-  <meta name="generator" content="Pelican" />
-  <link href="https://acalustra.com/" rel="canonical" />
-
-  <!-- Feed -->
-        <link href="https://acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A Calustra Full Atom Feed" />
-
-  <link href="https://acalustra.com/theme/css/style.css" type="text/css" rel="stylesheet" />
-
-  <!-- Code highlight color scheme -->
-      <link href="https://acalustra.com/theme/css/code_blocks/monokai.css" rel="stylesheet">
-
-    <!-- CSS specified by the user -->
-
-
-    <link href="https://acalustra.com/theme/css/eloy.css" type="text/css" rel="stylesheet" />
-
-  <!-- Custom fonts -->
-  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,300' rel='stylesheet' type='text/css' />
-  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css" />
-
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-  <![endif]-->
-
-
-  <link href="https://acalustra.com/how-can-i-monitor-my-voip-application.html" rel="canonical" />
-  <meta name="keywords" content="kamailio monitoring, kamailio statsd, SIPCapture, Packetbeat" >
-
-    <meta name="description" content="In the last Kamailio World two of the hot topics were Packetbeat and SIPCapture. Both projects announced good news meanwhile the...">
-
-    <meta name="author" content="eloycoto">
-
-    <meta name="tags" content="kamailio">
-    <meta name="tags" content="sip">
-    <meta name="tags" content="SIPCapture">
-    <meta name="tags" content="Packetbeat">
-    <meta name="tags" content="statsd">
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A Calustra Full Atom Feed" />
 
 
 
 
-<!-- Open Graph -->
-<meta property="og:site_name" content="A Calustra"/>
-<meta property="og:title" content="How can I monitor my Voip Application?"/>
-<meta property="og:description" content="In the last Kamailio World two of the hot topics were Packetbeat and SIPCapture. Both projects announced good news meanwhile the..."/>
-<meta property="og:locale" content="en_US"/>
-<meta property="og:url" content="https://acalustra.com/how-can-i-monitor-my-voip-application.html"/>
-<meta property="og:type" content="article"/>
-<meta property="article:published_time" content="2015-07-24 16:00:00+02:00"/>
-<meta property="article:modified_time" content=""/>
-<meta property="article:author" content="https://acalustra.com/author/eloycoto.html">
-<meta property="article:section" content="blog"/>
-<meta property="article:tag" content="kamailio"/>
-<meta property="article:tag" content="sip"/>
-<meta property="article:tag" content="SIPCapture"/>
-<meta property="article:tag" content="Packetbeat"/>
-<meta property="article:tag" content="statsd"/>
-<meta property="og:image" content="https://acalustra.com/img/oia.jpg">
 
-<!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@eloycoto">
-    <meta name="twitter:title" content="How can I monitor my Voip Application?">
-    <meta name="twitter:url" content="https://acalustra.com/how-can-i-monitor-my-voip-application.html">
 
-        <meta name="twitter:image:src" content="https://acalustra.com/img/oia.jpg">
 
-      <meta name="twitter:description" content="In the last Kamailio World two of the hot topics were Packetbeat and SIPCapture. Both projects announced good news meanwhile the...">
+    <meta name="tags" content="kamailio, graphite, influxdb, siphormer, beats" />
+    <meta name="date" content=" 2015-07-24 16:00:00+02:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
 
-<script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "Article",
-  "name": "How can I monitor my Voip Application?",
-  "headline": "How can I monitor my Voip Application?",
-  "datePublished": "2015-07-24 16:00:00+02:00",
-  "dateModified": "",
-  "author": {
-    "@type": "Person",
-    "name": "eloycoto",
-    "url": "https://acalustra.com/author/eloycoto.html"
-  },
-  "image": "https://acalustra.com/img/oia.jpg",
-  "url": "https://acalustra.com/how-can-i-monitor-my-voip-application.html",
-  "description": "In the last Kamailio World two of the hot topics were Packetbeat and SIPCapture. Both projects announced good news meanwhile the..."
-}
-</script>
-</head>
-<!-- TODO : Body class -->
-<body class="home-template">
-
-<nav id="menu">
-  <a class="close-button">Close</a>
-  <div class="nav-wrapper">
-    <p class="nav-label">Menu</p>
-    <ul>
-
-              <li role="presentation"><a href="https://acalustra.com/pages/about.html">About</a></li>
-
-    </ul>
-  </div>
-</nav>
-    <!-- Progressbar -->
-    <div class="progress-container">
-        <span class="progress-bar"></span>
-    </div>
-
-    <!-- Page Header -->
-    <!-- Set your background image for this header on the line below. -->
-    <header id="post-header" class="has-cover">
-      <div class="inner">
-        <nav id="navigation">
-            <span id="home-button" class="nav-button">
-                <a class="home-button" href="https://acalustra.com/" title="Home"><i class="ic ic-arrow-left"></i> Home</a>
-            </span>
-          <span id="menu-button" class="nav-button">
-            <a class="menu-button"><i class="ic ic-menu"></i> Menu</a>
-          </span>
-        </nav>
-        <h1 class="post-title">How can I monitor my Voip Application?</h1>
-        <!-- TODO : Proper class for headline -->
-        <span class="post-meta">
-                <a href="https://acalustra.com/author/eloycoto.html">Eloy Coto</a>
-            | <time datetime="Friday 24-07-2015">Friday 24-07-2015</time>
-        </span>
-        <!-- TODO : Modified check -->
-            <div class="post-cover cover" style="background-image: url('https://acalustra.com/img/oia.jpg')">
-      </div>
+    <header>
+      <b> A Calustra - Eloy Coto Pereiro </b>
+      <a href="/">Home</a>
+      <!-- <a href="/blog">Blog</a> -->
+      <a href="/pages/about.html">About</a>
     </header>
 
-  <section id="wrapper">
-    <a class="hidden-close"></a>
+<article>
+  <h1 itemprop="name headline">Kamailio monitoring with statsd, SIPCapture or Packetbeat</h1>
+  <p>
+    <b rel="author">Eloy Coto Pereiro </b>
+    on
+    <time datetime="2015-07-24T16:00:00" itemprop="datePublished">July 24th, 2015</time>
+  </p>
 
-    <!-- Post content -->
-    <main class="content" role="main">
-        <article class="post">
-        <div class="inner">
-            <section class="post-content">
-                <p>In the last <a class="reference external" href="https://acalustra.com/kamialio-world-2015.html">Kamailio World</a> two of the
+
+  <div itemprop="articleBody">
+    <p>In the last <a class="reference external" href="https://acalustra.com/kamialio-world-2015.html">Kamailio World</a> two of the
 hot topics were <a class="reference external" href="https://www.elastic.co/products/beats">Packetbeat</a> and
 <a class="reference external" href="http://SIPCapture.org/">SIPCapture</a>.  Both projects announced good news
 meanwhile the conference, people got excited about it.</p>
@@ -230,100 +122,34 @@ SIPCapture is the swiss-knife for support teams. Packetbeat is an amazing tool
 for all the operations teams and statsd is good for operations team and
 marketing/business team to make decisions based on the current metrics.</p>
 
-            </section>
 
-            <section class="post-info">
-                <div class="post-share">
-                    <a class="twitter" href="https://twitter.com/share?text=How can I monitor my Voip Application?&amp;url=https://acalustra.com/how-can-i-monitor-my-voip-application.html" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <i class="ic ic-twitter"></i><span class="hidden">Twitter</span>
-                    </a>
-                    <a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://acalustra.com/how-can-i-monitor-my-voip-application.html" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <i class="ic ic-facebook"></i><span class="hidden">Facebook</span>
-                    </a>
-                    <a class="googleplus" href="https://plus.google.com/share?url=https://acalustra.com/how-can-i-monitor-my-voip-application.html" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <i class="ic ic-googleplus"></i><span class="hidden">Google+</span>
-                    </a>
-                    <div class="clear"></div>
-                </div>
+    <h3>Tags</h3>
+    <div class="taglist">
+        <span class="tag">
+          <a href="/tag/kamailio.html" rel="tag">kamailio</a>
+        </span>
+        <span class="tag">
+          <a href="/tag/packetbeat.html" rel="tag">Packetbeat</a>
+        </span>
+        <span class="tag">
+          <a href="/tag/sip.html" rel="tag">sip</a>
+        </span>
+        <span class="tag">
+          <a href="/tag/sipcapture.html" rel="tag">SIPCapture</a>
+        </span>
+        <span class="tag">
+          <a href="/tag/statsd.html" rel="tag">statsd</a>
+        </span>
+    </div><!--tags-->
 
-                <aside class="post-tags">
-<a href="https://acalustra.com/tag/kamailio.html">kamailio</a><a href="https://acalustra.com/tag/sip.html">sip</a><a href="https://acalustra.com/tag/sipcapture.html">SIPCapture</a><a href="https://acalustra.com/tag/packetbeat.html">Packetbeat</a><a href="https://acalustra.com/tag/statsd.html">statsd</a>                </aside>
+    <h4>Related articles:</h4>
+      <ul>
+          <li><a href="/voip-talk-at-librecon-2015.html">Voip talk at Librecon 2015</a></li>
+          <li><a href="/kamailio-statsd-explained.html">Kamailio statsd explained</a></li>
+          <li><a href="/kamailio-statsd-better-statistics-in-your-voip-platform.html">Kamailio statsd, better statistics in your voip platform.</a></li>
+          <li><a href="/politicas-de-seguridad-en-kamailio.html">Politicas de seguridad en Kamailio</a></li>
+          <li><a href="/fosdem-2017-review.html">Fosdem 2017 review</a></li>
+      </ul>
 
-                <div class="clear"></div>
-
-                <aside class="post-author">
-
-
-                        <figure class="post-author-avatar">
-                            <img src="https://acalustra.com/img/profile.jpg" alt="Eloy Coto" />
-                        </figure>
-                    <div class="post-author-bio">
-                        <h4 class="post-author-name"><a href="https://acalustra.com/author/eloycoto.html">Eloy Coto</a></h4>
-                            <p class="post-author-about">Senior software engineer with experience in Golang, C and Python and CI/CD</p>
-                            <span class="post-author-location"><i class="ic ic-location"></i> Galicia</span>
-                            <span class="post-author-website"><a href="http://acalustra.com"><i class="ic ic-link"></i> Website</a></span>
-                        <!-- Social linkes in alphabet order. -->
-                            <span class="post-author-github"><a target="_blank" href="https://github.com/eloycoto"><i class="ic ic-link"></i> GitHub</a></span>
-                            <span class="post-author-linkedin"><a target="_blank" href="https://www.linkedin.com/in/eloycoto"><i class="ic ic-link"></i> LinkedIn</a></span>
-                            <span class="post-author-twitter"><a target="_blank" href="https://twitter.com/eloycoto"><i class="ic ic-twitter"></i> Twitter</a></span>
-                    </div>
-                    <div class="clear"></div>
-                </aside>
-
-                </section>
-
-                <script type="text/javascript">
-                    var disqus = 'acalustra';
-                    var disqus_shortname = 'acalustra';
-                    var disqus_identifier = '/how-can-i-monitor-my-voip-application.html';
-                    var disqus_url = 'https://acalustra.com/how-can-i-monitor-my-voip-application.html';
-                </script>
-                <noscript>Please enable JavaScript to view the comments.</noscript>
-                <section class="post-comments">
-                        <a id="show-disqus" class="post-comments-activate" data-disqus-identifier="/how-can-i-monitor-my-voip-application.html" >Show Comments</a>
-                    <div id="disqus_thread"></div>
-                </section>
-
-                <aside class="post-nav">
-                    <div class="clear"></div>
-                </aside>
-
-            </div>
-        </article>
-    </main>
-      <!-- TODO : Body class -->
-    <div id="body-class" style="display: none;" class=""></div>
-
-    <footer id="footer">
-      <div class="inner">
-        <section class="credits">
-
-
-          <span class="credits-theme">Theme <a href="https://github.com/arulrajnet/attila" rel="nofollow">Attila</a></span>
-          <span class="credits-software">Published with <a href="https://github.com/getpelican/pelican" rel="nofollow">Pelican</a></span>
-        </section>
-      </div>
-    </footer>
-  </section>
-
-  <script type="text/javascript" src="https://acalustra.com/theme/js/script.js"></script>
-
-    <!-- Global Site Tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-36310774-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-36310774-1', { 'anonymize_ip': true });
-    </script>
-<script type="text/javascript">
-    var disqus_shortname = 'acalustra';
-    (function () {
-        var s = document.createElement('script'); s.async = true;
-        s.type = 'text/javascript';
-        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-    }());
-</script>
-</body>
-</html>
+  </div>
+</article></body>
