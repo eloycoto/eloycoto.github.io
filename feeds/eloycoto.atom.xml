@@ -1,5 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>A Calustra - eloycoto</title><link href="https://acalustra.com/" rel="alternate"></link><link href="https://acalustra.com/feeds/eloycoto.atom.xml" rel="self"></link><id>https://acalustra.com/</id><updated>2022-11-17T21:00:00+01:00</updated><entry><title>What I wish my Telecom operator offer me</title><link href="https://acalustra.com/what-i-wish-my-telecom-operator-offer-me.html" rel="alternate"></link><published>2022-11-17T21:00:00+01:00</published><updated>2022-11-17T21:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2022-11-17:/what-i-wish-my-telecom-operator-offer-me.html</id><summary type="html">&lt;p&gt;Last week I was on a call with my internet provider, and surprisingly the agent
+<feed xmlns="http://www.w3.org/2005/Atom"><title>A Calustra - eloycoto</title><link href="https://acalustra.com/" rel="alternate"></link><link href="https://acalustra.com/feeds/eloycoto.atom.xml" rel="self"></link><id>https://acalustra.com/</id><updated>2022-11-20T21:00:00+01:00</updated><entry><title>Make your Golang project more secure with a few simple tools</title><link href="https://acalustra.com/make-your-golang-project-more-secure-with-a-few-simple-tools.html" rel="alternate"></link><published>2022-11-20T21:00:00+01:00</published><updated>2022-11-20T21:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2022-11-20:/make-your-golang-project-more-secure-with-a-few-simple-tools.html</id><summary type="html">&lt;p&gt;Over the last few years, I have been jumping between multiple Golang projects
+within different teams. These are a few tools that are not well-known by many
+developers but make your code a bit more secure.&lt;/p&gt;
+&lt;p&gt;These static check tools fit nicely on your CI pipelines. Other tools validate
+what …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Over the last few years, I have been jumping between multiple Golang projects
+within different teams. These are a few tools that are not well-known by many
+developers but make your code a bit more secure.&lt;/p&gt;
+&lt;p&gt;These static check tools fit nicely on your CI pipelines. Other tools validate
+what your code is doing on runtime (&lt;a class="reference external" href="https://github.com/cilium/tetragon"&gt;Tetragon&lt;/a&gt;), and some validate that your
+dependencies are what it is supposed to be (&lt;a class="reference external" href="https://www.sigstore.dev/"&gt;SigStore&lt;/a&gt;).&lt;/p&gt;
+&lt;div class="section" id="gosec"&gt;
+&lt;h2&gt;Gosec:&lt;/h2&gt;
+&lt;p&gt;It's a community-driven tool that does static code analysis based on Golang
+AST. It prevents your application from common attacks and controls SQL
+injection, decompression attacks, Insecuring connections, ENV attacks and a few
+others.&lt;/p&gt;
+&lt;p&gt;You can use it manually like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;docker run --rm -w /opt/data/ &lt;span class="se"&gt;\&lt;/span&gt;
+  -v &lt;span class="k"&gt;$(&lt;/span&gt;PWD&lt;span class="k"&gt;)&lt;/span&gt;:/opt/data/:z &lt;span class="se"&gt;\&lt;/span&gt;
+  docker.io/securego/gosec &lt;span class="se"&gt;\&lt;/span&gt;
+  -exclude-generated /opt/data/...
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Or using it on GitHub Actions:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nn"&gt;---&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Security&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="nt"&gt;on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;push&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;branches&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p p-Indicator"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;main&lt;/span&gt;&lt;span class="p p-Indicator"&gt;]&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;pull_request&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;branches&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p p-Indicator"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;main&lt;/span&gt;&lt;span class="p p-Indicator"&gt;]&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+
+&lt;span class="nt"&gt;jobs&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;Security-Scanner&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Security Scanner&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;runs-on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;ubuntu-latest&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;steps&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Check out code&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;actions/checkout@v2&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Run Gosec Security Scanner&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;securego/gosec@master&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;env&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;          &lt;/span&gt;&lt;span class="nt"&gt;GOFLAGS&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;-buildvcs=false&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;with&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;          &lt;/span&gt;&lt;span class="nt"&gt;args&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;-exclude-generated&lt;/span&gt;&lt;span class="nv"&gt; &lt;/span&gt;&lt;span class="s"&gt;./...&amp;#39;&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="semgrep"&gt;
+&lt;h2&gt;Semgrep:&lt;/h2&gt;
+&lt;p&gt;Semgrep is a broader tool and supports multiple programming languages. It has a
+lot of rules that are community driven and free, and it also has some extended
+rules that are only available by paying a subscription.&lt;/p&gt;
+&lt;p&gt;You can use it manually like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ docker run --rm -v &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nb"&gt;pwd&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;:/src&amp;quot;&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
+    -v &lt;span class="s2"&gt;&amp;quot;/tmp/semgrep-go:/rules/&amp;quot;&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
+    returntocorp/semgrep &lt;span class="se"&gt;\&lt;/span&gt;
+    semgrep -f /rules/ /src/
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="vuln"&gt;
+&lt;h2&gt;Vuln:&lt;/h2&gt;
+&lt;p&gt;In Golang projects, it is usual to commit the vendor packages inside the
+application repository. This behaviour can add some issues if one dependency
+has a CVE that the infra team may be unaware of.&lt;/p&gt;
+&lt;p&gt;Vuln is a community-driven tool that checks the dependencies that are part of
+the go.mod and validates that there is no CVE in the current dependency
+version; if it's any, it'll inform about the dependency.&lt;/p&gt;
+&lt;p&gt;From my perspective, this tool should run daily in our CI with a clear path to
+fixing it.&lt;/p&gt;
+&lt;p&gt;You can use it manually like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;govulncheck ./...
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Or using it on GitHub Actions:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;My Workflow&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="nt"&gt;on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p p-Indicator"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;push&lt;/span&gt;&lt;span class="p p-Indicator"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;pull_request&lt;/span&gt;&lt;span class="p p-Indicator"&gt;]&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="nt"&gt;jobs&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;build&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;runs-on&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;ubuntu-latest&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;steps&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;actions/checkout@v3&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Running govulncheck&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;uses&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;Templum/govulncheck-action@&amp;lt;version&amp;gt;&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="nt"&gt;with&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;          &lt;/span&gt;&lt;span class="nt"&gt;go-version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;1.18&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;          &lt;/span&gt;&lt;span class="nt"&gt;vulncheck-version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;latest&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;          &lt;/span&gt;&lt;span class="nt"&gt;package&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;./...&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;          &lt;/span&gt;&lt;span class="nt"&gt;github-token&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;${{ secrets.GITHUB_TOKEN }}&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;These are the tools that I would always add to my CI; they are free and can
+save your organization from any stupid risk.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="blog"></category><category term="golang"></category><category term="programming"></category><category term="security"></category></entry><entry><title>What I wish my Telecom operator offer me</title><link href="https://acalustra.com/what-i-wish-my-telecom-operator-offer-me.html" rel="alternate"></link><published>2022-11-17T21:00:00+01:00</published><updated>2022-11-17T21:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2022-11-17:/what-i-wish-my-telecom-operator-offer-me.html</id><summary type="html">&lt;p&gt;Last week I was on a call with my internet provider, and surprisingly the agent
 started to offer me a revolutionary product, &amp;quot;health insurance&amp;quot;, yes it was my
 telecom provider.&lt;/p&gt;
 &lt;p&gt;I understand why this happens; company boards want to diversify the cash flow

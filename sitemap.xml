@@ -5,28 +5,28 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://acalustra.com/</loc>
-<lastmod>2022-11-17T17:40:52-00:00</lastmod>
+<lastmod>2022-11-20T22:21:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://acalustra.com/archives.html</loc>
-<lastmod>2022-11-17T17:40:52-00:00</lastmod>
+<lastmod>2022-11-20T22:21:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://acalustra.com/tags.html</loc>
-<lastmod>2022-11-17T17:40:52-00:00</lastmod>
+<lastmod>2022-11-20T22:21:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://acalustra.com/categories.html</loc>
-<lastmod>2022-11-17T17:40:52-00:00</lastmod>
+<lastmod>2022-11-20T22:21:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -34,6 +34,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://acalustra.com/pages/about.html</loc>
 <lastmod>2018-07-02T20:00:00+02:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://acalustra.com/make-your-golang-project-more-secure-with-a-few-simple-tools.html</loc>
+<lastmod>2022-11-20T21:00:00+01:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -397,7 +404,28 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://acalustra.com/category/blog.html</loc>
-<lastmod>2022-11-17T21:00:00-00:15</lastmod>
+<lastmod>2022-11-20T21:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://acalustra.com/tag/golang.html</loc>
+<lastmod>2022-11-20T21:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://acalustra.com/tag/programming.html</loc>
+<lastmod>2022-11-20T21:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://acalustra.com/tag/security.html</loc>
+<lastmod>2022-11-20T21:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -516,13 +544,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://acalustra.com/tag/network-policies.html</loc>
-<lastmod>2019-10-15T16:00:00-00:15</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>https://acalustra.com/tag/security.html</loc>
 <lastmod>2019-10-15T16:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
@@ -1202,7 +1223,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://acalustra.com/author/eloycoto.html</loc>
-<lastmod>2022-11-17T21:00:00-00:15</lastmod>
+<lastmod>2022-11-20T21:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>

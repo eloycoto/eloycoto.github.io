@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0"><channel><title>A Calustra - eloycoto</title><link>https://acalustra.com/</link><description></description><lastBuildDate>Thu, 17 Nov 2022 21:00:00 +0100</lastBuildDate><item><title>What I wish my Telecom operator offer me</title><link>https://acalustra.com/what-i-wish-my-telecom-operator-offer-me.html</link><description>&lt;p&gt;Last week I was on a call with my internet provider, and surprisingly the agent
+<rss version="2.0"><channel><title>A Calustra - eloycoto</title><link>https://acalustra.com/</link><description></description><lastBuildDate>Sun, 20 Nov 2022 21:00:00 +0100</lastBuildDate><item><title>Make your Golang project more secure with a few simple tools</title><link>https://acalustra.com/make-your-golang-project-more-secure-with-a-few-simple-tools.html</link><description>&lt;p&gt;Over the last few years, I have been jumping between multiple Golang projects
+within different teams. These are a few tools that are not well-known by many
+developers but make your code a bit more secure.&lt;/p&gt;
+&lt;p&gt;These static check tools fit nicely on your CI pipelines. Other tools validate
+what …&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">eloycoto</dc:creator><pubDate>Sun, 20 Nov 2022 21:00:00 +0100</pubDate><guid isPermaLink="false">tag:acalustra.com,2022-11-20:/make-your-golang-project-more-secure-with-a-few-simple-tools.html</guid><category>blog</category><category>golang</category><category>programming</category><category>security</category></item><item><title>What I wish my Telecom operator offer me</title><link>https://acalustra.com/what-i-wish-my-telecom-operator-offer-me.html</link><description>&lt;p&gt;Last week I was on a call with my internet provider, and surprisingly the agent
 started to offer me a revolutionary product, &amp;quot;health insurance&amp;quot;, yes it was my
 telecom provider.&lt;/p&gt;
 &lt;p&gt;I understand why this happens; company boards want to diversify the cash flow

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title> Make your Golang project more secure with a few simple tools</title>
+    <link rel="canonical" href="https://acalustra.com/make-your-golang-project-more-secure-with-a-few-simple-tools.html" />
+    <meta name="keywords" content=" golang, security, programming"/>
+    <meta name="description" content=" A small guide how to run a few simple tools in your Golang CI to make it more secure "/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://acalustra.com/rss.xml" type="application/atom+xml" rel="alternate" title="A Calustra Full Atom Feed" />
+
+
+
+
+
+
+
+    <meta name="tags" content="golang, programming" />
+    <meta name="date" content=" 2022-11-20 21:00:00+01:00" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+
+    <header>
+      <b> A Calustra - Eloy Coto Pereiro </b>
+      <a href="/">Home</a>
+      <!-- <a href="/blog">Blog</a> -->
+      <a href="/pages/about.html">About</a>
+    </header>
+
+<article>
+  <h1 itemprop="name headline">Make your Golang project more secure with a few simple tools</h1>
+  <p>
+    <b rel="author">Eloy Coto Pereiro </b>
+    on
+    <time datetime="2022-11-20T21:00:00" itemprop="datePublished">November 20th, 2022</time>
+  </p>
+
+
+  <div itemprop="articleBody">
+    <p>Over the last few years, I have been jumping between multiple Golang projects
+within different teams. These are a few tools that are not well-known by many
+developers but make your code a bit more secure.</p>
+<p>These static check tools fit nicely on your CI pipelines. Other tools validate
+what your code is doing on runtime (<a class="reference external" href="https://github.com/cilium/tetragon">Tetragon</a>), and some validate that your
+dependencies are what it is supposed to be (<a class="reference external" href="https://www.sigstore.dev/">SigStore</a>).</p>
+<div class="section" id="gosec">
+<h2>Gosec:</h2>
+<p>It's a community-driven tool that does static code analysis based on Golang
+AST. It prevents your application from common attacks and controls SQL
+injection, decompression attacks, Insecuring connections, ENV attacks and a few
+others.</p>
+<p>You can use it manually like this:</p>
+<div class="highlight"><pre><span></span>docker run --rm -w /opt/data/ <span class="se">\</span>
+  -v <span class="k">$(</span>PWD<span class="k">)</span>:/opt/data/:z <span class="se">\</span>
+  docker.io/securego/gosec <span class="se">\</span>
+  -exclude-generated /opt/data/...
+</pre></div>
+<p>Or using it on GitHub Actions:</p>
+<div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Security</span><span class="w"></span>
+<span class="nt">on</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span><span class="w"></span>
+
+<span class="nt">jobs</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">Security-Scanner</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Security Scanner</span><span class="w"></span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span><span class="w"></span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check out code</span><span class="w"></span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v2</span><span class="w"></span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Gosec Security Scanner</span><span class="w"></span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">securego/gosec@master</span><span class="w"></span>
+<span class="w">        </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">GOFLAGS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-buildvcs=false</span><span class="w"></span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;-exclude-generated</span><span class="nv"> </span><span class="s">./...&#39;</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="section" id="semgrep">
+<h2>Semgrep:</h2>
+<p>Semgrep is a broader tool and supports multiple programming languages. It has a
+lot of rules that are community driven and free, and it also has some extended
+rules that are only available by paying a subscription.</p>
+<p>You can use it manually like this:</p>
+<div class="highlight"><pre><span></span>$ docker run --rm -v <span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">:/src&quot;</span> <span class="se">\</span>
+    -v <span class="s2">&quot;/tmp/semgrep-go:/rules/&quot;</span> <span class="se">\</span>
+    returntocorp/semgrep <span class="se">\</span>
+    semgrep -f /rules/ /src/
+</pre></div>
+</div>
+<div class="section" id="vuln">
+<h2>Vuln:</h2>
+<p>In Golang projects, it is usual to commit the vendor packages inside the
+application repository. This behaviour can add some issues if one dependency
+has a CVE that the infra team may be unaware of.</p>
+<p>Vuln is a community-driven tool that checks the dependencies that are part of
+the go.mod and validates that there is no CVE in the current dependency
+version; if it's any, it'll inform about the dependency.</p>
+<p>From my perspective, this tool should run daily in our CI with a clear path to
+fixing it.</p>
+<p>You can use it manually like this:</p>
+<div class="highlight"><pre><span></span>govulncheck ./...
+</pre></div>
+<p>Or using it on GitHub Actions:</p>
+<div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">My Workflow</span><span class="w"></span>
+<span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">push</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pull_request</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="nt">jobs</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">build</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span><span class="w"></span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Running govulncheck</span><span class="w"></span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Templum/govulncheck-action@&lt;version&gt;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">go-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.18</span><span class="w"></span>
+<span class="w">          </span><span class="nt">vulncheck-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span><span class="w"></span>
+<span class="w">          </span><span class="nt">package</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./...</span><span class="w"></span>
+<span class="w">          </span><span class="nt">github-token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span><span class="w"></span>
+</pre></div>
+<p>These are the tools that I would always add to my CI; they are free and can
+save your organization from any stupid risk.</p>
+</div>
+
+
+    <h3>Tags</h3>
+    <div class="taglist">
+        <span class="tag">
+          <a href="/tag/golang.html" rel="tag">golang</a>
+        </span>
+        <span class="tag">
+          <a href="/tag/programming.html" rel="tag">programming</a>
+        </span>
+        <span class="tag">
+          <a href="/tag/security.html" rel="tag">security</a>
+        </span>
+    </div><!--tags-->
+
+    <h4>Related articles:</h4>
+      <ul>
+          <li><a href="/kubernetes-network-policies-talk-at-atlanticaconf19.html">Kubernetes Network Policies talk at AtlanticaConf19</a></li>
+      </ul>
+
+  </div>
+</article></body>
