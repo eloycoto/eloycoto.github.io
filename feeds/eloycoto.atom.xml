@@ -53,9 +53,8 @@ lot of rules that are community driven and free, and it also has some extended
 rules that are only available by paying a subscription.&lt;/p&gt;
 &lt;p&gt;You can use it manually like this:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ docker run --rm -v &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;&lt;span class="nb"&gt;pwd&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;:/src&amp;quot;&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
-    -v &lt;span class="s2"&gt;&amp;quot;/tmp/semgrep-go:/rules/&amp;quot;&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
     returntocorp/semgrep &lt;span class="se"&gt;\&lt;/span&gt;
-    semgrep -f /rules/ /src/
+    semgrep --config &lt;span class="s2"&gt;&amp;quot;p/golang&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="section" id="vuln"&gt;

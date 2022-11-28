@@ -96,9 +96,8 @@ lot of rules that are community driven and free, and it also has some extended
 rules that are only available by paying a subscription.</p>
 <p>You can use it manually like this:</p>
 <div class="highlight"><pre><span></span>$ docker run --rm -v <span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">:/src&quot;</span> <span class="se">\</span>
-    -v <span class="s2">&quot;/tmp/semgrep-go:/rules/&quot;</span> <span class="se">\</span>
     returntocorp/semgrep <span class="se">\</span>
-    semgrep -f /rules/ /src/
+    semgrep --config <span class="s2">&quot;p/golang&quot;</span>
 </pre></div>
 </div>
 <div class="section" id="vuln">
