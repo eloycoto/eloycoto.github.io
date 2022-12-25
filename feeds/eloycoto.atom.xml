@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>A Calustra - eloycoto</title><link href="https://acalustra.com/" rel="alternate"></link><link href="https://acalustra.com/feeds/eloycoto.atom.xml" rel="self"></link><id>https://acalustra.com/</id><updated>2022-11-20T21:00:00+01:00</updated><entry><title>Make your Golang project more secure with a few simple tools</title><link href="https://acalustra.com/make-your-golang-project-more-secure-with-a-few-simple-tools.html" rel="alternate"></link><published>2022-11-20T21:00:00+01:00</published><updated>2022-11-20T21:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2022-11-20:/make-your-golang-project-more-secure-with-a-few-simple-tools.html</id><summary type="html">&lt;p&gt;Over the last few years, I have been jumping between multiple Golang projects
+<feed xmlns="http://www.w3.org/2005/Atom"><title>A Calustra - eloycoto</title><link href="https://acalustra.com/" rel="alternate"></link><link href="https://acalustra.com/feeds/eloycoto.atom.xml" rel="self"></link><id>https://acalustra.com/</id><updated>2022-12-25T21:00:00+01:00</updated><entry><title>Embedded Rust katas in A Industriosa</title><link href="https://acalustra.com/embedded-rust-katas-in-a-industriosa.html" rel="alternate"></link><published>2022-12-25T21:00:00+01:00</published><updated>2022-12-25T21:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2022-12-25:/embedded-rust-katas-in-a-industriosa.html</id><summary type="html">&lt;p&gt;Embedded Rust is something that it's taken off over the last months. In
+February, we will start a Monthly Kata where all of us work on different
+projects while learning Embedded rust.&lt;/p&gt;
+&lt;p&gt;For these sessions, there is no need to have prior knowledge, and the agenda
+for the katas will …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Embedded Rust is something that it's taken off over the last months. In
+February, we will start a Monthly Kata where all of us work on different
+projects while learning Embedded rust.&lt;/p&gt;
+&lt;p&gt;For these sessions, there is no need to have prior knowledge, and the agenda
+for the katas will be like this:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;9:30  - 10:00 -&amp;gt; Breakfast&lt;/li&gt;
+&lt;li&gt;10:00 - 12:00 -&amp;gt; Pair programming with all of us.&lt;/li&gt;
+&lt;li&gt;12:00 - 13:30 -&amp;gt; Introduction/Presentation to any specific topic (Testing, CI,
+debugging, etc..)&lt;/li&gt;
+&lt;li&gt;13:30 - 14:00 -&amp;gt; Recap and vote for the presentation on the next topic.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We'll have an introduction and dev environment setup on the first kata. Over
+the next katas, I'll be the presenter for the following topics, so with a month
+in advantage; I can prepare the doc/examples, etc. In each Kata, a new topic
+will be raised to discuss. The pair programming sessions are to have enough
+time to share/ask/do things with others.&lt;/p&gt;
+&lt;p&gt;My main goal is that a few have a small project to build. I prefer STM32(ARM)
+or ESP32 (RISC-V) based projects, so the support is good enough. Regarding
+peripherals, we have some in the hackspace, but I highly recommend buying all
+in advance, so it can be easy to do.&lt;/p&gt;
+&lt;p&gt;All the seasons will be on the third Saturday of the month, and I expect some
+people to do more pair-programming seasons in the hackspace.&lt;/p&gt;
+</content><category term="blog"></category><category term="rust"></category><category term="programming"></category></entry><entry><title>Make your Golang project more secure with a few simple tools</title><link href="https://acalustra.com/make-your-golang-project-more-secure-with-a-few-simple-tools.html" rel="alternate"></link><published>2022-11-20T21:00:00+01:00</published><updated>2022-11-20T21:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2022-11-20:/make-your-golang-project-more-secure-with-a-few-simple-tools.html</id><summary type="html">&lt;p&gt;Over the last few years, I have been jumping between multiple Golang projects
 within different teams. These are a few tools that are not well-known by many
 developers but make your code a bit more secure.&lt;/p&gt;
 &lt;p&gt;These static check tools fit nicely on your CI pipelines. Other tools validate
