@@ -1,5 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>A Calustra</title><link href="https://acalustra.com/" rel="alternate"></link><link href="https://acalustra.com/rss.xml" rel="self"></link><id>https://acalustra.com/</id><updated>2023-02-04T21:00:00+01:00</updated><entry><title>Unlocking Fiber Deployment in the town council: A Citizen's Journey of Using Data</title><link href="https://acalustra.com/unlocking-fiber-deployment-in-the-town-council-a-citizens-journey-of-using-data.html" rel="alternate"></link><published>2023-02-04T21:00:00+01:00</published><updated>2023-02-04T21:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2023-02-04:/unlocking-fiber-deployment-in-the-town-council-a-citizens-journey-of-using-data.html</id><summary type="html">&lt;p&gt;European Union is pushing some money to all countries to develop infrastructure
+<feed xmlns="http://www.w3.org/2005/Atom"><title>A Calustra</title><link href="https://acalustra.com/" rel="alternate"></link><link href="https://acalustra.com/rss.xml" rel="self"></link><id>https://acalustra.com/</id><updated>2023-03-23T21:00:00+01:00</updated><entry><title>On promotion: Lessons learned along the way</title><link href="https://acalustra.com/on-promotion-lessons-learned-along-the-way.html" rel="alternate"></link><published>2023-03-23T21:00:00+01:00</published><updated>2023-03-23T21:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2023-03-23:/on-promotion-lessons-learned-along-the-way.html</id><summary type="html">&lt;p&gt;My manager confirmed my promotion to Principal software engineer a few days
+ago. Getting in there made me happy; in fact, I enjoyed more the process. I
+would share some thoughts with you.&lt;/p&gt;
+&lt;p&gt;The process is a bit long. To get in there, my manager and I need to write …&lt;/p&gt;</summary><content type="html">&lt;p&gt;My manager confirmed my promotion to Principal software engineer a few days
+ago. Getting in there made me happy; in fact, I enjoyed more the process. I
+would share some thoughts with you.&lt;/p&gt;
+&lt;p&gt;The process is a bit long. To get in there, my manager and I need to write a
+document on why you should be promoted, with links and references. And for me,
+this is one of the best things where I saw how many things I did correctly from
+the beginning of my career; let me share a few:&lt;/p&gt;
+&lt;div class="section" id="brag-document"&gt;
+&lt;h2&gt;Brag Document&lt;/h2&gt;
+&lt;p&gt;I remember reading about companies doing Performance Reviews; at that time, I
+only worked for small companies where P&amp;amp;D was not enforced or planned. Getting
+a way to know where I was doing good, taking care of the yearly goals, and
+setting some direction was game changer for me.&lt;/p&gt;
+&lt;p&gt;When I wrote the promotion document, I only reviewed the brag documents I had
+and got links to things I did correctly, empowering the company, team or
+bussiness. It was an easy process because of my brag documents; when I spoke
+with colleagues who did not have the document, it was difficult for them if
+their manager did not help.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="journal-journal-journal"&gt;
+&lt;h2&gt;Journal, Journal, Journal&lt;/h2&gt;
+&lt;p&gt;I still remember my early days one of my mentors (&lt;a class="reference external" href="https://twitter.com/AntonRoman"&gt;Antón Román&lt;/a&gt;) told me to open a Google doc where I should
+save all my tips regarding Linux, small things, and notes. Also, he taught me
+how to use Delicious(A bookmark service) and keep all this information sorted
+for future use.&lt;/p&gt;
+&lt;p&gt;Nowadays, I still journal all the conversations, meeting notes, complains to my
+manager, so at the end of the year, I can see that I complained to my manager N
+times, and how many proposals I made. This has been a powerful thing for me
+because It helps me to identify some patterns over time.&lt;/p&gt;
+&lt;p&gt;Nowadays, I'm using org-mode for the notes, which may be hard to use initially,
+but the tags and the to-do list are handy for my use cases.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="growing-the-mindset"&gt;
+&lt;h2&gt;Growing the mindset&lt;/h2&gt;
+&lt;p&gt;I still remember my first week of work, I did not attend any University, and
+Antón told me a phrase that It is part of my since then:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+An engineer is someone who thinks up.
+&lt;/pre&gt;
+&lt;p&gt;Since that day, I have taken a self-learnt process. Every day, I normally spend
+around 15 minutes learning something new, which has been one of the best things
+I have done. When I'm with someone that it's junior, I told them something:
+&lt;em&gt;that it's not taught in the school&lt;/em&gt; is not valid as an engineer, and you'll
+need to find the way alone or with help.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="sharing-is-caring"&gt;
+&lt;h2&gt;Sharing is caring&lt;/h2&gt;
+&lt;p&gt;There is a book in Spain that it's pretty good (&lt;a class="reference external" href="https://www.goodreads.com/book/show/55683157-aprendiendo-a-aprender"&gt;Aprendiendo a aprender&lt;/a&gt;) which
+teaches you how to learn to learn. Sharing things with a junior engineer,
+coworker, or manager is the best way to unlock stuff for companies, and it
+helps you to settle the knowledge in your brain. Also, give you superpowers
+with your colleagues because you always care about things, and this is why I
+mastered being the green CI guy or the refactor man time over time.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="getting-feedback-help"&gt;
+&lt;h2&gt;Getting feedback&amp;amp;help&lt;/h2&gt;
+&lt;p&gt;I live in a place where thinking big is nothing ordinary. When I said to my
+parents that I would like to work on Open Source they were scared, and the same
+with other many things. To reach where you want to go, you need to realise many
+things. You can battle some of them, but at some point, you need to know if
+you're doing it correctly and validate it. Over the years, I was lucky to meet
+a lot of good engineers out there, and from time to time, I asked them things
+to improve my work. For example, I asked too many times to VP level management
+people, how I could create more exposure to reach higher or understand the
+business process of a change/new product.&lt;/p&gt;
+&lt;p&gt;To finalise, in April 2009, I started my internship at Quobis. That first day I
+cried (a lot), I was scared, and I had zero clue about things. I still remember
+that on the first day, Ángel advised me to read the &lt;a class="reference external" href="https://www.oreilly.com/library/view/asterisk-the-definitive/9781492031598/"&gt;Asterisk book&lt;/a&gt;;
+my English was even crapier than now, and those days I could not even imagine
+writing this blog post - I'm currently working at the same company as some
+writers of that book-. I'm so thankful for the things I achieved, the people I
+learnt from, and all the things I made over this time. To all of you who helped
+me with something, many thanks. I really appreciate it!&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+&amp;quot;A time comes when you need to stop waiting for the man you want to become
+and start being the man you want to be.” No one accidentally improves. If
+you want to improve, you must improve yourself.
+Bruce Springsteen.
+&lt;/pre&gt;
+&lt;/div&gt;
+</content><category term="blog"></category><category term="thoughts"></category><category term="work"></category></entry><entry><title>Unlocking Fiber Deployment in the town council: A Citizen's Journey of Using Data</title><link href="https://acalustra.com/unlocking-fiber-deployment-in-the-town-council-a-citizens-journey-of-using-data.html" rel="alternate"></link><published>2023-02-04T21:00:00+01:00</published><updated>2023-02-04T21:00:00+01:00</updated><author><name>eloycoto</name></author><id>tag:acalustra.com,2023-02-04:/unlocking-fiber-deployment-in-the-town-council-a-citizens-journey-of-using-data.html</id><summary type="html">&lt;p&gt;European Union is pushing some money to all countries to develop infrastructure
 for the regions. The kind of infrastructure does not matter, and the regions
 ask for their needs. One of the biggest for many town councils in my area is
 deploying FFTH to all homes, but as normal, some …&lt;/p&gt;</summary><content type="html">&lt;p&gt;European Union is pushing some money to all countries to develop infrastructure
