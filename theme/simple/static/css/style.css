@@ -38,3 +38,18 @@ pre {
   white-space: -o-pre-wrap;
   word-wrap: break-word;
 }
+
+.index-list dl {
+  display: table;
+  width: 100%;
+}
+
+.index-list dt {
+  display: table-cell;
+  width: 9em;
+}
+
+.index-list dd {
+  display: table-cell;
+  padding-left: 10px;
+}

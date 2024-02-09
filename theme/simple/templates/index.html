@@ -14,10 +14,12 @@
 
 {% block content %}
 <h1>Articles:</h1>
-<dl>
+<dl class="index-list">
 {% for article in dates %}
-    <dt>{{ article.locale_date }}</dt>
+    <div>
+    <dt>{{ article.date.strftime('%B %Y') }}</dt>
     <dd><a href="/{{ article.url }}">{{ article.title }}</a></dd>
+    </div>
 {% endfor %}
 </dl>
 {% endblock content %}
