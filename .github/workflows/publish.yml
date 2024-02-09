@@ -3,7 +3,7 @@ name: Publish Pelican Blog
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -11,7 +11,13 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup Pages
+      id: pages
+      uses: actions/configure-pages@v4
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -21,8 +27,27 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r req.txt  # Assuming you have a requirements.txt file with Pelican and its dependencies
+        pip install -r req.txt
 
     - name: Build Pelican
       run: |
         make html
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./output
+
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

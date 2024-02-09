@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = u'Eloy Coto'
 SITENAME = u'A Calustra'
-SITEURL = 'https://acalustra.com/'
+SITEURL = 'https://acalustra.com'
 DEFAULT_DATE_FORMAT = ('%A %d-%m-%Y')
 RELATIVE_URLS = False
 
