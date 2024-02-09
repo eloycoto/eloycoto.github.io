@@ -1,0 +1,5 @@
+*.py[cod]
+.DS_Store
+output
+cache
+env

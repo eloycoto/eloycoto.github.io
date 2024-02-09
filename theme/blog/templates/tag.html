@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %} Related articles with {{tag}} {% endblock %}
+{% block description %}{{tag}}{% endblock %}
+{% block keywords %}Asterisk, docker, sems, voip, sip{% endblock %}
+{% block canonical %}{{SITEURL}}/{{tag.url}}{% endblock %}
+
+{% if not articles_page %}
+  {% block head %}
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="noindex,nofollow" />
+  {% endblock %}
+{% endif %}
+
+{% block content%}
+
+  {% for article in articles %}
+    <div class="row">
+
+      <article>
+        <header>
+          <h1><a href="/{{ article.url }}">{{article.head}}</a></h1>
+          <div class="byline">
+            <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+              <span itemprop="name">
+                <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+              </span>
+            </span>
+            on
+            <time datetime="{{article.date | strftime("%Y-%m-%dT%H:%M:%S")}}" itemprop="datePublished">{{article.date |strftime("%B %dth, %Y")}}</time>
+          </div>
+        </header>
+
+
+        <div class="content" itemprop="articleBody">
+          {{ article.summary }}
+          <div class="row">
+            <div class="tags">
+              <h3>Tags</h3>
+              <div class="col-9 taglist">
+                {% for tag in article.tags|sort %}
+                  <span class="tag">
+                    <a href="{{SITEURL}}/{{tag.url}}" rel="tag">{{tag}}</a>
+                  </span>
+                {% endfor %}
+              </div><!--taglist-->
+
+              <div class="col-3">
+                <a href="/{{ article.url }}" class="btn"><i class="fa fa-arrow-right"></i> Read more</a>
+              </div>
+            </div>
+          </div> <!--row-->
+        </div>
+
+      </article>
+    </div>
+  {% endfor %}
+
+{% endblock %}

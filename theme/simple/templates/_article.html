@@ -1,0 +1,32 @@
+<article>
+  <h1 itemprop="name headline">{{article.head}}</h1>
+  <p>
+    <b rel="author">Eloy Coto Pereiro </b>
+    on
+    <time datetime="{{article.date | strftime("%Y-%m-%dT%H:%M:%S")}}" itemprop="datePublished">{{article.date |strftime("%B %dth, %Y")}}</time>
+  </p>
+
+
+  <div itemprop="articleBody">
+    {{ article.content }}
+
+    <h3>Tags</h3>
+    <div class="taglist">
+      {% for tag in article.tags|sort %}
+        <span class="tag">
+          <a href="/{{tag.url}}" rel="tag">{{tag}}</a>
+        </span>
+      {% endfor %}
+    </div><!--tags-->
+
+    <h4>Related articles:</h4>
+    {% if article.related_posts %}
+      <ul>
+        {% for related_post in article.related_posts %}
+          <li><a href="/{{ related_post.url }}">{{ related_post.title }}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+  </div>
+</article>

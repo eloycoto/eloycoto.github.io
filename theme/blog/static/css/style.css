@@ -1,0 +1,994 @@
+@font-face {
+  font-family: amble;
+  src: url(/theme/fonts/Amble-Regular.ttf);
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: fanwood;
+  src: url(/theme/fonts/Fanwood.otf);
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: lato;
+  src: url(/theme/fonts/lato-regular.woff);
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: helvetica;
+  src: url(/theme/fonts/HelveticaNeue-Thin.otf);
+  font-weight: normal;
+  font-style: normal;
+}
+body {
+  background-color: #e8e8e8;
+  margin: 0;
+  height: 100%;
+  color: #3b3b3b;
+  font-family: "medium-content-serif-font,Georgia,Cambria,Times,serif";
+  line-height: 1.3;
+}
+h1 {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+h2 {
+  font-size: 34px;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: lato;
+  color: #649130;
+}
+h1 a,
+h2 a,
+h3 a,
+h4 a {
+  color: #649130;
+}
+.center {
+  text-align: center;
+}
+p {
+  color: #3b3b3b;
+  font-family: "medium-content-serif-font,Georgia,Cambria,Times,serif";
+  line-height: 1.3;
+  box-sizing: border-box;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1.58;
+  letter-spacing: -0.003em;
+}
+li {
+  color: #3b3b3b;
+  font-family: "medium-content-serif-font,Georgia,Cambria,Times,serif";
+  line-height: 1.3;
+  box-sizing: border-box;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1.58;
+  letter-spacing: -0.003em;
+}
+a {
+  color: #3b3b3b;
+}
+pre {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+.btn {
+  background-color: #8bc34a;
+  color: #edf6e3;
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0px;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  text-decoration: none;
+}
+.title {
+  background-color: #abd47c;
+  margin-left: 0px!important;
+  margin-right: 0px!important;
+  padding-left: 100px;
+  padding-right: 70px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
+.title h1,
+.title h2,
+.title h3,
+.title h4,
+.title p {
+  color: #edf6e3;
+}
+.resume .resumetitle {
+  font-size: 34px;
+}
+.resume h2 {
+  font-size: 24px;
+}
+.resume img {
+  margin-top: 20px;
+  width: 50%;
+}
+.nav {
+  background-color: #edf6e3;
+  float: right;
+}
+.nav ul {
+  float: right;
+  font-family: lato;
+  color: #649130;
+  list-style: none;
+  margin-right: 70px;
+  text-transform: uppercase;
+}
+.nav li {
+  display: inline;
+  list-style-type: none;
+  padding-right: 5px;
+}
+.nav a:link,
+.nav a:visited,
+.nav a:hover,
+.nav a:active {
+  color: #649130;
+  text-decoration: none;
+}
+.content {
+  padding-bottom: 75px;
+  padding-top: 10px;
+}
+.wrapper {
+  min-height: 100%;
+  position: relative;
+}
+.footer {
+  background-color: #edf6e3;
+  position: absolute;
+  bottom: 0;
+  height: 70px;
+}
+.footer .container {
+  padding-top: 15px;
+}
+.footer h1,
+.footer h2,
+.footer h3,
+.footer h4,
+.footer p {
+  color: #649130;
+}
+.share {
+  color: #8bc34a;
+}
+.share a {
+  font-size: 30;
+  color: #8bc34a;
+}
+.share .fa {
+  margin-top: 10px;
+}
+.strike {
+  text-decoration: line-through;
+}
+.pr_list {
+  list-style-type: none;
+}
+.profile {
+  margin: 30px auto 30px;
+  width: 900px;
+}
+.profile .Headtitle {
+  display: block;
+  text-align: center;
+}
+.profile .Headtitle h1 {
+  display: inline-block;
+  padding-bottom: 5px;
+  position: relative;
+}
+.profile .Headtitle h1:before {
+  content: "";
+  position: absolute;
+  width: 50%;
+  height: 2px;
+  bottom: 0;
+  left: 25%;
+  border-bottom: 3px solid #abd47c;
+}
+.profile img.head {
+  width: 75%;
+  margin-left: 12.5%;
+  border-radius: 3px;
+  margin-top: 50px;
+}
+@media (max-width: 900px) {
+  .profile {
+    width: 100%;
+  }
+  .profile img.head {
+    margin-top: 10px;
+    margin-left: 0%;
+  }
+}
+.col-1 {
+  width: 8.33333333%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-1 {
+  margin-left: 8.33333333%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-2 {
+  width: 16.66666667%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-2 {
+  margin-left: 16.66666667%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-3 {
+  width: 25%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-3 {
+  margin-left: 25%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-4 {
+  width: 33.33333333%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-4 {
+  margin-left: 33.33333333%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-5 {
+  width: 41.66666667%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-5 {
+  margin-left: 41.66666667%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-6 {
+  width: 50%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-6 {
+  margin-left: 50%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-7 {
+  width: 58.33333333%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-7 {
+  margin-left: 58.33333333%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-8 {
+  width: 66.66666667%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-8 {
+  margin-left: 66.66666667%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-9 {
+  width: 75%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-9 {
+  margin-left: 75%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-10 {
+  width: 83.33333333%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-10 {
+  margin-left: 83.33333333%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-11 {
+  width: 91.66666667%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-11 {
+  margin-left: 91.66666667%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.col-12 {
+  width: 100%;
+  /* margin: 0; */
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow: hidden;
+  float: left;
+  display: inline;
+  position: relative;
+  box-sizing: border-box;
+}
+.col-offset-12 {
+  margin-left: 100%;
+  overflow: hidden;
+  float: left;
+  display: inline;
+}
+.row {
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.container {
+  margin-left: 100px;
+  margin-right: 70px;
+}
+@media (max-width: 768px) {
+  .col-1 {
+    width: 16.66666667%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-1 {
+    margin-left: 16.66666667%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-2 {
+    width: 33.33333333%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-2 {
+    margin-left: 33.33333333%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-3 {
+    width: 50%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-3 {
+    margin-left: 50%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-4 {
+    width: 66.66666667%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-4 {
+    margin-left: 66.66666667%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-5 {
+    width: 83.33333333%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-5 {
+    margin-left: 83.33333333%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-6 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-6 {
+    margin-left: 100%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-7 {
+    width: 100%;
+    margin: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-7 {
+    margin-left: 0px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-8 {
+    width: 100%;
+    margin: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-8 {
+    margin-left: 0px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-9 {
+    width: 100%;
+    margin: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-9 {
+    margin-left: 0px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-10 {
+    width: 100%;
+    margin: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-10 {
+    margin-left: 0px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-11 {
+    width: 100%;
+    margin: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-11 {
+    margin-left: 0px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-12 {
+    width: 100%;
+    margin: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-12 {
+    margin-left: 0px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .container {
+    margin-left: 50px;
+    margin-right: 35px;
+  }
+  .title {
+    padding-left: 50px;
+    padding-right: 35px;
+  }
+}
+@media (max-width: 450px) {
+  .col-1 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-1 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-2 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-2 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-3 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-3 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-4 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-4 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-5 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-5 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-6 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-6 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-7 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-7 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-8 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-8 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-9 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-9 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-10 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-10 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-11 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-11 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .col-12 {
+    width: 100%;
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-12 {
+    margin-left: 0%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .container {
+    margin-left: 25px;
+    margin-right: 17.5px;
+  }
+  .title {
+    padding-left: 25px;
+    padding-right: 17.5px;
+  }
+}
+.box h2 {
+  font-size: 34px;
+}
+.progress {
+  background-color: #bdbdbd;
+  margin-bottom: 10px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  box-sizing: border-box;
+}
+.progress .progress-bar {
+  background-color: #8bc34a;
+  color: #edf6e3;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+article {
+  background-color: white;
+  width: 900px;
+  margin: 30px auto 30px;
+  border: 1px solid #cfcfcf;
+  position: relative;
+  padding: 50px 0;
+  font-family: "medium-content-serif-font,Georgia,Cambria,Times,serif";
+}
+article header {
+  text-align: center;
+  width: 720px;
+  margin: 0 auto 45px;
+}
+article header h1 a {
+  text-decoration: none;
+}
+article header h1 {
+  margin: 0;
+  color: #649130;
+  font-size: 3em;
+  line-height: 1.5;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+}
+article header h4 {
+  color: #649130;
+}
+article .content {
+  width: 720px;
+  margin: 0 auto;
+}
+article .content img {
+  margin: auto auto;
+  display: block;
+  width: 100%;
+}
+article .byline a {
+  color: #649130;
+}
+@media (max-width: 900px) {
+  article {
+    width: 100%;
+  }
+  article header {
+    width: 85%;
+  }
+  article .content {
+    width: 85%;
+  }
+  article .content img {
+    width: 85%;
+  }
+}
+.taglist {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.taglist a {
+  text-decoration: none;
+  padding-left: 0px;
+}
+.tag {
+  border-radius: 4px;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  border: 1px solid #8bc34a;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  overflow: hidden;
+  line-height: 15px;
+  position: relative;
+  vertical-align: middle;
+  -webkit-transition: 0.25s linear;
+  transition: 0.25s linear;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.tag a {
+  text-decoration: none;
+}
+.figure .caption {
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+blockquote {
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C" "\201D" "\2018" "\2019";
+}
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote p {
+  display: inline;
+}

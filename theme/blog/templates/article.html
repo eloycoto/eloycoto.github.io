@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block lang%}{%if article.language %}{{article.language}}{%else%}es-ES{%endif%}{%endblock%}
+{% block title %} {{ article.metatitle }}{% endblock %}
+{% block description %} {{ article.description }} {% endblock %}
+{% block keywords %} {{ article.keywords }}{% endblock %}
+{% block canonical %}{{SITEURL}}/{{article.url}}{% endblock %}
+
+{% if not articles_page %}
+  {% block head %}
+    <meta name="tags" content="{{ article.metatags}}" />
+    <meta name="date" content=" {{ article.date }}" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  {% endblock %}
+{% endif %}
+
+{% block content%}
+  {% include "_article.html" %}
+{% endblock %}
+

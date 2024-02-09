@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %} A Calustra- Eloy Coto{% endblock %}
+{% block lang %}en-GB{% endblock %}
+{% block description %} Personal blog for Eloy Coto{% endblock %}
+{% block keywords %}{% endblock %}
+
+{% block head %}
+  <meta name="author" content="Eloy coto" />
+  <meta name="robots" content="index,follow" />
+{% endblock %}
+
+
+
+{% block content %}
+<h1>Articles:</h1>
+<dl>
+{% for article in dates %}
+    <dt>{{ article.locale_date }}</dt>
+    <dd><a href="/{{ article.url }}">{{ article.title }}</a></dd>
+{% endfor %}
+</dl>
+{% endblock content %}

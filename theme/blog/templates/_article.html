@@ -1,0 +1,60 @@
+<div class="row">
+  <article>
+    <header>
+      <h1 itemprop="name headline">{{article.head}}</h1>
+      <div class="byline">
+        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <span itemprop="name">
+            <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+          </span>
+        </span>
+        on
+        <time datetime="{{article.date | strftime("%Y-%m-%dT%H:%M:%S")}}" itemprop="datePublished">{{article.date |strftime("%B %dth, %Y")}}</time>
+      </div>
+    </header>
+
+
+    <div class="content" itemprop="articleBody">
+      {{ article.content }}
+
+      <div class="share">
+        <p>Share this:</>
+        <a href="http://twitter.com/share?text={{article.title}} via @eloycoto&url={{ SITEURL }}/{{article.url}}"><i class="fa fa-twitter"></i></a>
+        <a href="http://www.facebook.com/sharer/sharer.php?u={{ SITEURL }}/{{article.url}}"><i class="fa fa-facebook"></i></a>
+        <a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url={{SITEURL}}/{{article.url}}&title={{article.title}}"><i class="fa fa-linkedin"></i></a>
+      </div>
+      <div class="tags">
+        <h3>Tags</h3>
+        <div class="taglist">
+          {% for tag in article.tags|sort %}
+            <span class="tag">
+              <a href="/{{tag.url}}" rel="tag">{{tag}}</a>
+            </span>
+          {% endfor %}
+        </div><!--tags-->
+      </div>
+      {% if DISQUS_SITENAME %}
+        <div class="comments">
+          <h4>Comments:</h4>
+          <div id="disqus_thread"></div>
+            <script type="text/javascript" src="http://{{DISQUS_SITENAME}}.disqus.com/embed.js"></script>
+            <noscript><a href="http://{{DISQUS_SITENAME}}.disqus.com/?url=ref">Ver el hilo de discusión</a></noscript>
+        </div> <!-- .comments-container -->
+      {% endif %}
+
+      <div class="row">
+        <h4>Related articles:</h4>
+        {% if article.related_posts %}
+          <ul>
+            {% for related_post in article.related_posts %}
+              <li><a href="{{ SITEURL }}/{{ related_post.url }}">{{ related_post.title }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+
+    </div>
+
+  </article>
+</div>

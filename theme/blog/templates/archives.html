@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %} Blog - A Calustra{% endblock %}
+{% block description %} Blog de Eloy Coto, todas las entradas de mi blog relacionadas con Asterisk, Kamailio y desarrollo{% endblock %}
+{% block keywords %}i Ansible, Vagrant, Kamailio, Asterisk, Tornado, Python, Docker{% endblock %}
+{% block canonical %}{{SITEURL}}/archives.html{% endblock %}
+
+{% block head %}
+  <meta name="tags" content="Docker, Asterisk, Voip, SIP, IMS, dispatcher" />
+  <meta name="category" content="blog" />
+  <meta name="author" content="Eloy coto" />
+  <meta name="robots" content="NOINDEX" />
+{% endblock %}
+
+{% block content%}
+
+
+  {% for article in articles %}
+    <div class="row">
+
+      <article>
+        <header>
+          <h1><a href="/{{ article.url }}">{{article.head}}</a></h1>
+          <div class="byline">
+            <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+              <span itemprop="name">
+                <a href="https://plus.google.com/106179242242173415236/posts" itemprop="url" rel="author">Eloy Coto Pereiro</a>
+              </span>
+            </span>
+            on
+            <time datetime="{{article.date | strftime("%Y-%m-%dT%H:%M:%S")}}" itemprop="datePublished">{{article.date |strftime("%B %dth, %Y")}}</time>
+          </div>
+        </header>
+
+
+        <div class="content" itemprop="articleBody">
+          {{ article.summary }}
+          <div class="row">
+            <div class="tags">
+              <h3>Tags</h3>
+              <div class="col-9 taglist">
+                {% for tag in article.tags|sort %}
+                  <span class="tag">
+                    <a href="/{{tag.url}}" rel="tag">{{tag}}</a>
+                  </span>
+                {% endfor %}
+              </div><!--taglist-->
+
+              <div class="col-3">
+                <a href="/{{ article.url }}" class="btn"><i class="fa fa-arrow-right"></i> Read more</a>
+              </div>
+            </div>
+          </div> <!--row-->
+        </div>
+
+      </article>
+    </div>
+  {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %} A Calustra- Eloy Coto Soluciones Voip{% endblock %}
+{% block lang %}en-GB{% endblock %}
+{% block description %} Blog de Eloy Coto, desarrollo de aplicaciones Voip (SIP, Asterisk, Kamailio, Sems){% endblock %}
+{% block keywords %}Ansible, Vagrant, Kamailio, Asterisk, Tornado, Python, Docker{% endblock %}
+
+{% block head %}
+  <meta name="author" content="Eloy coto" />
+  <meta name="robots" content="index,follow" />
+{% endblock %}
+
+{# {%block headtitle%} #}
+{# <div class="title container"> #}
+{#   <div class="row"> #}
+{#     <div class="col-3 col-offset-2"> #}
+{#       <img src="/theme/images/profile.jpg" class="profile"> #}
+{#     </div> #}
+{#     <div class="col-6" style=""> #}
+{#       <div class="row"> #}
+{#         <h1>Hello! I'm <b>Eloy Coto</b> and I love Voip and Webrtc Apps</h1> #}
+{#       </div> #}
+{#       <div class="row"> #}
+{#         <h3>Currently I'm working remotely at Foehn from Galiza Spain</h3> #}
+{#       </div> #}
+{#     </div> #}
+{#   </div><!--row --> #}
+
+{#   <div class="row"> #}
+{#     <div class="col-3 box" style=""> #}
+{#       <h2><i class="fa fa-phone"></i> Voip</h2> #}
+{#       <p> #}
+{#        I've started in Voip in 2008. I started with Asterisk server and Openser. Nowadays I worked with all kind of installations and I'm Kamailio core developer. #}
+{#       </p> #}
+{#     </div> #}
+{#     <div class="col-3 box" style=""> #}
+{#       <h2><i class="fa fa-gear"></i> Backend</h2> #}
+{#       <p> #}
+{#         I've made a lot of my projects in python. It has elegance, power and flexibility for that. In the other hand, Django is my favourite framework. In the last months I'm playing a bit with Golang. #}
+{#       </p> #}
+{#     </div> #}
+
+{#     <div class="col-3 box" style=""> #}
+{#       <h2><i class="fa fa-puzzle-piece"></i> System</h2> #}
+{#       <p>When you work in Voip you need system skills. In the last years I'm working a lot with DevOps tools, Packer, Ansible, Terraform and Consul are my swiss knife.</p> #}
+{#     </div> #}
+
+{#     <div class="col-3 box" style=""> #}
+{#       <h2><i class="fa fa-signal"></i> Bussines</h2> #}
+{#       <p>I always work in startups and small companies. I love the business and help to my team to grow. I'm passionate, creative and very pro-active in my work. I use to provide solutions instead of problems</p> #}
+{#     </div> #}
+{#   </div><!--row--> #}
+{# </div><!--container--> #}
+{# {%endblock%} #}
+
+
+{%block content%}
+<div class="row">
+  <div class="profile">
+    <div class="Headtitle">
+      <h1>Eloy Coto</h1>
+
+      <p>Technology enthusiast, developer advocate and open-source supported.</p>
+    </div>
+
+    <div class="row">
+
+      <div class="col-6 center">
+        <img src="/theme/images/profile.jpg" class="head">
+      </div>
+
+      <div class="col-6">
+        <h2>About me</h2>
+        <p>
+          Hey, I'm Eloy, a software developer based in Galicia (north-west of Spain).
+          Over the last years, I'm working on multiple software projects mainly
+          related to real-time apps and VoIP. I'm familiar with, and hugely supported
+          of, the DevOps culture and how to make it work in the team that I'm working
+          with. Moreover, I am a proud contributor of multiple open source projects.
+        </p>
+      </div>
+
+		</div> <!--row-->
+
+
+    <div class="row">
+
+      <div class="col-4 box" style="">
+        <h2><i class="fa fa-gear"></i> Linux</h2>
+        <p>
+          My real passion from the college. Love to work with this OS,
+          escalate and create apps on top of it.
+        </p>
+      </div>
+
+      <div class="col-4 box" style="">
+        <h2><i class="fa fa-fighter-jet"></i> Python</h2>
+        <p>
+        Simple and powerful with awesome libraries on top of it. The base of
+        almost all my apps.
+        </p>
+      </div>
+
+
+      <div class="col-4 box" style="">
+        <h2><i class="fa fa-phone"></i> Voip</h2>
+        <p>
+        From SIP towards Webrtc using Asterisk, Kamailio and Freeswitch since
+        2008.
+        </p>
+      </div>
+
+    </div> <!--row-->
+
+
+    <div class="row">
+      <div class="col-4 box" style="">
+        <h2><i class="fa fa-flask"></i> Go</h2>
+        <p>
+        A programming language in the middle of C and Python. Really enjoy to
+        using in high concurrency projects.
+        </p>
+      </div>
+
+
+      <div class="col-4 box" style="">
+        <h2><i class="fa fa-puzzle-piece"></i> Ops</h2>
+        <p>
+        Dealing with infrastructure is fun. Love to make new things using new
+        tools like Docker, Consul or Kubernetes.
+        </p>
+      </div>
+
+      <div class="col-4 box" style="">
+        <h2><i class="fa fa-truck"></i> CI/CD</h2>
+        <p>
+        Spend less time in repetitive tasks is my priority. Love to use tools
+        like AWS, Terraform, Jenkins to avoid to do boring things.
+        </p>
+      </div>
+
+    </div> <!--row-->
+  </div>
+
+  <div class="row">
+
+    <div class="profile">
+      <div class="row">
+        <div class="col-6 pr_list">
+          <h1>Open-source contributions</h1>
+          {% for key, value in CONTRIBUTIONS.items() | sort %}
+            <li><b>{{key}}</b></li>
+            <ul class="pr_list">
+              {% for item in value %}
+                <li><a href="{{item.url}}">{{item.name}}</a>: {{item.desc}}</li>
+              {% endfor %}
+            </ul>
+          {% endfor %}
+        </div>
+
+        <div class="col-6">
+          <h1>In the blog</h1>
+          <ul>
+            {% for article in articles %}
+              {% if article.index_title %}
+                <li><a href="/{{ article.url }}">{{article.index_title}}</a></li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div><!--row-->
+
+
+      <div class="row">
+        <div class="col-6">
+          <h1>Experience</h1>
+          <ul>
+            <li><b>Foehn</b>(Jan 2013 - Sep 2017) Software Developer & DevOps</li>
+            <li><b>Webphone</b>(Nov 2011 - Jan 2013) Voip Developer</li>
+            <li><b>Quobis</b>(April 2008 - Juni 2011) Voip Developer</li>
+          </ul>
+        </div>
+
+        <div class="col-6">
+          <h1>Social</h1>
+          <ul>
+            <li><b>A Industriosa</b>(Jan 2017) Founder of the first medialab in Vigo.</li>
+            <li><b>Vigolabs</b>(Jan 2015-Ongoing) Founder of the longest meetup in the city. Related with IoT and Industrial technology.</li>
+            <li><b>Hackathon Sanjurjo Badía</b>(Feb 2015) Organiser, with 130 atteendes around Marine technology.</li>
+            <li><b>HackVG</b>(Jan 2014) Organiser, with 30 atteendes </li>
+            <li><b>Rally Serra da groba</b>(Nov 2011) North-west rally championship. Organiser of all service park (20K atteendes)</li>
+            <li><b>Subida a Vigo</b>(Sep 2007) North-west high-climp championship. Organiser</li>
+          </ul>
+        </div>
+
+      </div><!--row-->
+    </div>
+
+  </div> <!--row-->
+
+</div>
+{% endblock %}

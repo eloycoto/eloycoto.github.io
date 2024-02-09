@@ -1,0 +1,119 @@
+.generate-columns(12);
+.generate-columns(@n, @i: 1) when (@i =< @n) {
+  .col-@{i} {
+    width: (@i * 100% / @n);
+    /* margin: 0; */
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .col-offset-@{i} {
+    margin-left: (@i * 100% / @n);
+    overflow: hidden;
+    float: left;
+    display: inline;
+  }
+  .generate-columns(@n, (@i + 1));
+}
+
+.row {
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.container {
+  margin-left: @mainLeftMargin;
+  margin-right: @mainRightMargin;
+}
+
+
+@media (max-width: 768px) {
+  .generate-columns(12);
+  .generate-columns(@n, @i: 1) when (@i =< @n) {
+    .col-@{i} when(@i=<6){
+      width: (@i * 200% / @n);
+      /* margin: 0; */
+      padding-right: 15px;
+      padding-left: 15px;
+      overflow: hidden;
+      float: left;
+      display: inline;
+      position: relative;
+      box-sizing: border-box;
+    }
+    .col-offset-@{i} when(@i=<6) {
+      margin-left: (@i * 200% / @n);
+      overflow: hidden;
+      float: left;
+      display: inline;
+    }
+
+    .col-@{i} when(@i >6) {
+      width: 100%;
+      margin: 0;
+      padding-right: 15px;
+      padding-left: 15px;
+      overflow: hidden;
+      float: left;
+      display: inline;
+      position: relative;
+      box-sizing: border-box;
+    }
+    .col-offset-@{i} when(@i >6) {
+      margin-left: 0px;
+      overflow: hidden;
+      float: left;
+      display: inline;
+    }
+    .generate-columns(@n, (@i + 1));
+  }
+
+  .container {
+    margin-left: @mainLeftMargin / 2;
+    margin-right: @mainRightMargin / 2;
+  }
+  .title {
+    padding-left: @mainLeftMargin / 2;
+    padding-right: @mainRightMargin / 2;
+  }
+}
+
+
+@media (max-width: 450px) {
+  .generate-columns(12);
+  .generate-columns(@n, @i: 1) when (@i =< @n) {
+    .col-@{i} {
+      width: 100%;
+      /* margin: 0; */
+      padding-right: 15px;
+      padding-left: 15px;
+      overflow: hidden;
+      float: left;
+      display: inline;
+      position: relative;
+      box-sizing: border-box;
+    }
+    .col-offset-@{i} {
+      margin-left: 0%;
+      overflow: hidden;
+      float: left;
+      display: inline;
+    }
+    .generate-columns(@n, (@i + 1));
+  }
+
+  .container {
+    margin-left: @mainLeftMargin / 4;
+    margin-right: @mainRightMargin / 4;
+  }
+  .title {
+    padding-left: @mainLeftMargin / 4;
+    padding-right: @mainRightMargin / 4;
+  }
+
+}

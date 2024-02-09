@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block lang%}{%if page.language %}{{page.language}}{%else%}es-ES{%endif%}{%endblock%}
+{% block title %} {{ page.metatitle }}{% endblock %}
+{% block description %} {{ page.description }} {% endblock %}
+{% block keywords %} {{ page.keywords }}{% endblock %}
+{% block canonical %}{{SITEURL}}/{{page.url}}{% endblock %}
+
+{% if not pages_page %}
+  {% block head %}
+    <meta name="tags" content="{{ page.metatags}}" />
+    <meta name="date" content=" {{ page.date }}" />
+    <meta name="category" content="blog" />
+    <meta name="author" content="Eloy coto" />
+    <meta name="robots" content="index,follow" />
+  {% endblock %}
+{% endif %}
+
+{% block content%}
+    {{page.content}}
+{% endblock %}
+

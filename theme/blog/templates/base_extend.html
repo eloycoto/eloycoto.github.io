@@ -1,0 +1,139 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+    <link rel="canonical" href="http://acalustra.com/" />
+    <meta name="keywords" content="{% block keywords %}{% endblock keywords %}"/>
+    <meta name="description" content="{% block description %}{% endblock description %}"/>
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if FEED_ALL_ATOM %}
+    <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} Full Atom Feed" />
+    {% endif %}
+
+    {% if FEED_ALL_RSS %}
+    <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_RSS }}" type="application/rss+xml" rel="alternate" title="{{ SITENAME }} Full RSS Feed" />
+    {% endif %}
+
+    {% if FEED_ATOM %}
+    <link href="{{ FEED_DOMAIN }}/{{ FEED_ATOM }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} Atom Feed" />
+    {% endif %}
+
+    {% if FEED_RSS %}
+    <link href="{{ FEED_DOMAIN }}/{{ FEED_RSS }}" type="application/rss+xml" rel="alternate" title="{{ SITENAME }} RSS Feed" />
+    {% endif %}
+
+    {% if CATEGORY_FEED_ATOM and category %}
+    <link href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM|format(category.slug) }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} Categories Atom Feed" />
+    {% endif %}
+
+    {% if CATEGORY_FEED_RSS and category %}
+    <link href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_RSS|format(category.slug) }}" type="application/rss+xml" rel="alternate" title="{{ SITENAME }} Categories RSS Feed" />
+    {% endif %}
+
+    {% if TAG_FEED_ATOM and tag %}
+    <link href="{{ FEED_DOMAIN }}/{{ TAG_FEED_ATOM|format(tag.slug) }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} Tags Atom Feed" />
+    {% endif %}
+
+    {% if TAG_FEED_RSS and tag %}
+    <link href="{{ FEED_DOMAIN }}/{{ TAG_FEED_RSS|format(tag.slug) }}" type="application/rss+xml" rel="alternate" title="{{ SITENAME }} Tags RSS Feed" />
+    {% endif %}
+  </head>
+  <body>
+  <div class="title container">
+
+    <div class="row">
+      <div class="col-2 col-offset-2">
+        <img src="img/profile.jpg" class="profile">
+      </div>
+      <div class="col-6" style="">
+        <div class="row">
+          <h1>Hello! I'm <b>Eloy Coto</b> and I love Voip and Webrtc Apps</h1>
+        </div>
+        <div class="row">
+          <h3>Currently I'm working in Foehn from Galiza Spain</h3>
+        </div>
+      </div>
+    </div><!--row -->
+
+    <div class="row">
+      <div class="col-3 box" style="">
+        <h2>Voip</h2>
+      </div>
+      <div class="col-3 box" style="">
+        <h2>Backend</h2>
+        <p>
+          I dev all the things in Python, it's one of the best language
+        </p>
+      </div>
+
+      <div class="col-3 box" style="">
+        <h2>System</h2>
+        <p>When you work in Voip you need system skills, in the last years I'm working a lot with DevOps tools, Ansible and Fabric are my swiss knife. In the last months I work hard in Docker very useful tool</p>
+      </div>
+
+      <div class="col-3 box" style="">
+        <h2>Bussines</h2>
+        <p>I always work in startups or small companies. I love the bussines and help to my team to grow. As normal I always focus to share a lot of data to my managers. Always I implement Graphite and Grafana, the perfect combination!</p>
+      </div>
+    </div><!--row-->
+  </div><!--container-->
+
+
+  <div class="row nav">
+    <ul>
+      <li><a href="">Home</a></li>
+      <li><a href="">Projects</a></li>
+      <li><a href="">Blog</a></li>
+      <li><a href="">Contact</a></li>
+    </ul>
+  </div><!--row nav-->
+
+  <div class="container">
+    <div class="row">
+      <div class="col-9 resume">
+        <h2 class="resumetitle">Resume</h2>
+        <div class="row">
+         <div class="col-4">
+          <img src="img/profile.jpg" class="profile">
+         </div>
+         <div class="col-8">
+          <h2>Voip Developer at Foehn</h2>
+         </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <h2>Skills</h2>
+        <div class="row">
+          <h3>Voip</h3>
+          <div class="progress"><div class="progress-bar" style="width:85%">SIP</div></div>
+          <div class="progress"><div class="progress-bar" style="width:85%">XMPP</div></div>
+          <div class="progress"><div class="progress-bar" style="width:75%">Webrtc</div></div>
+          <div class="progress"><div class="progress-bar" style="width:95%">Asterisk</div></div>
+          <div class="progress"><div class="progress-bar" style="width:90%">Kamailio</div></div>
+          <div class="progress"><div class="progress-bar" style="width:75%">Freeswitch</div></div>
+        </div>
+        <div class="row">
+          <h3>Programming</h3>
+          <div class="progress"><div class="progress-bar" style="width:80%">Python</div></div>
+          <div class="progress"><div class="progress-bar" style="width:70%">Javascript</div></div>
+          <div class="progress"><div class="progress-bar" style="width:60%">C</div></div>
+          <div class="progress"><div class="progress-bar" style="width:60%">PHP</div></div>
+          <div class="progress"><div class="progress-bar" style="width:80%">Django</div></div>
+          <div class="progress"><div class="progress-bar" style="width:80%">Angular</div></div>
+        </div>
+        <div class="row">
+          <h3>System</h3>
+          <div class="progress"><div class="progress-bar" style="width:90%">Linux</div></div>
+          <div class="progress"><div class="progress-bar" style="width:70%">Docker</div></div>
+          <div class="progress"><div class="progress-bar" style="width:80%">Ansible</div></div>
+          <div class="progress"><div class="progress-bar" style="width:80%">Vagrant</div></div>
+          <div class="progress"><div class="progress-bar" style="width:75%">Postgresql</div></div>
+          <div class="progress"><div class="progress-bar" style="width:75%">NoSQL</div></div>
+        </div>
+      </div>
+    </div>
+  </div><!--container-->
+  </body>
+</html>

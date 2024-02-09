@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Tags de A calustra dev solutions{% endblock %}
+{% block description %}Categorias de tags ordenadas sobre Asterisk, Kamailio y otras tecnologías{% endblock %}
+{% block keywords %}Tags,Eloy Coto, Asterisk{% endblock %}
+{% block canonical %}{{SITEURL}}/tags.html{% endblock %}
+
+{% block head %}
+  <meta name="tags" content="Tags, asterisk, docker, kamailio, ansible" />
+  <meta name="category" content="blog" />
+  <meta name="author" content="Eloy coto" />
+  <meta name="robots" content="index,follow" />
+{% endblock %}
+
+
+{% block content%}
+
+
+<div class="row">
+  <div class="col-10">
+    <h1>Tags en los articulos de Eloy</h1>
+    <div style="display:none">
+      <h2>Asterisk integración con Kamailio</h2>
+    </div>
+
+    <ul>
+    {% for tag,article in tags %}
+      <li><a href="{{SITEURL}}/{{tag.url}}">{{tag.name}}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
