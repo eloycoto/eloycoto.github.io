@@ -12,13 +12,16 @@ img {
 }
 
 /* Optional 100 more bytes */
-h1,
+h1 {
+  margin: 3em 0 1em;
+}
+
 h2,
 h3,
 h4,
 h5,
 h6 {
-  margin: 3em 0 1em;
+  margin: 2em 0 1em;
 }
 
 p,

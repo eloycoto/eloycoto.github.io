@@ -5,28 +5,28 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://acalustra.com/</loc>
-<lastmod>2024-02-05T18:43:46-00:00</lastmod>
+<lastmod>2024-02-09T10:44:30-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://acalustra.com/archives.html</loc>
-<lastmod>2024-02-05T18:43:46-00:00</lastmod>
+<lastmod>2024-02-09T10:44:30-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://acalustra.com/tags.html</loc>
-<lastmod>2024-02-05T18:43:46-00:00</lastmod>
+<lastmod>2024-02-09T10:44:30-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://acalustra.com/categories.html</loc>
-<lastmod>2024-02-05T18:43:46-00:00</lastmod>
+<lastmod>2024-02-09T10:44:30-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -39,8 +39,15 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>https://acalustra.com/tips-for-embedded-developers-on-rust.html</loc>
+<lastmod>2024-02-09T12:00:00+01:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>https://acalustra.com/fosdem-2024-review.html</loc>
-<lastmod>2024-02-04T17:00:00+01:00</lastmod>
+<lastmod>2024-02-05T17:00:00+01:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -432,14 +439,28 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://acalustra.com/category/blog.html</loc>
-<lastmod>2024-02-04T17:00:00-00:15</lastmod>
+<lastmod>2024-02-09T12:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://acalustra.com/tag/rust.html</loc>
+<lastmod>2024-02-09T12:00:00-00:15</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://acalustra.com/tag/embedded.html</loc>
+<lastmod>2024-02-09T12:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://acalustra.com/tag/fosdem.html</loc>
-<lastmod>2024-02-04T17:00:00-00:15</lastmod>
+<lastmod>2024-02-05T17:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -454,13 +475,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://acalustra.com/tag/work.html</loc>
 <lastmod>2023-03-23T21:00:00-00:15</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>https://acalustra.com/tag/rust.html</loc>
-<lastmod>2022-12-25T21:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -1258,7 +1272,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://acalustra.com/author/eloycoto.html</loc>
-<lastmod>2024-02-04T17:00:00-00:15</lastmod>
+<lastmod>2024-02-09T12:00:00-00:15</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
