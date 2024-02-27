@@ -192,8 +192,8 @@ specified in the *configuration.nix* file.
 **Note** that it utilizes `config.boot.kernelPackages` instead of `pkgs.linuxPackages`,
 which lacks Rust support.
 
-Finally, we need to specify the compilation of the kernel modue, we can follow
-the official Nix guide:
+Finally, we need to specify the compilation of the kernel module, we can follow
+the official `Nix guide <https://nixos.wiki/wiki/Linux_kernel>`_:
 
 .. code-block:: nix
 
