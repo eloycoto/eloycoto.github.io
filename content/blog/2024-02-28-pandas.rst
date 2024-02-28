@@ -1,0 +1,91 @@
+Unlocking the Magic of Pandas: A Developer's Love Story
+========================================================
+
+:date: 2024-02-28 12:00
+:language: en-GB
+:author: eloycoto
+:head: Unlocking the Magic of Pandas: A Developer's Love Story
+:index_title: Unlocking the Magic of Pandas: A Developer's Love Story
+:metatitle: Unlocking the Magic of Pandas: A Developer's Love Story
+:tags: python
+:metatags: pandas, data manipulation, data analysis, junior developers, python libraries, jupyter, ipython, geopandas, data import, data export, geojson, geodatabase
+:description: A love history on how to parse geodatabase format in Pandas and apply some filters, maps and exporting to GeoJSON.
+:keywords: Python, Pandas, data manipulation, data analysis, junior developers, Python libraries, Jupyter, IPython, GeoPandas, data import, data export, GeoJSON, geodatabase
+
+`Pandas <https://pandas.pydata.org/>`_ is one of these projects that you can
+only feel in love. Even if you're not accustomed to working extensively with
+data, Pandas offers a plethora of advantages:
+
+- Seamless integration with Jupyter or ipython.
+- Extensive documentation comprising beginner guides and comprehensive API references.
+- Rich ecosystem, including tools like geopandas.
+- Familiar terminology borrowed from other technologies, such as SQL concepts.
+- Streamlined processes for importing and exporting data.
+
+Today, a friend from the council called me asking if there was a way to obtain
+a map for a grant the council received for FTTH deployment. More information on
+this topic can be found in another post `I've written <2023_fiber_connection.rst>`_.
+
+The information was stored in geodatabase format, and I needed to parse and
+extract some data from it. It turned out to be as simple as:
+
+.. code-block:: python
+
+    In [1]: import geopandas as gpd
+
+    In [2]: data = gpd.read_file('ZonasElegibles_2023.gdb')
+
+    In [3]: print(data.iloc[0])
+    CCOM                                                                          16
+    Comunidad_Autonoma                                            País Vasco/Euskadi
+    CPROV                                                                         01
+    Provincia                                                            Araba/Álava
+    CODINE                                                                     01001
+    Municipio                                                       Alegría-Dulantzi
+    Unidades_Inmobiliarias_Zona                                                  1.0
+    Viviendas_Zona                                                               0.0
+    CodZona                                                  01001000000-2023-000018
+    Shape_Length                                                         2094.039244
+    Shape_Area                                                          99287.285169
+    geometry                       MULTIPOLYGON Z (((537793.2750000004 4739548.16...
+    Name: 0, dtype: object
+
+Okay, so we have some polygons in there. I'd like to filter a few of them based
+on `CodZona`:
+
+
+.. code-block:: python
+
+    In [4]: desiredCodZonas = [
+       ...:     "28001000000-2023-000002",
+       ...:     "28001000000-2023-000003"
+       ...: ]
+       ...:
+       ...: filtered = data[data['CodZona'].isin(desiredCodZonas)]
+       ...:
+
+    In [5]: filtered.size
+    Out[5]: 24
+
+Now that we have our filtered data, **just five simple steps!** Next, I need to
+export it in a format suitable for presentation, like `GeoJSON
+<https://datatracker.ietf.org/doc/html/rfc7946>`_, which is supported on
+GitHub. Let's export it.
+
+While reading the GeoJSON documentation, I noticed that the coordinates should
+be in *EPSG:4326*, so we need to transform our dataset:
+
+
+.. code-block:: python
+
+    exported_dataset = filtered.to_crs('EPSG:4326')
+
+The final step is to serialize it as GeoJSON:
+
+.. code-block:: python
+
+    In [7]: exported_dataset.to_file("/tmp/myMap.json", driver='GeoJSON')
+
+*In just seven steps*, and fourty minutes, you can filter a geodatabase
+effortlessly, even in a format you're unfamiliar with. It's just incredible how
+easy it is to accomplish tasks with Pandas!
