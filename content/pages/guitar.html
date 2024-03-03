@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guitar</title>
+</head>
+<body>
+    <!-- The head is not rendered at all in pelican pages -->
+    <style>
+        #chords {
+            font-size: 40px;
+            line-height: 1.5;
+        }
+
+        .chord {
+            display: inline-block;
+            width: 30px;
+            padding-left: 2px;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
+
+    <script type="text/javascript" src="https://tonejs.github.io/build/Tone.js"></script>
+
+    <input type="number" id="tempo" placeholder="Enter tempo">
+    <button id="playBtn" value="120" onclick="playWithTempo()">Play</button>
+    <button id="stopBtn" onclick="stop()">Stop</button>
+
+    <div id="chords"></div>
+
+    <script>
+        const chords = [
+            "D...G...D..GD...",
+            "D...A...G...G...",
+            "G...A...D...G...",
+            "G...D...A...A..."
+        ];
+
+        var interval;
+
+        function highlight(current) {
+            chord = current - 1;
+            currentChord = document.getElementById('c'+chord);
+            if (currentChord != null) {
+                currentChord.classList.remove('highlight')
+            }
+            cdata = document.getElementById('c'+current);
+            playPianoNote(cdata.innerHTML);
+            cdata.classList.add('highlight')
+        }
+
+        function playTempoWithCallback(callback, bpm) {
+            const beatsPerSecond = 60 / bpm;
+            var currentPosition = 0;
+            const tempoInterval = setInterval(() => {
+                callback(currentPosition);
+                currentPosition++;
+            }, beatsPerSecond * 1000);
+
+            return tempoInterval;
+        }
+
+        function playWithTempo() {
+            stop();
+            console.log("starting");
+            let tempo = document.getElementById("tempo").value;
+            interval = playTempoWithCallback(highlight, tempo);
+        }
+
+        function stop() {
+            const chordsDiv = document.getElementById('chords');
+            const spans = chordsDiv.querySelectorAll('span');
+            spans.forEach(span => span.classList.remove('highlight'));
+            clearInterval(interval);
+        }
+
+        function renderChords() {
+            index = 0;
+            const chordsDiv = document.getElementById('chords');
+            chordsDiv.innerHTML = "";
+            chords.forEach(chord => {
+                const chordSpan = document.createElement('span');
+                const notes = chord.split('');
+                notes.forEach(note => {
+                    const noteSpan = document.createElement('span');
+                    noteSpan.setAttribute("id", "c"+index);
+                    noteSpan.setAttribute("class", "chord");
+                    index++;
+                    noteSpan.textContent = note;
+                    chordSpan.appendChild(noteSpan);
+                });
+                chordsDiv.appendChild(chordSpan);
+                chordsDiv.appendChild(document.createElement('br'));
+            });
+        }
+
+        renderChords();
+
+        function playPianoNote(note) {
+            const synth = new Tone.Synth().toDestination();
+
+            const noteFrequencies = {
+                'C': 'C4',
+                'D': 'D4',
+                'A': 'A4',
+                'G': 'G4',
+                '.': 'E2',
+            };
+
+            if (!Object.keys(noteFrequencies).includes(note)) {
+                console.error("Invalid input. Please provide a valid note");
+                return;
+            }
+            synth.triggerAttackRelease(noteFrequencies[note], "8n");
+        }
+    </script>
+</body>
+</html>
