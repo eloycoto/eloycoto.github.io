@@ -24,7 +24,7 @@ data, Pandas offers a plethora of advantages:
 
 Today, a friend from the council called me asking if there was a way to obtain
 a map for a grant the council received for FTTH deployment. More information on
-this topic can be found in another post `I've written <2023_fiber_connection.rst>`_.
+this topic can be found in another post `I've written <{filename}./2023_fiber_connection.rst>`_.
 
 The information was stored in geodatabase format, and I needed to parse and
 extract some data from it. It turned out to be as simple as:
