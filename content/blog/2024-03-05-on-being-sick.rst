@@ -14,11 +14,11 @@ On being sick
 
 Life is a whirlwind, isn't it? Taleb describes these events clearly in all his
 books. Sadly, I have my personal Black Swan event. I was cruising one of my
-summers in my life, I was just happy, with a head full of dreams and plans! But
-that morning, on 21st of Sept, BAM! A life unexpected setback!
+best summers in my life, I was just happy, with a head full of dreams and
+plans! But that morning, on 21st of Sept, BAM! A life unexpected setback!
 
 That morning, I had a check with the doctor, regarding a small pain that I had
-for a few weeks. I got diagnosed with a 13-11-9 cm Sarcoma tumour, fu##! my
+for a few weeks. I got diagnosed with a 13-11-9 cm Sarcoma tumour, fu##! My
 life at that moment just changed, in four hours I should had to pick up the
 train to speak at Atlantica Conf, I had plans to have dinner with one of my
 mentors, and I'd just received the worst notice that I could get.
@@ -62,7 +62,7 @@ shit!
 
 When you need to be lying in bed, you can think about a lot of things, and I'm
 sure that almost all negative! I got into the Theodore Vail mod, explore what
-you don't know about it! If you want to stay motivated and in the good mod, you
+you don't know about! If you want to stay motivated and in the good mod, you
 need to feel challenged every single day, the healthy stress!
 
 Today marks my 50th day! I learnt a lot of things, from `NixOs
