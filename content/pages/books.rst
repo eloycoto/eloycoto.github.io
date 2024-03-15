@@ -31,6 +31,7 @@ Most enjoyed
 - **Open** -- Andre Agassi
 - **Patria** -- Fernando Aramburu
 - **Ready Player One** -- Ernest Cline
+- **Skunk Works: A Personal Memoir of My Years at Lockheed** -- Ben R. Rich
 - **The Hard Thing About Hard Things** -- Ben Horowitz
 - **Un lume azul** -- Pedro Feijoo
 
