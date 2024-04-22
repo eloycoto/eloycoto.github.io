@@ -1,0 +1,109 @@
+Playing with ESPHome
+=====================
+
+:date: 2024-04-22 17:00
+:language: en-GB
+:author: eloycoto
+:head: Playing with ESPHome, how to read compost bin temperature
+:index_title: Playing with ESPHome
+:metatitle: Learn How to Set Up a Smart Compost Bin with ESPHome: A User-Friendly Guide
+:tags: embedded, esphome
+:metatags: embedded, esphome
+:description: Discover ESPHome, a user-friendly open-source platform for IoT projects. Explore how to set up a smart compost bin to monitor temperature and improve composting efficiency effortlessly using YAML configurations. Dive into the benefits of ESPHome over proprietary firmware and its compatibility with ESP32 and RISC-V devices.
+:keywords: ESPHome, open-source projects, smart compost bin, IoT, ESP32, RISC-V, firmware alternatives, YAML configuration, MQTT reporting, temperature monitoring, compost bin safety, user experience, deep sleep feature, efficient power usage, lambda calls, C++ integration
+
+Have you heard of `ESPHome <https://esphome.io/index.html>`_? It is one of the
+projects which understand how important is user experience in any project,
+especially in an open-source project. ESP ecosystem is growing, and there are a
+bunch of projects out there that simplify complex tasks
+
+Personally, I'm not a big fan of proprietary firmware of ESP32, and I like the
+`alternative projects
+<https://zeus.ugent.be/blog/23-24/open-source-esp32-wifi-mac/>`_ out there. On
+the other hand, the RISC-V devices are just great and have impressive RTOS
+support.
+
+In the past, I always used `Tasmota firmware
+<https://tasmota.github.io/docs/>`_. However, the other day, I needed to make a
+more complex project which reads the compost bin temperature and reports it
+over MQTT. The project is based on a ESP32 with an NPC thermistor.
+
+While I could gone with Rust embedded, I decided to give ESPhome a try! All that
+took was ~2 hours, the following yaml and running `esphome run` command:
+
+.. code-block:: yaml
+  ---
+  esphome:
+    name: compostBin
+
+  esp32:
+    board: nodemcu-32s2
+    variant: esp32s2
+    framework:
+      type: arduino
+
+  # Logger must be at least debug (default)
+  logger:
+    level: DEBUG
+
+  web_server:
+    port: 80
+
+  wifi:
+    ssid: "SSID"
+    password: "PASSWORD"
+
+    ap:
+      ssid: "compostbin"
+      password: "compostbin"
+
+  captive_portal:
+
+  mqtt:
+    broker: my-mqtt-broker
+    username: compostbin
+    password: compostbin
+
+  sensor:
+
+    - platform: ntc
+      sensor: resistance_sensor
+      name: NTC Temperature B Constant
+      calibration:
+       b_constant: 3950
+       reference_temperature: 25°C
+       reference_resistance: 10kOhm
+
+    - platform: resistance
+      id: resistance_sensor
+      sensor: source_sensor
+      configuration: DOWNSTREAM
+      resistor: 10kOhm
+      reference_voltage: 3.3V
+      name: Resistance Sensor
+
+    - platform: adc
+      id: source_sensor
+      name: ADC Voltage
+      filters:
+        - offset:  +0.14
+        - multiply: 3.3
+      pin: 1
+      update_interval: 5s
+
+   deep_sleep:
+     run_duration: 15s
+     sleep_duration: 180min
+
+With ESPHome, setting up this project was quick. The YAML configuration
+encapsulates everything needed, from defining sensors to configuring Wi-Fi and
+MQTT. Plus, the deep sleep feature ensures efficient power usage for
+battery-operated setups. For complex scenarios, I really love the lambda calls
+and the C++ code in it.
+
+
+P.S. While I don't have an immediate need to monitor the compost bin
+temperature, I `discovered
+<https://www.quora.com/Can-Salmonella-survive-at-60-70-degrees-Celsius>`_ that
+if the temperature exceeds 70 degrees, it helps eliminate salmonella, making
+the compost bin safer.
