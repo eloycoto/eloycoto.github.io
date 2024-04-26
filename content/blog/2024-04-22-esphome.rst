@@ -26,7 +26,7 @@ support.
 In the past, I always used `Tasmota firmware
 <https://tasmota.github.io/docs/>`_. However, the other day, I needed to make a
 more complex project which reads the compost bin temperature and reports it
-over MQTT. The project is based on a ESP32 with an NPC thermistor.
+over MQTT. The project is based on a ESP32 with an NTC thermistor.
 
 While I could gone with Rust embedded, I decided to give ESPhome a try! All that
 took was ~2 hours, the following yaml and running `esphome run` command:

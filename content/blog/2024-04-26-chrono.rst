@@ -1,0 +1,139 @@
+Reverse Engineering an RS232 Device
+===================================
+
+:date: 2024-04-26 17:00
+:language: en-GB
+:author: eloycoto
+:head: Reverse engineering an RS232 device
+:index_title: Reverse engineering an RS232 device
+:metatitle: Reverse engineering an RS232 device
+:tags: embedded
+:metatags: embedded, lap counter, slot racing, TV app
+:description: Learn how to build a custom Lap Counter TV application for your Slot Racing Club. Dive into deciphering hexadecimal data from old lap counter technology and create the parser using python.
+:keywords: lap counter TV app, slot racing club, embedded systems, hexadecimal decoding
+
+
+For a couple of years, one project I have wanted to pursue is building a Lap
+Counter TV application for our local Slot Racing Club.
+
+At the club, we use a lap counter technology that is 20 years old, featuring an
+RS232 interface from which I can retrieve data. I have experimented with a few
+setups, and at a baud rate of 4800, I began receiving promising hexadecimal
+values. Now, I need to decipher them
+
+My journey started with the following data:
+
+.. code-block:: bash
+
+  e0 09 15 02 0b 00 00 3e a1 00 06 00 00 00 00 00 00 00 10 00 eb e0 09 15 02 0b 00 00 3e a1 00 06 00 00 00 00 00 00 00 10 00 eb e0 09 15 02 0b 00 00 3e a1 00 06 00 00 00 00 00 00 00 10 00 eb e0 0a 15 02 0b 00 00 00 a2 00 00 00 00 00 00 00 00 00 ce 00 eb e0 0a 15 02 0b 00 00 00 a2 00 00 00 00 00 00 00 00 00 ce 00 eb e0 0a 15 02 0b 00 00 00 a2 00 00 00 00 00 00 00 00 00 ce 00 eb e0 0b 15 02 0b 00 00 00 a3 00 00 00 00 00 00 00 00 00 d0 00 eb e0 0b 15 02 0b 00 00 00 a3 00 00 00 00 00 00 00 00 00 d0 00 eb e0 0b 15 02 0b 00 00 00 a3 00 00 00 00 00 00 00 00 00 d0 00 eb e0 0c 15 02 0b 00 00 1b a9 00 00 00 00 00 aa aa aa aa 9a 00 eb e0 0c 15 02 0b 00 00 1b a9 00 00 00 00 00 aa aa aa aa 9a 00 eb e0 0c 15 02 0b 00 00 1b a9 00 00 00 00 00 aa aa aa aa 9a 00 eb e0 0d 15 02 0b 00 00 1b a9 a8 00 00 00 01 00 02 52 90 80 00 eb e0 0d 15 02 0b 00 00 1b a9 a8 00 00 00 01 00 02 52 90 80 00 eb e0 0d 15 02 0b 00 00 1b a9 a8 00 00 00 01 00 02 52 90 80 00 eb e0 0e 15 02 0b 00 00 1b a9 a8 00 00 00 02 00 01 28 60 27 00 eb e0 0e 15 02 0b 00 00 1b a9 a8 00 00 00 02 00 01 28 60 27 00 eb e0 0e 15 02 0b 00 00 1b a9 a8 00 00 00 02 00 01 28 60 27 00 eb e0 0f 15 02 0b 00 00 1b a9 00 00 00 00 03 00 02 13 40 4d 00 eb e0 0f 15 02 0b 00 00 1b a9 00 00 00 00 03 00 02 13 40 4d 00 eb e0 0f 15 02 0b 00 00 1b a9 00 00 00 00 03 00 02 13 40 4d 00 eb e0 10 15 02 0b 00 00 1b a9 a8 00 00 00 04 00 01 23 80 46 00 eb e0 10 15 02 0b 00 00 1b a9 a8 00 00 00 04 00 01 23 80 46 00 eb e0 10 15 02 0b 00 00 1b a9 a8 00 00 00 04 00 01 23 80 46 00 eb e0 11 15 02 0b 00 00 1b a9 00 00 00 00 05 00 02 71 90 ff 00 eb e0 11 15 02 0b 00 00 1b a9 00 00 00 00 05 00 02 71 90 ff 00 eb e0 11 15 02 0b 00 00 1b a9 00 00 00 00 05 00 02 71 90 ff 00 eb e0 12 15 02 0b 00 00 1c a9 00 00 00 00 06 00 11 63 50 c3 00 eb e0 12 15 02 0b 00 00 1c a9 00 00 00 00 06 00 11 63 50 c3 00 eb e0 12 15 02 0b 00 00 1c a9 00 00 00 00 06 00 11 63 50 c3 00 eb e0 13 15 02 0b 00 00 1b a9 00 00 00 00 06 00 01 72 70 e2 00 eb e0 13 15 02 0b 00 00 1b a9 00 00 00 00 06 00 01 72 70 e2 00 eb e0 13 15 02 0b 00 00 1b a9 00 00 00 00 06 00 01 72 70 e2 00 eb e0 14 15 02 0b 00 00 00 a4 00 00 00 00 00 00 00 00 00 da 00 eb e0 14 15 02 0b 00 00 00 a4 00 00 00 00 00 00 00 00 00 da 00 eb e0 14 15 02 0b 00 00 00 a4 00 00 00 00 00 00 00 00 00 da 00 eb 
+
+
+When you encounter a situation like this, you need to start identifying the
+pattern. The beginning of the pattern seems to be clear, in this case 'e0', and
+the ending byte should be something before 'e0', which appears to be 'eb' in
+this instance.
+
+Great, we have identified a pattern of 21 bytes! Now, every time a lap is
+counted, the serial port sends some information. Let's delve into it by creating
+a table that includes the byte position, hexadecimal value, and decimal values!
+
+
+Example for lap2:
+
+.. code-block:: text
+
+    |    0 |    1 |    2 |    3 |    4 |    5 |    6 |    7 |    8 |    9 |   10 |   11 |   12 |   13 |   14 |   15 |   16 |   17 |   18 |   19 |   20
+    | 0xe0 | 0x1a | 0x15 | 0x02 | 0x0b | 0x00 | 0x00 | 0x1b | 0xa9 | 0x00 | 0x00 | 0x00 | 0x00 | 0x02 | 0x00 | 0x06 | 0x23 | 0x00 | 0x2b | 0x00 | 0xeb
+    |  224 |   26 |   21 |    2 |   11 |    0 |    0 |   27 |  169 |    0 |    0 |    0 |    0 |    2 |    0 |    6 |   35 |    0 |   43 |    0 |  235
+
+
+Example for lap 3:
+
+.. code-block:: text
+
+    |    0 |    1 |    2 |    3 |    4 |    5 |    6 |    7 |    8 |    9 |   10 |   11 |   12 |   13 |   14 |   15 |   16 |   17 |   18 |   19 |   20
+    | 0xe0 | 0x1b | 0x15 | 0x02 | 0x0b | 0x00 | 0x00 | 0x1b | 0xa9 | 0x00 | 0x00 | 0x00 | 0x00 | 0x03 | 0x00 | 0x06 | 0x70 | 0x70 | 0xea | 0x00 | 0xeb
+    |  224 |   27 |   21 |    2 |   11 |    0 |    0 |   27 |  169 |    0 |    0 |    0 |    0 |    3 |    0 |    6 |  112 |  112 |  234 |    0 |  235
+
+And in the final lap, I got the following:
+
+.. code-block:: text
+
+    |    0 |    1 |    2 |    3 |    4 |    5 |    6 |    7 |    8 |    9 |   10 |   11 |   12 |   13 |   14 |   15 |   16 |   17 |   18 |   19 |   20
+    | 0xe0 | 0x1f | 0x15 | 0x02 | 0x0b | 0x00 | 0x00 | 0x1b | 0xa9 | 0xa8 | 0x00 | 0x00 | 0x00 | 0x06 | 0x00 | 0x02 | 0x81 | 0x00 | 0x36 | 0x00 | 0xeb
+    |  224 |   31 |   21 |    2 |   11 |    0 |    0 |   27 |  169 |  168 |    0 |    0 |    0 |    6 |    0 |    2 |  129 |    0 |   54 |    0 |  235
+    ...
+    |    0 |    1 |    2 |    3 |    4 |    5 |    6 |    7 |    8 |    9 |   10 |   11 |   12 |   13 |   14 |   15 |   16 |   17 |   18 |   19 |   20
+    | 0xe0 | 0x20 | 0x15 | 0x02 | 0x0b | 0x00 | 0x00 | 0x1c | 0xa9 | 0x00 | 0x00 | 0x00 | 0x00 | 0x06 | 0x00 | 0x80 | 0x17 | 0x70 | 0x14 | 0x00 | 0xeb
+    |  224 |   32 |   21 |    2 |   11 |    0 |    0 |   28 |  169 |    0 |    0 |    0 |    0 |    6 |    0 |  128 |   23 |  112 |   20 |    0 |  235
+
+The good thing about this lap counter is that it has a display, so I can see the information I need. In this case, the information should be:
+
+- Lap2: 6.23seconds
+- Lap3: 6.70seconds
+- Lap6: 2.81seconds
+- Final time 80.1770 seconds:
+
+Looking at these patterns, we can identify key elements:
+
+- Byte 0: seems to be the starting of the secuence, and a constant.
+- Byte 1: is different across all times.
+- Byte 2:  is consistent and may indicate the length of the message.
+- Byte 3-6,8: always constant.
+- Byte 7: Aha! something interesting, the 0x1c is only when the counter finish, and 01xb when reporting the lap.
+- Byte 9: Something differnet, but I didn't find the pattern when 0xa8 happens.
+- Byte 13: Looks like the lap number.
+- Byte 14-18: Aha! Looks like the numbers for the counter, let's dig in in!
+- Byte 19: might be a CRC?
+- Byte 20: marks the end of the message.
+
+Ok, let's dig into the numbers. Clearly, it's not reporting the current time in decimal; it's using a different notation. The lap counter's display is an 8-digit display, and we have 4 bytes of information. Maybe it's using 4 bits for each digit?
+
+Let's analyze byte number 15; there's some interesting information there. For byte 15, if the number is smaller than 10, it appears to be in decimal. However, when the value is greater, it does not match the direct decimal interpretation. For example, for the final time, when the value is 0x80 or 128 in decimal, the display value was 80 seconds.
+
+Electronics normally works in 0 and 1, let's put the value in binary:
+
+
+.. code-block:: text
+
+   HEX: 0x80, decial: 128, binary: 10000000
+
+We need an 8, and we found it, we can split the binary in 2 parts:
+
+- **1000** is 8
+- **0000** is 0
+
+We found how the data is sent, let's parse it:
+
+.. code-block:: python
+
+  def parse(x):
+      return "{}{}".format(x>>4, x&0xf)
+
+  def parse_lap_time(data):
+      if len(data) != 21:
+          raise ValueError("Invalid data length. Expected 21 bytes.")
+
+      data_type = data[7]
+      lap = data[13]
+      secondsa = data[14]
+      secondsb = data[15]
+      millisecondsa = data[16]
+      millisecondsb = data[17]
+
+      time = "LAP:{} Seconds:'{}{}' mili: '{}{}'".format(
+              parse(lap),
+              parse(secondsa),
+              parse(secondsb),
+              parse(millisecondsa),
+              parse(millisecondsb))
+
+      if data_type == 0x1B:
+          print("Is lap time", time)
+      elif data_type == 0x1C:
+          print("Is final time", time)
+
+This parser can handle the lap data and distinguish between lap times and the
+final time. From here, we can develop further applications to process and
+display this data. It's been exciting to dive back into this type of reverse
+engineering!
