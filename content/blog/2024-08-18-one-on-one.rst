@@ -1,0 +1,82 @@
+Less 1:1 meetings
+===================
+
+:date: 2024-08-18 12:00
+:language: en-GB
+:author: eloycoto
+:head: Less 1:1 meetings
+:index_title: Less 1:1 meetings
+:metatitle: Improving Team Communication: Why I Replaced Weekly 1:1s with Status Emails and Monthly Check-ins
+:tags: thoughts
+:metatags: team communication, performance reviews, employee development, workplace productivity, team meetings, management tips, status updates, 1:1 meetings, manager-employee relations, remote work communication
+:description: Discover why I transitioned from weekly 1:1 meetings to a more effective communication strategy involving weekly status emails and monthly performance check-ins. Learn how this change improved team dynamics, reduced unnecessary pressure, and enhanced my overall productivity and job satisfaction.
+:keywords: team communication, 1:1 meetings, performance management, workplace productivity, employee development, management strategies, status emails, remote work, team dynamics, workplace improvement
+
+Over the past few years, I had weekly 1:1 meetings with my manager. However,
+after returning from a long sick leave, I realized that these meetings were
+doing more harm than good.
+
+While weekly 1:1s are useful for identifying issues, they created the following
+problems for me:
+
+- In weekly 1:1s, team problems are often managed by the manager, which is
+  counterproductive. Why would you fix something within the team when your
+  manager is already handling it? Managers should focus on eliminating
+  roadblocks rather than managing team dynamics.
+- Weekly 1:1s also prevent you from filtering out minor issues, leading to
+  discussions about trivial matters every week. This constant focus on problems
+  negatively impacts morale.
+- What about Performance & Development (P&D)? Are we really working on
+  performance weekly? That’s unrealistic. P&D should be done in year/6months.
+  Weekly focus on P&D doesn’t provide any personal benefit and get you to focus
+  in short goals instead of big goals.
+
+What I'm doing instead of meetings?
+-----------------------------------
+
+Weekly email status:
+~~~~~~~~~~~~~~~~~~~~~
+
+Currently, I'm sending a weekly email with status update, something that my
+manager can digest. If something is on fire, we can have a quick chat. The
+template that I'm using is:
+
+- **Status:** The two sentence status about how the week was.
+- **Blocker:** If I can see any blocker out there.
+- **Pain:** The list of things that are painful this week, and if something can
+  be fixed.
+- **Achievements:** Things that I achieved this week
+- **Next Goals:** Goals for the next week
+
+Monthly 1:1
+~~~~~~~~~~~~
+
+These are focused on performance and development. I usually send my agenda to
+my manager beforehand. During these meetings, I concentrate on my own progress
+and what I can do to improve, rather than on team matters.
+
+Team meetings:
+~~~~~~~~~~~~~~~
+
+I'm trying to write more, **a lot more**. In my dayly standups(slack) I'm
+trying to explain all with more details.
+
+What am I aiming to achieve?
+-----------------------------
+
+- **No more private messages:** Does it make sense to have private
+  conversations with my manager? No! This encourages me to bring up issues in
+  team meetings instead.
+- **Discuss team matters with the team:** If something is important, it should
+  be discussed with the team. In my current project, where personal agendas are
+  prevalent, having public discussions helps others identify and address
+  issues.
+
+
+Does it work?
+-------------
+
+Currently, I can see that I do not complain weekly, so my mod is much better at
+the end of the week. I also focus more in the roadblocks and long term. In
+terms of development, I don't have weekly nosense preasure. I'm happy as hell
+with this idea, let's see in the long term if that works.
