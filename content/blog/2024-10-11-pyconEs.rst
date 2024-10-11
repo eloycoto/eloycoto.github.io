@@ -1,0 +1,98 @@
+My Experience at PyConEs
+========================
+
+:date: 2024-10-11 23:00
+:language: en-GB
+:author: eloycoto
+:head: My Experience at PyConEs
+:index_title: PyConEs: A Tech Conference to Remember
+:metatitle: PyConEs 2024: Insights from a Tech Conference Attendee
+:tags: python, ai
+:metatags: PyConEs, Python conference, AI, machine learning, quantum computing
+:description: A personal account of attending PyConEs, covering insights on AI, MLOps, quantum computing, and more from one of Spain's largest Python conferences.
+:keywords: PyConEs, Python, AI, machine learning, quantum computing, MLOps, tech conference, PINNs
+
+I had the privilege of attending PyConEs, the largest tech conference in my
+town. From the moment it was announced, I knew it would be an incredible event,
+especially since many of the organizers were close friends whom I admire.
+
+Although I'm not heavily involved in Python development (though I've been using
+it more recently due to the AI trend), I thoroughly enjoyed the conference.
+Here are my favorite talks and key learnings:
+
+1. Introduction to Physics-informed Neural Networks (PINNs)
+-----------------------------------------------------------
+
+This talk was outstanding. I learned about adjusting AI models with expected
+formulas and how AI might help discover new physics equations. I'm excited to
+delve deeper into this topic soon.
+
+2. MLOps: Maintaining a Healthy ML Infrastructure
+-------------------------------------------------
+
+Daniel Cabo's presentation on MLOps was exceptional. He taught us how to
+maintain a robust ML infrastructure for both inference and training data.
+
+3. Quantum Computing
+----------------------
+
+We were fortunate to have Ismael Faro on stage, sharing his vision of quantum
+computing. It was fascinating to see how AI and quantum worlds may interact. I
+believe this convergence will happen sooner than we think. I was particularly
+shocked by IBM's use of AI to transpile quantum circuits.
+
+4. Oxidizing Python Projects
+----------------------------
+
+Diego's talk on integrating Rust into Python projects was illuminating. I was
+impressed by how Qiskit uses pyO3 and Rust to improve performance. The
+integration of Rayon with Python was a pleasant surprise.
+
+5. The Python GIL: Informative and Entertaining
+-----------------------------------------------
+
+Pablo Galindo's presentation on the Python Global Interpreter Lock (GIL) was
+both informative and funny.
+
+6. AI in Fashion: Outfit Generator
+----------------------------------
+
+Clara Marti's talk on Inditex's outfit generator help me to understand better
+the convolution neural network
+
+Volunteering and Networking
+---------------------------
+
+I had the opportunity to lead an open space session, which turned out to be a
+great experience thanks to the enthusiastic participants.
+
+One of the highlights was reconnecting with many old friends I hadn't seen
+during my recovery period. It was wonderful to learn from them again.
+
+As a volunteer, I had the chance to speak with the Galician Education Counselor
+about remote work opportunities in Galicia. I also took on the role of advising
+the organizers on potential issues and suggesting proactive solutions, and I
+love that role!
+
+.. figure:: img/pycon_es_xunta.jpg
+   :alt: pycon_es_xunta
+
+A Personal Note
+---------------
+
+Just days before the conference, I received news of three new small tumors.
+Initially, I considered not attending, but knowing how hard Alex and the Python
+Vigo team had worked, I decided to go and support them. I couldn't be happier
+with that decision.
+
+A big thank you to Alex for leading and to the Python Vigo team for organizing
+this fantastic event!
+
+.. figure:: img/pycon_es.jpg
+   :alt: pycon_es
+
+PS: As a special treat, volunteers received awesome swag crafted by A
+Industriosa members using a laser cutter.
+
+.. figure:: img/pycon_es_plato.jpg
+   :alt: pycon_es plato
