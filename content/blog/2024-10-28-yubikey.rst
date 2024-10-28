@@ -1,0 +1,89 @@
+Using National Certificates with OpenSSL and YubiKey
+====================================================
+
+:date: 2024-10-28 23:00
+:language: en-GB
+:author: eloycoto
+:head: Using National Certificates with OpenSSL and YubiKey
+:index_title: National Certificates: From Legacy OpenSSL to YubiKey
+:metatitle: Guide: Migrating Legacy National Certificates to Modern OpenSSL and YubiKey Storage
+:tags: security
+:metatags: OpenSSL Legacy Certificates, YubiKey PIV, Digital Certificates, mTLS Configuration, Certificate Migration
+:description: Learn how to handle legacy national certificates with modern OpenSSL, migrate them to newer encryption standards, and securely store them in a YubiKey for enhanced security and convenience.
+:keywords: OpenSSL, YubiKey, Digital Certificates, PIV, Legacy Certificates, mTLS, Certificate Migration, PKCS12, Security Token, Certificate Storage
+
+When I tried to use the national certificate, I was unable to do so due to the
+encryption algorithm. Some algorithms are set as legacy in the newer versions
+of OpenSSL (3.0.0).
+
+To discover the encryption type, you can run the following:
+
+.. code-block:: bash
+
+    -> openssl pkcs12 -info -in cert.pfx -noout
+    Shrouded Keybag: pbeWithSHA1And3-KeyTripleDES-CBC, Iteration 600000
+    PKCS7 Encrypted data: pbeWithSHA1And40BitRC2-CBC, Iteration 600000
+
+For importing it into Firefox, I needed to change the encryption to a newer
+one. You might not know, but in the PKCS12 format, the certificate and the key
+are all in the same file, so you can extract all information using some OpenSSL
+commands:
+
+.. code-block:: bash
+
+    openssl pkcs12 -legacy -in cert.pfx -clcerts -nokeys -out certificate.crt
+    openssl pkcs12 -legacy -in cert.pfx -nocerts -out encrypted.key
+    openssl rsa -in encrypted.key -out private.key
+
+Note that the `-legacy` option is needed to extract the values.
+
+With all the information extracted, we need to bundle everything in the same
+file using the following command:
+
+.. code-block:: bash
+
+   openssl pkcs12 -export -in certificate.crt -inkey private.key -out certificate.p12
+
+Checking the algorithm again gives better results:
+
+.. code-block:: bash
+
+  -> openssl pkcs12 -info -in certificate.p12 -noout
+  PKCS7 Encrypted data: PBES2, PBKDF2, AES-256-CBC, Iteration 2048, PRF hmacWithSHA256
+  Shrouded Keybag: PBES2, PBKDF2, AES-256-CBC, Iteration 2048, PRF hmacWithSHA256
+
+Importing into the browser now works correctly!
+
+Bonus: Want to store it in the YubiKey?
+****************************************
+
+YubiKey is a nice tool that I highly recommend. In YubiKey, you can store PIV
+certificates. You can load the certificates using the following commands:
+
+Load into Auth slot:
+
+.. code-block:: bash
+
+    yubico-piv-tool -s 9a -a import-cert -i certificate.crt
+    yubico-piv-tool -s 9a -a import-key -i private.key
+
+Load into Card Auth slot:
+
+.. code-block:: bash
+
+    yubico-piv-tool -s 9d -a import-cert -i certificate.crt
+    yubico-piv-tool -s 9d -a import-key -i private.key
+
+Load into Digital Signature slot:
+
+.. code-block:: bash
+
+    yubico-piv-tool -s 9c -a import-cert -i certificate.crt
+    yubico-piv-tool -s 9c -a import-key -i private.key
+
+You can learn about the purpose of each slot in the `following documentation: <https://developers.yubico.com/PIV/Introduction/Certificate_slots.html>`_
+
+With this setup, each time an mTLS request is needed in Firefox, the browser
+will ask for the YubiKey password.
+
+Hope that helps!
