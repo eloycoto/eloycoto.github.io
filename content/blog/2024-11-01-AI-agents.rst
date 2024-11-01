@@ -1,0 +1,97 @@
+Custom AI Agents and the Future of Workflow Composition
+========================================================
+:date: 2024-11-01 23:00
+:language: en-GB
+:author: eloycoto
+:head: Custom AI Agents and the Future of Workflow Composition
+:index_title: Composing Custom AI Agents for Dynamic Workflows: A Future Path
+:metatitle: Custom AI Agents and the Future of Workflow Composition
+:tags: ai
+:metatags: ai, LLMs, agents, workflow automation, ReAct, PDL, Gptscript
+:description: Exploring the next phase in AI and automation, where customisable AI agents allow companies to streamline workflows and tackle dynamic tasks. By 2025, the concept of composition will enable agents to become integral tools in the critical path, making processes more effective.
+:keywords: AI agents, LLMs, composition, ReAct, PDL, Gptscript, workflow automation, custom agents
+
+Over the last months, I've been working with LLMs full-time. All of these
+technologies are moving fast! The simple chat app is no longer valid in late
+2024. Moving into agents will be a key concept and the way forward.
+
+Agents are simple. Let me introduce them to you. In the early days, LLMs were
+one-shot: you ask, and based on the model's knowledge, you get an answer. If
+you want to add some context, you might use a bit of RAG. This is okay, but
+when building something, you need to iterate and perform multiple actions. This
+is the concept of the Agent. It's a trending technology right now, from
+`Langgraph <https://www.langchain.com/langgraph>`__ to `SWE-agent
+<https://github.com/princeton-nlp/SWE-agent>`__, `Aider
+<https://aider.chat/>`__, `Bee-agent
+<https://github.com/i-am-bee/bee-agent-framework>`__, all related to the ReAct
+paper.
+
+And here's the opportunity: a normal user will build its custom agents. It
+might consume agents from outside but will also create custom agents for its
+workflows—like handling support escalations or retrieving information from
+third parties. How will this be implemented?
+
+There is only one response: **Composition!**
+
+In the early days of containers, multiple tools tried to create alternatives to
+the Docker CLI, like Compose, Docker Swarm, and Dokku. After a while, almost
+all missed something, and building on top of them was challenging. What was the
+solution? **Composition!**
+
+Kubernetes added a way to compose apps, providing users/companies/customers
+with 80% of the implementation, users adds the next 20%. Building something
+good on top of Kubernetes became easy. This model of adding custom layers on
+top of a foundation can be found in multiple projects, from the Linux Kernel,
+Databases, Ruby on Rails, Django, and Terraform. Ultimately, you compose
+something on top of a stack that supplies 80% of the hard work.
+
+Can this be achieved with AI agents? I think so! There are two projects I'm
+keeping an eye on that I believe will allow building on top of:
+
+`Gptscript <https://github.com/gptscript-ai/gptscript>`__: I see this as
+the tool for ReAct (Reasoning and Action). It allows users to execute LLM
+workflows in a natural way, instead of diving into the roots of LLM frameworks
+like Langchain and LlamaIndex.
+
+`PDL <https://github.com/IBM/prompt-declaration-language>`__: For me, this
+is the User Agent Framework project that provides the right layer of
+abstraction. Some agents and workflows can be defined in a file, and users can
+consume advanced tools or run agents already defined in the framework or
+provided by third parties. An example can be an abstraction layer like IATI
+(AI Tools Interface), IAAI (AI Agent Interface), or IAOI (AI Output Interface).
+
+When this level of agent is in place, some awesome work can be done. For
+example, in a car factory context:
+
+- User input: The delivery of the last brake truck is 30 minutes delayed
+- Router Agent: Based on your input, I'll redirect you to the "factory line 3" subagent.
+- Line 3 Subagent: Understanding the situation, let me plan:
+    - Plan 1: Get the current queue from factory line 2 using get_queue_for_line(2).
+    - Plan 2: Get the number of brakes in stock in the failover warehouse using get_stock(brakes, warehouse=failover)
+    - Plan 3: Get current brake stock in the factory line using get_stock(brakes, warehouse=line3)
+    - Execute all plans
+    - Thought: My current stock can handle 300 cars; I need 200 more brakes from the failover warehouse
+- Action: Call failover warehouse agent and request 200 brakes be sent to Line 3.
+
+.. figure:: img/ai-workflow.png
+   :alt: ai agent workflow
+
+Should an operations manager write this workflow in Python code? I don't think
+so. The IT manager should define the tools, and from there, the operations
+manager should write small AI agents in a language that can be understood by a
+real human.
+
+
+In my view, by early 2025, we'll see open-source apps or frameworks that
+implement composition for users — it might be PDL or another framework. It'll
+be the next tool for companies to take advantage of. These agents will unlock
+things in the critical path incredibly effectively, and the future will be
+amazingly productive.
+
+
+P.S. One day, these agents will be written by AI too. They'll listen to
+meetings, and the agent will be in place. My bet is for the first quarter of
+2027.
+
+P.P.S. Despite my current health condition, I cannot imagine a better moment in
+life to launch a startup.
