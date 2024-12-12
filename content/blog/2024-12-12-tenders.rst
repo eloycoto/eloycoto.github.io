@@ -1,0 +1,212 @@
+Transforming Government Tender Data into Insights with DuckDB
+=============================================================
+:date: 2024-12-12 23:00
+:language: en-GB
+:author: eloycoto
+:tags: rust, thoughts
+:head: Learning Data Analysis with Public Tenders information
+:index_title: Learning Data Analysis with Public Tenders
+:metatitle: A Journey Through Data Analysis Using Rust and DuckDB
+:metatags: data analysis, tender data, DuckDB, Rust programming, public data analysis, data scraping
+:description: Learn how a personal recovery project transformed public tender data into actionable insights using Rust, DuckDB, and innovative data techniques.
+:keywords: tender analysis, public data, DuckDB tutorial, Rust scraping, data structures
+
+I’m currently on my second tumor recovery, and, as in the past, I need to spend
+most of my time lying in bed. I’ve decided to use this phase as an opportunity
+to learn new things and stay active. This time, I want to go deep in
+understanding of data—how to retrieve, clean, analyze it, and ultimately
+achieve better results. Living in one of the most corrupt countries in Europe,
+I wondered: given that public administrations are required to publish tender
+information, could we use this data in interesting ways?
+
+Defining a Minimal Data Structure
+---------------------------------
+
+To begin, let’s define the minimal data structure we need. It might look
+something like this:
+
+- **Contract ID:** A unique identifier for each contract.
+- **Dates:** The start date of the tender.
+- **Description:** A detailed explanation of the service or campaign.
+- **Price:** The expected cost.
+- **Purchaser:** The organization buying the service.
+- **Awarded:** Information about who won the contract.
+
+Here’s an example of how our structured data look like with a real tender
+information:
+
+.. code-block:: javascript
+
+   {
+     "id": "xunt::17774",
+     "date": "2012-07-10T00:00:00",
+     "updated_date": "2024-12-10T19:14:14.148450201",
+     "description": "Servizo para execución do plan de medios: Campaña de promoción dos produtos cabeceira da marca turítica de Galicia entre os cidadáns Galegos na cadena COPE Galicia. Cofinaciado con fondos FEDER.",
+     "category": "Servicios",
+     "source_id": "Invalid",
+     "expected_price": 29058.62,
+     "src_url": "https://www.contratosdegalicia.gal/licitacion?OP=50&N=17774&lang=es",
+     "purchaser": {
+       "id": "218",
+       "name": "Secretaría Xeral  para o Turismo (Presidencia da Xunta)"
+     },
+     "status": "Awarded",
+     "awarded": [
+       {
+         "id": "NOID",
+         "name": "RADIO POPULAR S.A.",
+         "price": 29058.62,
+         "date": "2012-10-10T00:00:00"
+       }
+     ]
+   }
+
+Gathering the Data
+------------------
+
+To collect this information, I used RSS feeds[1], a bit of web scraping, and
+parsing. I decided to implement everything in Rust, utilizing tools like `Tokio
+<https://tokio.rs/>`__, `Scraper <https://docs.rs/scraper/latest/scraper/>`__,
+and Indexes. To enhance performance, the entire process is asynchronous. I also
+experimented with `Rayon <https://docs.rs/rayon/latest/rayon/>`__ —what an
+awesome framework!
+
+For the scraping service, I used an index to store the state. Normally, I’d opt
+for SQLite, but I wanted to try `Polars <https://pola.rs/>`_ for this project.
+Polars also allowed me to store the index in Parquet files easily.
+
+.. code-block:: rust
+
+   let file = File::create(self.file_path.as_str())
+       .map_err(|e| format!("Failed to create file: {}", e))?;
+
+   ParquetWriter::new(file)
+       .with_compression(ParquetCompression::Snappy)
+       .with_row_group_size(Some(256))
+       .finish(&mut self.df)?;
+   info!("Index writter succesfully finished");
+   Ok(())
+
+About Polars, for this use case, SQLite will be easier and fits better to be
+honest, but I really love to try it!.
+
+All tender information is saved in a directory structure like this:
+
+.. code-block:: bash
+
+   ./${PURCHASER_ID}/${YEAR}/${ID}.json
+
+At this stage, I didn’t want to commit to any database. Instead, I preferred to
+use plain text files for simplicity. This approach also allowed me to run the
+scraper daily using GitHub Actions. While I could have used SQLite or another
+tool, plain files offered flexibility, and I could always transform the data
+later if needed.
+
+Exploring DuckDB
+----------------
+
+One challenge with government portals is that you can’t filter tenders by the
+awarded company, making it difficult to see who frequently wins contracts. With
+the data structured appropriately, the next step was loading it into a
+database. Given the recomendatation from `Anton
+<https://www.galiglobal.com/>`__, I chose to experiment with `DuckDB
+<https://duckdb.org/>`__, inspired by its efficient handling json files and the
+availibility to export to Parquet files.
+
+The first step was loading all tenders into a table, a straightforward process:
+
+.. code-block:: sql
+
+   CREATE table tenders as SELECT
+         id,
+         date,
+         description,
+         category,
+         source_id,
+         expected_price,
+         src_url,
+         purchaser,
+         status,
+         awarded
+     FROM read_ndjson('./39/*/*.json');
+
+I didn’t bother with advanced type casting or transformations at this point,
+but casting is available too.
+
+Here’s the resulting table structure:
+
+.. code-block:: text
+
+   > DESCRIBE tenders;
+   ┌────────────────┬──────────────────────────────────────────────┬─────────┬─────────┬─────────┬─────────┐
+   │  column_name   │                 column_type                  │  null   │   key   │ default │  extra  │
+   │    varchar     │                   varchar                    │ varchar │ varchar │ varchar │ varchar │
+   ├────────────────┼──────────────────────────────────────────────┼─────────┼─────────┼─────────┼─────────┤
+   │ id             │ VARCHAR                                      │ YES     │         │         │         │
+   │ date           │ VARCHAR                                      │ YES     │         │         │         │
+   │ description    │ VARCHAR                                      │ YES     │         │         │         │
+   │ category       │ VARCHAR                                      │ YES     │         │         │         │
+   │ source_id      │ VARCHAR                                      │ YES     │         │         │         │
+   │ expected_price │ DOUBLE                                       │ YES     │         │         │         │
+   │ src_url        │ VARCHAR                                      │ YES     │         │         │         │
+   │ purchaser      │ STRUCT(id VARCHAR, "name" VARCHAR)           │ YES     │         │         │         │
+   │ status         │ VARCHAR                                      │ YES     │         │         │         │
+   │ awarded        │ STRUCT(id VARCHAR, "name" VARCHAR, price D…  │ YES     │         │         │         │
+   ├────────────────┴──────────────────────────────────────────────┴─────────┴─────────┴─────────┴─────────┤
+   │ 10 rows                                                                                     6 columns │
+   └───────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+DuckDB is fantastic. If the dataset exceeds available RAM, you can define
+temporary files. Also you can export the data to Parquet files in a single
+command.
+
+Making Queries
+~~~~~~~~~~~~~~
+
+From here, you can run insightful queries. For example:
+
+.. code-block:: sql
+
+   Select
+       sum(CAST(award_entry.price as INT)) as total,
+       award_entry.name as name
+   from (
+       select
+           id,
+           unnest(awarded) as award_entry
+       from tenders where status == 'Awarded'
+   ) group by name order by total DESC limit 10;
+
+What’s Next?
+------------
+
+Sadly, not much. While this data in Parquet format could be incredibly valuable
+for auditing public tenders, publishing it comes with significant challenges.
+To make the dataset public, I’d need to comply with GDPR regulations, which are
+strict. The Spanish government has already `issued <https://www.hacienda.gob.es/es-ES/El%20Ministerio/Paginas/DPD/REGISTRO_DE_ACTIVIDADES_DE_TRATAMIENTO_DE_HACIENDA.aspx>`_
+warnings about this topic.
+
+-  **Is this data interesting?** Yes!
+-  **Can it be auto-updated and made publicly available via GitHub Actions?** Absolutely!
+-  **Would citizens benefit?** Yes!
+-  **Could I face significant legal risks?** Unfortunately, also yes!
+-  **Could AI audit thousands of contracts using this data?** Definitely!
+
+If I were in my twenties, I might have shared this with the world. But the
+potential troubles far outweigh the benefits. As Peter Thiel wrote in Zero to
+One: *"Winning is better than losing, but everybody loses when the war isn’t one
+worth fighting"*. My primary goal for this project was to practice handling
+large datasets, stay sharp, and keep myself occupied during part of my
+recovery. Mission accomplished 🚀!
+
+**This project was a lot of fun**. Now, it’s time to switch gears and dive into
+`AA228 <https://aa228.stanford.edu/>`__.
+
+**[1]** Spain govt publishes a monthly ZIP file containing all the tenders data
+files for that month in atom format, like:
+
+.. code-block:: bash
+
+   curl https://contrataciondelsectorpublico.gob.es/sindicacion/sindicacion_643/licitacionesPerfilesContratanteCompleto3_202401.zip
+   curl https://contrataciondelsectorpublico.gob.es/sindicacion/sindicacion_643/licitacionesPerfilesContratanteCompleto3_202402.zip
+
