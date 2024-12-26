@@ -1,5 +1,5 @@
 html {
-  font-family: sans-serif;
+  font-family: sans-serif, mon;
   font-size: 1.5em;
   line-height: 1.75;
   margin: auto;
@@ -46,7 +46,7 @@ pre {
 
 .index-list dt {
   display: table-cell;
-  width: 9em;
+  width: 5em;
 }
 
 .index-list dd {
