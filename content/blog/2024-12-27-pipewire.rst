@@ -1,0 +1,118 @@
+Playing with Pipewire audio streams and Rust
+=============================================
+:date: 2024-12-27 23:00
+:language: en-GB
+:author: eloycoto
+:tags: rust, linux
+:head: Capturing Audio with Pipewire and Rust: A Practical Guide
+:index_title: Working with Pipewire Audio Streams in Rust
+:metatitle: How to Capture Audio Using Pipewire and Rust | Linux Audio Programming
+:metatags: pipewire tutorial, rust audio programming, linux audio capture, pipewire rust example, audio streaming linux
+:description: Learn how to capture audio streams in Linux using Pipewire and Rust. This practical guide covers stream initialization, event handling, and real-world implementation with code examples.
+:keywords: pipewire, rust, linux audio, audio capture, stream api, pw-mon, pw-cli, pw-dump, audio programming, pulseaudio replacement
+
+
+The world of media and Linux got a major update over the last few years thanks
+to the work done in Pipewire. Over the last few days, I was playing around with
+audio to see what can be done using Pipewire. If you don't know, Pipewire is a
+project which adds a layer of abstraction on top of the Linux drivers to handle
+audio/video streams. This is the replacement for PulseAudio in major Linux
+distributions.
+
+The project is entirely written in C, and you can do multiple things like
+create a new input device to generate tones/loops, get video streams, or
+receive audio streams in your application. The good thing is that the framework
+was designed with the idea of attaching things to it, so you can compose many
+applications on top of it!
+
+Let's analyze how to capture audio in Rust with Pipewire, but before we start,
+here are a few useful commands:
+
+- **pw-mon**: A tool to monitor all Pipewire object changes
+- **pw-cli**: A CLI tool with various options for Pipewire objects. `pw-cli
+  list-objects` is handy many times
+- **pw-dump**: is cool because it dumps the state of Pipewire in JSON, so jq
+  filters are handy for debugging
+
+If you want to capture the output audio, the Stream API is available to be
+used. Stream API defines a way to consume (`PW_DIRECTION_INPUT
+<https://docs.pipewire.org/group__pw__port.html#gac8fe785592185f71666d2d03903cc367>`__)
+or produce audio (`PW_DIRECTION_OUTPUT
+<https://docs.pipewire.org/group__pw__port.html#gac245481d75b73061398575ed44ab3e07>`__).
+
+To initialize a stream, we should start with the following code:
+
+.. code-block:: rust
+
+    let props = properties! {
+        *pw::keys::MEDIA_TYPE => "Audio",
+        *pw::keys::MEDIA_CATEGORY => "Capture",
+        *pw::keys::MEDIA_ROLE => "Music",
+    };
+
+    let stream = pw::stream::Stream::new(&core, "audio-capture", props)?;
+
+With this API call, the stream is created but it's not yet connected to the
+Pipewire server. Before connecting, we need to decide what we want to do with
+it. In this case, we need to add an `event handler
+<https://docs.pipewire.org/structpw__stream__events.html>`__. In Rust, the code
+looks like this:
+
+.. code-block:: rust
+
+    let _listener = stream
+        .add_local_listener_with_user_data(data)
+        .param_changed(|_, user_data, id, param| {
+                ...
+        })
+        .process(|stream, user_data|  {
+            ...
+        }
+        })
+        .register()?;
+
+
+Where:
+
+- **add_local_listener_with_user_data:** A way to define what kind of data
+  we're going to get from the stream; it's different for audio or video, for
+  example
+- **param_changed** (`doc <https://docs.pipewire.org/structpw__stream__events.html#a4d1ed03aa78fb2c8324ae13bc45731e3>`__):
+  Called when the server changes some media params in the stream, it will
+  notify here to modify if needed.
+- **process:** The "good" callback to receive audio. In this case, you receive
+  the stream and the user_data (which is defined in
+  `add_local_listener_with_user_data`). All these process calls are async and
+  don't block the output to the device. Here the API call
+  `pw_stream_dequeue_buffer
+  <https://docs.pipewire.org/group__pw__stream.html#ga0ed34dd74ca8f5f46db7c2a4cbd45a94>`__
+  should be used to retrieve the data.
+
+After we've registered the listener, we just need to connect the media with a
+simple call to connect to the server:
+
+
+.. code-block:: rust
+
+    stream.connect(
+        spa::utils::Direction::Input,
+        None,
+        pw::stream::StreamFlags::AUTOCONNECT
+            | pw::stream::StreamFlags::MAP_BUFFERS
+            | pw::stream::StreamFlags::RT_PROCESS,
+        &mut params,
+
+When we have this set up, we only need to start the mainloop, and we can see
+the changes in our Pipewire server using the `pw-mon` command:
+
+.. code-block:: rust
+
+    mainloop.run();
+
+It was a joy to work with this API - I learned a ton!
+
+Full examples can be found here:
+    - `C audio capture <https://docs.pipewire.org/audio-capture_8c-example.html#a22>`__
+    - `Rust audio capture <https://gitlab.freedesktop.org/pipewire/pipewire-rs/-/raw/main/pipewire/examples/audio-capture.rs?ref_type=heads>`__
+    - `Stream documentation <https://docs.pipewire.org/page_streams.html>`__
+
