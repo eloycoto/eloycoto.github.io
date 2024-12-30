@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multi-Axis Graph</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .controls {
+            width: 200px;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 10px;
+            font-family: monospace;
+            margin-bottom: 10px;
+        }
+        .graph-container {
+            flex-grow: 1;
+            height: 400px;
+            position: relative;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .info {
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Multi-Axis Graph</h1>
+    <div class="container">
+        <div class="controls">
+            <textarea id="input" placeholder="Enter values (comma-separated on each line)&#10;Example:&#10;1.2,2.3,3.4&#10;2.1,3.2,4.3"></textarea>
+            <button id="clearBtn">Clear Data</button>
+            <div class="info">Enter values as comma-separated numbers on each line. Each position represents a different axis.</div>
+        </div>
+        <div class="graph-container">
+            <canvas id="graph"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const textarea = document.getElementById('input');
+        const clearBtn = document.getElementById('clearBtn');
+        const ctx = document.getElementById('graph').getContext('2d');
+
+        // Colors for different axes
+        const axisColors = ['#4CAF50', '#2196F3', '#FFC107', '#E91E63', '#9C27B0', '#FF5722'];
+        const axisNames = ['X-Axis', 'Y-Axis', 'Z-Axis', 'Axis 4', 'Axis 5', 'Axis 6'];
+
+        // Initialize the chart
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: []
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Y'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'X'
+                        }
+                    }
+                },
+                animation: {
+                    duration: 0
+                }
+            }
+        });
+
+        function updateGraph() {
+            // Split input into lines
+            const lines = textarea.value.trim().split('\n');
+            
+            // Parse each line into arrays of numbers
+            const data = lines.map(line => 
+                line.split(',')
+                    .map(v => parseFloat(v.trim()))
+                    .filter(v => !isNaN(v))
+            ).filter(arr => arr.length > 0);
+
+            if (data.length === 0) {
+                chart.data.labels = [];
+                chart.data.datasets = [];
+                chart.update();
+                return;
+            }
+
+            // Find the maximum number of axes in any line
+            const maxAxes = Math.max(...data.map(arr => arr.length));
+
+            // Prepare datasets for each axis
+            const datasets = [];
+            for (let axis = 0; axis < maxAxes; axis++) {
+                datasets.push({
+                    label: axisNames[axis] || `Axis ${axis + 1}`,
+                    data: data.map(values => values[axis] || null),
+                    borderColor: axisColors[axis % axisColors.length],
+                    borderWidth: 2,
+                    tension: 0.1,
+                    fill: false
+                });
+            }
+
+            // Update chart
+            chart.data.labels = data.map((_, i) => i + 1);
+            chart.data.datasets = datasets;
+            chart.update();
+        }
+
+        // Clear button handler
+        clearBtn.addEventListener('click', () => {
+            textarea.value = '';
+            updateGraph();
+        });
+
+        // Update graph on input change
+        textarea.addEventListener('input', updateGraph);
+    </script>
+</body>
+</html>
