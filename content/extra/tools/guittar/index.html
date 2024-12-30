@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chord Progression Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .song-display {
+            display: flex;
+            gap: 20px;
+        }
+        .chord-section, .lyrics-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .line {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 60px; /* Set minimum height for both sections */
+        }
+        .measure-container {
+            display: flex;
+            width: 100%;
+            gap: 2px;
+            height: 100%;
+        }
+        .measure {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            flex: 1;
+            border-right: 1px solid #eee;
+            padding: 0 2px;
+        }
+        .measure:last-child {
+            border-right: none;
+        }
+        .beat {
+            text-align: center;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background-color 0.1s;
+            min-width: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .beat.active {
+            background-color: #90EE90;
+        }
+        .chord {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .beat-number {
+            color: #999;
+            font-size: 0.8em;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .lyrics-section .line {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            font-size: 1.1em;
+        }
+        select, input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        select {
+            min-width: 200px;
+        }
+        input[type="number"] {
+            width: 80px;
+        }
+        input[type="range"] {
+            width: 150px;
+        }
+        button {
+            padding: 8px 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        h3 {
+            margin-top: 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Rest of the HTML and JavaScript remains the same -->
+    <div class="controls">
+        <select id="songSelect">
+            <option value="loading">Loading songs...</option>
+        </select>
+        <input type="number" id="tempo" min="60" max="200" value="120" placeholder="Tempo (BPM)">
+        <input type="range" id="volume" min="0" max="100" value="75" title="Volume">
+        <button id="playButton">Play Beat</button>
+    </div>
+
+    <div class="song-display">
+        <div class="chord-section">
+            <h3>Chords</h3>
+            <div id="chordDisplay"></div>
+        </div>
+        <div class="lyrics-section">
+            <h3>Lyrics</h3>
+            <div id="lyricsDisplay"></div>
+        </div>
+    </div>
+
+    <script>
+        // The entire JavaScript section remains unchanged
+        // DOM Elements
+        const songSelect = document.getElementById('songSelect');
+        const tempoInput = document.getElementById('tempo');
+        const volumeInput = document.getElementById('volume');
+        const playButton = document.getElementById('playButton');
+        const chordDisplay = document.getElementById('chordDisplay');
+        const lyricsDisplay = document.getElementById('lyricsDisplay');
+
+        // Audio Context and state
+        let audioContext;
+        let metronomeInterval;
+        let currentBeat = 0;
+        let totalBeats = 0;
+        let beatElements = [];
+
+        // Initialize with empty songs object
+        let songs = {
+            loading: {
+                name: "Loading...",
+                tempo: 120,
+                lines: []
+            }
+        };
+
+        function createMetronomeSound() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
+            
+            filter.type = 'bandpass';
+            filter.frequency.value = currentBeat % 4 === 0 ? 750 : 500;
+            filter.Q.value = 10;
+            
+            oscillator.connect(filter);
+            filter.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            const volume = (volumeInput.value / 100) * (currentBeat % 4 === 0 ? 1 : 0.7);
+            oscillator.type = 'triangle';
+            oscillator.frequency.value = currentBeat % 4 === 0 ? 750 : 500;
+            
+            const now = audioContext.currentTime;
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(volume, now + 0.001);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+            
+            oscillator.start(now);
+            oscillator.stop(now + 0.05);
+        }
+
+        function updateBeatHighlight() {
+            beatElements.forEach((beat, index) => {
+                beat.classList.toggle('active', index === currentBeat);
+            });
+        }
+
+        function startMetronome() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            const bpm = parseInt(tempoInput.value);
+            const interval = (60 / bpm) * 1000;
+            currentBeat = 0;
+            
+            if (metronomeInterval) {
+                clearInterval(metronomeInterval);
+            }
+            
+            updateBeatHighlight();
+            createMetronomeSound();
+            
+            metronomeInterval = setInterval(() => {
+                currentBeat = (currentBeat + 1) % totalBeats;
+                updateBeatHighlight();
+                createMetronomeSound();
+            }, interval);
+            
+            playButton.textContent = 'Stop';
+        }
+
+        function stopMetronome() {
+            if (metronomeInterval) {
+                clearInterval(metronomeInterval);
+                metronomeInterval = null;
+            }
+            currentBeat = 0;
+            updateBeatHighlight();
+            playButton.textContent = 'Play Beat';
+        }
+
+        function displaySong(songId) {
+            const song = songs[songId];
+            chordDisplay.innerHTML = '';
+            lyricsDisplay.innerHTML = '';
+            beatElements = [];
+            totalBeats = song.lines.length * 16;
+
+            song.lines.forEach((line, lineIndex) => {
+                const chordLine = document.createElement('div');
+                chordLine.className = 'line';
+                const measureContainer = document.createElement('div');
+                measureContainer.className = 'measure-container';
+                
+                line.measures.forEach((measure, measureIndex) => {
+                    const measureDiv = document.createElement('div');
+                    measureDiv.className = 'measure';
+                    
+                    measure.forEach((chord, beatIndex) => {
+                        const beatDiv = document.createElement('div');
+                        beatDiv.className = 'beat';
+                        
+                        const beatNumber = document.createElement('span');
+                        beatNumber.className = 'beat-number';
+                        beatNumber.textContent = `${beatIndex + 1}`;
+                        
+                        const chordSpan = document.createElement('span');
+                        chordSpan.className = 'chord';
+                        chordSpan.textContent = chord;
+                        
+                        beatDiv.appendChild(beatNumber);
+                        beatDiv.appendChild(chordSpan);
+                        measureDiv.appendChild(beatDiv);
+                        
+                        beatElements.push(beatDiv);
+                    });
+                    
+                    measureContainer.appendChild(measureDiv);
+                });
+                
+                chordLine.appendChild(measureContainer);
+                chordDisplay.appendChild(chordLine);
+
+                const lyricsLine = document.createElement('div');
+                lyricsLine.className = 'line';
+                lyricsLine.textContent = line.lyrics;
+                lyricsDisplay.appendChild(lyricsLine);
+            });
+
+            if (song.tempo) {
+                tempoInput.value = song.tempo;
+            }
+        }
+
+        async function loadSongs() {
+            try {
+                const response = await fetch('songs.json');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                songs = await response.json();
+                
+                songSelect.innerHTML = '';
+                Object.keys(songs).forEach(songId => {
+                    const option = document.createElement('option');
+                    option.value = songId;
+                    option.textContent = songs[songId].name;
+                    songSelect.appendChild(option);
+                });
+                
+                if (Object.keys(songs).length > 0) {
+                    displaySong(Object.keys(songs)[0]);
+                }
+            } catch (error) {
+                console.error('Error loading songs:', error);
+                songs = {
+                    demo: {
+                        name: "Demo Song",
+                        tempo: 120,
+                        lines: [
+                            {
+                                measures: [
+                                    ["C", ".", ".", "."],
+                                    ["G", ".", ".", "."],
+                                    ["Am", ".", ".", "."],
+                                    ["F", ".", ".", "."]
+                                ],
+                                lyrics: "Demo song line 1..."
+                            }
+                        ]
+                    }
+                };
+                songSelect.innerHTML = '<option value="demo">Demo Song</option>';
+                displaySong('demo');
+            }
+        }
+
+        songSelect.addEventListener('change', (e) => {
+            displaySong(e.target.value);
+            stopMetronome();
+        });
+
+        playButton.addEventListener('click', () => {
+            if (metronomeInterval) {
+                stopMetronome();
+            } else {
+                startMetronome();
+            }
+        });
+
+        loadSongs();
+    </script>
+</body>
+</html>

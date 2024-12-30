@@ -1,0 +1,346 @@
+{
+  "song1": {
+    "name": "Thunderroad",
+    "tempo": 120,
+    "lines": [
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["Bm", ".", ".", "."],
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": ""
+      },
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["F#m", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."]
+        ],
+        "lyrics": ""
+      },
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["D", ".", ".", "G"],
+          ["D", ".", ".", "."]
+        ],
+        "lyrics": "The screen door slams, Mary's dress sways"
+      },
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": "Like a vision she dances across the porch as the radio plays"
+      },
+      {
+        "measures": [
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": "Roy Orbison's singing for the lonely Hey, that's me and I want you only"
+      },
+      {
+        "measures": [
+          ["G", ".", ".", "."],
+          ["D", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["A", ".", ".", "."]
+        ],
+        "lyrics": "Don't turn me home again I just can't face myself alone again"
+      },
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["D", ".", ".", "G"],
+          ["D", ".", ".", "."]
+        ],
+        "lyrics": "Don't run back inside, darling You know just what I'm here for"
+      },
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": "So you're scared and you're thinking That maybe we ain't that young anymore"
+      },
+      {
+        "measures": [
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": "Show a little faith, there's magic in the night You ain't a beauty, but hey, you're alright"
+      },
+      {
+        "measures": [
+          ["G", ".", ".", "."],
+          ["D", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["A", ".", ".", "."]
+        ],
+        "lyrics": " Oh, and that's alright with me"
+      },
+
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["Bm", ".", ".", "."],
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": "You can hide 'neath your covers and study your pain Make crosses from your lovers, throw roses in the rain"
+      },
+
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["F#m", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."]
+        ],
+        "lyrics": "Waste your summer praying in vain For a savior to rise from these streets"
+      },
+
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["Bm", ".", ".", "."],
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": " Well now, I'm no hero, that's understood All the redemption I can offer, girl, is beneath this dirty hood"
+      },
+
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["F#m", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."]
+        ],
+        "lyrics": " With a chance to make it good somehow Hey, what else can we do now?"
+      },
+
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["D", ".", ".", "G"],
+          ["D", ".", ".", "."]
+        ],
+        "lyrics": "Except roll down the window And let the wind blow back your hair"
+      },
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": "Well, the night's busting open These two lanes will take us anywhere"
+      },
+      {
+        "measures": [
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": "We got one last chance to make it real To trade in these wings on some wheels"
+      },
+      {
+        "measures": [
+          ["G", ".", ".", "."],
+          ["D", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["A", ".", ".", "."]
+        ],
+        "lyrics": "Climb in back, heaven's waiting down on the tracks"
+      },
+
+
+    
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["Bm", ".", ".", "."],
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": "Oh, come take my hand We're riding out tonight to case the promised land "
+      },
+
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["F#m", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."]
+        ],
+        "lyrics": "Oh, Thunder Road, oh, Thunder Road Oh, Thunder Road"
+      },
+
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["Bm", ".", ".", "."],
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": "Lying out there like a killer in the sun Hey, I know it's late, we can make it if we run "
+      },
+
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["F#m", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."]
+        ],
+        "lyrics": " Oh, Thunder Road, sit tight, Take hold"
+      },
+
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["D", ".", ".", "."]
+        ],
+        "lyrics": " Thunder Road"
+      },
+
+      {
+        "measures": [
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["D", ".", ".", ""],
+          ["D", ".", ".", "."]
+        ],
+        "lyrics": "Well, I got this guitar and I've learned how to make it talk"
+      },
+
+      {
+        "measures": [
+          ["Bm", ".", ".", "."],
+          ["Bm", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."]
+        ],
+        "lyrics": "And my car's out back if you're ready to take that long walk"
+      },
+
+      {
+        "measures": [
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["F#m", ".", ".", "."],
+          ["Bm", ".", ".", "."]
+        ],
+        "lyrics": "From your front porch to my front seat The door's open but the ride ain't free"
+      },
+
+      {
+        "measures": [
+          ["G", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["A", ".", ".", "."]
+        ],
+        "lyrics": "And I know you're lonely for words that I ain't spoken Tonight we'll be free, all the promises will be broken"
+      },
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["D", ".", ".", "G"],
+          ["D", ".", ".", "."]
+        ],
+        "lyrics": "There were ghosts in the eyes of all the boys you sent away"
+      },
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": "They haunt this dusty beach road In the skeleton frames of burned out Chevrolets"
+      },
+      {
+        "measures": [
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": "They scream your name at night in the street Your graduation gown lies in rags at their feet"
+      },
+      {
+        "measures": [
+          ["F#m", ".", ".", "."],
+          ["F#m", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": "And in the lonely cool before dawn You hear their engines roaring on"
+      },
+      {
+        "measures": [
+          ["Em", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": "When you get to the porch they're gone on the wind So Mary, climb in"
+      },
+      {
+        "measures": [
+          ["Em", ".", ".", "."],
+          ["Em", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."]
+        ],
+        "lyrics": "It's a town full of losers I'm pulling out of here"
+      },
+
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["D", ".", ".", "."]
+        ],
+        "lyrics": "to win"
+      },
+
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["D", ".", ".", "."],
+          ["G", ".", ".", "."]
+        ],
+        "lyrics": ""
+      },
+      {
+        "measures": [
+          ["D", ".", ".", "."],
+          ["A", ".", ".", "."],
+          ["G", ".", ".", "."],
+          ["A", ".", ".", "."]
+        ],
+        "lyrics": ""
+      }
+    ]
+  }
+}
