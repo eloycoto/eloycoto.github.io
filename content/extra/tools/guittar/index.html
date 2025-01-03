@@ -195,10 +195,53 @@
             oscillator.stop(now + 0.05);
         }
 
+        function getVerticalCenterPosition(element) {
+            const rect = element.getBoundingClientRect();
+            const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+            // Calculate the vertical center points
+            const elementCenterY = rect.top + (rect.height / 2);
+            const viewportCenterY = viewportHeight / 2;
+
+            // Define tolerance (how close to center is considered "centered")
+            const tolerance = 5; // pixels
+
+            // Check if element is vertically centered
+            const isCentered = Math.abs(elementCenterY - viewportCenterY) <= tolerance;
+
+            // Calculate the Y position where the element should be to be centered
+            const targetY = viewportCenterY - (rect.height / 2);
+
+            // Calculate how far the element needs to move
+            const offsetY = targetY - rect.top;
+
+            return {
+                isCentered,
+                currentY: rect.top,
+                targetY: targetY,
+                offsetY: offsetY
+            };
+        }
+
+
         function updateBeatHighlight() {
             beatElements.forEach((beat, index) => {
                 beat.classList.toggle('active', index === currentBeat);
             });
+
+            const currentBeatElement = beatElements[currentBeat];
+            if (currentBeatElement) {
+                const scrollData = getVerticalCenterPosition(currentBeatElement);
+                if (!scrollData.isCentered) {
+                    const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+                    const newScrollPosition = currentScrollY + scrollData.offsetY;
+                    window.scrollTo({
+                        top: newScrollPosition,
+                        top: window.pageYOffset + scrollData.currentY - scrollData.targetY,
+                        behavior: 'smooth'
+                    });
+                }
+            }
         }
 
         function startMetronome() {
