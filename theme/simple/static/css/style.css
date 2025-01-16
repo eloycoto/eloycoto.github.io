@@ -24,6 +24,10 @@ h6 {
   margin: 2em 0 1em;
 }
 
+.underline {
+    text-decoration: underline;
+}
+
 p,
 ul,
 ol {
