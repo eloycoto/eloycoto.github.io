@@ -141,7 +141,7 @@ ofrecendo titorías, clases e formación. Isto é algo positivo se encaixa coa
 misión da asociación, pero tamén me xorden preguntas: ata que punto estas
 actividades están alineadas cos intereses e necesidades dos socios? Que
 beneficio aporta ao socio? Estamos mantendo un equilibrio adecuado entre os
-servizos externos e o benestar da comunidade interna? ***Custame entender como
+servizos externos e o benestar da comunidade interna? **Custame entender como
 para o FabAcademy temos apertura de 20 horas semanais, pero hoxe en día, un
 socio non sabe se o sábado se abre as 10 ou as 11. A quen se debe a
 asociación?**
@@ -262,7 +262,8 @@ Dende o meu punto de vista, a actual directiva non está nestas dinamicas.
 Moita tristeza de ter que escribir isto.
 Apertas
 
-PD: Seguramente isto acabará de que son un mentireiro, pero que casualidade, eu
-son coxo, e xa sabemos o refrán :-)
+PD: Seguramente isto acabará de que son un mentireiro, pero que casualidade, eu son coxo, e xa sabemos o refrán..
+
 PD1: Se alguén anda cabreado comigo, falar comigo, que eu son un rapaz de falar
 as cousas home. Eu sempre digo as cousas a cara :-)
+
