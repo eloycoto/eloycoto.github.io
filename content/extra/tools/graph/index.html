@@ -53,9 +53,9 @@
     <h1>Multi-Axis Graph</h1>
     <div class="container">
         <div class="controls">
-            <textarea id="input" placeholder="Enter values (comma-separated on each line)&#10;Example:&#10;1.2,2.3,3.4&#10;2.1,3.2,4.3"></textarea>
+            <textarea id="input" placeholder="Enter values (comma-separated on each line)&#10;Example:&#10;1.2,2.3,true,4&#10;2.1,3.2,false,5"></textarea>
             <button id="clearBtn">Clear Data</button>
-            <div class="info">Enter values as comma-separated numbers on each line. Each position represents a different axis.</div>
+            <div class="info">Enter values as comma-separated numbers on each line.</div>
         </div>
         <div class="graph-container">
             <canvas id="graph"></canvas>
@@ -98,37 +98,100 @@
                 },
                 animation: {
                     duration: 0
+                },
+                plugins: {
+                    // Custom plugin to draw background
+                    backgroundPlugin: {
+                        beforeDraw: (chart) => {
+                            const ctx = chart.ctx;
+                            const chartArea = chart.chartArea;
+                            const meta = chart.getDatasetMeta(0);
+                            
+                            if (!chartArea || !meta.data || !chart.data.booleanValues) return;
+
+                            // Calculate bar width
+                            const barWidth = chartArea.width / meta.data.length;
+
+                            // Draw background for each true value
+                            chart.data.booleanValues.forEach((isTrue, index) => {
+                                if (isTrue) {
+                                    const x = chartArea.left + (barWidth * index);
+                                    ctx.fillStyle = 'rgba(76, 175, 80, 0.2)'; // Light green
+                                    ctx.fillRect(x, chartArea.top, barWidth, chartArea.height);
+                                }
+                            });
+                        }
+                    }
                 }
-            }
+            },
+            plugins: [{
+                id: 'backgroundPlugin',
+                beforeDraw: function(chart) {
+                    const ctx = chart.ctx;
+                    const chartArea = chart.chartArea;
+                    const meta = chart.getDatasetMeta(0);
+                    
+                    if (!chartArea || !meta.data || !chart.data.booleanValues) return;
+
+                    // Calculate bar width
+                    const barWidth = chartArea.width / meta.data.length;
+
+                    // Draw background for each true value
+                    chart.data.booleanValues.forEach((isTrue, index) => {
+                        if (isTrue) {
+                            const x = chartArea.left + (barWidth * index);
+                            ctx.fillStyle = 'rgba(76, 175, 80, 0.2)'; // Light green
+                            ctx.fillRect(x, chartArea.top, barWidth, chartArea.height);
+                        }
+                    });
+                }
+            }]
         });
 
         function updateGraph() {
             // Split input into lines
             const lines = textarea.value.trim().split('\n');
-            
-            // Parse each line into arrays of numbers
-            const data = lines.map(line => 
-                line.split(',')
-                    .map(v => parseFloat(v.trim()))
-                    .filter(v => !isNaN(v))
-            ).filter(arr => arr.length > 0);
+
+            // Parse each line into arrays of numbers and boolean
+            const data = lines.map(line => {
+                const values = line.split(',').map(v => v.trim());
+                
+                // Extract boolean value from the third position (index 2)
+                const isTrue = values[2]?.toLowerCase() === 'true';
+                
+                // Convert all other values to numbers
+                const numbers = values.map((v, i) => {
+                    // Skip the boolean value at index 2
+                    if (i === 2) return null;
+                    return parseFloat(v);
+                }).filter(n => n !== null && !isNaN(n));
+
+                return {
+                    numbers,
+                    isTrue
+                };
+            }).filter(item => item.numbers.length > 0);
 
             if (data.length === 0) {
                 chart.data.labels = [];
                 chart.data.datasets = [];
+                chart.data.booleanValues = [];
                 chart.update();
                 return;
             }
 
+            // Store boolean values for background drawing
+            chart.data.booleanValues = data.map(item => item.isTrue);
+
             // Find the maximum number of axes in any line
-            const maxAxes = Math.max(...data.map(arr => arr.length));
+            const maxAxes = Math.max(...data.map(item => item.numbers.length));
 
             // Prepare datasets for each axis
             const datasets = [];
             for (let axis = 0; axis < maxAxes; axis++) {
                 datasets.push({
                     label: axisNames[axis] || `Axis ${axis + 1}`,
-                    data: data.map(values => values[axis] || null),
+                    data: data.map(item => item.numbers[axis] || null),
                     borderColor: axisColors[axis % axisColors.length],
                     borderWidth: 2,
                     tension: 0.1,
