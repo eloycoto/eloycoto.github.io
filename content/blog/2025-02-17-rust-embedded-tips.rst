@@ -40,7 +40,10 @@ Playing Nice: Sharing I2C Between Tasks
 ------------------------------------------
 
 Sharing I2C can be problematic in embedded Rust. For that, I normally suggest
-using the embedded-hal shared_bus traits and sharing using the Embassy Mutex,
+using the embedded-hal `shared_bus traits
+<https://docs.embassy.dev/embassy-embedded-hal/git/default/shared_bus/blocking/i2c/struct.I2cDevice.html>`_
+and sharing using the `Embassy Mutex
+<https://docs.embassy.dev/embassy-sync/git/default/blocking_mutex/index.html>`_,
 like this:
 
 .. code-block:: rust
@@ -53,8 +56,13 @@ like this:
   let device_1_i2c = I2cDevice::new(&i2c_bus);
   let device_2_i2c = I2cDevice::new(&i2c_bus);
 
-TIP: I use NoopRawMutex for reading because it has zero overhead when there are no
-writes. For writing, I normally use ThreadModeMutex or CriticalSectionMutex
+TIP: I use `NoopRawMutex
+<https://docs.embassy.dev/embassy-sync/git/default/blocking_mutex/raw/struct.NoopRawMutex.html>`_
+for reading because it has zero overhead when there are no writes. For writing,
+I normally use `ThreadModeMutex
+<https://docs.embassy.dev/embassy-sync/git/default/blocking_mutex/struct.ThreadModeMutex.html>`_
+or `CriticalSectionMutex
+<https://docs.embassy.dev/embassy-sync/git/default/blocking_mutex/type.CriticalSectionMutex.html>`_
 to prevent data races.
 
 Juggling Events: Async Select to the Rescue
@@ -62,7 +70,7 @@ Juggling Events: Async Select to the Rescue
 
 When using Embassy, the async phase is more important than anything. When
 reading multiple UARTs or waiting for multiple events, waiting for futures can
-be problematic. Embassy's `select` allows the code to wait for any kind of event:
+be problematic. Embassy's `select <https://docs.embassy.dev/embassy-futures/git/default/select/index.html>`_ allows the code to wait for any kind of event:
 
 .. code-block:: rust
 
@@ -78,9 +86,11 @@ Simple Task Communication with Channels
 ----------------------------------------
 
 When two or more main tasks are part of the microcontroller and there is no
-need for DMA, I recommend using Embassy channels. They provide a nice
-abstraction that enables sharing information across tasks without problems and
-race conditions. The computational overhead isn't that high.
+need for DMA, I recommend using `Embassy channels
+<https://docs.embassy.dev/embassy-sync/git/default/channel/struct.Channel.html>`_.
+They provide a nice abstraction that enables sharing information across tasks
+without problems and race conditions. The computational overhead isn't that
+high.
 
 .. code-block:: rust
 
