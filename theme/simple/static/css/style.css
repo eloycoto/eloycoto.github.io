@@ -34,6 +34,11 @@ ol {
   color: #1d1d1d;
   margin-bottom: 2em;
 }
+.highlight {
+    padding-left: 10px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
 
 pre {
   white-space: pre-wrap;
