@@ -32,7 +32,8 @@ SOCIAL = ()
 DEFAULT_PAGINATION = 10
 
 PLUGIN_PATHS = ["pelican-plugins/"]
-PLUGINS = ['sitemap','related_posts']
+PLUGINS = ['sitemap','related_posts', 'render_math']
+MATH_JAX = {'tex_extensions': ['color.js','mhchem.js']}
 THEME = 'theme/simple/'
 SITEMAP = {
     'format': 'xml',
