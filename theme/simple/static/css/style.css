@@ -1,3 +1,10 @@
+:root {
+  --bg-color: #ffffff;
+  --text-color: #1d1d1d;
+  --link-color: #0066cc;
+  --code-bg: #f8f8f8;
+}
+
 html {
   font-family: sans-serif, mon;
   font-size: 1.5em;
@@ -5,6 +12,8 @@ html {
   margin: auto;
   max-width: 70ch;
   padding: 3em 1em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 img {
@@ -34,6 +43,7 @@ ol {
   color: #1d1d1d;
   margin-bottom: 2em;
 }
+
 .highlight {
     padding-left: 10px;
     padding-top: 1px;
@@ -41,11 +51,16 @@ ol {
 }
 
 pre {
-  white-space: pre-wrap;
-  white-space: -moz-pre-wrap;
-  white-space: -pre-wrap;
-  white-space: -o-pre-wrap;
-  word-wrap: break-word;
+  /* white-space: pre-wrap; */
+  /* white-space: -moz-pre-wrap; */
+  /* white-space: -pre-wrap; */
+  /* white-space: -o-pre-wrap; */
+  /* word-wrap: break-word; */
+  background-color: var(--code-bg);
+  border-radius: 4px;
+  overflow-x: auto;
+  padding: 1em;
+  position: relative;
 }
 
 .index-list dl {
@@ -63,6 +78,15 @@ pre {
   padding-left: 10px;
 }
 
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 /* Table styles */
 table {
   border-collapse: collapse;
@@ -70,6 +94,7 @@ table {
   width: 100%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   font-size: 0.9em;
+  table-layout: fixed;
 }
 
 table thead tr {
@@ -82,6 +107,11 @@ table th,
 table td {
   padding: 12px 15px;
   vertical-align: top;
+}
+
+table td {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 table tbody tr {
@@ -106,13 +136,16 @@ table pre {
   margin: 0;
   padding: 10px;
   border-radius: 3px;
-  white-space: pre-wrap;
+  word-wrap: break-word !important;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 table code {
   font-family: monospace;
   background: transparent;
   padding: 0;
+  word-break: break-word
 }
 
 /* Adjustments for mathematical notation */
