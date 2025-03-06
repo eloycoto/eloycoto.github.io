@@ -19,6 +19,7 @@ map with raw Python.
 
 
 1. Arithmetic & Basic Operators
+--------------------------------
 
 .. list-table::
    :header-rows: 1
