@@ -1,0 +1,489 @@
+Mathematical Notation to Python Mapping
+========================================
+:date: 2025-03-06 23:00
+:language: en-GB
+:author: eloycoto
+:tags: math
+:head: Mathematical Notation to Python Mapping
+:index_title: Mathematical Notation to Python Mapping
+:metatitle: Translating Mathematical Notation to Python Code: A Comprehensive Reference Guide
+:metatags: mathematics, python, programming, reference, translation, notation, mapping
+:description: A comprehensive guide mapping mathematical notation to equivalent Python code implementations, covering arithmetic, algebra, calculus, linear algebra, and more.
+:keywords: math, python, programming, notation, mapping, reference, translation, arithmetic, algebra, calculus, derivatives, integrals, linear algebra, set theory
+
+I did not attend college, so I learned a lot of things on my own. I'm good at
+Math, but because I learned math using programming languages, the Math language
+is always something I need to read ten times to understand. This is a map model
+for me. Nowadays I'm reading a lot of math papers, and I wanted to have a 1:1
+map with raw Python.
+
+
+1. Arithmetic & Basic Operators
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 30 30
+
+   * - Symbol
+     - Meaning
+     - Python Equivalent
+   * - :math:`+`
+     - Addition
+     - .. code-block:: python
+
+         a + b
+   * - :math:`-`
+     - Subtraction
+     - .. code-block:: python
+
+         a - b
+   * - :math:`\times` or :math:`\cdot`
+     - Multiplication
+     - .. code-block:: python
+
+         a * b
+   * - :math:`\div` or :math:`/`
+     - Division
+     - .. code-block:: python
+
+         a / b
+   * - :math:`//`
+     - Floor Division
+     - .. code-block:: python
+
+         a // b
+   * - :math:`\bmod` or :math:`\%`
+     - Modulus (Remainder)
+     - .. code-block:: python
+
+         a % b
+   * - :math:`a^b`
+     - Exponentiation
+     - .. code-block:: python
+
+         a ** b
+   * - :math:`\sqrt{x}`
+     - Square root
+     - .. code-block:: python
+
+         math.sqrt(x)
+   * - :math:`\lfloor x \rfloor`
+     - Floor function
+     - .. code-block:: python
+
+         math.floor(x)
+   * - :math:`\lceil x \rceil`
+     - Ceiling function
+     - .. code-block:: python
+
+         math.ceil(x)
+
+2. Algebraic Symbols
+---------------------
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 15 30 30
+
+   * - Symbol
+     - Meaning
+     - Python Equivalent
+   * - :math:`=`
+     - Equal
+     - .. code-block:: python
+
+         a == b
+   * - :math:`\neq`
+     - Not equal
+     - .. code-block:: python
+
+         a != b
+   * - :math:`<`
+     - Less than
+     - .. code-block:: python
+
+         a < b
+   * - :math:`>`
+     - Greater than
+     - .. code-block:: python
+
+         a > b
+   * - :math:`\leq`
+     - Less than or equal
+     - .. code-block:: python
+
+         a <= b
+   * - :math:`\geq`
+     - Greater than or equal
+     - .. code-block:: python
+
+         a >= b
+
+
+3. Summation & Products
+-----------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 30 30
+
+   * - Symbol
+     - Meaning
+     - Python Equivalent
+   * - :math:`\sum_{i=1}^n a_i`
+     - Summation
+     - .. code-block:: python
+
+         sum([1,2,3])
+   * - :math:`\prod_{i=1}^n a_i`
+     - Product
+     - .. code-block:: python
+
+         math.prod([1,2,3])
+
+   * - :math:`\prod_{i=1}^n a_i \text{ where } n < 10`
+     - Product with condition
+     - .. code-block:: python
+
+         def conditional_product(sequence):
+             if len(sequence) >= 10:
+                 return "n must be less than 10"
+
+             return math.prod(sequence)
+
+         conditional_product([1, 2, 3, 4])
+
+
+4. Derivatives & Integrals
+---------------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 30 30
+
+   * - Symbol
+     - Meaning
+     - Python Equivalent
+   * - :math:`\frac{d}{dx}f(x)`
+     - First derivative
+     - .. code-block:: python
+
+         def first_derivative(vals, step_size=1):
+             derivatives = []
+             for i in range(len(vals) - 1):
+                 derivatives.append((vals[i+1] - vals[i]) / step_size)
+             return derivatives
+
+         val = [0,4,5,3,2,5,3,2]
+         print(first_derivative(val))
+
+   * - :math:`\frac{d^n}{dx^n}f(x)`
+     - Higher-order derivative
+     - .. code-block:: python
+
+         def nth_derivative(vals, n, step_size=1):
+             if n == 0:
+                 return vals
+             elif n == 1:
+                 return first_derivative(vals, step_size)
+             else:
+                 return first_derivative(nth_derivative(vals, n-1, step_size), step_size)
+
+         val = [0,4,5,3,2,5,3,2]
+         print(nth_derivative(val, 2))
+
+   * - :math:`\int f(x)dx`
+     - Indefinite integral
+     - .. code-block:: python
+
+         def indefinite_integral(vals, step_size=1, const=0):
+             integral = [const]
+             for i in range(len(vals)):
+                 integral.append(integral[-1] + vals[i] * step_size)
+             return integral[1:]
+
+         val = [0,4,5,3,2,5,3,2]
+         print(indefinite_integral(val))
+
+   * - :math:`\int_{a}^{b} f(x)dx`
+     - Definite integral
+     - .. code-block:: python
+
+        def definite_integral(vals, a=0, b=None, step_size=1):
+            if b is None:
+                b = len(vals) - 1
+
+            if a < 0 or b >= len(vals) or a > b:
+                raise ValueError("Integration bounds out of range")
+
+            result = 0
+            for i in range(a, b):
+                result += (vals[i] + vals[i+1]) / 2 * step_size
+            return result
+
+         val = [0,4,5,3,2,5,3,2]
+         print(definite_integral(val, 2, 6))
+
+5. Limits
+----------
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 15 30 30
+
+   * - Symbol
+     - Meaning
+     - Python Equivalent
+   * - :math:`\lim_{x \to a} f(x)`
+     - Limit of a function
+     - .. code-block:: python
+
+        def limit(f, a, epsilon=1e-6):
+            return (f(a + epsilon) + f(a - epsilon)) / 2
+
+        def f(x):
+            return (x**2 - 1) / (x - 1) if x != 1 else None
+
+        print(limit(f, 1))
+
+
+6. Trigonometry & Logarithms
+-----------------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 30 30
+
+   * - Symbol
+     - Meaning
+     - Python Equivalent
+   * - :math:`\sin x`
+     - Sine
+     - .. code-block:: python
+
+         math.sin(x)
+   * - :math:`\cos x`
+     - Cosine
+     - .. code-block:: python
+
+         math.cos(x)
+   * - :math:`\tan x`
+     - Tangent
+     - .. code-block:: python
+
+         math.tan(x)
+   * - :math:`\arcsin x`
+     - Inverse sine
+     - .. code-block:: python
+
+         math.asin(x)
+   * - :math:`\arccos x`
+     - Inverse cosine
+     - .. code-block:: python
+
+         math.acos(x)
+   * - :math:`\arctan x`
+     - Inverse tangent
+     - .. code-block:: python
+
+         math.atan(x)
+   * - :math:`\log x`
+     - Natural logarithm
+     - .. code-block:: python
+
+         math.log(x)
+   * - :math:`\log_b x`
+     - Logarithm base b
+     - .. code-block:: python
+
+         math.log(x, b)
+   * - :math:`e^x`
+     - Exponential function
+     - .. code-block:: python
+
+         math.exp(x)
+
+7. Linear Algebra Symbols
+--------------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 30 30
+
+   * - Symbol
+     - Meaning
+     - Python Equivalent
+   * - :math:`A^T`
+     - Matrix transpose
+     - .. code-block:: python
+        def transpose(matrix):
+         return [[matrix[j][i] for j in range(len(matrix))]
+                 for i in range(len(matrix[0]))]
+
+        # Example
+        A = [[1, 2, 3], [4, 5, 6]]
+        print(transpose(A))
+   * - :math:`A^{-1}`
+     - Matrix inverse
+     - .. code-block:: python
+
+         def matrix_inverse(matrix):
+             n = len(matrix)
+             augmented = [row[:] + [1 if i == j else 0 for j in range(n)] for i, row in enumerate(matrix)]
+
+             for i in range(n):
+                 pivot = augmented[i][i]
+                 if pivot == 0:
+                     raise ValueError("Matrix is singular")
+
+                 for j in range(i, 2*n):
+                     augmented[i][j] /= pivot
+
+                 for k in range(n):
+                     if k != i:
+                         factor = augmented[k][i]
+                         for j in range(i, 2*n):
+                             augmented[k][j] -= factor * augmented[i][j]
+
+             inverse = [row[n:] for row in augmented]
+             return inverse
+
+         A = [[4, 7], [2, 6]]
+         print(matrix_inverse(A))
+         print(numpy.linalg.inv(A))
+   * - :math:`\det(A)`
+     - Determinant
+     - .. code-block:: python
+
+         def determinant(matrix):
+             n = len(matrix)
+             if n == 1:
+                 return matrix[0][0]
+             if n == 2:
+                 return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+
+             det = 0
+             for c in range(n):
+                 submatrix = []
+                 for i in range(1, n):
+                     row = []
+                     for j in range(n):
+                         if j != c:
+                             row.append(matrix[i][j])
+                     submatrix.append(row)
+
+                 det += ((-1) ** c) * matrix[0][c] * determinant(submatrix)
+
+             return det
+
+         A = [[1, 2], [3, 4]]
+         print(determinant(A))
+         print(numpy.linalg.det(A))
+
+   * - :math:`A \cdot B`
+     - Matrix multiplication
+     - .. code-block:: python
+
+         def matrix_multiply(A, B):
+             n, m = len(A), len(A[0])
+             p = len(B[0])
+
+             if m != len(B):
+                 raise ValueError("Matrix dimensions do not match for multiplication")
+
+             result = [[0 for _ in range(p)] for _ in range(n)]
+
+             for i in range(n):
+                 for j in range(p):
+                     for k in range(m):
+                         result[i][j] += A[i][k] * B[k][j]
+
+             return result
+
+         A = [[1, 2], [3, 4]]
+         B = [[5, 6], [7, 8]]
+         print(matrix_multiply(A, B))
+
+   * - :math:`\lambda`
+     - Eigenvalue
+     - .. code-block:: python
+
+         def power_method(matrix, iterations=100, tolerance=1e-10):
+             n = len(matrix)
+             vector = [1] * n
+
+             magnitude = (sum(x**2 for x in vector)) ** 0.5
+             vector = [x / magnitude for x in vector]
+
+             eigenvalue = 0
+             for _ in range(iterations):
+                 new_vector = [0] * n
+                 for i in range(n):
+                     for j in range(n):
+                         new_vector[i] += matrix[i][j] * vector[j]
+
+                 new_eigenvalue = sum(new_vector[i] * vector[i] for i in range(n))
+
+                 magnitude = (sum(x**2 for x in new_vector)) ** 0.5
+                 new_vector = [x / magnitude for x in new_vector]
+
+                 if abs(new_eigenvalue - eigenvalue) < tolerance:
+                     break
+
+                 vector = new_vector
+                 eigenvalue = new_eigenvalue
+
+             return eigenvalue, vector
+
+         A = [[2, 1], [1, 3]]
+         eigenvalue, eigenvector = power_method(A)
+         print(f"Dominant eigenvalue: {eigenvalue}")
+         print(f"Corresponding eigenvector: {eigenvector}")
+         print(numpy.linalg.eig(A))
+
+
+9. Logic & Set Theory Symbols
+------------------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 30 30
+
+   * - Symbol
+     - Meaning
+     - Python Equivalent
+   * - :math:`\forall`
+     - "For all"
+     - .. code-block:: python
+
+         for x in [1,2,3]:
+   * - :math:`\exists`
+     - "There exists"
+     - .. code-block:: python
+
+         any([...])
+   * - :math:`\in`
+     - "Element of"
+     - .. code-block:: python
+
+         x in [1,2,3]
+   * - :math:`\notin`
+     - "Not element of"
+     - .. code-block:: python
+
+         x not in [1,2,3]
+   * - :math:`\cap`
+     - Intersection
+     - .. code-block:: python
+
+         A & B
+   * - :math:`\cup`
+     - Union
+     - .. code-block:: python
+
+         A | B
+   * - :math:`\subset`
+     - Subset
+     - .. code-block:: python
+
+         A.issubset(B)
