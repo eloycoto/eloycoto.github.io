@@ -62,3 +62,103 @@ pre {
   display: table-cell;
   padding-left: 10px;
 }
+
+/* Table styles */
+table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-size: 0.9em;
+}
+
+table thead tr {
+  background-color: #f8f8f8;
+  border-bottom: 2px solid #dddddd;
+  text-align: left;
+}
+
+table th,
+table td {
+  padding: 12px 15px;
+  vertical-align: top;
+}
+
+table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+table tbody tr:nth-of-type(even) {
+  background-color: #f8f8f8;
+}
+
+table tbody tr:last-of-type {
+  border-bottom: 2px solid #dddddd;
+}
+
+/* Code inside tables */
+table .highlight {
+  margin: 0;
+  padding: 0;
+}
+
+table pre {
+  margin: 0;
+  padding: 10px;
+  border-radius: 3px;
+  white-space: pre-wrap;
+}
+
+table code {
+  font-family: monospace;
+  background: transparent;
+  padding: 0;
+}
+
+/* Adjustments for mathematical notation */
+table .math {
+  white-space: nowrap;
+  font-family: serif;
+}
+
+/* Responsive tables for small screens */
+@media (max-width: 600px) {
+  table {
+    border: 0;
+    box-shadow: none;
+  }
+  
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+  table tr {
+    border-bottom: 3px solid #dddddd;
+    display: block;
+    margin-bottom: 25px;
+  }
+  
+  table td {
+    border-bottom: 1px solid #dddddd;
+    display: block;
+    font-size: 0.9em;
+    text-align: left;
+    padding: 10px;
+  }
+  
+  table td:first-child {
+    font-weight: bold;
+    background-color: #f8f8f8;
+  }
+  
+  table td:last-child {
+    border-bottom: 0;
+  }
+}
