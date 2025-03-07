@@ -1,197 +1,206 @@
 :root {
-  --bg-color: #ffffff;
-  --text-color: #1d1d1d;
-  --link-color: #0066cc;
-  --code-bg: #f8f8f8;
+    --bg-color: #ffffff;
+    --text-color: #1d1d1d;
+    --link-color: #0066cc;
+    --code-bg: #f8f8f8;
+    --muted-text: #666666;
 }
 
+/* Base styles */
 html {
-  font-family: sans-serif, mon;
-  font-size: 1.5em;
-  line-height: 1.75;
-  margin: auto;
-  max-width: 70ch;
-  padding: 3em 1em;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: auto;
+    max-width: 70ch;
+    padding: 2em 1em;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
 }
 
-img {
-  width: 100%;
+body {
+    margin: 0;
+    padding: 0;
 }
 
-/* Optional 100 more bytes */
+/* Typography */
 h1 {
-  margin: 3em 0 1em;
+    font-size: 2em;
+    font-weight: 700;
+    margin: 1em 0 0.5em;
+    line-height: 1.2;
 }
 
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 2em 0 1em;
+h2 {
+    font-size: 1.5em;
+    font-weight: 600;
+    margin: 1.5em 0 0.5em;
+    line-height: 1.3;
 }
 
-.underline {
-    text-decoration: underline;
+h3, h4, h5, h6 {
+    font-size: 1.25em;
+    font-weight: 600;
+    margin: 1.5em 0 0.5em;
+    line-height: 1.3;
 }
 
-p,
-ul,
-ol {
-  color: #1d1d1d;
-  margin-bottom: 2em;
+p, ul, ol {
+    margin-bottom: 1.5em;
 }
 
-.highlight {
-    padding-left: 10px;
-    padding-top: 1px;
-    padding-bottom: 1px;
-}
-
-pre {
-  /* white-space: pre-wrap; */
-  /* white-space: -moz-pre-wrap; */
-  /* white-space: -pre-wrap; */
-  /* white-space: -o-pre-wrap; */
-  /* word-wrap: break-word; */
-  background-color: var(--code-bg);
-  border-radius: 4px;
-  overflow-x: auto;
-  padding: 1em;
-  position: relative;
-}
-
-.index-list dl {
-  display: table;
-  width: 100%;
-}
-
-.index-list dt {
-  display: table-cell;
-  width: 5em;
-}
-
-.index-list dd {
-  display: table-cell;
-  padding-left: 10px;
-}
-
+/* Links */
 a {
-  color: var(--link-color);
-  text-decoration: none;
+    color: var(--link-color);
+    text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
+}
+
+/* Post metadata */
+.post-meta {
+    font-size: 0.9em;
+    color: var(--muted-text);
+    margin-bottom: 2em;
+}
+
+.post-meta a {
+    color: var(--muted-text);
+}
+
+.post-meta a:hover {
+    color: var(--link-color);
+}
+
+/* Tags */
+.tags {
+    display: inline;
+}
+
+.tags:before {
+    content: "Tags: ";
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 2em auto;
+}
+
+/* Code blocks */
+pre {
+    background-color: var(--code-bg);
+    border-radius: 4px;
+    overflow-x: auto;
+    padding: 1em;
+    margin: 1.5em 0;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.9em;
+    background-color: var(--code-bg);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+}
+
+/* Blockquotes */
+blockquote {
+    border-left: 4px solid #e6e6e6;
+    padding-left: 1em;
+    margin-left: 0;
+    color: #666;
+}
+
+/* Footnotes */
+sup {
+    font-size: 0.75em;
+    vertical-align: super;
+}
+
+.footnote {
+    font-size: 0.9em;
+    color: var(--muted-text);
+    margin-top: 2em;
+    padding-top: 1em;
+    border-top: 1px solid #e6e6e6;
+}
+
+/* Index list */
+.index-list dl {
+    display: table;
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+.index-list dt {
+    display: table-cell;
+    width: 5em;
+    color: var(--muted-text);
+    font-size: 0.9em;
+}
+
+.index-list dd {
+    display: table-cell;
+    padding-left: 1em;
 }
 
 /* Table styles */
 table {
-  border-collapse: collapse;
-  margin: 25px 0;
-  width: 100%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  font-size: 0.9em;
-  table-layout: fixed;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    width: 100%;
+    font-size: 0.9em;
 }
 
 table thead tr {
-  background-color: #f8f8f8;
-  border-bottom: 2px solid #dddddd;
-  text-align: left;
+    border-bottom: 2px solid #e6e6e6;
+    text-align: left;
 }
 
 table th,
 table td {
-  padding: 12px 15px;
-  vertical-align: top;
+    padding: 0.75em 1em;
+    border-bottom: 1px solid #e6e6e6;
 }
 
-table td {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+/* Highlight */
+.highlight {
+    padding-left: 10px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-left: 3px solid #e6e6e6;
 }
 
-table tbody tr {
-  border-bottom: 1px solid #dddddd;
-}
-
-table tbody tr:nth-of-type(even) {
-  background-color: #f8f8f8;
-}
-
-table tbody tr:last-of-type {
-  border-bottom: 2px solid #dddddd;
-}
-
-/* Code inside tables */
-table .highlight {
-  margin: 0;
-  padding: 0;
-}
-
-table pre {
-  margin: 0;
-  padding: 10px;
-  border-radius: 3px;
-  word-wrap: break-word !important;
-  overflow-x: auto;
-  max-width: 100%;
-}
-
-table code {
-  font-family: monospace;
-  background: transparent;
-  padding: 0;
-  word-break: break-word
-}
-
-/* Adjustments for mathematical notation */
-table .math {
-  white-space: nowrap;
-  font-family: serif;
-}
-
-/* Responsive tables for small screens */
+/* Responsive adjustments */
 @media (max-width: 600px) {
-  table {
-    border: 0;
-    box-shadow: none;
-  }
-  
-  table thead {
-    border: none;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-  }
-  
-  table tr {
-    border-bottom: 3px solid #dddddd;
-    display: block;
-    margin-bottom: 25px;
-  }
-  
-  table td {
-    border-bottom: 1px solid #dddddd;
-    display: block;
-    font-size: 0.9em;
-    text-align: left;
-    padding: 10px;
-  }
-  
-  table td:first-child {
-    font-weight: bold;
-    background-color: #f8f8f8;
-  }
-  
-  table td:last-child {
-    border-bottom: 0;
-  }
+    html {
+        font-size: 15px;
+        padding: 1em;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    h2 {
+        font-size: 1.4em;
+    }
+
+    pre {
+        padding: 0.75em;
+    }
+
+    table {
+        font-size: 0.85em;
+    }
 }
