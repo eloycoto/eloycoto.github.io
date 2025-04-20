@@ -1,0 +1,37 @@
+Managing Pain After Tumour Removal
+====================================
+:date: 2025-04-20 23:00
+:language: en-GB
+:author: eloycoto
+:tags: thoughts
+:head: Managing Pain After a Tumour: My Personal Journey
+:index_title: Managing Pain After Tumour Removal
+:metatitle: Managing Pain After Surgery: A Personal Journey Through Recovery
+:metatags: recovery, pain management, surgery, health, rehabilitation
+:description: A personal account of managing different types of pain following surgery, understanding pain signals, and working toward recovery without relying solely on pain medication.
+
+It was the 19th of November. My doctor's face turned white when I asked how the surgery went. He mentioned that the tumor was even worse than the previous one, and it would be a long journey to get back into good shape. Since then, pain has been a constant thing for me, and this is how I'm managing it.
+
+When dealing with pain, there is something that you need to understand: **your body is sending a signal that something is not working well**. Of course, you are recovering from surgery or an accident; the body has pain because something is in an abnormal state and needs to recover.
+
+In Spain, as in many places, when people experience pain, they often turn to various medications like paracetamol, ibuprofen, dexketoprofen, or tramadol. Many of these drugs work by inhibiting enzymes such as `cyclooxygenase <https://en.wikipedia.org/wiki/Cyclooxygenase>`_. This mechanism blocks pain signals, providing temporary relief without necessarily addressing the underlying cause of the pain. While these medications effectively reduce discomfort, they primarily mask symptoms rather than targeting the root issue causing the pain. I normally explain painkillers like `Homer Simpson using tape on car signals <https://www.youtube.com/watch?v=HK7NbCRCatg>`_.
+
+It took me a bit of time and patience to understand the pain and try to address the right problem. I've categorized my pain into three distinct types:
+
+- **The sharp:** When you're moving and at that exact moment, you feel like someone shot you in that zone. That means that you pushed too hard, and at that point, you need to take a break of a few days/week.
+- **The dull:** This is a good spot to be in physical rehabilitation, some pain from previous days. The muscles started to move, slowly breaking some fibers, and some inflammation occurs to repair and strengthen that muscle.. If you're in physical rehab, 3-4 days is a good spot for recovery.
+- **The tight:** A small feeling of pain when you change from one position to another. That means that maybe some strength is needed, and something to keep you active.
+
+Sometimes, despite our best efforts, the pain can't be reduced. Since you still need to remain active, having a way to inhibit the pain becomes necessary. Living with constant pain is challenging. I've also learned an important lesson: ignoring a "dull pain" can lead to much bigger problems after just a week. Listening to your body's early warnings is crucial for preventing further damage.
+
+Now that I've lost almost all of my right hip, living pain-free has become particularly complicated. Some muscles are not working in their ideal situation, and I need to teach my outer muscles how to work in this situation. Learning how all the other muscles work and doing specific exercises is a good recipes for understanding it and try to improve and balance my body as best as possible.
+
+Moving away from painkillers is going to be a hard task for me. In the end, our body is designed to work in perfect harmony; I cannot get all muscles working in the right way. However, I'm doing all that I can to fix the problem at the root and be as comfortable as possible while developing my resilience!
+
+Finally, my journey is not about rejecting modern medicine but discovering that the path through pain involves understanding, rather than seeking its absence. In the end, part of my life is around managing these issues instead of passively surrendering to them.
+
+Books that I recommend on this topic:
+
+- `Movement: Functional Movement Systems <https://www.goodreads.com/book/show/8591357-movement>`_
+- `Rebuilding Milo <https://www.goodreads.com/book/show/54303312-rebuilding-milo>`_
+- `Back Mechanic <https://www.goodreads.com/book/show/63221240-back-mechanic>`_
