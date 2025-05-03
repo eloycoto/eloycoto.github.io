@@ -1,0 +1,78 @@
+Biomass: A New Era in Radar Earth Observation
+=============================================
+:date: 2025-05-03 20:30
+:language: en-GB
+:author: eloycoto
+:tags: hardware
+:head: Biomass: A New Era in Radar Earth Observation
+:index_title: Biomass Satellite Deep Dive
+:metatitle: ESA Biomass Satellite: Forest Monitoring with P-Band SAR
+:metatags: biomass, ESA, radar, SAR, satellite
+:description: An in-depth look at ESA’s Biomass satellite and its revolutionary use of P-Band radar to map the world's forests.
+
+
+This week the `Biomass <https://www.esa.int/Applications/Observing_the_Earth/FutureEO/Biomass>`__ satellite was launched, one of the most ambitious Earth observation missions by the ESA. Its goal is to measure the amount of forest on Earth and monitor how it is evolving. The long term goal is to help scientists to understand how the forest affects the carbon cycle. Moreover, this satellite is part of a series of new generation of Earth science missions that ESA is currently developing, the upcoming satellites in the series include:
+
+- `Flex <https://earth.esa.int/eogateway/missions/flex>`__: to measure photosynthesis
+- `Forum <https://www.esa.int/Applications/Observing_the_Earth/FutureEO/FORUM/Introducing_FORUM>`__: to measure thermal radiation
+- `Harmony <https://www.esa.int/ESA_Multimedia/Images/2024/10/Harmony_satellites>`__: for surface dynamics
+
+Full detailed satellite mission can be found `here <https://esamultimedia.esa.int/docs/EarthObservation/BIOMASS_Press_Pack_250418.pdf>`__
+
+P-BAND
+*******
+
+What sets Biomass unique is that it is the first satellite in space to use the `P-Band <https://www.microwaves101.com/encyclopedias/frequency-letter-bands>`__. This frequency band enables the radar to penetrate dense forest canopies, resulting in more detailed images of the forest floor. Additionally, P-Band is not affected by rain or weather conditions, can see the ground clearly, and can estimate the number of leaves on a tree.
+
+.. image:: /img/biomass_p_band_explanation.png
+   :alt: biomass p-band details
+   :align: center
+   :width: 80%
+
+`Image source <https://www.airbus.com/en/newsroom/press-releases/2025-04-airbus-built-forest-monitoring-satellite-biomass-successfully>`__
+
+Operating between 225 – 390 MHz, with a wavelength of 70–130 cm, the P-Band opens a new opportunities into hidden layers from the space. One of its earliest notable uses was in `NASA’s AirSAR project <https://airsar.jpl.nasa.gov/>`__, where a radar-equipped plane surveyed biomass in remote regions. Today, P-Band technology also finds applications in civil engineering, such as detecting underground structures, and in military scenarios like identifying land mines.
+
+For deeper understanding of the P-Band, I highly recommend this `presentation <https://www.isprs.org/proceedings/2005/banff2005/presentations/WG%201-2_16.pdf>`__.
+
+SAR(Synthetic Aperture Radar)
+*********************************
+
+SAR is a type of radar that uses the motion between the antenna and the target to create a synthetic aperture, which is much larger than the physical antenna(`Details <https://www.earthdata.nasa.gov/learn/earth-observation-data-basics/sar>`__). This technique allows the creation of high-resolution measurements. In this case, Biomass has a 12-meter antenna. Because it uses microwaves, weather conditions do not affect the measurements. Nowadays, many satellites use SAR. This technology can be used in various bands; here are a few examples:
+
+- X-band (3.8–2.4 cm wavelength): allows high-resolution urban monitoring.
+- S-band (15–7.5 cm wavelength): not precise at centimeter levels, but provides general estimations of agriculture and vegetation density.
+- P-band (130–70 cm wavelength): offers deeper penetration, useful for examining underground layers, biomass, and vegetation.
+
+.. image:: /img/biomas_sar_explanation.jpg
+   :alt: SAR explanation
+   :align: center
+   :width: 80%
+
+`Image source <https://www.earthdata.nasa.gov/learn/earth-observation-data-basics/sar>`__
+
+There are also three SAR-based technologies that provide different image perspectives:
+
+- SAR Polarimetry (PolSAR): uses different polarizations of radar signals to analyze surface properties.
+- Polarimetric SAR Interferometry (Pol-InSAR): combines polarimetry and interferometry to estimate the 3D structure and height of forests and vegetation.
+- SAR Tomography (TomoSAR): uses multiple SAR images from different angles to reconstruct a 3D volumetric view.
+
+For SAR, I highly recommend this `video <https://www.youtube.com/watch?v=62Gi4okn2kg>`__.
+
+
+Ionospheric Distortions
+*************************
+ 
+When using the P-Band to measure from space, one of the biggest challenges was dealing with `ionospheric distortions <https://www.astron.nl/lofarschool2016/Documents/Tuesday/Mevius.pdf>`__. These are caused by Earth's ionosphere, an upper atmospheric layer filled with charged particles, which affects how radar signals travel through it.
+
+The state of the ionosphere is typically characterized by the `Total Electron Content (TEC) <https://de.wikipedia.org/wiki/Total_electron_content#/media/Datei:Map20070212_090000.gif>`__, which measures the number of electrons per square meter. It is usually expressed in TECU (Total Electron Content Units), where 1 TECU equals 10¹⁶ electrons per square meter.
+
+As the radar signal passes twice through the ionosphere (down and back), it experiences a phenomenon called `Faraday Rotation <https://www.astron.nl/lofarschool2016/Documents/Tuesday/Mevius.pdf>`__, a rotation of the signal’s polarization. This effect can cause rotations of many degrees and may introduce serious errors. In this project, the team estimates the rotation matrix using polarimetric data and corrects the distortions by analyzing the image itself. `Several algorithms were tested <https://eo-college.org/wp-content/slides/EEBiomass_Slides/#/20/10>`__ to estimate Faraday Rotation, and the Bickel & Bates Maximum Likelihood method showed the best performance.
+
+Faraday Rotation is not the only issue caused by Earth's ionosphere. Phase scintillation is another effect that alters the radar signal's phase. It can introduce noise, reduce the measured radar cross-section, and increase sidelobes.
+
+This effect is more severe near the equator and polar regions, where ionospheric activity is stronger due to Earth's magnetic field. To mitigate this, the project uses TEC data derived from Faraday Rotation to generate a phase screen and correct the distortions(`details <https://eo-college.org/wp-content/slides/EEBiomass_Slides/#/20/13>`__).
+
+You can find more detailed explanations and visualizations in this `presentation <https://eo-college.org/wp-content/slides/EEBiomass_Slides/#/20/5>`__
+
+Diving deep into the Biomass satellite technology was a joy. It’s one of the most impressive projects I've reviewed from ESA, and I learned a ton. I can't wait to see the discoveries that this satellite brings to us!
