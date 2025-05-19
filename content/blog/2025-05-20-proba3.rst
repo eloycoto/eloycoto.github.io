@@ -1,0 +1,62 @@
+ESA's Proba-3: Creating Eclipses on Demand
+=============================================================================================
+:date: 2025-05-20 00:30
+:language: en-GB
+:author: eloycoto
+:tags: hardware
+:head: The Science Behind Proba-3's Formation Flying
+:index_title: ESA's Proba-3: Creating Eclipses on Demand
+:metatitle: The Science Behind Proba-3's Formation Flying
+:metatags: ESA, Proba-3, European Space Agency, solar corona, artificial eclipse, formation flying, satellites, space technology, solar winds, coronagraph, occulter
+:description: ESA's Proba-3 mission creates artificial solar eclipses using two satellites flying in precise formation, allowing unprecedented study of the Sun's corona and solar winds.
+
+
+It's been an exciting few weeks for the European Space Agency! Let me introduce you to the `Proba-3 mission <https://www.esa.int/Enabling_Support/Space_Engineering_Technology/Proba_Missions/Proba-3_Mission3>`__, which will allow observation of the Sun's corona without interference from sunlight, mainly through eclipses on demand 🤯! The Proba-3 consists of two satellites: the Coronagraph (CSC) and the Occulter (OSC). The Occulter spacecraft creates an artificial eclipse, allowing the Coronagraph to observe the Sun's corona without sunlight interference.
+
+You might ask, why study the Sun's corona? The main reason is to understand solar winds (TLDR: charged particles flying at high speeds), which can cause numerous problems, such as interference with GPS signals, satellites, or power grids!
+
+These spacecraft are unique; they can fly in formation (150 meters apart) with millimeter precision while in high orbit (55,000 km at the time of writing) at a speed of 2.58 km/s. Last week, the first formation flight was conducted, fully autonomous and without issues.
+
+`Here <https://www.youtube.com/watch?v=YgdRImH-BAw>`_ is a great video with a full explanation of the project.
+
+
+.. image:: /img/proba-3.jpg
+   :alt: proba-3 ESA ilustration
+   :align: center
+   :width: 80%
+
+How is this achieved?
+**********************
+
+In the end, millimeter-level adjustments are quite common in space. For example, docking with the ISS requires millimeter precision and has been done for many years, you can even `try it in a simulator <https://iss-sim.spacex.com/>`_! However, doing it at this altitude and speed is a whole different challenge.
+
+Making this mission work depends on two key parts: accurately measuring the distance between the satellites and ensuring reliable communication. For distance measurement, the mission uses the following technologies: 
+
+**Fine Lateral and Longitudinal Sensor (FLLS):** Uses a retro-reflected laser beam to track the position of the Occulter-disc satellite relative to the Coronagraph satellite. It includes two components: a lateral system with a CMOS sensor to detect beam movement for lateral displacement, and a longitudinal system that uses phase measurements of the reflected beam to calculate the distance between satellites. Full technical details are available `on this paper <https://www.researchgate.net/publication/327020297_Fine_Lateral_and_Longitudinal_Sensor_FLLS_on-board_ESA'S_PROBA-3_Mission>`_, with `initial test results here <https://blogs.esa.int/proba-3/2025/04/11/first-laser-measurements/>`_:
+
+**Vision-Based System:** Both satellites are equipped with this system(`details <https://www.researchgate.net/publication/347950105_Proba-3_ESA's_small_satellites_precise_formation_flying_mission_to_study_the_Sun's_inner_corona_as_never_before>`_), which includes:
+
+- Wide Angle Camera (WAC): Ideal for long-range tracking, with an 18x14° field of view for smooth handovers. 
+- Narrow Angle Camera (NAC): Delivers better accuracy during formation operations. 
+- 8 light mires on the CSC: Create light patterns that help guide alignment. 
+- Acquisition Mire: Ensures accurate timing and lock-on during alignment. 
+- Synchronization Detector: Tracks the blinking of mires to keep both spacecraft in perfect sync.
+
+This is how the spacecraft determine their distance and position during flight. Relative GPS is also used, but only in a small part of the free-flight, because there is no coverage at higher altitudes. At the same time, both spacecraft need to communicate between them; for that, an Inter-Satellite Link (ISL) is present. In each spacecraft, there are two transceivers and two antennas; these provide an S-Band RF communication link with a bandwidth of 118 kbps (It's the evolution of `GAMALINK <https://www.tekever.com/gamalink-specs/>`_).
+
+All of this is managed by the Formation Flying System, which is onboard each satellite and coordinates the formation completely autonomously. All autonomous modes are described `in this paper <https://www.eucass.eu/doi/EUCASS2019-0764.pdf>`_.
+
+Interesting topics
+**********************
+
+**Why only flying in formation on orbit apogee?** The measurements phase is only 6 hours. Keeping the whole formation for all the phases would be costly in terms of fuel, so each orbit is divided into four phases:
+  - Perigee Pass phase: 9.5h, free-flight around the orbit.
+  - Formation Acquisition Phase: 2h, where both satellites prepare for the formation flight.
+  - Science Operation Phase: 6h, where satellites are in formation mode and taking observations.
+  - Perigee Pass Preparation Phase: 2h, where satellites prepare for free-flight.
+
+Full details are `described here <https://openaccess.inaf.it/bitstream/20.500.12386/31753/1/1-s2.0-S0273117720305627-main.pdf#:~:text=%03%20Inter%20Satellite%20Link%3A%20for,coming%20from%20the%20CSC%20target>`_:
+
+**How location is calculated**: At this altitude, there is no GPS, so the location is calculated using star trackers, computer-linked cameras that recognize the constellations around them and calculate the position and orientation based on that.
+
+Proba-3 is a top-notch project by ESA, and it completed a wonderful April for ESA with the Biomass project already commented on. The fact that there are two spacecraft at 55,000 km altitude with precision of millimeters has all my respect for all those engineers who worked here.
