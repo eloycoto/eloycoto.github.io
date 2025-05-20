@@ -32,7 +32,7 @@ In the end, millimeter-level adjustments are quite common in space. For example,
 
 Making this mission work depends on two key parts: accurately measuring the distance between the satellites and ensuring reliable communication. For distance measurement, the mission uses the following technologies: 
 
-**Fine Lateral and Longitudinal Sensor (FLLS):** Uses a retro-reflected laser beam to track the position of the Occulter-disc satellite relative to the Coronagraph satellite. It includes two components: a lateral system with a CMOS sensor to detect beam movement for lateral displacement, and a longitudinal system that uses phase measurements of the reflected beam to calculate the distance between satellites. Full technical details are available `on this paper <https://www.researchgate.net/publication/327020297_Fine_Lateral_and_Longitudinal_Sensor_FLLS_on-board_ESA'S_PROBA-3_Mission>`_, with `initial test results here <https://blogs.esa.int/proba-3/2025/04/11/first-laser-measurements/>`_:
+**Fine Lateral and Longitudinal Sensor (FLLS):** Uses a retro-reflected laser beam to track the position of the Occulter-disc satellite relative to the Coronagraph satellite. It includes two components: a lateral system with a CMOS sensor to detect beam movement for lateral displacement, and a longitudinal system that uses phase measurements of the reflected beam to calculate the distance between satellites. Full technical details are available `on this paper <https://www.researchgate.net/publication/327020297_Fine_Lateral_and_Longitudinal_Sensor_FLLS_on-board_ESA'S_PROBA-3_Mission>`_, with `initial test results here <https://blogs.esa.int/proba-3/2025/04/11/first-laser-measurements/>`_.
 
 **Vision-Based System:** Both satellites are equipped with this system(`details <https://www.researchgate.net/publication/347950105_Proba-3_ESA's_small_satellites_precise_formation_flying_mission_to_study_the_Sun's_inner_corona_as_never_before>`_), which includes:
 
@@ -55,7 +55,7 @@ Interesting topics
   - Science Operation Phase: 6h, where satellites are in formation mode and taking observations.
   - Perigee Pass Preparation Phase: 2h, where satellites prepare for free-flight.
 
-Full details are `described here <https://openaccess.inaf.it/bitstream/20.500.12386/31753/1/1-s2.0-S0273117720305627-main.pdf#:~:text=%03%20Inter%20Satellite%20Link%3A%20for,coming%20from%20the%20CSC%20target>`_:
+Full details are `described here <https://openaccess.inaf.it/bitstream/20.500.12386/31753/1/1-s2.0-S0273117720305627-main.pdf#:~:text=%03%20Inter%20Satellite%20Link%3A%20for,coming%20from%20the%20CSC%20target>`_.
 
 **How location is calculated**: At this altitude, there is no GPS, so the location is calculated using star trackers, computer-linked cameras that recognize the constellations around them and calculate the position and orientation based on that.
 
