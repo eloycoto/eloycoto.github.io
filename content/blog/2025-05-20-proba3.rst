@@ -50,10 +50,11 @@ Interesting topics
 **********************
 
 **Why only flying in formation on orbit apogee?** The measurements phase is only 6 hours. Keeping the whole formation for all the phases would be costly in terms of fuel, so each orbit is divided into four phases:
-  - Perigee Pass phase: 9.5h, free-flight around the orbit.
-  - Formation Acquisition Phase: 2h, where both satellites prepare for the formation flight.
-  - Science Operation Phase: 6h, where satellites are in formation mode and taking observations.
-  - Perigee Pass Preparation Phase: 2h, where satellites prepare for free-flight.
+
+- Perigee Pass phase: 9.5h, free-flight around the orbit.
+- Formation Acquisition Phase: 2h, where both satellites prepare for the formation flight.
+- Science Operation Phase: 6h, where satellites are in formation mode and taking observations.
+- Perigee Pass Preparation Phase: 2h, where satellites prepare for free-flight.
 
 Full details are `described here <https://openaccess.inaf.it/bitstream/20.500.12386/31753/1/1-s2.0-S0273117720305627-main.pdf#:~:text=%03%20Inter%20Satellite%20Link%3A%20for,coming%20from%20the%20CSC%20target>`_.
 
