@@ -1,0 +1,164 @@
+Rust Design Patterns I Use All the Time
+=======================================
+:date: 2025-05-24 11:30
+:language: en-GB
+:author: eloycoto
+:tags: rust
+:head: Practical Rust Design Patterns You Probably Already Use
+:index_title: Everyday Rust: Useful Design Patterns Explained
+:metatitle: Common Rust Design Patterns Every Developer Should Know
+:metatags: rust, design patterns, rustlang, rust programming, functional programming, rust examples, software architecture
+:description: A practical look at common design patterns in Rust, including Pipeline, Railway, Decorator, and more—complete with real-world code examples and explanations.
+
+The other day, I was chatting with a friend about design patterns and realized that we often use them without knowing their formal names. Here are a few patterns I find especially useful when working with Rust.
+
+If you want to work effectively with Rust, these are some design patterns that are especially helpful to understand.
+
+Pipeline
+*********
+
+This pattern chains operations so that the output of one becomes the input of the next. It’s widely used in Rust and common across data processing platforms. In the following example, an array of numbers is filtered, transformed, and formatted to produce the desired result.
+
+.. code-block:: rust
+
+  fn process_numbers(numbers: Vec<i32>) -> i32 {
+      numbers
+          .into_iter()              // Get an iterator
+          .filter(|x| x % 2 == 0)   // Filter only even numbers
+          .map(|x| x * x)           // Modify all numbers
+          .sum()                    // Execute something at the end.
+  }
+
+  fn main() {
+      let nums = vec![1, 2, 3, 4, 5, 6];
+      let result = process_numbers(nums);
+      println!("The result is: {}", result);
+  }
+
+
+
+Railway
+*********
+
+The Pipeline pattern is straightforward, but what happens if something fails midway, such as a validation check? In that case, the Railway pattern extends Pipeline to handle both success and error paths. In the following example, data flows through validation, transformation, and formatting stages using Rust’s `Result` type and the `and_then` function.
+
+.. code-block:: rust
+
+  #[derive(Debug, Clone)]
+  struct Data {
+      value: i32,
+  }
+
+  fn validate(data: Data) -> Result<Data, String> {
+      if data.value >= 0 {
+          Ok(data)
+      } else {
+          Err("Value cannot be negative".to_string())
+      }
+  }
+
+  fn process(data: Data) -> Result<Data, String> {
+      Ok(Data { value: data.value * 2 })
+  }
+
+  fn format(data: Data) -> Result<String, String> {
+      Ok(format!("Processed value: {}", data.value))
+  }
+
+  fn pipeline_example() {
+      let initial_data = Data { value: 5 };
+
+      let result = validate(initial_data)
+          .and_then(process)
+          .and_then(format);
+
+      match result {
+          Ok(output) => println!("{}", output),
+          Err(e) => println!("Error: {}", e),
+      }
+  }
+
+Higher-Order Function
+**********************
+
+This pattern involves functions that take other functions as parameters or return them. It’s a core concept in functional programming. Here's a simple example:
+
+.. code-block:: rust
+
+  fn create_multiplier(factor: i32) -> impl Fn(i32) -> i32 {
+      move |x| x * factor
+  }
+
+  fn main() {
+
+      let double = create_multiplier(2);
+      let triple = create_multiplier(3);
+
+      println!("Double of 5: {}", double(5));
+      println!("Triple of 5: {}", triple(5));
+  }
+
+
+Decorator
+***********
+
+This pattern adds behavior to objects without affecting other instances of the same class. It’s well-known in Python, where decorators are commonly used in frameworks like Flask or Click. In Rust, similar behavior can be achieved using traits, for example.
+
+.. code-block:: rust
+
+    trait TextProcessor {
+        fn process(&self, text: &str) -> String;
+    }
+
+
+    struct SimpleTextProcessor;
+
+    impl TextProcessor for SimpleTextProcessor {
+        fn process(&self, text: &str) -> String {
+            text.to_string()
+        }
+    }
+
+    // Decorator: Adds uppercase functionality
+    struct UppercaseDecorator<T: TextProcessor> {
+        wrapped: T,
+    }
+
+    impl<T: TextProcessor> TextProcessor for UppercaseDecorator<T> {
+        fn process(&self, text: &str) -> String {
+            self.wrapped.process(text).to_uppercase()
+        }
+    }
+
+    // Second decorator: Adds trimming functionality
+    struct TrimDecorator<T: TextProcessor> {
+        wrapped: T,
+    }
+
+    impl<T: TextProcessor> TextProcessor for TrimDecorator<T> {
+        fn process(&self, text: &str) -> String {
+            self.wrapped.process(text.trim())
+        }
+    }
+
+    // Usage
+    let text = "  hello, world  ";
+
+    let processor = SimpleTextProcessor;
+    println!("Base: '{}'", processor.process(text));
+
+
+    let uppercase_processor = UppercaseDecorator { wrapped: processor };
+    println!("Uppercase: '{}'", uppercase_processor.process(text));
+
+
+    let trimmed = TrimDecorator { wrapped: uppercase_processor };
+    println!("Trimmed + Uppercase: '{}'", trimmed.process(text));
+
+There are more patterns out there, that you should check, like:
+
+- `Command <https://refactoring.guru/design-patterns/command>`__
+- `Observer <https://refactoring.guru/design-patterns/observer>`_
+- `Builder pattern <https://refactoring.guru/design-patterns/builder>`_
+- `Factory pattern <https://refactoring.guru/design-patterns/factory-method>`__
+- `Iterator <https://refactoring.guru/design-patterns/iterator>`__
