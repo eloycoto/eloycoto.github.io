@@ -1,0 +1,35 @@
+How AI is going to change software dev
+=======================================
+:date: 2025-06-14 16:30
+:language: en-GB
+:author: eloycoto
+:tags: thoughts
+:head: The future of software development in the age of AI: challenges and opportunities.
+:index_title: How AI is Changing Software Dev, Insights & Predictions
+:metatitle: Software Development and AI: Predictions from a Developer’s Perspective
+:metatags: AI software development, large language models, RAG, AI agents, developer future, automation in coding
+:description: A software developer’s personal take on how AI agents and automation are transforming software development and the future of work.
+
+Everyone’s talking about AI and large language models (LLMs). The pace of change is wild! Just recently, we were laser-focused on Retrieval-Augmented Generation (RAG), and now it’s all about Agents. Let me share my personal opinion about some AI topics.
+
+First of all, I want to make it clear: **things are not black or white, and the grayscale is important here**. Here are a few topics to consider:
+
+This technology allows us to do a ton more, and we can focus on what matters. It's like road infrastructure, it allowed villages to communicate. Many people said it was bad at first, but now remote villages are just 20 minutes from a good hospital. Of course, there are drawbacks. In the 80s, someone had a convenience store in the village and made a living. Nowadays, these stores are losing money, and many villages are shrinking population. Big chains of supermarkets and restaurants are now taking 80% of the economy. **Important optimizations are driven by disruptions**.
+
+I believe software development work will shrink by 70%. That sounds extreme, but let’s be real, we’re factory workers, building digital products. Many developers saw themselves as indispensable, especially post-COVID. Now, however, we’re in the “assembly line” phase, similar to when Ford introduced it in the 1920s. Did mechanics disappear? No. In fact, more cars meant more repair work. Similarly, as we automate more coding tasks, new problems will emerge that still need skilled people to solve them.
+
+Smaller teams: Look at what Cursor is doing, they raised `$900M with only 100 developers <https://techcrunch.com/2025/05/04/cursor-is-reportedly-raising-funds-at-9-billion-valuation-from-thrive-a16z-and-accel/>`_. Read that again: 100 devs raising $900M. That’s huge! Sure, we’ve seen things like Facebook acquiring Instagram, but that’s not common. When GitHub raised $100M, they also had around `100 employees <https://web.archive.org/web/20121213223837/https://github.com/about>`_. What does this mean? Smaller teams are capable of doing much more, across the entire organizations, from finance, marketing, sales and development.
+
+If you’re aiming for a white-collar job, being near a city will matter again. Why would someone in the U.S. hire a developer deep in rural Galicia? Maybe it's for a lower salary, or because they can’t find local talent, but that’s not sustainable. Remote work isn’t going away, but it’ll shift somewhat: people will work from home, but close to urban centers. Distributed teams around the globe introduce friction and delay. A small team working in the same city, meeting in person twice a week, will move faster in all terms.
+
+Each LLM provider is taking a different vertical direction:
+
+- OpenAI: They want to go all-in on both software and hardware. They’re becoming our 1984-style speakers, aiming for a trillion-dollar business that reaches the entire population. OpenAI is not going to be acquired.
+- Anthropic: They’ll be the biggest acquisition ever, likely by Oracle, IBM, or a similar company. They're laser-focused on software development, and I expect them to expand into physics and biology too. I don’t think their goal is global reach, they will be excellent in specific domains.
+- Cursor: They're evolving from a modified VSCode into a full end-to-end software development platform. I believe they’ll build strong, smaller models (32B/70B) and some local-first model, and focus on software agents and security auditing. The editor is just a channel strategy. My bet: they’ll be acquired in Q2 2027 by a major cloud provider, for around $50–70B.
+
+Robotics is about to explode in all directions. `Reinforcement learning <https://arxiv.org/abs/2408.03539>`_ is pushing us into the next level of autonomy. On the hardware side, iteration cycles are speeding up (just look at `Zoo.dev <https://zoo.dev/design-studio>`_, `tscircuit <https://tscircuit.com/>`_ or `flux.ai <https://www.flux.ai/>`_). The next wave will be all about actuators, torque control, and shifting from hydraulic to fully electric systems. That’s where the magic (and the hard problems) will be.
+
+Those are my thoughts on where AI is going. One thing is certain: **software development will change dramatically. Many of us will have to adapt**. The future will be turbulent, overloaded with change, but I believe we’re about to be part of one of the greatest evolutions in human history.
+
+Finally, **even with all my optimism, I know that disruption breaks things. It pushes boundaries and forces entire systems to rebuild**. We can laugh at the small failures, like how an LLM might miscount letters in a word, but using those as an excuse won’t hold. The smart move is to focus on what these models do well and start building on that. If we don’t, we’re in for a tough ride. I worry that a lot of people will get left behind. That could lead to social riots, and honestly, I don’t know how to prevent that.

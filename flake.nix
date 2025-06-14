@@ -23,6 +23,7 @@
             buildInputs = [
               (pkgs.python3.withPackages python-packages)
               pkgs.gnumake
+              pkgs.harper
             ];
           };
         }
