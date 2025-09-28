@@ -20,7 +20,7 @@ I’ve been into slot cars for about 20 years now. In my village the scene is su
 
 The standard setup we use relies on a `commercial timing tool <https://scaleauto-slot.com/ds-electronic/>`_ with a light sensor that triggers when a car crosses the line. It works fine, but the data is only available at the very end of the race. No useful lap-by-lap details, no real-time insight, nothing live for others. For someone like me, that was just begging to be improved.
 
-The timing device had an RS232 interface, which I’d experimented with before for central counting. This time I decided to go further. With the help of some custom hardware and the RP2350’s PIO interfaces, I built a datalogger. To make the data accessible, I hooked up a budget-friendly OrangePI with HDMI output. On top of that, I wrote a `Ratatui <https://ratatui.rs>`_ application to create a live dashboard.
+The timing device had an RS232 interface, which I’d experimented with before for central counting. This time I decided to go further. With the help of some custom hardware and the RP2350’s PIO interfaces(`Thanks Pedro <https://www.linkedin.com/in/pedro-rodr%C3%ADguez-vieites-a56b901ab/?originalSubdomain=es>`_), I built a datalogger. To make the data accessible, I hooked up a budget-friendly OrangePI with HDMI output. On top of that, I wrote a `Ratatui <https://ratatui.rs>`_ application to create a live dashboard.
 
 The result is something like a WRC-style dashboard: live, interactive, and fun for everyone participating in the race. Instead of waiting until the end, we now get a clear picture of what’s happening as it happens.
 
@@ -44,3 +44,5 @@ The first working prototype looked like this:
 One of the neatest parts is how the memory works. All data is kept in RAM just for the duration of the race. Exporting is optional, but nothing ever writes to the SD card. The moment the TV powers on, the whole system boots up ready to go.
 
 Building this project was fun. I learned a ton about the RP2350’s PIO ports, got to stretch my Rust and PCB design skills, and in the end created something my friends and I can actually use. Honestly, that combination of learning and sharing the fun is what makes this project so fun!
+
+Thanks `Antonmry <https://x.com/antonmry>`_ for the TV screen <3
