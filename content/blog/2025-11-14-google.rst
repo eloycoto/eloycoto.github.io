@@ -1,0 +1,39 @@
+Can Google win the AI race?
+=============================
+:date: 2025-11-11 16:30
+:language: en-GB
+:author: eloycoto
+:tags: thoughts
+:head: The Future of Google
+:index_title: Google's AI Strategy: Why They'll Win
+:metatitle: Google Will Win the AI War - Here's Why
+:metatags: ChatGPT, Google, AI race, DeepMind, superintelligence
+:description: A deep dive into Google's organizational advantages that position it to win the artificial intelligence revolution
+
+Over the years, I've tried to understand how companies work. One thing that worries me about companies is when they don't realize they can die, whether they're big or small. But honestly, a bit of death is good for companies. It clears out the bullshit, aligns priorities, and real innovation starts to happen again!
+
+Innovation happens mostly at the edges of companies. Whenever I see a big company, I focus on the edges. Because when revenue is happening every quarter in the normal way, nothing changes, no risks are taken. It just keeps growing, growing, growing until you hit a plateau, and people don't see it coming. Innovation always happens at the edge, where a team has a problem to fix, or a team that doesn't have enough budget and needs to figure out how to do more with less, or a team doing research that stumbles onto something bigger.
+
+With Google, I can see the innovation on an edge. I see this with Hassabis, the CEO of DeepMind. Hassabis is bigger than the Nobel Prize. Two years ago, when everyone said ChatGPT or Perplexity would eat Google's lunch, there was something good happening at the edge: a good leader, a clear vision, focus on what matters, and staying out of politics. Google faced a bit of death, and when companies face that, things transform. My favorite example is described in "Build" by Tony Fadell, where he explains how the iPhone was built. You see how politics disappeared because there was only one priority: get a new pillar of revenue up. From the edge, Apple got transformed.
+
+DeepMind made enough effort to get models out from Google. I'm sure they tried before but couldn't. Now, I'm confident Google will win. Two reasons:
+
+1) Every user in the world knows the word "Google" and uses their services.
+2) Millions of users have Gmail accounts, Android phones, and everything else.
+
+It's just a matter of time before Google delivers something that may not be as good as ChatGPT, but they can bring a lot of value to end users because they're able to handle a lot of user context. They also have the scaffolding and infrastructure to elevate this to all their users.
+
+My only concern is that in the journey, there’ll be a ton of politics and technologies they need to move away from or do differently. But ultimately, Google knows that if this doesn't happen, it's the end, maybe a new Yahoo!
+
+Another side is what happens if any AI lab reaches superintelligence. People focus on global superintelligence. But think about AlphaFold, I consider that superintelligence: AI is already achieving more than humans can. They already know how to build superintelligent systems. Will it be global superintelligence? I do not know, but I see superintelligence in spikes, in vertical transformations like rocket calculations, materials calculations, protein folding, antibiotics. There's a lot of work like this, for example the work that César de la Fuente is doing with AI to develop new antibiotics. Maybe superintelligence happens in parts, not as a global thing.
+
+I see some promising startups out there, but they'll have difficulty getting into the user channels. It's going to be hard for them to reach millions of users like Google or integrate everything. I'm worried about Apple, I don't see real innovation at the edge there. I can see other companies though:
+
+• Meta has Instagram, WhatsApp, Facebook in most countries. They have the channel and the power to deliver something cool.
+• Cursor, the editor, isn't going to be an editor. It's building one thing: getting users engaged with AI, creating a channel, trying to reach more money there. I know editors are going to die in three, four, five, six years. We don't know when exactly, but it'll happen. The AI runtime is closer than ever!
+
+New systems and tools will arrive, but the harder problem is going to be getting user traction. How do you reach two million developers? How do you scale that?
+
+This is why I think Google has a real advantage. They have a great channel, have good hardware (TPUs will be big if they do it right). They know how to deliver to millions of users. They understand AI and how to use it. And the most important thing: at the edge, they have someone capable of doing the right things, delivering, being present, leading, and most importantly, someone who sees what Google can become.
+
+PS: A bit of death is good for companies. At some point, they need to realize their issues. But look at the European car manufacturing industry, they've been facing death since the early 2000s, and instead of fixing their roots, they're asking for subsidies or import tariffs. Good leaders matters!
